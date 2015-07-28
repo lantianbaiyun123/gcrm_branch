@@ -1,0 +1,16 @@
+<style>
+.body{font-size:15px;}
+.important{font-weight:bold;}
+.red{color:red;}
+</style>
+<div class="body">
+	${sendTo}:</br></br> 
+	The advertisement (${adContentNumber}) you submitted on <span class="important">${adSubmitTime}</span> has been successfully scheduled!</br>
+	Advertising periods：${occupationPeriods} </br>
+	Insert periods：#if(${insertPeriods}) <span class="red">${insertPeriods}</span> #else none #end </br>
+	</br>
+	The advertisement details please click here ($url)
+	</br>
+	<span class="important">Please confirm within 72 hours</span>, or the reserved periods will be released!</br>
+	If you have any problems, please contact domestic agent(${countryAgent}).</br>
+</div>

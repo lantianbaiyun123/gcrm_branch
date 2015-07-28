@@ -1,0 +1,197 @@
+<div class="material-approval">
+  <div class="proposal-panel panel gcrm-panel">
+    <div class="panel-heading">
+        <span class="black-block">&nbsp;</span>
+        <span class="panel-heading-text">{{'MATERIAL_MODIFY' | translate}}</span>
+    </div>
+
+    <div class="panel-body">
+      <div class="gcrm-slots gcrm-slots-m0 row well">
+        <span class="col-md-4">{{'MATERIAL_BILL' | translate}}：{{approvalInfo.materialApplyNumber}}</span>
+        <span class="col-md-4">{{'SUBMITTER' | translate}}：{{approvalInfo.submitPerson}}</span>
+        <span class="col-md-4">{{'SUBMIT_TIME' | translate}}：{{approvalInfo.submitTime | date: 'yyyy-MM-dd'}}</span>
+      </div>
+    </div>
+    <div class="panel-body">
+      <h5 class="mt0 pb10">{{'MATERIAL_CONTENT_INFO' | translate}}</h5>
+      <dl class="dl-horizontal">
+        <dt>{{'ADVERTISER' | translate}}：</dt><dd>{{approvalInfo.advertiser}}</dd>
+        <dt>{{'MATERIAL_AD_CONTENT_NUMBER' | translate}}：</dt><dd>{{approvalInfo.advertiseContentNumber}}</dd>
+        <dt>{{'MATERIAL_SOLUTION_EXECUTOR' | translate}}：</dt><dd>{{approvalInfo.operatorName}}</dd>
+        <dt>{{'AD_CONTENT_DESCRIBE' | translate}}：</dt><dd>{{approvalInfo.description}}</dd>
+        <dt>{{'MATERIAL_CONTENT_STATUS' | translate}}：</dt><dd>{{'AD_SOLUTION_STATUS_' + approvalInfo.approvalStatus | translate}}</dd>
+        <dt>{{'MATERIAL_LAUNCH_TIME' | translate}}：</dt>
+        <dd>
+          <div ng-model="approvalInfo.periodDescription" period-label></div>
+          <!-- {{approvalInfo.periodDescription}} -->
+        </dd>
+      </dl>
+      <h5 class="bdt pt15 pb10 pl10">{{'MATERIAL_POSITION_AND_MATERIAL' | translate}}</h5>
+      <dl class="dl-horizontal">
+        <dt>{{'MATERIAL_LAUNCH_POSITION' | translate}}：</dt><dd>{{approvalInfo.positionName}}</dd>
+        <dt>{{'MATERIAL_PROPERTY_REQUEST' | translate}}：</dt>
+        <dd>
+          <table class="table table-bordered sub-table">
+            <tbody>
+              <tr>
+                <th class="active">{{'POSITION_TYPE' | translate}}</th>
+                <td>{{approvalInfo.materialType | PositionFilter: 'materialType' | translate}}</td>
+              </tr>
+              <tr ng-if="approvalInfo.areaRequired">
+                <th class="active">{{'IMAGE_AREA_REQUIRED' | translate}}</th>
+                <td>{{approvalInfo.areaRequired}}</td>
+              </tr>
+              <tr ng-if="approvalInfo.size">
+                <th class="active">{{'IMAGE_SIZE' | translate}}</th>
+                <td>{{approvalInfo.size}}</td>
+              </tr>
+              <tr ng-if="approvalInfo.textlinkLength">
+                <th class="active">{{'TEXT_LINK_LENGTH' | translate }}</th>
+                <td>{{approvalInfo.textlinkLength}}{{'CHARACTER' | translate}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </dd>
+        <dt>{{'MATERIAL_INFO' | translate}}：</dt>
+        <dd>
+          <span ng-if="approvalInfo.materialEmpty">{{'NOTHING_YET' | translate}}</span>
+          <table ng-if="!approvalInfo.materialEmpty" class="table table-bordered sub-table">
+            <tbody>
+              <!-- 物料类型为“文字”或“文字+图片”，有title -->
+              <tr ng-if="approvalInfo.materialType==1 || approvalInfo.materialType==2">
+                <th class="active">Title</th>
+                <td>
+                  <span ng-if="approvalInfo.materialTitle">{{approvalInfo.materialTitle}}</span>
+                  <span ng-if="!approvalInfo.materialTitle">{{'NOTHING_YET' | translate}}</span>
+                </td>
+              </tr>
+              <tr>
+                <th class="active">URL</th>
+                <td>
+                  <span class="limit-long-text">
+                    <a ng-if="approvalInfo.materialUrl" ng-href="{{approvalInfo.materialUrl}}" target="_blank">{{approvalInfo.materialUrl}}</a>
+                    <span ng-if="!approvalInfo.materialUrl">{{'NOTHING_YET' | translate}}</span>
+                  </span>
+                </td>
+              </tr>
+              <tr ng-if="approvalInfo.materialType==0 || approvalInfo.materialType==2">
+                <th class="active">{{'MATERIAL_TYPE' | translate}}</th>
+                <td>
+                    <span class="limit-long-text">
+                        {{'MATERIALFILETYPE_' + approvalInfo.materialFileType | translate}}
+                    </span>
+                </td>
+              </tr>
+              <!-- 物料类型为“图片”或“文字+图片”，有详细物料 -->
+              <tr ng-if="approvalInfo.materialFileType==0 || approvalInfo.materialFileType==1">
+                <th class="active">{{'MATERIAL_DETAIL_INFO' | translate}}</th>
+                <td>
+                  <span ng-if="approvalInfo.materialList.length" ng-repeat="material in approvalInfo.materialList">
+                    <span ng-if="$index">、&nbsp;</span>
+                    <a ng-href="{{material.downloadUrl}}" target="_blank">{{material.downloadFileName}}</a>
+                    <span>
+                      (<span ng-if="material.picWidth && material.picHeight">{{material.picWidth}}x{{material.picHeight}},&nbsp;</span>
+                      {{material.fileSize}}k)
+                    </span>
+                  </span>
+                  <span ng-if="!approvalInfo.materialList.length">{{'NOTHING_YET' | translate}}</span>
+                </td>
+              </tr>
+              <tr ng-if="approvalInfo.materialFileType==2">
+                <th class="active">{{'APPROVAL_MATERIAL_EMBED_CODE_CONTENT' | translate}}</th>
+                <td>
+                  <span class="limit-long-text">{{approvalInfo.materialEmbedCodeContent}}</span>
+                  <span ng-if="!approvalInfo.materialEmbedCodeContent">{{'NOTHING_YET' | translate}}</span>
+                </td>
+              </tr>
+              <tr>
+                <th class="active">{{'THIRDPARTY_MONITOR' | translate}}</th>
+                <td>
+                  <span class="limit-long-text"  ng-if="approvalInfo.monitorUrl">
+                      <a ng-href="{{approvalInfo.monitorUrl}}" target="_blank">{{approvalInfo.monitorUrl}}</a>
+                  </span>
+                  <span  ng-if="!approvalInfo.monitorUrl">{{'NOT_SET_YET' | translate}}</span>
+                </td>
+              </tr>
+            </tbody>
+            <tbody ng-repeat="mm in approvalInfo.materialMenuList">
+              <tr>
+                <th class="active va-m" rowspan="3">{{'DROPDOWN_MENU' | translate}}{{$index + 1}}</th>
+                <td>
+                  <span class="limit-long-text">{{mm.materialTitle}}</a></span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <span class="limit-long-text">
+                    <a ng-href="{{mm.materialUrl}}" target="_blank">{{mm.materialUrl}}</a>
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <span class="limit-long-text">
+                    <a ng-href="{{mm.material.downloadUrl}}" target="_blank">{{mm.material.downloadFileName}}</a>
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </dd>
+      </dl>
+    </div>
+  </div>
+
+  <div class="proposal-panel panel gcrm-panel">
+    <div class="panel-heading">
+        <span class="black-block">&nbsp;</span>
+        <span class="panel-heading-text">{{'QUOTATION_APPROVAL_OPERATION' | translate}}</span>
+    </div>
+    <div class="panel-body">
+      <div class="form-horizontal clearfix tables-wrap">
+          <div class="form-group">
+              <label class="control-label col-md-2">{{'APPROVAL_AUDIT_OPINION' | translate}}：</label>
+              <div ng-class="{'has-error':checkApprovalStatus && (form.approvalStatus!=1 && form.approvalStatus!=0)}">
+                  <div class="col-md-3">
+                      <label class="radio radio-inline"><input type="radio" ng-value="1" ng-model="form.approvalStatus"/> {{'AGREE' | translate}} </label>
+                      <label class="radio radio-inline"><input type="radio" ng-value="0" ng-model="form.approvalStatus"/> {{'REJECT' | translate}} </label>
+                  </div>
+                  <div class="col-md-7 radio-inline-hint text-danger" ng-show="!submitSuccessful && checkApprovalStatus && (form.approvalStatus!=1 && form.approvalStatus!=0)">
+                      <span class="glyphicon glyphicon-warning-sign"></span>{{'APPROVAL_CHOOSE_AUDIT_OPINION' | translate}}
+                  </div>
+              </div>
+          </div>
+          <div class="form-group">
+              <label class="control-label col-md-2">{{'AD_CONTENT_OTHER_EXPLAIN' | translate}}：</label>
+              <div class="col-md-6 div-approval-suggestion" ng-class="{'has-error':checkApprovalSuggestion && !form.approvalSuggestion}">
+                  <textarea class="form-control" rows="3" ng-model="form.approvalSuggestion"></textarea>
+              </div>
+              <div class="col-md-3 approval-suggestion-hint text-info" ng-show="form.approvalStatus==0 && !form.approvalSuggestion">
+                  <span class="glyphicon glyphicon-warning-sign"></span>&nbsp;&nbsp;{{'APPROVAL_REVOKE_NOTES' | translate}}
+              </div>
+          </div>
+      </div>
+    </div>
+
+    <div class="panel-footer text-left">
+        <a  class="btn btn-primary" ng-click="submitApproval()" ng-disabled="submitDisabble || !tasksReady || (form.approvalStatus!=0 && form.approvalStatus!=1) || (form.approvalStatus==0 && !form.approvalSuggestion)">{{'APPROVAL_SUBMIT' | translate}}</a>
+        <a  class="btn btn-default" ng-click="goNextTask()" ng-disabled="!(nextTask.foreignKey && nextTask.activityId) || submitDisabble || !tasksReady">{{'APPROVAL_NEXTTASK_TEXT' | translate}}</a>
+    </div>
+  </div>
+  <div class="shortcuts" >
+    <div class="shortcut">
+      <a class="btn btn-default" ng-click="modalApprovalRecord()">{{'APPROVAL_APPROVAL_RECORD' | translate}}</a>
+    </div>
+    <div class="shortcut">
+      <a class="btn btn-default" ng-click="modalModifyRecord()">{{'APPROVAL_UPDATE_RECORD' | translate}}</a>
+    </div>
+    <div class="shortcut">
+      <a ng-click="anchorTo('navBarTop')" class="btn btn-default">
+        &nbsp;
+        <span class="glyphicon glyphicon-chevron-up"></span>
+        <br>
+        {{'APPROVAL_BACK_TO_TOP' | translate}}
+      </a>
+    </div>
+  </div>
+</div>

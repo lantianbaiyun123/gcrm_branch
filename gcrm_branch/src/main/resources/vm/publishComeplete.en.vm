@@ -1,0 +1,34 @@
+<style>
+.body{font-size:14px;}
+.important{font-weight:bold;}
+table td, table th{text-align:center}
+</style>
+<div class="body">
+	#foreach ($element in $Operator) 
+	${element} #end ：</br>
+	#if(${MaiType}=="reminders")
+	The material of the advertisement you submitted on ${AdsubmitTime} is missing or disapproved during investigation. </br>
+    Please submit the material as soon as possible in order to ensure the advertisement to run on time.	#end</br>
+	#if(${MaiType}=="terminate")
+	The advertisement you submitted on ${AdsubmitTime} has been terminated by the PM at ${PmterminateDate}, all confirmed occupation periods has been released. #end</br>
+	#if(${MaiType}=="online")
+	The advertisement you submitted on ${AdsubmitTime} , has been put online by the PM at ${PmstartDate} #end</br>
+	#if(${MaiType}=="offline")
+	The advertisement you submitted on ${AdsubmitTime} , has went offline at ${PmendDate} . The next schedule time of the current advertisement is ${NextDate} #end</br>
+	
+	#if(${MaiType}=="materOngoing")
+	The content of your ad ${adContenNumber} submitted on ${materialSubtime}has been put online by the PM at ${materialUpdatetime}.  #end</br>
+	
+	Advertisement Information：</br>
+	Advertisement Owner:${Customer}</br>
+	Description：${Description}</br>
+	Run Time：${PeriodDescript}</br>
+	#if(${MaiType}=="reminders")
+	Click<a href=${materialUrl}> here</a> to enter the material management interface. #end
+	</br>
+	</br>
+	</br>
+	#if(${MaiType}!="reminders")
+	If you have any questions, please contact related PM.
+	#end
+</div>

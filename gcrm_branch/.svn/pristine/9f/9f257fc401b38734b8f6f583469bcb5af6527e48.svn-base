@@ -1,0 +1,193 @@
+package com.baidu.gcrm.stock.service.impl;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.baidu.gcrm.common.exception.CRMRuntimeException;
+import com.baidu.gcrm.stock.dao.StockRepository;
+import com.baidu.gcrm.stock.model.Stock;
+import com.baidu.gcrm.stock.service.ICalculateStockService;
+import com.baidu.gcrm.stock.service.IStockUpdateService;
+
+public abstract class AbstractCalculateStockService implements ICalculateStockService{
+    
+    @Autowired
+    protected StockRepository stockRepository;
+    
+    @Autowired
+    IStockUpdateService stockUpdateService;
+    
+    @Override
+    public Map<String, Stock> findByConditions(Collection<Long> positionDateIds) {
+        List<Stock> stocks = stockRepository.findByPositionDateIdIn(positionDateIds);
+        if (CollectionUtils.isEmpty(stocks)) {
+            throw new CRMRuntimeException("stock.find.error");
+        }
+        Map<String, Stock> stockMap = new HashMap<String, Stock>();
+        for (Stock temStock : stocks) {
+            String stockKey = getStockMapKey(temStock.getPositionDateId(), temStock.getBillingModelId());
+            stockMap.put(stockKey, temStock);
+        }
+        return stockMap;
+    }
+    
+    @Override
+    public Stock loadStock(Long positionDateId, Long billingModelId, Map<String, Stock> stockMap) {
+        Stock stock = null;
+        String stockKey = getStockMapKey(positionDateId, billingModelId);
+        if (stockMap == null) {
+            stock = findSingleStock(positionDateId, billingModelId);
+        } else {
+            stock = stockMap.get(stockKey);
+            if (stock == null) {
+                stock = findSingleStock(positionDateId, billingModelId);
+            }
+        }
+        return stock;
+    }
+    
+    private String getStockMapKey(Long positionDateId, Long billingModelId) {
+        return new StringBuilder()
+                .append(positionDateId)
+                .append("-")
+                .append(billingModelId).toString();
+    }
+    
+    @Override
+    public Stock findSingleStock(Long positionDateId, Long billingModelId) {
+        List<Stock> stocks = stockRepository.findByPositionDateIdAndBillingModelId(positionDateId, billingModelId);
+        if (CollectionUtils.isEmpty(stocks)) {
+            throw new CRMRuntimeException("stock.find.error");
+        }
+        return stocks.get(0);
+    }
+    
+    @Override
+    public Stock findById(Long id) {
+        return stockRepository.findOne(id);
+    }
+    
+    @Override
+    public void save(Stock stock) {
+        stockRepository.save(stock);
+    }
+    
+    @Override
+    public int updateOccupiedStock(Stock oldStock, Long occupiedStock, Long oldOccupiedStock) {
+        return stockRepository.updateOccupiedStock(oldStock, occupiedStock, oldOccupiedStock);
+    }
+    
+    protected List<Long> calculateOccupation(Long billingModelId, Collection<Long> positionDateIds,
+            Long count, StockOperateType stockOperateType) {
+            
+        if (count == null || count.longValue() < 0) {
+            throw new CRMRuntimeException("stock.occupy.count.error");
+        }
+        List<Long> fullPositionDateIds = new ArrayList<Long>();
+        if (CollectionUtils.isEmpty(positionDateIds)) {
+            return fullPositionDateIds;
+        }
+        
+        Map<String, Stock> stockMap = findByConditions(positionDateIds);
+        for (Long positionDateId : positionDateIds) {
+            Stock stock = loadStock(positionDateId, billingModelId, stockMap);
+            Long oldOccupiedStock = stock.getOccupiedStock();
+            Long oldRealOccupiedStock = stock.getRealOccupiedStock();
+            Long newRealOccupiedStock = count;
+            if (oldRealOccupiedStock != null) {
+                newRealOccupiedStock = Long.valueOf(newRealOccupiedStock.longValue()
+                        + oldRealOccupiedStock.longValue());
+            }
+            long newOccupiedStock = oldOccupiedStock.longValue() + count.longValue();
+            long totalOccupiedStock = stock.getTotalStock().longValue();
+            if (newOccupiedStock > totalOccupiedStock) {
+                throw new CRMRuntimeException("stock.occupy.error");
+            }
+            boolean isFull = changeStock(stockOperateType, oldOccupiedStock,
+                    Long.valueOf(newOccupiedStock), newRealOccupiedStock,
+                    stock, stockMap);
+            
+            if (isFull) {
+                fullPositionDateIds.add(positionDateId);
+            }
+        }
+        
+        return fullPositionDateIds;
+    }
+    
+    protected void calculateRelease(Long billingModelId, Collection<Long> positionDateIds,
+            Long count, StockOperateType stockOperateType) {
+        if (count == null || count.longValue() < 0) {
+            throw new CRMRuntimeException("stock.occupy.count.error");
+        }
+        if (CollectionUtils.isEmpty(positionDateIds)) {
+            return;
+        }
+        Map<String, Stock> stockMap = findByConditions(positionDateIds);
+        for (Long positionDateId : positionDateIds) {
+            Stock stock = loadStock(positionDateId, billingModelId, stockMap);
+            Long oldOccupiedStock = stock.getOccupiedStock();
+            Long oldRealOccupiedStock = stock.getRealOccupiedStock();
+            
+            Long newRealOccupiedStock = oldRealOccupiedStock;
+            if (oldRealOccupiedStock != null) {
+                newRealOccupiedStock = Long.valueOf(oldRealOccupiedStock.longValue() - count.longValue());
+            }
+            if (newRealOccupiedStock.longValue() < 0) {
+                newRealOccupiedStock = Long.valueOf(0);
+            }
+            Long newOccupiedStock = oldOccupiedStock;
+            if (oldOccupiedStock != null && oldOccupiedStock.longValue() > 0) {
+                newOccupiedStock = Long.valueOf(oldOccupiedStock.longValue() - count.longValue());
+            }
+            if (newOccupiedStock.longValue() < 0) {
+                newOccupiedStock = Long.valueOf(0);
+            }
+            
+            changeStock(stockOperateType, oldOccupiedStock,
+                    newOccupiedStock, newRealOccupiedStock,
+                    stock, stockMap);
+        }
+        
+    }
+    
+    private boolean changeStock(StockOperateType stockOperateType, Long oldOccupiedStock,
+            Long newOccupiedStock, Long newRealOccupiedStock, Stock stock,
+            Map<String, Stock> stockMap) {
+        int changedCount = stockRepository.updateOccupiedStock(stock, newOccupiedStock,
+                newRealOccupiedStock, oldOccupiedStock);
+        Stock newStock = copyNewStock(stock);
+        if (changedCount != 1) {
+            throw new CRMRuntimeException("stock.occupy.error");
+        } else {
+            newStock.setOccupiedStock(newOccupiedStock);
+            newStock.setRealOccupiedStock(newRealOccupiedStock);
+        }
+        
+        stockUpdateService.changeOtherStock(stockOperateType, newStock, stockMap);
+        long remainOccupiedStock = stock.getTotalStock().longValue() - newOccupiedStock.longValue();
+        if (remainOccupiedStock == 0) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+    
+    private Stock copyNewStock(Stock stock) {
+        Stock newStock = new Stock();
+        newStock.setId(stock.getId());
+        newStock.setOccupiedStock(stock.getOccupiedStock());
+        newStock.setRealOccupiedStock(stock.getRealOccupiedStock());
+        newStock.setPositionDateId(stock.getPositionDateId());
+        newStock.setBillingModelId(stock.getBillingModelId());
+        newStock.setTotalStock(stock.getTotalStock());
+        return newStock;
+    }
+}

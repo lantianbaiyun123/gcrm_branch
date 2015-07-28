@@ -1,0 +1,82 @@
+<div class="content-site-info">
+  <h5 class="bdt">
+    {{'AD_CONTENT_ADDERSS' | translate}}
+  </h5>
+  <div class="form-group">
+    <label class="control-label col-md-2">
+      {{'AD_CONTENT_PRODUCT_PLATFORMS' | translate}}：
+    </label>
+    <div ng-class="{'has-error':e.contentSave && formAd.product.$error.required}">
+      <div class="col-md-6">
+        <label class="radio radio-inline" ng-repeat="product in e.adPlatformList">
+          <input type="radio" ng-model="e.adSolutionContent.productId" ng-change="changeProduct(e.adSolutionContent.productId)" value="{{product.id}}" name="product" required>
+          {{product.i18nName}}
+        </label>
+      </div>
+      <div class="col-md-2 help-block" ng-show="e.contentSave && formAd.product.$error.required">
+        {{'AD_CONTENT_CHOOSE_PLATFORM' | translate}}
+      </div>
+    </div>
+  </div>
+  <div class="form-group" ng-if="e.siteList.length">
+    <label class="control-label col-md-2">
+      {{'AD_CONTENT_PRODUCT_SITE' | translate}}：
+    </label>
+    <div ng-class="{'has-error':e.hiddenElValidator && formAd.siteByProduct.$error.required}">
+      <div class="col-md-6 platformaGentType">
+        <label class="radio radio-inline" ng-repeat="siteByProduct in e.siteList">
+          <input type="radio" ng-model="e.adSolutionContent.siteId" ng-change="changeSite(e.adSolutionContent.productId,e.adSolutionContent.siteId)" value="{{siteByProduct.id}}" name="siteByProduct" required>
+          {{siteByProduct.i18nName}}
+        </label>
+        <div ng-hide="e.siteList.length" class="form-control-static">
+          {{'FORM_VALIDATE_INFO_NOT_AVAILABLE' | translate}}
+        </div>
+      </div>
+      <div class="col-md-3 help-block" ng-show="e.hiddenElValidator && formAd.siteByProduct.$error.required">
+        {{'AD_CONTENT_CHOOSE_SITE' | translate}}
+      </div>
+    </div>
+  </div>
+  <div class="form-group" ng-if="e.adSolutionContent.siteId || e.adSolutionContent.siteId === 0">
+    <label class="control-label col-md-2">
+      {{'AD_CONTENT_PRODUCT_ADRRESS' | translate}}：
+    </label>
+    <div ng-class="{'has-error':e.hiddenElValidator && formAd.adAdress.$error.required}">
+      <div class="col-md-2">
+        <select class="form-control validate" id="adChanel" ng-options="channelBySite.id as channelBySite.i18nName for channelBySite in e.channelVOList"
+        ng-change="changeChannel(e.adSolutionContent.channelId)" ng-model="e.adSolutionContent.channelId">
+          <option value="">
+            {{'AD_CONTENT_PRODUCT_CHANNEL' | translate}}
+          </option>
+        </select>
+      </div>
+      <div class="col-md-2 row">
+        <select class="form-control validate" id="adDistrict" name="adDistrict" ng-options="areaByChannel.i18nName for areaByChannel in e.areaVOList" ng-change="changeArea(e.area.id)" ng-model="e.area" ng-disabled="!e.adSolutionContent.channelId || !e.areaVOList.length">
+          <option value="">
+            {{'AD_CONTENT_PRODUCT_AREA' | translate}}
+          </option>
+        </select>
+      </div>
+      <div class="col-md-2">
+        <select class="form-control validate" ng-options="PositionByArea.i18nName for PositionByArea in e.positionVOList" name="adAdress" ng-model="e.position" ng-change="changePosition()" required ng-disabled="!e.area || !e.positionVOList.length">
+          <option value="">
+            {{'AD_CONTENT_PRODUCT_ADDRESS' | translate}}
+          </option>
+        </select>
+      </div>
+      <div class="col-md-1" ng-show="!!e.area && e.area.hasGuideFile">
+        <p class="form-control-static">
+          <a ng-href="../position/viewGuide/{{e.area.id}}" target="_blank" class="textDeco">
+            {{'AD_CONTENT_ADDRESS_GUIDE' | translate}}
+          </a>
+        </p>
+      </div>
+      <div class="col-md-2" ng-if="!formAd.adAdress.$error.required">
+        <button class="btn btn-link" ng-click="showSchedule()">{{'查看投放详情' | translate}}</button>
+      </div>
+      <div class="col-md-2 help-block" ng-show="e.hiddenElValidator && formAd.adAdress.$error.required">
+        {{'AD_CONTENT_CHOOSE_ADRESS' | translate}}
+      </div>
+    </div>
+  </div>
+</div>

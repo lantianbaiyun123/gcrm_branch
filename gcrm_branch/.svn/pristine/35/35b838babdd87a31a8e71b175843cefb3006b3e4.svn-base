@@ -1,0 +1,459 @@
+package com.baidu.gcrm.publish.service.impl;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.baidu.gcrm.ad.approval.model.Participant;
+import com.baidu.gcrm.ad.approval.model.Participant.DescriptionType;
+import com.baidu.gcrm.ad.approval.service.IParticipantService;
+import com.baidu.gcrm.ad.content.model.AdSolutionContent;
+import com.baidu.gcrm.ad.content.service.IAdSolutionContentService;
+import com.baidu.gcrm.ad.dao.AdvertiseMaterialApplyRepository;
+import com.baidu.gcrm.ad.material.service.IMaterialManageService;
+import com.baidu.gcrm.ad.material.vo.MaterialContentVO;
+import com.baidu.gcrm.ad.model.AdvertiseMaterialApply;
+import com.baidu.gcrm.bpm.vo.ParticipantConstants;
+import com.baidu.gcrm.common.DateUtils;
+import com.baidu.gcrm.common.GcrmConfig;
+import com.baidu.gcrm.common.LocaleConstants;
+import com.baidu.gcrm.i18n.service.I18nKVService;
+import com.baidu.gcrm.mail.MailHelper;
+import com.baidu.gcrm.mail.PublishContent;
+import com.baidu.gcrm.occupation.service.IPositionOccupationCommonService;
+import com.baidu.gcrm.publish.dao.IPublishOwnerRepository;
+import com.baidu.gcrm.publish.dao.IPublishRepository;
+import com.baidu.gcrm.publish.dao.IPublishRepositoryCustom;
+import com.baidu.gcrm.publish.model.Publish;
+import com.baidu.gcrm.publish.model.PublishDate;
+import com.baidu.gcrm.publish.model.PublishDate.PublishPeriodStatus;
+import com.baidu.gcrm.publish.model.PublishMailType;
+import com.baidu.gcrm.publish.model.PublishOwner;
+import com.baidu.gcrm.publish.service.IPublishDateService;
+import com.baidu.gcrm.publish.service.IPublishMailService;
+import com.baidu.gcrm.publish.service.IPublishRecordService;
+import com.baidu.gcrm.publish.web.vo.MaterialVo;
+import com.baidu.gcrm.publish.web.vo.PublishListVO;
+import com.baidu.gcrm.quote.service.impl.QuotationMainServiceImpl;
+import com.baidu.gcrm.resource.position.service.IPositionService;
+import com.baidu.gcrm.resource.position.web.vo.PositionVO;
+import com.baidu.gcrm.resource.site.model.Site;
+import com.baidu.gcrm.resource.site.service.ISiteService;
+import com.baidu.gcrm.schedule.service.IScheduleService;
+import com.baidu.gcrm.user.dao.IUserRepository;
+import com.baidu.gcrm.user.model.User;
+import com.baidu.gcrm.valuelistcache.model.AdvertisingPlatform;
+import com.baidu.gcrm.valuelistcache.service.impl.AdvertisingPlatformServiceImpl;
+@Service
+public class PublishMailServiceImpl implements IPublishMailService{
+	Logger logger = LoggerFactory.getLogger(QuotationMainServiceImpl.class);
+	@Autowired
+	private IPublishRepository publishDao;
+    @Autowired
+    private IAdSolutionContentService contentService;
+	@Autowired
+	IPublishDateService publishDateService;	
+    @Autowired
+	IPublishRepositoryCustom publishRepositoryCustom;
+	@Autowired
+	IPositionOccupationCommonService occupationService;
+	@Autowired
+	IScheduleService scheduleService;
+	@Autowired
+	IPublishRecordService publishRecordService;
+	@Autowired
+	IPositionService positionService;
+	@Autowired
+	IUserRepository useDao;
+	@Autowired
+	AdvertisingPlatformServiceImpl adPlatformService;
+	@Autowired
+    ISiteService siteService;
+	@Autowired
+	I18nKVService i18nKVService;
+	@Autowired
+	AdvertiseMaterialApplyRepository materApplyDao;
+	@Autowired
+	IParticipantService  participantService;
+	@Autowired
+	IMaterialManageService materialManageService;
+	@Autowired
+	IPublishOwnerRepository publishOwnerDao;
+	Set<String> sendTo =  new HashSet<String>();
+ 	List<String> operator=new ArrayList<String>();
+ 	
+	/**
+	 * 终止投放时发送邮件
+	 */
+    @Override
+    public void terminateContentByMail(Publish publish) {
+        try {
+            PublishContent pbcontent = new PublishContent();
+            AdSolutionContent content = contentService.findOne(publish.getAdContentId());
+            generateAccount(pbcontent, content.getAdSolutionId());
+            pbcontent.setLocale(LocaleConstants.en_US);
+            pbcontent.setMaiType(PublishMailType.terminate.name());
+            pbcontent.setAdContentNumber(content.getNumber());
+            pbcontent.setAdsubmitTime(DateUtils.getDate2String(DateUtils.YYYY_MM_DD_HH_MM_SS, content.getSubmitTime()));
+            pbcontent.setCustomer(content.getAdvertiser());
+            pbcontent.setDescription(content.getDescription());
+            pbcontent.setPmterminateDate(DateUtils.getDate2String(DateUtils.YYYY_MM_DD_HH_MM, publish.getUpdateTime()));
+            pbcontent.setPeriodDescription(generateperiodDescription(content.getPeriodDescription()));
+            generatePmMail(pbcontent, content.getProductId());
+            MailHelper.sendPublishContentMail(pbcontent);
+            sendTo.clear();
+            operator.clear();
+        } catch (Exception e) {
+            logger.error("邮件发送失败" + e.getClass() + "错误原因" + e.getMessage());
+
+        }
+    }
+	
+	/**
+	 * 催办时发送邮件
+	 */
+	@Override
+	public void remindersContetnByMail(Long id,LocaleConstants currentLocale) {
+	     PublishContent pbcontent=new PublishContent();	
+		 Publish publish=publishDao.findOne(id);		 
+		 pbcontent.setMaiType(PublishMailType.reminders.name());
+		 AdSolutionContent content= contentService.findOne(publish.getAdContentId());
+		 generateAccount(pbcontent,content.getAdSolutionId());
+		 if(currentLocale==null)
+		 {
+			 pbcontent.setLocale(LocaleConstants.en_US);
+		 }
+		 else
+		 {
+			 pbcontent.setLocale(currentLocale); 
+		 }
+		 pbcontent.setAdContentNumber(content.getNumber());
+		 pbcontent.setAdsubmitTime(DateUtils.getDate2String(DateUtils.YYYY_MM_DD_HH_MM_SS,content.getSubmitTime()));
+		 pbcontent.setCustomer(content.getAdvertiser());
+		 pbcontent.setDescription(content.getDescription());
+		 pbcontent.setPeriodDescription(generateperiodDescription(content.getPeriodDescription()));
+		 pbcontent.setMaterialUrl(GcrmConfig.getConfigValueByKey("app.url")+"views/main.jsp#/materialDetail?contentId="+content.getId());
+		 MailHelper.sendPublishContentMail(pbcontent);
+		 sendTo.clear();
+		 operator.clear();
+	}
+	
+	/**
+	 * 上下线时发送邮件
+	 */
+	@Override
+	public void ongoingOrEndByMail(PublishDate date,Publish publish) {
+		try{
+		PublishContent pbcontent=new PublishContent();	
+		AdSolutionContent content= contentService.findOne(publish.getAdContentId());
+		generateAccount(pbcontent,content.getAdSolutionId());		
+		pbcontent.setLocale(LocaleConstants.en_US);
+		if(date.getStatus().equals(PublishPeriodStatus.ongoing)){
+			pbcontent.setMaiType(PublishMailType.online.name());
+			pbcontent.setPmstartDate(DateUtils.getDate2String(DateUtils.YYYY_MM_DD_HH_MM_SS,date.getActuralStart()));
+		}
+		else if(date.getStatus().equals(PublishPeriodStatus.end)){
+			pbcontent.setMaiType(PublishMailType.offline.name());
+			pbcontent.setPmendDate(DateUtils.getDate2String(DateUtils.YYYY_MM_DD_HH_MM_SS,date.getActuralEnd()));
+			generatePmMail(pbcontent,content.getProductId());
+			List<PublishDate> dateList= publishRepositoryCustom.findPublishNoStartDateByPublishNumber(publish.getNumber());
+		if(dateList!=null&&dateList.size()>0)
+		{
+			PublishDate pdate=dateList.get(0);
+			pbcontent.setPdate( DateUtils.getDate2String(DateUtils.YYYY_MM_DD,pdate.getPlanStart()));
+		}else{
+			pbcontent.setPdate("无");
+		}
+		}
+		 pbcontent.setAdContentNumber(content.getNumber());
+		 pbcontent.setAdsubmitTime(DateUtils.getDate2String(DateUtils.YYYY_MM_DD_HH_MM_SS,content.getSubmitTime()));
+		 pbcontent.setCustomer(content.getAdvertiser());
+		 pbcontent.setDescription(content.getDescription());
+		 pbcontent.setPeriodDescription(generateperiodDescription(content.getPeriodDescription()));
+		 MailHelper.sendPublishContentMail(pbcontent);
+		 sendTo.clear();
+		 operator.clear();
+		}catch (Exception e) {
+			logger.error("邮件发送失败"+e.getClass()+"错误原因"+e.getMessage());
+		}
+	}
+	/**
+	 * 定时发送需要提醒上线任务的邮件
+	 * 
+	 */
+	@Override
+	public List<PublishListVO> findPulishMail(LocaleConstants currentLocale,PublishMailType type) {
+		if(currentLocale==null)
+		{
+			currentLocale=LocaleConstants.zh_CN;
+		}
+		List<PublishListVO> voList=publishRepositoryCustom.findOnlinePublishByPlanStart(type);    
+		List<PublishListVO> newList=new ArrayList<PublishListVO>();  
+		boolean autoPublished=false;
+		for(int i=0;i<voList.size();i++){     
+		 PublishListVO voBean = voList.get(i);  
+		 /* 如果是自动上线的广告内容，则不需要邮件通知pm去执行上线操作,暂时先不停掉，注释掉
+		  * autoPublished=contentService.findAutoPublishStatus(voBean.getAdContentId())
+		  */
+		 if(autoPublished){
+		     continue;  //暂时不停掉通知pm去上线的邮件
+		 }
+		 generatePositionNames(voBean,currentLocale);
+		 generateEmail(voBean); 
+		 generatePlatSiteNames(voBean,currentLocale);
+		 List<MaterialVo> materList=publishRepositoryCustom.findMaterialByAdcontentId(voBean.getAdContentNumber());
+		 if(materList!=null){
+			 for(MaterialVo vo:materList){
+				 vo.setDownUrl(GcrmConfig.getConfigValueByKey("app.url")
+						 +"/material/downloadMaterialFile?materialFileId="+vo.getId());
+			 }
+			 
+		 }
+		 MaterialContentVO contentVO = materialManageService
+					.findAdContVoMaterByContId(voBean.getAdContentId());
+		 voBean.setMaterList(materList);
+		 voBean.setContentVO(contentVO);
+		 
+		   if(i<voList.size()-1){
+			   if(voList.get(i).getChannelId().longValue()!=voList.get(i+1).getChannelId().longValue()){
+				   newList.add(voBean); 
+				   if(type.equals(PublishMailType.onlineCollection)){
+					   
+					   MailHelper.sendeCollectContentMail(newList, currentLocale);
+					   sendTo.clear();
+					   operator.clear();   
+				   }else{					   	
+						 MailHelper.sendeCollectMaterialMail(newList, currentLocale);   
+						 sendTo.clear();
+						 operator.clear();  
+				   }
+				   newList.clear();
+			   }else{				   
+				   newList.add(voBean); 
+			   }
+		   }else{
+			   newList.add(voBean);
+			   if(type.equals(PublishMailType.onlineCollection)){
+			   MailHelper.sendeCollectContentMail(newList, currentLocale);
+			   sendTo.clear();
+			   operator.clear();
+			   }else{
+			     MailHelper.sendeCollectMaterialMail(newList, currentLocale); 
+			     sendTo.clear();
+				 operator.clear();
+			   }
+		   }		   
+		}
+		return voList;
+	}
+	
+	/**
+	 * 
+	 * 格式化投放日期
+	 */
+	public String generateperiodDescription(String periodDescription)
+	{
+		 String pdtime = periodDescription.replaceAll("-",".").replaceAll(",", "-").replaceAll(";", ",");
+         char c=pdtime.charAt(pdtime.length()-1);
+         if(c==',')
+         {
+        	 pdtime= pdtime.substring(0, pdtime.length()-1);	
+        	 return pdtime;
+         }
+         else
+         {
+        	 return pdtime;
+         }
+     
+
+	
+
+}
+	/**
+	 * 格式化邮件接收人
+	 * @param pbcontent
+	 * @param adSoulutionId
+	 */
+	public void generateAccount(PublishContent pbcontent,Long adSoulutionId)
+	{
+
+		HashMap<String, Object> account= publishRepositoryCustom.findExecutor(adSoulutionId);
+		if(account!=null)
+		{
+			operator.add(account.get("name").toString());
+			pbcontent.setOperator(operator);
+			sendTo.add(account.get("email").toString());
+			pbcontent.setSendTo(sendTo);
+			} 
+		}
+	/**
+	 * 国际化投放位置
+	 * @param channelId
+	 * @param areaId
+	 * @param positionId
+	 * @param currentLocale
+	 * @return
+	 */
+	public void generatePositionNames(PublishListVO voBean,LocaleConstants currentLocale)
+	{    String PositionNames="";
+		 List<Long> positionIds = new ArrayList<Long> ();
+	     positionIds.add(voBean.getChannelId());
+	     positionIds.add(voBean.getAreaId());
+	     positionIds.add(voBean.getPositionId());
+	     String channelName="";
+	     String areaName="";
+	     String positionName="";
+	     List<PositionVO> positionVOs = positionService.findI18nByPositionIds(positionIds,currentLocale);
+	     for (PositionVO temPositionVO : positionVOs) {
+	         String i18nName = temPositionVO.getI18nName();
+	         long temPositionId = temPositionVO.getId().longValue();
+	         if (temPositionId == voBean.getChannelId().longValue()) {
+	         	 channelName=i18nName;
+	         	 
+	         }else if (temPositionId == voBean.getAreaId().longValue()) {
+	        	 areaName=i18nName;
+	         }else if (temPositionId == voBean.getPositionId().longValue()) {
+	        	 positionName=i18nName;
+	         }
+		 
+	     }
+	     voBean.setChannelName(channelName);
+	     PositionNames=channelName+"→"+areaName+"→"+positionName;
+	     voBean.setPositionName(PositionNames);
+	}
+/**
+ * 通过上下线人员配置查找邮件
+ * @param ower
+ * @return
+ */
+	public void generateEmail(PublishListVO voBean)
+	{   
+		PublishOwner owner=	publishOwnerDao.findByPositionId(voBean.getChannelId());
+		String [] email=null;
+		Set<String>  emailName=new HashSet<String>();
+		List<String> operator=new ArrayList<String>();
+	    if(owner!=null&&StringUtils.isNotBlank(owner.getOwner()))
+	    {
+	    	if(owner.getOwner().contains(","))
+	    	{
+	    		email=owner.getOwner().split(",");
+	    		for(int i=0;i<email.length;i++)
+	    		{
+	    			User user=useDao.findByUcid(Long.valueOf(email[i]));
+	    			emailName.add(user.getEmail());
+	    			operator.add(user.getRealname());
+	    		}
+	    	}else{
+	    			User user=useDao.findByUcid(Long.valueOf(owner.getOwner()));
+					emailName.add(user.getEmail());
+					operator.add(user.getRealname());
+	    	}
+	    	   voBean.setSendToers(emailName);
+	   	       voBean.setOperator(operator);
+	    }else{
+	    	Participant part=participantService.findByKeyAndDescAndParticId(voBean.getProductId().toString(), DescriptionType.platform, ParticipantConstants.pm_leader.toString());
+			if(part!=null){
+				User use=useDao.findByUsername(part.getUsername());
+				if(use!=null){
+					sendTo.add(use.getEmail());
+					operator.add(use.getRealname());
+				}
+				 	voBean.setSendToers(sendTo);
+		   	        voBean.setOperator(operator);
+			}
+	    	
+	    }
+		
+	 
+	}
+	/**
+	 * 国际化投放平台和站点
+	 * @param channelId
+	 * @param areaId
+	 * @param positionId
+	 * @param currentLocale
+	 * @return
+	 */
+	public void generatePlatSiteNames(PublishListVO voBean,LocaleConstants currentLocale)
+	{   
+		 AdvertisingPlatform advertisingPlatform= adPlatformService.getByIdAndLocale(voBean.getProductId(),currentLocale);
+		 if(advertisingPlatform!=null)
+		 {
+			 voBean.setPlatName(advertisingPlatform.getI18nName());
+		 }
+		 
+		 Site temSite=siteService.findSiteAndI18nById(voBean.getSiteId(),currentLocale);
+		 if(temSite!=null)
+		 {
+			 voBean.setSiteName(temSite.getI18nName());
+		 }
+   
+	     
+	}
+
+	@Override
+	public void materialOngoing(Publish publish) {
+		PublishContent pbcontent=new PublishContent();
+		pbcontent.setLocale(LocaleConstants.zh_CN);
+		pbcontent.setMaiType(PublishMailType.materOngoing.name());
+		AdvertiseMaterialApply materApply=materApplyDao.findByNumber(publish.getMaterialNumber());
+	    if(materApply!=null){
+	    	pbcontent.setMaterialsSubtime(DateUtils.getDate2String(DateUtils.YYYY_MM_DD_HH_MM_SS,materApply.getCreateTime()));
+	    }else{
+	    	return;
+	    }
+	    if(publish.getUpdateTime()!=null){
+	    pbcontent.setMaterialsUpdatetime(DateUtils.getDate2String(DateUtils.YYYY_MM_DD_HH_MM_SS,publish.getUpdateTime()));
+	    }
+	    AdSolutionContent content= contentService.findOne(publish.getAdContentId());
+        if(content!=null){
+        	try{
+        	 pbcontent.setAdContentNumber(content.getNumber());
+    		 pbcontent.setAdsubmitTime(DateUtils.getDate2String(DateUtils.YYYY_MM_DD_HH_MM_SS,content.getSubmitTime()));
+    		 pbcontent.setCustomer(content.getAdvertiser());
+    		 pbcontent.setDescription(content.getDescription());
+    		 pbcontent.setPeriodDescription(generateperiodDescription(content.getPeriodDescription()));
+    		 MailHelper.sendPublishContentMail(pbcontent);
+    		 sendTo.clear();
+    		 operator.clear();
+    		 }catch (Exception e) {
+    				logger.error("邮件发送失败"+e.getClass()+"错误原因"+e.getMessage());
+
+			}
+        }
+	}
+	
+	/**
+	 * 格式化平台pm邮件接收人
+	 * @param pbcontent
+	 * @param adSoulutionId
+	 */
+	public void generatePmMail(PublishContent pbcontent,Long productId)
+	{	
+		Participant part=participantService.findByKeyAndDescAndParticId(productId.toString(), DescriptionType.platform, ParticipantConstants.pm_leader.toString());
+		if(part!=null){
+			User use=useDao.findByUsername(part.getUsername());
+			if(use!=null){
+				sendTo.add(use.getEmail());
+				operator.add(use.getRealname());
+			}
+			pbcontent.setSendTo(sendTo);
+			pbcontent.setOperator(operator);
+		}
+	
+	}
+
+
+
+
+}
+
+

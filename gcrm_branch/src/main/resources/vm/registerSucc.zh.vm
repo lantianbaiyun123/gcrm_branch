@@ -1,0 +1,13 @@
+<p>
+尊敬的客户：
+</p>
+<p>
+&nbsp;&nbsp;&nbsp;&nbsp;您好！
+</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;
+${operator}已为您成功创建百度广告投放数据平台账号。
+</p>
+<p> &nbsp;&nbsp;&nbsp;&nbsp;您的账号用户名为：${username}，账号初始密码为：${password}</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp; 百度广告投放数据平台网址为：${url} 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;欢迎登录使用！</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp; 此为系统消息，请勿回复。</p>

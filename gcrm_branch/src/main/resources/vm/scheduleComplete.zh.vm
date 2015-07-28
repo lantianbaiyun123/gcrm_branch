@@ -1,0 +1,14 @@
+<style>
+.body{font-size:16px;}
+.important{font-weight:bold;}
+.red{color:red;}
+</style>
+<div class="body">
+	${sendTo}：</br>
+	您在<span class="important">${adSubmitTime}</span>提交的 广告内容（${adContentNumber}）<span class="important">排期成功</span></br>
+	投放时间：${occupationPeriods} </br>
+	插单时间：#if(${insertPeriods}) <span class="red">${insertPeriods}</span> #else无  #end </br>
+	</br>
+	请在<span class="important">72小时内完成确认</span>，否则将释放预定的排期时间</br>
+	若有问题请与国代（${countryAgent}）联系</br>
+</div>

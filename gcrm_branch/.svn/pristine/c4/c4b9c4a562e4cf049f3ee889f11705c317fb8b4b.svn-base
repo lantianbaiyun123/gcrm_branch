@@ -1,0 +1,197 @@
+package com.baidu.gcrm.ad.content.web.validator;
+
+import java.util.Date;
+import java.util.List;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.springframework.validation.Errors;
+import org.springframework.validation.Validator;
+
+import com.baidu.gcrm.ad.content.model.AdSolutionContent;
+import com.baidu.gcrm.ad.content.web.vo.AdSolutionContentView;
+import com.baidu.gcrm.ad.model.AdvertiseQuotation;
+import com.baidu.gcrm.ad.model.Contract;
+import com.baidu.gcrm.common.PatternUtil;
+import com.baidu.gcrm.common.ServiceBeanFactory;
+import com.baidu.gcrm.common.util.BeanModifyUtil;
+import com.baidu.gcrm.occupation.helper.DatePeriod;
+import com.baidu.gcrm.occupation.helper.DatePeriodHelper;
+import com.baidu.gcrm.resource.position.model.Position;
+
+public class AdSolutionContentExtraValidator implements Validator {
+
+    @Override
+    public boolean supports(Class<?> clazz) {
+        return clazz.equals(AdSolutionContentView.class);
+    }
+
+    @Override
+	public void validate(Object target, Errors errors) {
+	    
+		AdSolutionContentView view = (AdSolutionContentView)target;
+		AdSolutionContent currAdContent = view.getAdSolutionContent();
+		Long adSolutionId = currAdContent.getAdSolutionId();
+        
+		compareWithContractDate(view, errors);
+		
+		//compare other exists ad content
+		List<AdSolutionContentView> dbAdContentViews = ServiceBeanFactory.getAdSolutionContentService()
+		                                                 .findByAdSolutionId(adSolutionId, null, null);
+		if (CollectionUtils.isEmpty(dbAdContentViews)) {
+		    return;
+		}
+		
+		//check occupation
+        Long currPositionId = currAdContent.getPositionId();
+        Position currPosition = ServiceBeanFactory.getPositionService().findById(currPositionId);
+        List<DatePeriod> newCurrDatePeriods = view.getPeriods();
+        int salesAmount=1;
+        if(currPosition!=null){
+            salesAmount=currPosition.getSalesAmount() != null?currPosition.getSalesAmount():1;
+        }
+		for (AdSolutionContentView dbAdSolutionContentView : dbAdContentViews) {
+		    AdSolutionContent dbAdSolutionContent = dbAdSolutionContentView.getAdSolutionContent();
+		    Long currcurrAdContentId = currAdContent.getId();
+		    if (currcurrAdContentId != null && dbAdSolutionContent.getId().longValue() == currcurrAdContentId.longValue()) {
+		        continue;
+		    }
+		    
+		    Long dbPositionId = dbAdSolutionContent.getPositionId();
+            String conflictErrorKey = "advertise.content.position.conflict";
+            Object[] args = new Object[]{currAdContent.getId(),
+                    dbAdSolutionContent.getId()};
+            boolean isConflicted = false;
+		    if ((null != currPosition && null != currPositionId && null != dbPositionId) && currPositionId.equals(dbPositionId)) {
+		        String dbPeriodStr = dbAdSolutionContent.getPeriodDescription();
+		        if (!PatternUtil.isBlank(dbPeriodStr)) {
+		            List<DatePeriod> dbPeriods = DatePeriodHelper.getDatePeriods(dbPeriodStr);
+		            if (CollectionUtils.isNotEmpty(dbPeriods)) {
+		            	for (DatePeriod dbDatePeriod : dbPeriods) {
+			                if (isConflicted) {
+			                    break;
+			                }
+			                for (DatePeriod currDatePeriod : newCurrDatePeriods) {
+			                    Date currFormDate = currDatePeriod.getFrom();
+			                    Date currToDate = currDatePeriod.getTo();
+			                    Date dbFormDate = dbDatePeriod.getFrom();
+			                    Date dbToDate = dbDatePeriod.getTo();
+			                    
+			                    if (null != currFormDate && null != dbFormDate && null != dbToDate && null != currToDate) {
+			                        // 新投放开始时间在已有投放开始时间之前，如果新投放结束时间在已有起始时间之后则冲突
+			                    	if (currFormDate.compareTo(dbFormDate) < 0) {
+			                    		if (currToDate.compareTo(dbFormDate) >= 0) {
+			                    		    salesAmount--;
+			                    		    if(salesAmount==0){
+				                            errors.reject(conflictErrorKey, args, null);
+				                            isConflicted = true;
+			                                break;
+			                    		    }
+				                        }
+									} else if (currFormDate.compareTo(dbFormDate) >= 0 && currFormDate.compareTo(dbToDate) <= 0) {    // 新投放开始时间在已有投放时间之中，如果新投放结束时间在起始时间之后则冲突
+                                        if (currToDate.compareTo(dbFormDate) >= 0) {
+                                            salesAmount--;
+                                            if(salesAmount==0){
+                                            errors.reject(conflictErrorKey, args, null);
+                                            isConflicted = true;
+                                            break;
+                                            }
+                                        }
+                                    }
+			                    }
+			                }
+			            }
+					}
+		        }
+	            
+		    }
+		    if (isConflicted) {
+		        continue;
+		    }
+		    //check duplicate
+	        boolean isChangedContent = BeanModifyUtil.isModified(AdSolutionContent.class, currAdContent, dbAdSolutionContent);
+	        if(isChangedContent) {
+	            continue;
+	        }
+	        
+	        boolean isChangedQuotation = BeanModifyUtil.isModified(AdvertiseQuotation.class, view.getAdvertiseQuotation(), dbAdSolutionContentView.getAdvertiseQuotation());
+            if(isChangedQuotation) {
+                continue;
+            }
+            
+            /* 判断两个广告内容是否为重复时，不需要判断物料附件信息 ,fix bug CRM-1454
+            boolean isChangedMaterials = false;
+            List<AdvertiseMaterial> currAdvertiseMaterials = view.getAdvertiseMaterials();
+            List<AdvertiseMaterial> dbAdvertiseMaterials = dbAdSolutionContentView.getAdvertiseMaterials();
+            if (CollectionUtils.isEmpty(currAdvertiseMaterials)) {
+                if (CollectionUtils.isEmpty(dbAdvertiseMaterials)) {
+                    isChangedMaterials = false;
+                }else {
+                    isChangedMaterials = true;
+                }
+            }
+            if (isChangedMaterials) {
+                continue;
+            }
+            
+            if (CollectionUtils.isNotEmpty(dbAdvertiseMaterials)) {
+            	for (AdvertiseMaterial dbAdvertiseMaterial : dbAdvertiseMaterials) {
+                    if (isChangedMaterials) {
+                        break;
+                    }
+                    for (AdvertiseMaterial currAdvertiseMaterial : currAdvertiseMaterials) {
+                        isChangedMaterials = BeanModifyUtil.isModified(AdvertiseMaterial.class,
+                                currAdvertiseMaterial, dbAdvertiseMaterial);
+                        if (isChangedMaterials) {
+                            break;
+                        }
+                    }
+                }
+			}
+            
+            if (isChangedMaterials) {
+                continue;
+            }
+            */
+            
+            if (null != currPositionId && null != view.getAdvertiseQuotation().getId()) {
+                String duplicateErrorCode = "advertise.content.occupation.duplicate";
+                errors.reject(duplicateErrorCode, args, null);
+            }
+		}
+	}
+
+    private void compareWithContractDate(AdSolutionContentView view, Errors errors) {
+        AdSolutionContent currAdContent = view.getAdSolutionContent();
+        Long adSolutionId = currAdContent.getAdSolutionId();
+
+        Contract contract = ServiceBeanFactory.getContractService().findByAdSolutionId(adSolutionId);
+        if (contract == null) {
+            return;
+        }
+
+        Date contractEndDate = contract.getEndDate();
+        Date contractStartDate = contract.getBeginDate();
+        String contractErrorCode = "occupation.compare.contract.invalid";
+        Object[] errorArgs = new Object[] { currAdContent.getId() };
+        List<DatePeriod> periods = view.getPeriods();
+        if (CollectionUtils.isNotEmpty(periods)) {
+            for (DatePeriod temDatePeriod : periods) {
+                Date temFrom = temDatePeriod.getFrom();
+                Date temTo = temDatePeriod.getTo();
+
+                if (null != temFrom && null != temTo) {
+                    if ((contractStartDate != null && temFrom.before(contractStartDate))
+                            || (contractEndDate != null && temFrom.after(contractEndDate))) {
+                        errors.reject(contractErrorCode, errorArgs, null);
+                        break;
+                    } else if ((contractStartDate != null && temTo.before(contractStartDate))
+                            || (contractEndDate != null && temTo.after(contractEndDate))) {
+                        errors.reject(contractErrorCode, errorArgs, null);
+                        break;
+                    }
+                }
+            }
+        }
+
+    }
+}

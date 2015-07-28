@@ -1,0 +1,17 @@
+<div class="dropdown btn-group w100p">
+  <button class="dropdown-toggle btn btn-default btn-full-width" ng-disabled="dropdownDisabled">
+    <span class="col-md-11 btn-text">{{buttonText}}</span>
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu">
+    <li ng-repeat="choice in choices">
+      <a ng-click="setChoiceType( $index )" ng-if="!isI18nList">
+        <span ng-if="$index || noPleaseSelectText">{{typeNamePrefix + choice | translate}}</span>
+        <span ng-if="!$index && !noPleaseSelectText">{{choice | translate}}</span>
+      </a>
+      <a ng-click="setChoiceType( $index )" ng-if="isI18nList">
+        <span>{{choice.i18nName}}</span>
+      </a>
+    </li>
+  </ul>
+</div>

@@ -1,0 +1,1 @@
+define(["app"],function(e){e.registerFilter("PriceTypeFilter",function(){var e={unit:"PRICE_TYPE_unit",ratio:"PRICE_TYPE_ratio",rebate:"PRICE_TYPE_rebate"};return function(r){return e[r]?e[r]:"--"}})});

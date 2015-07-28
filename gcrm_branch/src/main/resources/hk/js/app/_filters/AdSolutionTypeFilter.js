@@ -1,0 +1,1 @@
+define(["app"],function(e){e.registerFilter("AdSolutionTypeFilter",function(){var e={create:"AD_SOLUTION_TYPE_CREATE",update:"AD_SOLUTION_TYPE_UPDATE"};return function(t){return e[t]?e[t]:"--"}})});

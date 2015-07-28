@@ -1,0 +1,15 @@
+{
+  "code": 200,
+  "data": {
+    "transactionRecordId": -1,
+    "moduleName": "adcontentonlineapply",
+    "delete": false,
+    "fieldName": "materialFile",
+    "id": -1,
+    "message": "success",
+    "name": "Desert.jpg",
+    "tempUrl": "/e6aa8110-606b-4893-ba4b-4116fad3c0de",
+    "url": "http://bcs-sandbox.baidu.com/gcm-storage%2Fe6aa8110-606b-4893-ba4b-4116fad3c0de?sign=MBO%3AcqKYLqQNYOdk%3AoJsOUSNWvQrjCwx4x08qXU8HG0w%3D"
+  },
+  "message": "OK"
+}

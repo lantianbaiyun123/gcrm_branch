@@ -1,0 +1,29 @@
+{
+    "code": 200,
+    "data": [
+        {
+            "data": {
+                "applier": "Anonymous",
+                "beginDate": 1389684542000,
+                "category": "代理协议",
+                "customerId": 245,
+                "endDate": 1389684544000,
+                "number": "151315HAO0029",
+                "sales": "Anonymous",
+                "state": "生效",
+                "summary": "这是一个合同摘要"
+            },
+            "value": "151315HAO0029"
+        },
+        {
+            "data": {
+                "category": "代理协议",
+                "customerId": 245,
+                "number": "151315HAO0030",
+                "summary": "流量"
+            },
+            "value": "151315HAO0030"
+        }
+    ],
+    "message": "OK"
+}

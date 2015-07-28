@@ -1,0 +1,9 @@
+[
+    "{{repeat(5,7)}}",
+    {
+        "id": "{{index()}}",
+        "guid": "{{guid()}}",
+        "isActive": "{{bool()}}",
+        "kaka": "(function () { var fruits = ['apple', 'banana', 'strawberry']; return fruits[0];})()"
+    }
+]

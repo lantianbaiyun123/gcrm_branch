@@ -1,0 +1,54 @@
+{
+  "code": 200,
+  "data": {
+    "codeFile": {
+      "adSolutionContentId": 795,
+      "downloadFileName": "嵌入代码.txt",
+      "fileUrl": "http://bcs-sandbox.baidu.com/gcm-storage%2F07e44c5c-f603-4620-8d80-ecba6cfa15ca?sign=MBO%3AcNDCkbD8viASpw7OhpzgGkexgrTvMO0PQk%3AS3ND5Sfrm4410mT6H2loz8z3QpY%3D",
+      "id": 577,
+      "materialApplyId": 41,
+      "materialFileType": "EMBED_CODE",
+      "uploadFileName": "/07e44c5c-f603-4620-8d80-ecba6cfa15ca"
+    },
+    "imageList": [
+      {
+        "adSolutionContentId": 795,
+        "createOperator": 6256473,
+        "createTime": 1398486591000,
+        "downloadFileName": "代码检查工具.png",
+        "fileUrl": "http://bcs-sandbox.baidu.com/gcm-storage%2F07e44c5c-f603-4620-8d80-ecba6cfa15ca?sign=MBO%3AcNDCkbD8viASpw7OhpzgGkexgrTvMO0PQk%3AS3ND5Sfrm4410mT6H2loz8z3QpY%3D",
+        "id": 576,
+        "materialApplyId": 41,
+        "materialFileType": "IMAGE",
+        "updateOperator": 6256473,
+        "updateTime": 1398486591000,
+        "uploadFileName": "/07e44c5c-f603-4620-8d80-ecba6cfa15ca"
+      },
+      {
+        "adSolutionContentId": 795,
+        "createOperator": 6256473,
+        "createTime": 1398486591000,
+        "downloadFileName": "代码检1212查工具.png",
+        "fileUrl": "http://bcs-sandbox.baidu.com/gcm-storage%2F07e44c5c-f603-4620-8d80-ecba6cfa15ca?sign=MBO%3AcNDCkbD8viASpw7OhpzgGkexgrTvMO0PQk%3AS3ND5Sfrm4410mT6H2loz8z3QpY%3D",
+        "id": 576,
+        "materialApplyId": 41,
+        "materialFileType": "IMAGE",
+        "updateOperator": 6256473,
+        "updateTime": 1398486591000,
+        "uploadFileName": "/07e44c5c-f603-4620-8d80-ecba6cfa15ca"
+      }
+    ],
+    "materialApply": {
+      "adSolutionContentId": 795,
+      "applyState": "confirm",
+      "id": 41,
+      "materialTitle": "test35-1-change",
+      "materialUrl": "http://www.test35-1-change.com",
+      "number": "38657155",
+      "taskInfo": "adSolution.content.material.approval.abandon:2014-04-26 12:32,<b>张晓斌</b>",
+      "updateOperator": 6256473,
+      "updateTime": 1398486749000
+    }
+  },
+  "message": "OK"
+}

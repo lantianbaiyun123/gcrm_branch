@@ -1,0 +1,1 @@
+define(["app"],function(e){e.registerFilter("BoolValueFilter",function(){return function(e){var n=e?"YES":"NO";return n}})});

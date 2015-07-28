@@ -1,0 +1,24 @@
+{
+    "code": 200,
+    "data": {
+        "datePeriod": [
+            {
+                "from": 1415980800000,
+                "to": 1416499200000
+            }
+        ],
+        "insertDate": [
+            {
+                "date": 1416153600000,
+                "checked":true
+            },
+            {
+                "date": 1416240000000,
+                "checked":true
+            }
+        ],
+        "totalDays": 10,
+        "maxDate":"2014-2-12"
+    },
+    "message": "OK"
+}

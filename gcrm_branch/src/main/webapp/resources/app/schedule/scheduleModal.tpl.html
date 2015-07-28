@@ -1,0 +1,186 @@
+<div class="modal-header">
+    <!-- <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">&times;</button> -->
+    <h4>
+        <span ng-show="!showConfirm">{{'SCHEDULE_AD_RESOURCE_TITLE' | translate}}</span>
+        <span ng-show="showConfirm">{{'SCHEDULE_AD_RESOURCE_TIPS' | translate}}</span>
+        <span>【{{positionInfo.channelName}} - {{positionInfo.areaName}}  - {{positionInfo.positionName}}】</span>
+        <span>
+            【{{positionInfo.rotationType | RotationTypeFilter | translate}}<span ng-if="positionInfo.rotationType == 1">&nbsp;/&nbsp;{{positionInfo.salesAmount}}</span>】
+        </span>
+    </h4>
+</div>
+<div ng-show="!noSchedule" class="modal-body container" yt-busy-spin yt-busy-spin-show="busySpinShow">
+    <div ng-show="!showConfirm" make-schdule>
+        <div class="suspend-msg" alert ng-repeat="suspendMsg in suspendMsgs" type="'danger'" close="closeAlert($index)">
+            <div ng-repeat="(suspendType, msgs) in suspendMsg">
+                <h5 ng-if=" suspendType==='conflict' "><strong>{{'SCHEDULE_TIME_CONFLICT' | translate}}</strong></h5>
+                <p ng-if=" suspendType==='conflict' " ng-repeat="msg in msgs">
+                    <span>{{msg.conflictPeriods | DatePeriodFilter}}</span>：
+                    <span ng-repeat="advertiser in msg.conflictAdvertisers">
+                        <span ng-if="$index">&nbsp;&nbsp;VS&nbsp;&nbsp;</span>
+                        <span>{{advertiser.name}}</span>
+                        <span ng-if="advertiser.isCurrent">({{'SCHEDULE_CURRENT' | translate}})</span>
+                    </span>
+                </p>
+                <h5 ng-if=" suspendType === 'change' "><strong>{{'TOTAL_DAYS_EXCESS' | translate}}</strong></h5>
+                <p ng-if=" suspendType === 'change' " ng-repeat="msg in msgs">
+                    <span>{{msg.advertiser}}</span>，
+                    {{'ORIGINAL' | translate}}<strong>&nbsp;{{msg.oldAmount}}&nbsp;</strong>{{'DAY_S' | translate}},
+                    {{'CHANGE_TO' | translate}}<strong>&nbsp;{{msg.newAmount}}&nbsp;</strong>{{'DAY_S' | translate}}
+                </p>
+                <h5 ng-if="suspendType === 'overdue'">
+                    <strong>{{'SCHEDULE_CONTRACT_OVERDUE' | translate}}</strong>
+                </h5>
+                <div ng-if="suspendType === 'overdue'" ng-repeat="msg in msgs">
+                    <h5>{{msg.advertiser}}【{{msg.operator}}】</h5>
+                    <p>{{'SCHEDULE_SCHEDULE_PERIOD' | translate}}：{{msg.conflictPeriods}}</p>
+                    <p>{{'SCHEDULE_CONTRACT_PERIOD' | translate}}：{{msg.contractPeriods}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-1 col-md-year">
+                <span class="pull-right">{{activeYear}}&nbsp;{{'SCHEDULE_YEARS' | translate}}</span>
+            </div>
+            <div class="col-md-10 col-md-month">
+                <ul class="nav nav-pills nav-justified">
+                  <li ng-class="{'active': month.active}" ng-repeat="month in monthList" ng-click="selectMonth(month, $index)">
+                    <span class="nav-pills-inner">
+                        <!-- <label class="checkbox-inline" ng-click="selectMonth($event, month)"> -->
+                        <input ng-show="adContent.selected" ng-repeat="(adContentKey, adContent) in scheduleList" class="checkbox-select" type="checkbox" ng-model="scheduleList[adContentKey].monthCheckbox[$parent.$index].checked" yt-checkbox-indeterminate="scheduleList[adContentKey].monthCheckbox[$parent.$index].indeterminate" value="" ng-disabled="!month.active || scheduleList[adContentKey].monthCheckbox[$parent.$index].disabled || readOnly" ng-click="changeMonthCheckbox($event, $parent.$index, adContentKey)">
+                        <span class="month-select">{{month.num | MonthShortFilter | translate}}</span>
+                        <!-- </label> -->
+                    </span>
+                  </li>
+            </div>
+            <div class="col-md-1 col-md-btn">
+                <div class="btn-group btn-group-xs pull-right">
+                  <a type="button" class="btn btn-default" ng-click="reloadSchedule()" title="{{'RESET' | translate}}"><span class="glyphicon glyphicon-repeat"></span></a>
+                  <a type="button" class="btn btn-default" ng-mouseover="legendShow=true" ng-mouseleave="legendShow=false" title="{{'LEGEND' | translate}}"><span class="glyphicon glyphicon-th-large"></span></a>
+                </div>
+                <div class="schedule-legend-wrap" ng-mouseover="legendShow=true" ng-mouseleave="legendShow=false" ng-show="legendShow">
+                    <ul class="schedule-legend list-group">
+                        <li class="list-group-item">
+                            <span class="color-box legend-reserved"></span>
+                            <span class="legend-text">{{'SCHEDULE_RESERVED' | translate}}</span>
+                        </li>
+                        <li class="list-group-item">
+                            <span class="color-box legend-confirmed"></span>
+                            <span class="legend-text">{{'SCHEDULE_CONFIRMED' | translate}}</span>
+                        </li>
+                        <li class="list-group-item">
+                            <span class="color-box legend-locked"></span>
+                            <span class="legend-text">{{'SCHEDULE_LOCKED' | translate}}</span>
+                        </li>
+                        <li class="list-group-item">
+                            <span class="color-box legend-current"></span>
+                            <span class="legend-text">{{'SCHEDULE_CURRENT' | translate}}</span>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+        <div class="wrapper-block">
+            <div class="schedule-table-wrapper" yt-schedule-table scroll-end="loadMore();" active-month-position="{{activeMonthPosition}}" input-clicked="dayClicked(colIndex, adContentKey, shiftKey);" owner-clicked="ownerClicked(adContentKey);" scroll-to-month="scrollSetMonth(scrollPosition)" read-only="readOnly">
+                <table class="schedule-table table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th class="headcol">{{'SCHEDULE_CUSTOMER_CONTENT' | translate}}</th>
+                            <th class="day-th" ng-repeat="day in thDays">{{day.dayNo}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="(adContentKey, adContent) in scheduleList" class="{{adContent.ngClass}}" ad-content-key="{{adContentKey}}">
+                            <td class="headcol {{adContent.ngClass}} row" title="{{adContent.advertiser}}  {{adContent.operator}}  {{ 'SCHEDULE_AD_CONTENT_NUMBER' | translate}}{{adContent.adContentNumber}}">
+                                <span class="headcol-current-icon col-md-1">
+                                    <span ng-if="!adContent.scheduleId">
+                                        <span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;
+                                    </span>
+                                </span>
+                                <span class="headcol-advertiser col-md-8" >{{adContent.advertiser}}</span>
+                                <span class="headcol-operator col-md-1">{{adContent.operator}}</span>
+                                <span class="headcol-selected-icon col-md-1">
+                                    <span class="glyphicon glyphicon-chevron-right"></span>
+                                </span>
+                            </td>
+                            <td ng-repeat="day in adContent.days" class="{{day.ngClass}} check-td {{day.changed}}">
+                                <label ng-if="day.checkbox"  title="{{day.dateString}}">
+                                    <input type="checkbox" ng-model="day.checked" ng-click="changeDayCheckBox(adContentKey, $index)" ng-disabled="day.disabled">
+                                </label>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div ng-show="showConfirm">
+        <table class="table table-bordered schedule-confirm" ng-repeat="msg in submitMsgs">
+            <caption>{{msg.advertiser}}&nbsp;&nbsp;【{{msg.adContentNumber}}】</caption>
+            <thead>
+                <tr>
+                    <th class="active col-md-2"></th>
+                    <th class="col-md-5">{{'SCHEDULE_EXPECT' | translate}}</th>
+                    <th colspan="2">{{'SCHEDULE_AFTER_BIDDING' | translate}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="active">{{'SCHEDULE_PRODUCT_TIME_BUCKET' | translate}}</td>
+                    <td class="period-label-td col-md-5">
+                        <span class="period-label-span"><div ng-model="msg.originalOccupy" period-label></div></span>
+                    </td>
+                    <td class="period-label-td col-md-5 no-right-border">
+                        <span><div ng-model="msg.nowOccupy" period-label></div></span>
+                    </td>
+                    <td class="confirm-same-label">
+                        <span ng-if="msg.nowOccupy == msg.originalOccupy" class="alert alert-success">{{'SCHEDULE_LABEL_SAME' | translate}}</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="active">{{'SCHEDULE_INSERT_TIME_BUCKET' | translate}}</td>
+                    <td class="period-label-td col-md-5">
+                        <!-- <span ng-if="msg.originalInsertOccupy">{{msg.originalInsertOccupy}}</span> -->
+                        <span class="period-label-span" ng-if="msg.originalInsertOccupy"><div ng-model="msg.originalInsertOccupy" period-label="danger"></div></span>
+                        <span ng-if="!msg.originalInsertOccupy">{{'SCHEDULE_NO_INSERT' | translate}}</span>
+                    </td>
+                    <td class="period-label-td col-md-5 no-right-border">
+                        <span ng-if="msg.nowInsertOccupy"><div ng-model="msg.nowInsertOccupy" period-label="danger"></div></span>
+                        <span ng-if="!msg.nowInsertOccupy">{{'SCHEDULE_NO_INSERT' | translate}}</span>
+                    </td>
+                    <td class="confirm-same-label">
+                        <span ng-if="msg.nowInsertOccupy == msg.originalInsertOccupy" class="alert alert-success">{{'SCHEDULE_LABEL_SAME' | translate}}</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="active">{{'SCHEDULE_TOTAL_PRODUCT_TIMES' | translate}}</td>
+                    <td class="col-md-5">{{msg.originalDays}}&nbsp;{{'DAY_S' | translate}}</td>
+                    <td class="col-md-5 no-right-border">
+                        <span>{{msg.nowDays}}&nbsp;{{'DAY_S' | translate}}</span>
+                    </td>
+                    <td class="confirm-same-label">
+                        <span ng-if="msg.nowDays == msg.originalDays" class="alert alert-success">{{'SCHEDULE_LABEL_SAME' | translate}}</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="protect-cover" ng-show="popoverConfirmShow"></div>
+</div>
+<div ng-show="noSchedule" class="pl10 pr10">
+    <div class="alert alert-info mt15">
+        {{'SCHEDULE_NO_SCHEDULE' | translate}}
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-if="!readOnly" ng-show="!showConfirm && !noSchedule" yt-schedule-popover-confirm yt-popover-confirm-show="popoverConfirmShow" yt-popover-confirm-msgs="warningMsgs" yt-popover-cancel="nextCancel()" yt-popover-ok="nextOk()" ng-click="next()" ng-disabled="popoverConfirmShow || (!changedArr.length && !nextAlways)">{{'NEXT_STEP' | translate}}</button>
+    <span></span>
+    <button class="btn btn-default" ng-click="prev()" ng-show="showConfirm">{{'PREV_STEP' | translate}}</button>
+    <span></span>
+    <button class="btn btn-primary" ng-if="!readOnly" ng-click="confirm()" ng-show="showConfirm">{{'CONFIRM_SCHEDULE' | translate}}</button>
+    <span></span>
+    <button class="btn btn-default" ng-click="cancel()" ng-disabled="popoverConfirmShow">{{'CLOSE' | translate}}</button>
+</div>

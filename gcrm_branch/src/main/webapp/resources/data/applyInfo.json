@@ -1,0 +1,62 @@
+{
+  "code": 200,
+  "data": {
+    "adSolutionContentApply": {
+      "adSolutionId": 1,
+      "adSolutionContentId": 11,
+      "adSolutiionContentNumber": "1233344-01",
+      "applyReason": "I agree with no idea",
+      "contractNumber": "123323-01",
+      "contractUrl": "http://www.asdfas.asfasdf",
+      "id": 1,
+      "creator": "xuzhi",
+      "createTime": "2012-02-12 12:12:12",
+      "createOperator": 2345567
+    },
+    "attachments": [
+      {
+        "transactionRecordId": -1,
+        "moduleName": "adcontentonlineapply",
+        "delete": false,
+        "fieldName": "materialFile",
+        "id": -1,
+        "message": "success",
+        "name": "Jellyfish.jpg",
+        "tempUrl": "/b9b365fe-bef3-4e01-a0d1-60b394e8f181",
+        "url": "http://bcs-sandbox.baidu.com/gcm-storage%2Fb9b365fe-bef3-4e01-a0d1-60b394e8f181?sign=MBO%3AcqKYLqQNYOdk%3Arxmcjo1eAJ6YLQPKrPhVECe7mnM%3D",
+        "type": "businesslicense",
+        "isEditing": true
+      },
+      {
+        "transactionRecordId": -1,
+        "moduleName": "adcontentonlineapply",
+        "delete": false,
+        "fieldName": "materialFile",
+        "id": -1,
+        "message": "success",
+        "name": "Desert.jpg",
+        "tempUrl": "/35e06ae3-28c5-49e7-a4a9-b679ca136ecf",
+        "url": "http://bcs-sandbox.baidu.com/gcm-storage%2F35e06ae3-28c5-49e7-a4a9-b679ca136ecf?sign=MBO%3AcqKYLqQNYOdk%3A2IOBp2%2BG3XVAOq6FQt0LjivjfaM%3D",
+        "type": "businesslicense",
+        "isEditing": true
+      }
+    ],
+    "approvalRecords": [
+      {
+        "taskName": "提交申请单",
+        "approvalStatus": "1",
+        "approvalSuggestion": "",
+        "creater": "黎明",
+        "createTime": "2012-02-11 12:12:12"
+      },
+      {
+        "taskName": "部门总监审核",
+        "approvalStatus": "1",
+        "approvalSuggestion": "no reason",
+        "creater": "胡永",
+        "createTime": "2012-02-11 12:12:12"
+      }
+    ]
+  },
+  "message": "OK"
+}

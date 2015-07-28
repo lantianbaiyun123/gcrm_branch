@@ -1,0 +1,354 @@
+define([
+  'app',
+  'anuglar-ui-select2',
+  '../_common/ytCommon',
+  '../_directives/ytMaxlength',
+  './ServiceAd',
+  './ModalPO',
+  '../record/SolutionApprovalRecord'
+], function(app) {
+  app.registerController('CtrlAd', [
+    '$scope',
+    '$interval',
+    '$state',
+    '$stateParams',
+    '$filter',
+    '$window',
+    '$modal',
+    'GCRMUtil',
+    'AdConstant',
+    'AdSolution',
+    'AdHttp',
+    'AdBasic',
+    'AdContent',
+    'AdContentUtil',
+    'AdContentAdvertising',
+    'ModalC',
+    'ModalPO',
+    'Utils',
+  function ($scope, $interval, $state, $stateParams, $filter, $window, $modal, GCRMUtil, AdConstant, AdSolution, AdHttp, AdBasic, AdContent, AdContentUtil, AdContentAdvertising, ModalC, ModalPO, Utils) {
+
+    //注入常量
+    $scope.AdConstant = AdConstant;
+
+    //初始化相关变量
+    AdSolution.init($scope, $stateParams.id);
+
+    //关闭提示栏
+    $scope.closeAlert = function(index) {
+      if ( $scope.alerts[index].type === 'info') {
+        $scope.alerts.splice(index, 1);
+      }
+    };
+
+    //修改
+    $scope.basicEdit = function() {
+      AdBasic.edit($scope);
+    };
+
+    //添加广告内容
+    $scope.addAdContent = function() {
+      AdSolution.addContent($scope);
+      var contentIndex = $scope.adContents.length - 1;
+      $scope.anchorTo( 'anchorContent' + contentIndex );
+    };
+
+    //变更方案
+    $scope.btnAdSolutionChange = function () {
+      AdHttp.changeAdSolution({
+        id: $stateParams.id
+      }).success(function (response) {
+        if (response.code === 200) {
+          $state.go( 'ad2.facade.facade', {id: response.data.adSolution.id } );
+        }
+      });
+    };
+
+    // 方案修改
+    // $scope.btnAdModify = function () {
+    //   AdHttp.modifyAd({
+    //     id: $stateParams.id
+    //   }).success(function ( response ) {
+    //     if (response.code === 200) {
+    //       $window.location.reload();
+    //     }
+    //   });
+    // };
+
+    //撤销广告方案
+    $scope.btnCancelAdSolution = function () {
+      AdHttp.cancelAd({
+        id: $stateParams.id
+      }).success(function (response) {
+        // 撤销成功后跳转回 添加页
+        if ( response.code === 200 ) {
+          ModalC.success({
+            content: AdConstant.successAdCancel
+          }).then(function (result) {
+            $window.location.reload();
+          });
+        }
+      });
+    };
+
+    //删除广告方案
+    $scope.btnRemoveAdSolution = function () {
+      AdHttp.removeAd({
+        id: $stateParams.id
+      }).success(function (response) {
+        // 撤销成功后跳转列表页
+        if ( response.code === 200 ) {
+          ModalC.success({
+            content: AdConstant.successAdRemove
+          }).then(function (result) {
+            $state.go( 'adSolutionList', {id: response.data} );
+          });
+        }
+      });
+    };
+
+    //单笔合同  框架下单笔合同   协议下单笔合同
+    $scope.btnContractType = function ( type, bussinessChange ) {
+      if ( type === 'single' ) {
+        createSingleContract();
+      } else {
+        if ( bussinessChange ) {
+          //框架下单笔合同   协议下单笔合同
+          AdHttp.createSingleContract({
+            id: $stateParams.id
+          }).success( function (response) {
+            if ( response.code === 200 ) {
+              //CMS返回成功后，显示已提交至商务人员提示
+              ModalC.success({
+                content: AdConstant.btnContractTypeSuccess
+              }).then(function (result) {
+                $window.location.reload();
+              });
+            }
+          });
+        } else {
+          //框架下单笔合同   协议下单笔合同
+          popPO( type );
+        }
+      }
+    };
+
+    //撤销单笔合同
+    $scope.btnCancelSingle = function () {
+      AdHttp.revokeContract({
+        id: $stateParams.id
+      }).success(function (response) {
+        if ( response.code === 200 ) {
+          ModalC.success({
+            content: AdConstant.successSingleCancel
+          }).then(function (result) {
+            $window.location.reload();
+          });
+        }
+      });
+    };
+
+    //创建PO
+    //判断有无合同编号 --有-直接回写PO号--无-弹出框，填写合同
+    $scope.btnCreatePO = function () {
+      AdHttp.findContactPO({id: $stateParams.id}).success(function (response) {
+        if (response.code === 200) {
+          //根据有无合同编号做不同操作
+          if ( response.data ) {
+            //回写PO号到广告内容中，在哪显示
+            ModalC.success({
+              content: AdConstant.btnCreatePOSuccess
+            }).then(function (result) {
+              $window.location.reload();
+            });
+          } else {
+            popPO( 'direct' );
+          }
+        }
+      });
+    };
+
+    //查看作废广告内容
+    $scope.btnViewCanceled = function (content) {
+      $window.open( '#/adContentDetail?id=' + content.adSolutionContentId );
+    };
+
+    //取消方案变更
+    $scope.cancelChangeAd = function () {
+      if ( !$stateParams.id ) {
+        return false;
+      }
+      AdHttp.cancelChangeAdSolution( { id: $stateParams.id } ).success( function ( response ) {
+        if ( response.code === 200 ) {
+          $state.go( 'ad2.facade.facade', {id: response.data } );
+        }
+      });
+    };
+
+    //广告内容自动保存
+    var autoTempSave;
+    $scope.autoTempSaveStart = function() {
+      // 如果已经在autoTempSave，不要再启动
+      if ( angular.isDefined(autoTempSave) ) {
+        return;
+      }
+
+      // autoTempSave = $interval(function () {
+      //   $scope.tempSaveContents();
+      // }, 30000);
+    };
+    $scope.autoTempSaveStop = function() {
+      if (angular.isDefined(autoTempSave)) {
+        $interval.cancel(autoTempSave);
+        autoTempSave = undefined;
+      }
+    };
+
+    $scope.$on('$destroy', function() {
+      // destroy的时候停止自动保存
+      $scope.autoTempSaveStop();
+    });
+
+    $scope.tempSaveContents = function (isManual) {
+      AdSolution.tempSaveContents($scope, isManual).then(function (results) {
+        var successContents = [];
+        for (var i = 0, length = results.length; i < length; i++) {
+          if (results[i] && results[i].success) {
+            successContents.push(i);
+          }
+        }
+        $scope.auto.successContents = successContents;
+        if (successContents.length) {
+          $scope.auto.saveTime = new Date();
+        }
+      });
+    };
+
+    //提交广告方案
+    $scope.btnSubmitAdSolution = function () {
+      if ($scope.state.isAutoSave) {
+        submitAfterContentsSaved();
+      } else {
+        submitSolution();
+      }
+    };
+
+    function submitAfterContentsSaved() {
+      var contentsData = [];
+      var allValid = true;
+      var firstErrorIndex = -1;
+      AdSolution.disableToApproval($scope);
+      for (var i = 0, length = $scope.adContents.length; i < length; i++) {
+        var innerScope = $scope.adContents[i].innerScope,
+            cData = AdContent.packSaveData(innerScope);
+        AdContentAdvertising.clearEmptyPeriod(innerScope.e.datePeriods);
+        AdContent.activateValidator(innerScope);
+        if (innerScope.formAd.$valid && AdContentAdvertising.isMinStockGood(innerScope.e)) {
+          contentsData.push(cData);
+          innerScope.formAd.$setPristine();
+        } else {
+          allValid = false;
+          if (firstErrorIndex < 0) {
+            firstErrorIndex = i;
+          }
+        }
+      }
+
+      if (!allValid) {
+        $scope.anchorTo( 'anchorContent' + firstErrorIndex );
+        AdSolution.enableToApproval($scope);
+        return false;
+      }
+
+      var promise = AdSolution.saveContents($scope, contentsData).then(function (result) {
+        if (result.success) {
+          // console.log(contentsData);
+          submitSolution();
+        } else if (result.errorList && result.firstErrorIndex>-1){
+          ModalC.alert({
+            contentList: result.errorList
+          }).then(function (result) {
+            $scope.anchorTo( 'anchorContent' + result.firstErrorIndex );
+          });
+        }
+      });
+      promise['finally'](function () {
+        AdSolution.enableToApproval($scope);
+      });
+    }
+
+    function submitSolution () {
+      AdSolution.disableToApproval($scope);
+      AdSolution.submitAdSolution($stateParams.id).then(function (result) {
+        if (result.success) {
+          ModalC.alert({
+            content: $filter('translate')('AD_BASIC_ALERT_SUBMIT_SUCCESS')
+          }).then(function (result) {
+            $scope.anchorTo('navBarTop');
+            $window.location.reload();
+          });
+        } else if (result.errorText) {
+          ModalC.alert({contentList: result.errorText});
+        }
+        AdSolution.enableToApproval($scope);
+      });
+    }
+
+    /**
+     * [popPO description]
+     * @param  {[type]} argument [description]
+     *         type == 'direct' 直接点击PO
+     *         type == 'frame'  点击框架下单笔合同
+     *         type == 'protocol' 点击协议下单笔合同
+     * @return {[type]}          [description]
+     */
+    function popPO(type) {
+      ModalPO.show({
+        type: type,
+        customerNumber: $scope.basic.customerI18nView.customer.customerNumber,
+        adSolutionId: $stateParams.id
+      }).then(function (result) {
+        if ( result && result.type) {
+          if ( result.type === 'direct' ) {
+            //创建PO成功，找到匹配的合同
+            if ( result.data ) {
+              //将PO的编号回写至每个广告内容中，并在每个广告内容显示变更按钮
+              ModalC.success({
+                content: AdConstant.POSuccess
+              }).then(function (result) {
+                $window.location.reload();
+              });
+            } else {
+              createSingleContract();//创建单笔合同
+            }
+          } else {
+            //框架下单笔合同   协议下单笔合同
+            if ( result.data ) {
+              $window.location.reload();
+            } else {
+              createSingleContract();//创建单笔合同
+            }
+          }
+        }
+      });
+    }
+    //创建单笔合同
+    function createSingleContract() {
+      AdHttp.createSingleContract({
+        id: $stateParams.id
+      }).success(function (response) {
+        if ( response.code === 200 ) {
+          if ( response.data ) {
+            //显示'已提交至商务人员'的ALERT
+            ModalC.success({
+              content: AdConstant.btnContractTypeSuccess
+            }).then(function (result) {
+              $window.location.reload();
+            });
+          }
+        }
+      });
+    }
+
+  }]);
+});

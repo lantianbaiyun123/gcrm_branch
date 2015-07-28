@@ -1,0 +1,544 @@
+package com.baidu.gcrm.publish.service.impl;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.baidu.gcrm.ad.content.service.IAdSolutionContentService;
+import com.baidu.gcrm.ad.material.service.IMaterialManageService;
+import com.baidu.gcrm.common.Constants;
+import com.baidu.gcrm.common.DateUtils;
+import com.baidu.gcrm.common.exception.CRMRuntimeException;
+import com.baidu.gcrm.common.log.LoggerHelper;
+import com.baidu.gcrm.occupation.helper.DatePeriod;
+import com.baidu.gcrm.occupation.helper.DatePeriodHelper;
+import com.baidu.gcrm.occupation1.service.IPositionDateRelationService;
+import com.baidu.gcrm.publish.dao.IForcePublishProofRepository;
+import com.baidu.gcrm.publish.dao.IPublishDateRepository;
+import com.baidu.gcrm.publish.helper.PublishDateHelper;
+import com.baidu.gcrm.publish.model.ForcePublishProof;
+import com.baidu.gcrm.publish.model.Publish;
+import com.baidu.gcrm.publish.model.Publish.PublishStatus;
+import com.baidu.gcrm.publish.model.Publish.PublishType;
+import com.baidu.gcrm.publish.model.PublishDate;
+import com.baidu.gcrm.publish.model.PublishDate.PublishPeriodStatus;
+import com.baidu.gcrm.publish.model.PublishRecord;
+import com.baidu.gcrm.publish.model.PublishRecord.OperateType;
+import com.baidu.gcrm.publish.service.IPublishDateService;
+import com.baidu.gcrm.publish.service.IPublishMailService;
+import com.baidu.gcrm.publish.service.IPublishOwnerService;
+import com.baidu.gcrm.publish.service.IPublishRecordService;
+import com.baidu.gcrm.publish.service.IPublishService;
+import com.baidu.gcrm.schedule1.service.ISchedulesService;
+
+@Service("publishDateServiceImpl")
+public class PublishDateServiceImpl implements IPublishDateService {
+
+    @Autowired
+    IPublishDateRepository publishDateDao;
+    @Autowired
+    IPublishService publishService;
+    @Autowired
+    ISchedulesService scheduleService;
+    @Autowired
+    IForcePublishProofRepository proofDao;
+    @Autowired
+    IPublishRecordService publishRecordService;
+    @Autowired
+    IMaterialManageService materialService;
+    @Autowired
+    IPublishOwnerService ownerService;
+    @Autowired
+    IPublishMailService publishMailService;
+    @Autowired
+    IAdSolutionContentService contentService;
+    @Autowired
+    IPositionDateRelationService dateRelationService;
+
+    @Override
+    public List<PublishDate> findByPublishNumberAndStatus(String publishNumber, PublishPeriodStatus status) {
+        return publishDateDao.findByPublishNumberAndStatus(publishNumber, status);
+    }
+
+    @Override
+    public List<PublishDate> findByPublishNumberAndStatusNot(String publishNumber, PublishPeriodStatus status) {
+        return publishDateDao.findByPublishNumberAndStatusNot(publishNumber, status);
+    }
+
+    @Override
+    public void publish(Long id, Long operatorId) {
+        PublishDate publishDate = publishDateDao.findOne(id);
+        checkPublishDateExist(publishDate);
+
+        String publishNumber = publishDate.getPublishNumber();
+        Publish publish = publishService.findByNumber(publishNumber);
+        checkPermission(publish, operatorId);
+        checkOperationPermitOrNot(publish, publishDate, OperateType.publish);
+
+        publish(operatorId, publishDate, publish);
+
+        publishRecordService.createAndSavePublishRecord(publish, operatorId, OperateType.publish,
+                publishDate.getPlanStart());
+        LoggerHelper.info(getClass(), "上线成功，上线单：{}，上线时间：{}", publish, publishDate);
+
+        publishMailService.ongoingOrEndByMail(publishDate, publish);
+    }
+
+    @Override
+    public void unpublish(Long id, Long operatorId) {
+        PublishDate publishDate = publishDateDao.findOne(id);
+        checkPublishDateExist(publishDate);
+        String publishNumber = publishDate.getPublishNumber();
+        Publish publish = publishService.findByNumber(publishNumber);
+        checkPermission(publish, operatorId);
+        checkOperationPermitOrNot(publish, publishDate, OperateType.unpublish);
+
+        publishDate.setActuralEnd(new Date());
+        publishDate.setEndOperator(operatorId);
+        publishDate.setStatus(PublishPeriodStatus.end);
+        publishDateDao.save(publishDate);
+
+        dealWithUnpublishedDate(publish, publishDate);
+        updatePublishAfterUnpublish(publish, operatorId);
+
+        publishRecordService.createAndSavePublishRecord(publish, operatorId, OperateType.unpublish,
+                publishDate.getPlanEnd());
+        LoggerHelper.info(getClass(), "下线成功，上线单：{}，上线时间：{}", publish, publishDate);
+
+        publishMailService.ongoingOrEndByMail(publishDate, publish);
+    }
+
+    private void dealWithUnpublishedDate(Publish publish, PublishDate publishDate) {
+        if (!publishDate.getActuralEnd().before(publishDate.getPlanEnd())) {
+            return;
+        }
+        List<Date> dates =
+                DatePeriodHelper.getDatesInPeriod(new DatePeriod(DateUtils.getNDayFromDate(publishDate.getActuralEnd(),
+                        1), publishDate.getPlanEnd()));
+
+        String scheduleNumber = publish.getScheduleNumber();
+        dateRelationService.removeRelationsAndReleaseStocksByDateIn(publish.getAdContentId(), dates);
+        LoggerHelper.info(getClass(), "上线单：{}，提前下线，释放排期单{}当前时间段对应的时间：{}", publish, scheduleNumber, dates);
+    }
+
+    private void updatePublishAfterUnpublish(Publish publish, Long operatorId) {
+        // not end including not start and expired(never start)
+        List<PublishDate> notEndDates =
+                publishDateDao.findByPublishNumberAndStatusNot(publish.getNumber(), PublishPeriodStatus.end);
+        boolean existNotStart = checkIfExistNotStart(notEndDates);
+        if (!existNotStart) {
+            publish.setStatus(PublishStatus.publish_finish);
+            publish.setUpdateTime(new Date());
+            publish.setUpdateOperator(operatorId);
+
+            publishService.save(publish);
+            scheduleService.updateScheduleCompleted(publish.getScheduleNumber());
+            LoggerHelper.info(getClass(), "上线单：{}，最后一段时间下线成功， 更新上线状态。", publish);
+        } else if (PublishType.material.equals(publish.getType())) {
+            // if publish type is material, change type to force or normal according to having contract or not(that is
+            // schedule locked or not)
+            publish.setUpdateTime(new Date());
+            publish.setUpdateOperator(operatorId);
+            // publish.setType(scheduleService.isScheduleLocked(publish.getScheduleNumber()) ? PublishType.normal :
+            // PublishType.force);
+            publish.setType(PublishType.normal);
+            publishService.save(publish);
+            LoggerHelper.info(getClass(), "上线单：{}，下线前应物料上线，下线后清掉物料上线任务。", publish);
+        }
+
+    }
+
+    private boolean checkIfExistNotStart(List<PublishDate> notEndDates) {
+        boolean existNotStart = false;
+        if (CollectionUtils.isNotEmpty(notEndDates)) {
+            for (PublishDate publishDate : notEndDates) {
+                if (!publishDate.getPlanStart().before(DateUtils.getCurrentDateOfZero())) {
+                    existNotStart = true;
+                    break;
+                }
+            }
+        }
+        return existNotStart;
+    }
+
+    @Override
+    @Deprecated
+    public void forcePublish(Long id, Long operatorId, List<ForcePublishProof> proofs) {
+        PublishDate publishDate = publishDateDao.findOne(id);
+        checkPublishDateExist(publishDate);
+
+        String publishNumber = publishDate.getPublishNumber();
+        Publish publish = publishService.findByNumber(publishNumber);
+        checkPermission(publish, operatorId);
+        checkOperationPermitOrNot(publish, publishDate, OperateType.force_publish);
+
+        publish(operatorId, publishDate, publish);
+
+        PublishRecord record =
+                publishRecordService.createAndSavePublishRecord(publish, operatorId, OperateType.force_publish,
+                        publishDate.getPlanStart());
+
+        for (ForcePublishProof proof : proofs) {
+            proof.setPublishNumber(publishNumber);
+            proof.setOperatorId(operatorId);
+            proof.setCreateTime(new Date());
+            proof.setRecordId(record.getId());
+        }
+        proofDao.save(proofs);
+        publishMailService.ongoingOrEndByMail(publishDate, publish);
+        LoggerHelper.info(getClass(), "上线单：{}，强制上线成功，上线时间：{}", publish, publishDate);
+    }
+
+    @Override
+    @Deprecated
+    public void forcePublish(Long id, Long operatorId) {
+        PublishDate publishDate = publishDateDao.findOne(id);
+        checkPublishDateExist(publishDate);
+        String publishNumber = publishDate.getPublishNumber();
+        Publish publish = publishService.findByNumber(publishNumber);
+        checkPermission(publish, operatorId);
+        checkOperationPermitOrNot(publish, publishDate, OperateType.force_publish);
+        publish(operatorId, publishDate, publish);
+        publishRecordService.createAndSavePublishRecord(publish, operatorId, OperateType.force_publish,
+                publishDate.getPlanStart());
+        LoggerHelper.info(getClass(), "上线单：{}，强制上线成功，上线时间：{}", publish, publishDate);
+
+    }
+
+    private void publish(Long operatorId, PublishDate publishDate, Publish publish) {
+        updatePublishDateAfterPublish(publishDate, new Date(), operatorId);
+        publishDateDao.save(publishDate);
+
+        publish.setStatus(PublishStatus.publishing);
+        publish.setUpdateOperator(operatorId);
+        publish.setUpdateTime(new Date());
+        publishService.save(publish);
+    }
+
+    private void updatePublishDateAfterPublish(PublishDate publishDate, Date date, Long operatorId) {
+        publishDate.setActuralStart(date);
+        publishDate.setStartOperator(operatorId);
+        publishDate.setStatus(PublishPeriodStatus.ongoing);
+    }
+
+    @Override
+    public List<PublishDate> saveAll(Collection<PublishDate> publishDates) {
+        return publishDateDao.save(publishDates);
+    }
+
+    @Override
+    public PublishDate save(PublishDate publishDate) {
+        return publishDateDao.save(publishDate);
+    }
+
+    @Override
+    public List<PublishDate> generatePublishDatesAndSave(List<DatePeriod> periods, String publishNumber) {
+        List<PublishDate> dates = generatePublishDatesByPeriods(periods, publishNumber);
+        return saveAll(dates);
+    }
+
+    @Override
+    public List<PublishDate> generatePublishDatesByPeriods(List<DatePeriod> periods, String publishNumber) {
+        List<PublishDate> dates = new ArrayList<PublishDate>();
+        if (CollectionUtils.isEmpty(periods)) {
+            return dates;
+        }
+
+        for (DatePeriod period : periods) {
+            PublishDate publishDate = new PublishDate();
+            publishDate.setPlanStart(period.getFrom());
+            publishDate.setPlanEnd(period.getTo());
+            publishDate.setPublishNumber(publishNumber);
+            publishDate.setStatus(PublishPeriodStatus.not_start);
+            dates.add(publishDate);
+        }
+        return dates;
+    }
+
+    private void checkPublishDateExist(PublishDate publishDate) {
+        if (publishDate == null) {
+            throw new CRMRuntimeException("publish.date.not.exists");
+        }
+    }
+
+    /**
+     * 检查当前用户是否有操作权限
+     * 
+     * @param id
+     * @param username
+     */
+    void checkPermission(Publish publish, Long userId) {
+        boolean isPermited = ownerService.checkPublishPermission(publish, userId);
+        if (isPermited) {
+            return;
+        }
+        throw new CRMRuntimeException("publish.not.authorized");
+    }
+
+    /**
+     * 检查当前时间段是否允许执行指定类型操作
+     * 
+     * @param type 操作类型
+     */
+    void checkOperationPermitOrNot(Publish publish, PublishDate date, OperateType type) {
+        Date currentDate = DateUtils.getCurrentDateOfZero();
+        PublishType publishType = publish.getType();
+        PublishStatus publishStatus = publish.getStatus();
+        PublishPeriodStatus publishDateStatus = date.getStatus();
+
+        switch (type) {
+            case publish:
+                if (!PublishType.normal.equals(publishType)) {
+                    throw new CRMRuntimeException("上线类型不是normal");
+                }
+                if (!PublishStatus.publishing.equals(publishStatus) && !PublishStatus.unpublish.equals(publishStatus)) {
+                    throw new CRMRuntimeException("上线单所处状态不能上线");
+                }
+                if (!PublishPeriodStatus.not_start.equals(publishDateStatus)) {
+                    throw new CRMRuntimeException("该时段已经在上线中或上线完成");
+                }
+                if (date.getPlanStart().after(currentDate) || date.getPlanEnd().before(currentDate)) {
+                    throw new CRMRuntimeException("当前时间不在该时段中");
+                }
+                if (!isMaterialCompleted(publish)) {
+                    throw new CRMRuntimeException("物料不全");
+                }
+                if (!PublishType.normal.equals(publishType)
+                        || (!PublishStatus.publishing.equals(publishStatus) && !PublishStatus.unpublish
+                                .equals(publishStatus)) || !PublishPeriodStatus.not_start.equals(publishDateStatus)
+                        || date.getPlanStart().after(currentDate) || date.getPlanEnd().before(currentDate)
+                        || !isMaterialCompleted(publish)) {
+                    throw new CRMRuntimeException("operation.not.permit");
+                }
+                break;
+            case unpublish:
+                if (!PublishStatus.publishing.equals(publishStatus)) {
+                    throw new CRMRuntimeException("operation.not.permit");
+                } else if (PublishPeriodStatus.not_start.equals(publishDateStatus)) {
+                    throw new CRMRuntimeException("publish.date.not.start");
+                } else if (PublishPeriodStatus.end.equals(publishDateStatus)) {
+                    throw new CRMRuntimeException("publish.date.end.already");
+                }
+                break;
+            case force_publish:
+                if (!PublishType.force.equals(publishType)) {
+                    throw new CRMRuntimeException("上线类型不是force");
+                }
+                if (!PublishStatus.publishing.equals(publishStatus) && !PublishStatus.unpublish.equals(publishStatus)) {
+                    throw new CRMRuntimeException("上线单所处状态不能上线");
+                }
+                if (!PublishPeriodStatus.not_start.equals(publishDateStatus)) {
+                    throw new CRMRuntimeException("该时段已经在上线中或上线完成");
+                }
+                if (date.getPlanStart().after(currentDate) || date.getPlanEnd().before(currentDate)) {
+                    throw new CRMRuntimeException("当前时间不在该时段中");
+                }
+                if (!isMaterialCompleted(publish)) {
+                    throw new CRMRuntimeException("物料不全");
+                }
+                if (!PublishType.force.equals(publishType)
+                        || (!PublishStatus.publishing.equals(publishStatus) && !PublishStatus.unpublish
+                                .equals(publishStatus)) || !PublishPeriodStatus.not_start.equals(publishDateStatus)
+                        || date.getPlanStart().after(currentDate) || date.getPlanEnd().before(currentDate)
+                        || !isMaterialCompleted(publish)) {
+                    throw new CRMRuntimeException("operation.not.permit");
+                }
+                break;
+            default:
+                throw new CRMRuntimeException("operation.not.permit");
+        }
+    }
+
+    private boolean isMaterialCompleted(Publish publish) {
+        return materialService.isMaterFullByPosMaterType(publish.getAdContentId());
+    }
+
+    @Override
+    public void deleteByPublishNumber(String publishNumber) {
+        publishDateDao.deleteByPublishNumber(publishNumber);
+    }
+
+    @Override
+    public List<PublishDate> findByPublishNumber(String publishNumber) {
+        return publishDateDao.findByPublishNumber(publishNumber);
+    }
+
+    @Override
+    public void unpublishAllAfterRelease(List<PublishDate> publishDates, Date date, Long operatorId) {
+        if (CollectionUtils.isEmpty(publishDates)) {
+            return;
+        }
+        for (PublishDate publishDate : publishDates) {
+            publishDate.setActuralEnd(date);
+            publishDate.setEndOperator(operatorId);
+            publishDate.setStatus(PublishPeriodStatus.end);
+        }
+        saveAll(publishDates);
+        LoggerHelper.info(getClass(), "释放排期单后，下线投放时间：{}", publishDates);
+    }
+
+    @Override
+    public List<PublishDate> combinePublishDatesAndSave(List<DatePeriod> newPeriods, Date approvalDate,
+            String newPublishNumber, String oldPublishNumber) {
+        List<PublishDate> oldDates =
+                this.findByPublishNumberAndPlanStartLessThan(oldPublishNumber,
+                        DateUtils.getNDayFromDate(approvalDate, 1));
+        if (CollectionUtils.isEmpty(oldDates)) {
+            return new ArrayList<PublishDate>();
+        }
+        LoggerHelper.info(getClass(), "旧上线单编号：{}，已经上线的时间有：{}", oldPublishNumber, oldDates);
+        List<PublishDate> dates =
+                PublishDateHelper.combineOldAndNewPublish(oldDates, newPeriods, approvalDate, newPublishNumber);
+        saveAll(dates);
+        LoggerHelper.info(getClass(), "合并新旧上线单后，上线单编号：{}，上线时间：{}", newPublishNumber, dates);
+        return dates;
+    }
+
+    @Override
+    public void batchUnpublishTimer() {
+        List<Publish> publishing = publishService.findByStatus(PublishStatus.publishing);
+        Date currentDate = DateUtils.getCurrentDate();
+        LoggerHelper.info(getClass(), "{}开始批量下线定时任务，正在上线中的上线单有{}个", currentDate, publishing.size());
+        if (CollectionUtils.isEmpty(publishing)) {
+            return;
+        }
+        int count = 0;
+        for (Publish publish : publishing) {
+            List<PublishDate> ongoingDates =
+                    findByPublishNumberAndStatus(publish.getNumber(), PublishPeriodStatus.ongoing);
+            if (CollectionUtils.isEmpty(ongoingDates)) {
+                continue;
+            }
+            for (PublishDate publishDate : ongoingDates) {
+                /*
+                 * String formatDateStr = DateUtils.getDate2String(DateUtils.YYYY_MM_DD, publishDate.getPlanEnd()); Date
+                 * planEndTime = DateUtils.getString2Date(DateUtils.YYYY_MM_DD_HH_MM_SS, formatDateStr + " 23:30:50");
+                 */
+                Date planEnd = publishDate.getPlanEnd();
+                if (!planEnd.before(currentDate)) {
+                    continue;
+                }
+                publishDate.setActuralEnd(new Date());
+                publishDate.setEndOperator(Constants.SYSTEM_OPERATOR);
+                publishDate.setStatus(PublishPeriodStatus.end);
+                publishDateDao.save(publishDate);
+
+                updatePublishAfterUnpublish(publish, Constants.SYSTEM_OPERATOR);
+                count++;
+                publishRecordService.createAndSavePublishRecord(publish, Constants.SYSTEM_OPERATOR,
+                        OperateType.unpublish, publishDate.getPlanEnd());
+                LoggerHelper.info(getClass(), "下线成功，上线单：{}，上线时间：{}", publish, publishDate);
+
+                publishMailService.ongoingOrEndByMail(publishDate, publish);
+            }
+        }
+        LoggerHelper.info(getClass(), "批量下线成功，共下线{}个时间段。", count);
+    }
+
+    public void batchPublishTimer() {
+        LoggerHelper.info(getClass(), "定时上线任务扫描开始------");
+        List<PublishStatus> statuses = Arrays.asList(PublishStatus.unpublish, PublishStatus.publishing);
+        List<Publish> publishing = publishService.findByStatusIn(statuses);
+        try {
+            autoPublish(publishing);
+        } catch (Exception e) {
+            LoggerHelper.err(getClass(), "定时上线任务发生异常:事务回滚", e.getMessage());
+            throw new CRMRuntimeException(e);
+        }
+        LoggerHelper.info(getClass(), "定时上线任务扫描结束------");
+    }
+
+    public void autoPublish(List<Publish> unpublishes) {
+        if (CollectionUtils.isEmpty(unpublishes)) {
+            return;
+        }
+        Date currentDate = DateUtils.getCurrentDate();
+        LoggerHelper.info(getClass(), "{}开始进行上线检查，待检查的上线单有{}个", currentDate, unpublishes.size());
+        int count = 0;
+        for (Publish publish : unpublishes) {
+            if (contentService.findAutoPublishStatus(publish.getAdContentId())) {
+                List<PublishDate> ongoingDates =
+                        findByPublishNumberAndStatus(publish.getNumber(), PublishPeriodStatus.not_start);
+                if (CollectionUtils.isEmpty(ongoingDates)) {
+                    continue;
+                }
+                for (PublishDate publishDate : ongoingDates) {
+                    Date planStart = publishDate.getPlanStart();
+                    Date planEnd = publishDate.getPlanEnd();
+                    if (planStart.after(currentDate) || planEnd.compareTo(DateUtils.getCurrentDateOfZero()) < 0) {
+                        continue;
+                    }
+                    publishDate.setActuralStart(currentDate);
+                    publishDate.setStartOperator(Constants.SYSTEM_OPERATOR);
+                    publishDate.setStatus(PublishPeriodStatus.ongoing);
+                    publishDateDao.save(publishDate);
+                    if (PublishStatus.unpublish == publish.getStatus()) {
+                        publish.setStatus(PublishStatus.publishing);
+                        publish.setUpdateTime(currentDate);
+                        publish.setUpdateOperator(Constants.SYSTEM_OPERATOR);
+                        publishService.save(publish);
+                    }
+                    count++;
+                    publishRecordService.createAndSavePublishRecord(publish, Constants.SYSTEM_OPERATOR,
+                            OperateType.publish, planStart);
+                    LoggerHelper.info(getClass(), "上线成功，上线单：{}，上线时间：{}", publish, currentDate);
+
+                    publishMailService.ongoingOrEndByMail(publishDate, publish);
+                }
+            }
+        }
+        LoggerHelper.info(getClass(), "上线成功，共上线{}个时间段。", count);
+    }
+
+    @Override
+    public List<PublishDate> findByPublishNumberAndPlanStartLessThan(String publishNumber, Date date) {
+        return publishDateDao.findByPublishNumberAndPlanStartLessThan(publishNumber, date);
+    }
+
+    @Override
+    public List<PublishDate> findByAdContentId(Long contentId) {
+        if (contentId != null) {
+            Publish publish = publishService.findByAdContentId(contentId);
+            if (publish != null) {
+                return publishDateDao.findByPublishNumber(publish.getNumber());
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public void unpublishAndRemovePublishDates(Publish publish) {
+        List<PublishDate> publishDates = publishDateDao.findByPublishNumber(publish.getNumber());
+        if (CollectionUtils.isEmpty(publishDates)) {
+            return;
+        }
+        List<PublishDate> toDeleteDates = new ArrayList<PublishDate>();
+        Date currentDate = new Date();
+        for (PublishDate publishDate : publishDates) {
+            if (PublishPeriodStatus.ongoing.equals(publishDate.getStatus())) {
+                LoggerHelper.info(getClass(), "下线时间段：{}", publishDate);
+                publishDate.setPlanEnd(currentDate);
+                publishDate.setActuralEnd(currentDate);
+                publishDate.setEndOperator(Constants.SYSTEM_OPERATOR);
+                publishDate.setStatus(PublishPeriodStatus.end);
+                publishDateDao.save(publishDate);
+                publishRecordService.createAndSavePublishRecord(publish, Constants.SYSTEM_OPERATOR,
+                        OperateType.unpublish, publishDate.getPlanEnd());
+                LoggerHelper.info(getClass(), "更新时间段为：{}", publishDate);
+                continue;
+            }
+            if (PublishPeriodStatus.not_start.equals(publishDate.getStatus())
+                    && publishDate.getPlanStart().after(currentDate)) {
+                toDeleteDates.add(publishDate);
+            }
+        }
+        publishDateDao.delete(toDeleteDates);
+        LoggerHelper.info(getClass(), "删除没有开始的未来时间段：{}", toDeleteDates);
+    }
+}

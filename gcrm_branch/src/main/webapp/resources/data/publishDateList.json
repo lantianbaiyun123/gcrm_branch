@@ -1,0 +1,69 @@
+{
+    "code": 200, 
+    "data": {
+        "adContentId": 6315, 
+        "materialList": [
+            {
+                "adSolutionContentId": 6315, 
+                "createOperator": 7426813, 
+                "createTime": 1410931830000, 
+                "downloadFileName": "1086.jpg", 
+                "downloadUrl": "http://cq01-iit-bkmdev09.vm.baidu.com:8101/gcrm/material/downloadMaterialFile?materialFileId=225", 
+                "fileDownloadUrl": "http://10.240.166.3/gcm-storage%2F0333ae91-bb2e-425e-9725-696a64617b6e?sign=MBO%3AN29h9ewpiKZHcPVah2p76Tgqb2L9ow13n%3AdH5nPjH8BnANFFDv8hvfS0%2BjDbE%3D", 
+                "fileUrl": "http://10.240.166.3/gcm-storage%2F0333ae91-bb2e-425e-9725-696a64617b6e?sign=MBO%3AN29h9ewpiKZHcPVah2p76Tgqb2L9ow13n%3AdH5nPjH8BnANFFDv8hvfS0%2BjDbE%3D", 
+                "id": 225, 
+                "materialApplyId": 1191, 
+                "materialFileType": "IMAGE", 
+                "updateOperator": 7426813, 
+                "updateTime": 1410931830000, 
+                "uploadFileName": "/0333ae91-bb2e-425e-9725-696a64617b6e"
+            }
+        ], 
+        "materialMenuList": [
+            {
+                "adSolutionContentId": 6592, 
+                "createOperator": 7426946, 
+                "createTime": 1414723686000, 
+                "id": 634, 
+                "material": {
+                    "downloadFileName": "高福春.jpg", 
+                    "downloadUrl": "http://localhost:8080/gcrm/material/downloadMaterialFile?materialFileId=634", 
+                    "fileUrl": "http://bcs-sandbox.baidu.com/gcm-storage%2Fa5e45764-be0b-4a16-9b06-6cb353af2c40?sign=MBO%3AcqKYLqQNYOdk%3AD%2BIo7O7sLoGC1EwusWcFgR8ZHhQ%3D", 
+                    "fileSize": 33, 
+                    "picHeight": 598, 
+                    "picWidth": 441, 
+                    "uploadFileName": "/a5e45764-be0b-4a16-9b06-6cb353af2c40"
+                }, 
+                "materialApplyId": 1310, 
+                "materialFileType": "IMAGE", 
+                "updateOperator": 7426946, 
+                "updateTime": 1414723686000
+            }
+        ], 
+        "materialPeriodDescription": "2014-06-23,2014-06-26;", 
+        "materialEmpty": false, 
+        "materialEmptyType": 2, 
+        "materialFileType": 0, 
+        "materialNumber": "00010880", 
+        "materialOld": false, 
+        "materialType": 0, 
+        "materialUrl": "http://hsoubgo.com/offer/1404263267551786/1406127351260088", 
+        "publishDate": [
+            {
+                "acturalStart": 1413258563000, 
+                "countForceOnline": false, 
+                "countOffline": true, 
+                "countOnline": false, 
+                "id": 292, 
+                "planEnd": 1418659200000, 
+                "planStart": 1412784000000, 
+                "publishNumber": "0000017607", 
+                "showForceOnline": false, 
+                "showOffline": true, 
+                "showOnline": false, 
+                "startOperator": "王旭"
+            }
+        ]
+    }, 
+    "message": "OK"
+}

@@ -1,0 +1,43 @@
+<div class="container">
+  <div class="panel gcrm-panel">
+    <div class="panel-top-heading">
+      <h1>
+        <span>{{'PLATFORM_LIST' | translate}}</span>
+        <span class="pull-right">
+          <a class="btn btn-success" ng-click="btnAdd()" ng-if="BtnIndex.btn_platform_list_add">
+              {{'PLATFORM_LIST_ADD' | translate}}
+          </a>
+        </span>
+      </h1>
+    </div>
+    <div class="panel-body">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>{{'PLATFORM' | translate}}</th>
+            <th>{{'PLATFORM_LIST_SITE' | translate}}</th>
+            <th>{{'PLATFORM_LIST_SITE_NUMBER' | translate}}</th>
+            <th>{{'STATUS' | translate}}</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="item in list">
+            <td>{{item.i18nName}}</td>
+            <td class="td-max mw350" title="{{item.siteNames}}">{{item.siteNames}}</td>
+            <td>{{item.siteCount}}</td>
+            <td>{{item.status | PositionFilter:'status' | translate}}</td>
+            <td>
+              <a ng-click="btnEdit(item)" ng-if="BtnIndex.btn_platform_list_mod">{{'MODIFY' | translate}}</a>
+              <span ng-if="BtnIndex.btn_platform_list_mod && BtnIndex.btn_platform_list_close">&nbsp;|&nbsp;</span>
+              <span ng-if="BtnIndex.btn_platform_list_close">
+                <a ng-click="btnShutdown(item)" ng-if="item.status == 'enable'">{{'SHUTDOWN' | translate}}</a>
+                <a ng-click="btnStartup(item)" ng-if="item.status == 'disable'">{{'ACTIVATE' | translate}}</a>
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

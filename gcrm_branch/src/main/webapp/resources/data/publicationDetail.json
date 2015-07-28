@@ -1,0 +1,51 @@
+{
+  "code": 200,
+  "data": {
+    "materialFileType": "2",
+    "materialNumber": "25410965-01",
+    "materialTitle": "201404101500",
+    "materialUrl": "http://www.baidu.com",
+    "adContentId": 123,
+    "imageList": [
+      {
+        "downloadFileName": "文件名",
+        "id": 1,
+        "fileUrl": "下载地址"
+      }
+    ],
+    "codeFile": {
+      "downloadFileName": "文件名",
+      "id": 1,
+      "fileUrl": "下载地址"
+    },
+    "publishDate": [
+      {
+        "id": 1,
+        "planEnd": 1399132800000,
+        "planStart": 1398960000000,
+        "acturalEnd": 1399305600000,
+        "acturalStart": 1399305600000,
+        "publishNumber": "1234567890",
+        "startOperator": "安欢",
+        "endOperator": "李晓丽",
+        "showOffline": true,
+        "showOnline": true,
+        "showForceOnline": true
+      },
+      {
+        "id": 2,
+        "planEnd": 1399305600000,
+        "planStart": 1399305600000,
+        "acturalEnd": 1399305600000,
+        "acturalStart": 1399305600000,
+        "publishNumber": "1234567890",
+        "endOperator": "李晓丽丽丽丽丽丽丽",
+        "startOperator": "安欢",
+        "showOffline": true,
+        "showOnline": true,
+        "showForceOnline": true
+      }
+    ]
+  },
+  "message": "OK"
+}

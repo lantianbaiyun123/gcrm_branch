@@ -1,0 +1,78 @@
+<div class="container customer-detail">
+  <div class="panel gcrm-panel panel-attached">
+    <div class="panel-top-heading">
+      <h1>
+        <span>{{'PAGE_CUSTOMER_DETAIL' | translate}}</span>
+        <span class="pull-right">
+          <a class="btn btn-link" ng-click="modalApprovalRecord()" ng-if="BtnIndex.btn_cust_detail_appr_record_view">
+            {{'RECORD_APPROVAL_RECORD' | translate}}
+          </a>
+          <a class="btn btn-link" ng-click="modalModifyRecord()" ng-if="BtnIndex.btn_cust_detail_mod_record_view">
+            {{'RECORD_MODIFY_RECORD' | translate}}
+          </a>
+
+          <button type="button" class="btn btn-danger" ng-if="(!OwnerOpers.btn_cust_detail_withdraw || isOwner) && BtnIndex.btn_cust_detail_withdraw && customerApplyInfo.approveState == 'approving' && customerApplyInfo.companyStatus != 2" yt-popover-confirm="withdraw(customerApplyInfo.customerId)" yt-popover-title="{{'CONFIRM_WITHDRAW' | translate}}" yt-popover-ok-class="btn-warning" yt-popover-ok-text="{{'WITHDRAW' | translate}}" append-to-body="true">
+            {{'WITHDRAW' | translate}}
+          </button>
+          <button type="button" class="btn btn-danger" ng-if="(!OwnerOpers.btn_cust_detail_cancel || isOwner) && BtnIndex.btn_cust_detail_cancel && customerApplyInfo.companyStatus != 2" yt-popover-confirm="nullify(customerApplyInfo.customerId)" yt-popover-title="{{'CONFIRM_NULLITY' | translate}}" yt-popover-ok-class="btn-danger" yt-popover-ok-text="{{'NULLITY' | translate}}" append-to-body="true">
+            {{'NULLITY' | translate}}
+          </button>
+          <button type="button" class="btn btn-success" ng-if="(!OwnerOpers.btn_cust_detail_recover || isOwner) && BtnIndex.btn_cust_detail_recover && customerApplyInfo.companyStatus == 2" yt-popover-confirm="recover(customerApplyInfo.customerId)" yt-popover-title="{{'CONFIRM_RECOVER' | translate}}" yt-popover-ok-text="{{'RECOVER' | translate}}" append-to-body="true">
+            {{'RECOVER' | translate}}
+          </button>
+          <a class="btn btn-success" ng-click="saveToApproval()" ng-if="(!OwnerOpers.btn_cust_detail_submit || isOwner) && BtnIndex.btn_cust_detail_submit && (customerApplyInfo.approveState == 'saving' || customerApplyInfo.approveState == 'refused') && customerApplyInfo.companyStatus != 2">
+            {{'SUBMIT_TO_APPROVAL' | translate}}
+          </a>
+          <a class="btn btn-warning" ng-click="sendReminder(customerApplyInfo.customerId)" ng-if="(!OwnerOpers.btn_cust_detail_remind || isOwner) && BtnIndex.btn_cust_detail_remind && customerApplyInfo.approveState == 'approving' && customerApplyInfo.companyStatus != 2">
+            {{'REMINDER' | translate}}
+          </a>
+          <a class="btn btn-success" ng-click="navToAd(customerApplyInfo.customerNumber)" ng-if="BtnIndex.btn_cust_detail_adsol_create && customerApplyInfo.approveState == 'approved' && customerApplyInfo.companyStatus != 2">
+            {{'CUSTOMER_CREATE_SOLUTION' | translate}}
+          </a>
+        </span>
+      </h1>
+    </div>
+  </div>
+  <div class="panel-attaching">
+    <div class="panel gcrm-panel">
+      <div class="gcrm-slots well" style="margin:18px 15px 18px">
+        <span class="col-md-3">{{'CUSTOMER_NUM' | translate}}：{{customerApplyInfo.customerNumber || '--'}}</span>
+        <span class="col-md-3">{{'APPROVAL_STATUS' | translate}}：{{'APPROVAL_STATUS_' + customerApplyInfo.approveState | translate}}</span>
+        <span class="col-md-3">{{'SUBMIT_TIME' | translate}}：{{customerApplyInfo.submitTime | date:'yyyy-MM-dd'}}</span>
+        <span class="col-md-3">{{'SUBMITTER' | translate}}：{{customerApplyInfo.submitOperator}}</span>
+      </div>
+      <div class="panel-heading pt0 pb15" ng-if="customerApplyInfo.taskInfo">
+        <div class="alert alert-info mb0">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true" ng-click="closeTaskInfo()"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+          <p>{{customerApplyInfo.taskInfo}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div ui-view="customerBasic" class="panel-attaching"></div>
+  <div class="row">
+    <div tabset>
+      <div tab heading="{{'CONTACT' | translate}}">
+        <div ui-view="customerContacts"></div>
+      </div>
+      <div tab heading="{{'BUSINESS_OPPORTUNITY' | translate}}" ng-if="basic.customerType != 'offline'">
+        <div ui-view="customerOpportunity"></div>
+      </div>
+      <div tab heading="{{'AGENT_QUALIFICATION' | translate}}" ng-if="basic.customerType == 'offline'">
+        <div ui-view="customerQualification"></div>
+      </div>
+      <div tab heading="{{'CUSTOMER_QUALIFICATION_MATERIAL' | translate}}">
+        <div ui-view="customerAttachment"></div>
+      </div>
+      <div tab heading="{{'ACCOUNT_INFO' | translate}}" select="queryAccountList()" ng-if="customerApplyInfo.customerNumber">
+        <div ui-view="customerAccountList"></div>
+      </div>
+      <div tab heading="{{'AD_SOLUTION' | translate}}" ng-if="customerApplyInfo.customerNumber">
+        <div ui-view="customerAdSolutionList" class="customer-adsolution-list"></div>
+      </div>
+      <div tab heading="{{'CONTRACT_PO' | translate}}" select="queryContractList()" ng-if="customerApplyInfo.customerNumber">
+        <div ui-view="customerContractList"></div>
+      </div>
+    </div>
+  </div>
+</div>

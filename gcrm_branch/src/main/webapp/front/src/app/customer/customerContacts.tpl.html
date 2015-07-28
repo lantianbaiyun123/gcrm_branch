@@ -1,0 +1,84 @@
+<div class="panel gcrm-panel">
+  <div class="panel-sub-heading">
+    <h2 ng-if="basic.state == 'addEditing'">
+      <span class="black-block">&nbsp;</span>{{'CUSTOMER_CONTACT_INFO' | translate}}
+    </h2>
+  </div>
+  <div class="panel-body">
+    <table class="table contacts-table">
+      <thead>
+        <tr>
+          <th style="width:45px"></th>
+          <th class="">{{'CONTACT' | translate}}</th>
+          <th style="width:72px">{{'GENDER' | translate}}</th>
+          <th>{{'DUTY_TITLE' | translate}}</th>
+          <th>{{'CUSTOMER_HIGHER_AUTHORITIES' | translate}}</th>
+          <th>{{'CUSTOMER_DEPARTMENT' | translate}}</th>
+          <th>{{'CELLPHONE' | translate}}</th>
+          <th>{{'LANDLINE_TELEPHONE' | translate}}</th>
+          <th>{{'MAILBOX' | translate}}</th>
+          <th style="width:45px" class="align-center">{{'LEGAL_PERSON' | translate}}</th>
+          <th style="width:55px" class="align-center">{{'DECISION_MAKER' | translate}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="item in contact.contacts" class="repeat">
+          <td style="padding: 8px 0">
+            <a class="btn btn-link btn-remove" ng-click="removeRow(item,$index)" ng-if="(!OwnerOpers.btn_cust_detail_contact_mod || isOwner) && BtnIndex.btn_cust_detail_contact_mod && contact.contacts.length > 1 && customerApplyInfo.companyStatus != 2"><span class="glyphicon glyphicon-trash"></span></a>
+            <a class="btn btn-link btn-edit" ng-if="(!OwnerOpers.btn_cust_detail_contact_mod || isOwner) && BtnIndex.btn_cust_detail_contact_mod && basic.state != 'addEditing' && !item.isEditing && customerApplyInfo.companyStatus != 2" ng-click="editRow(item)"><span class="glyphicon glyphicon-pencil"></span></a>
+            <a class="btn btn-link btn-edit" ng-if="(!OwnerOpers.btn_cust_detail_contact_mod || isOwner) && BtnIndex.btn_cust_detail_contact_mod && basic.state != 'addEditing' && item.isEditing && customerApplyInfo.companyStatus != 2" ng-click="saveRow(item)"><span class="glyphicon glyphicon-floppy-disk"></span></a>
+          </td>
+          <td ng-if="basic.state == 'addEditing' || item.isEditing">
+            <input type="text" class="form-control" ng-model="item.name" />
+          </td>
+          <td ng-if="basic.state == 'addEditing' || item.isEditing">
+            <div yt-input-dropdown="contact.genderTypes" dropdown-selected="item.gender" dropdown-type="sex" please-text="false" />
+          </td>
+          <td ng-if="basic.state == 'addEditing' || item.isEditing">
+            <input type="text" class="form-control" ng-model="item.positionName" />
+          </td>
+          <td ng-if="basic.state == 'addEditing' || item.isEditing">
+            <input type="text" class="form-control" ng-model="item.superiorPosition" />
+          </td>
+          <td ng-if="basic.state == 'addEditing' || item.isEditing">
+            <input type="text" class="form-control" ng-model="item.department" />
+          </td>
+          <td ng-if="basic.state == 'addEditing' || item.isEditing">
+            <input type="text" class="form-control" ng-model="item.mobile" yt-placeholder="number" />
+          </td>
+          <td ng-if="basic.state == 'addEditing' || item.isEditing">
+            <input type="text" class="form-control" ng-model="item.telephone" yt-placeholder="zone-number" />
+          </td>
+          <td ng-if="basic.state == 'addEditing' || item.isEditing">
+            <input type="email" class="form-control" ng-model="item.email" yt-placeholder="ex.john@company.com" />
+          </td>
+          <td ng-if="basic.state == 'addEditing' || item.isEditing">
+            <input type="checkbox" ng-model="item.isLegalPerson" ng-true-value="ENABLE" ng-false-value="DISABLE" />
+          </td>
+          <td ng-if="basic.state == 'addEditing' || item.isEditing">
+            <input type="checkbox" ng-model="item.isDecisionMaker" ng-true-value="ENABLE" ng-false-value="DISABLE" />
+          </td>
+          <td ng-if="basic.state != 'addEditing' && !item.isEditing" class="contact-td">{{item.name}}</td>
+          <td ng-if="basic.state != 'addEditing' && !item.isEditing" class="contact-td">{{'SEX_' + item.gender | translate}}</td>
+          <td ng-if="basic.state != 'addEditing' && !item.isEditing" class="contact-td">{{item.positionName}}</td>
+          <td ng-if="basic.state != 'addEditing' && !item.isEditing" class="contact-td">{{item.superiorPosition}}</td>
+          <td ng-if="basic.state != 'addEditing' && !item.isEditing" class="contact-td">{{item.department}}</td>
+          <td ng-if="basic.state != 'addEditing' && !item.isEditing" class="contact-td">{{item.mobile}}</td>
+          <td ng-if="basic.state != 'addEditing' && !item.isEditing" class="contact-td">{{item.telephone}}</td>
+          <td ng-if="basic.state != 'addEditing' && !item.isEditing" class="contact-td">{{item.email}}</td>
+          <td ng-if="basic.state != 'addEditing' && !item.isEditing" class="contact-td">
+            <span ng-if="item.isLegalPerson=='ENABLE'" class="glyphicon glyphicon-ok"></span>
+          </td>
+          <td ng-if="basic.state != 'addEditing' && !item.isEditing" class="contact-td">
+            <span ng-if="item.isDecisionMaker=='ENABLE'" class="glyphicon glyphicon-ok"></span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div ng-hide="contact.contacts.length >= 10 || customerApplyInfo.companyStatus == 2 || !BtnIndex.btn_cust_detail_contact_mod || !(!OwnerOpers.btn_cust_detail_contact_mod || isOwner)">
+      <button class="btn btn-success" ng-click="addRow()">
+        <span class="glyphicon glyphicon-plus"></span>{{'ADD_ROW' | translate}}
+      </button>
+    </div>
+  </div>
+</div>

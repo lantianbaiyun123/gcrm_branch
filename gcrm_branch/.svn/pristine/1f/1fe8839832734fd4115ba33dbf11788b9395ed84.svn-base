@@ -1,0 +1,258 @@
+package com.baidu.gcrm.ad.material.service;
+
+import java.util.List;
+import java.util.Map;
+
+import com.baidu.gcrm.ad.content.model.AdSolutionContent;
+import com.baidu.gcrm.ad.content.web.helper.AdSolutionContentCondition;
+import com.baidu.gcrm.ad.content.web.vo.AdSolutionContentView4Material;
+import com.baidu.gcrm.ad.material.model.MaterialApprovalRecord;
+import com.baidu.gcrm.ad.material.vo.MaterialApplyDetailVO;
+import com.baidu.gcrm.ad.material.vo.MaterialApplyVO;
+import com.baidu.gcrm.ad.material.vo.MaterialApproveInfoView;
+import com.baidu.gcrm.ad.material.vo.MaterialContentVO;
+import com.baidu.gcrm.ad.material.vo.MaterialDetailVO;
+import com.baidu.gcrm.ad.model.AdvertiseMaterial;
+import com.baidu.gcrm.ad.model.AdvertiseMaterialMenu;
+import com.baidu.gcrm.common.LocaleConstants;
+import com.baidu.gcrm.common.exception.CRMBaseException;
+import com.baidu.gcrm.common.page.Page;
+import com.baidu.gcrm.user.model.User;
+import com.baidu.gcrm.ad.model.AdvertiseMaterialApply;
+import com.baidu.gcrm.ad.model.AdvertiseMaterialApply.MaterialApplyState;
+
+public interface IMaterialManageService {
+
+    /**
+     * 根据动态查询条件查询广告内容（物料管理使用) add by cch at 2014-04-19
+     */
+    Page<AdSolutionContentView4Material> findAdSolutionContendByCondition(AdSolutionContentCondition condition,
+            LocaleConstants locale);
+
+    /**
+     * 根据广告内容ID获取广告内容VO
+     * 
+     * @author zhanglei35
+     * @param contentId
+     * @param locale
+     * @return
+     */
+    public MaterialContentVO findAdContentVoById(Long contentId, LocaleConstants locale);
+
+    /**
+     * 根据广告内容ID获取广告内容VO关联的物料单, 为仅需要广告内容的物料单信息的功能提供<br/>
+     * 如果物料完全为空，则返回null
+     * 
+     * @author zhanglei35
+     * @param contentId
+     * @param locale
+     * @return 广告内容编号、广告内容ID、物料信息
+     */
+    public MaterialContentVO findAdContVoMaterByContId(Long contentId);
+
+    /**
+     * 根据广告内容查找审批通过的物料单, 为仅需要广告内容的物料单信息的功能提供<br/>
+     * 如果物料完全为空，则返回null
+     * 
+     * @author zhanglei35
+     * @param content
+     * @return 广告内容编号、广告内容ID、物料信息
+     */
+    public MaterialContentVO findAdContVoMaterByCont(AdSolutionContent content);
+
+    /**
+     * 根据广告内容查找审批通过的物料单, 为仅需要广告内容的物料单信息的功能提供<br/>
+     * 要求根据资源位的物料类型，物料信息必须完整，否则返回为null
+     * 
+     * @param content
+     * @return
+     */
+    public MaterialContentVO findFullAdContVoMaterByContent(AdSolutionContent content);
+
+    /**
+     * 根据物料单编号，获取广告内容中的物料单, 为仅需要广告内容的物料单信息的功能提供<br/>
+     * 
+     * @param materNumber
+     * @return
+     */
+    public MaterialContentVO findAdContVoMaterByMaterNumber(String materNumber);
+
+    /**
+     * 根据广告内容ID，找出资源位的物料类型，来判断物料信息是否完整
+     * 
+     * @param adContent
+     * @param applyDetailVO
+     * @return
+     */
+    public boolean isMaterFullByPosMaterType(Long contentId);
+
+    public boolean isMaterFullByPosMaterType(AdSolutionContent content);
+
+    /**
+     * 根据广告内容ID，找出资源位的物料类型，来判断物料是否有部分信息
+     * 
+     * @param contentId
+     * @param applyDetailVO
+     * @return
+     */
+    public boolean isMaterEmptyByPosMaterType(Long applyId);
+
+    public boolean isMaterEmptyByPosMaterType(AdSolutionContent content);
+
+    /**
+     * 根据广告内容ID获取物料单列表
+     * 
+     * @author zhanglei35
+     * @param contentId
+     * @param locale
+     * @return
+     */
+    public List<MaterialApplyVO> findMaterialApplyListByContentId(Long contentId) throws Exception;
+
+    /**
+     * 根据广告内容ID返回物料详情VO
+     * 
+     * @author zhanglei35
+     * @return
+     */
+    public MaterialDetailVO findMaterialDetailVoByContentId(Long contentId, LocaleConstants locale) throws Exception;
+
+    /**
+     * 根据物料单ID获取物料单详细内容
+     * 
+     * @author zhanglei35
+     * @param number
+     * @return
+     */
+    public MaterialApplyDetailVO findMaterialApplyDetailVOById(Long applyId, LocaleConstants locale) throws Exception;
+
+    /**
+     * 根据物料文件ID查询物料文件
+     * 
+     * @author zhanglei35
+     * @param id
+     * @return
+     */
+    public AdvertiseMaterial findMaterialFileById(Long id);
+
+    /**
+     * 根据物料文件ID删除物料文件
+     * 
+     * @author zhanglei35
+     * @param id
+     */
+    public void deleteMateialFileById(Long id);
+
+    /**
+     * 保存物料单详细内容
+     * 
+     * @author zhanglei35
+     * @param applyDetailVO
+     */
+    public MaterialDetailVO saveMaterialApplyDetail(MaterialApplyDetailVO applyDetailVO, User user,
+            LocaleConstants locale, String processDefineId) throws Exception;
+
+    /**
+     * 广告方案审核通过时，根据方案ID,对于方案中有物料单的广告内容，更新其物料单状态为审核通过
+     * 
+     * @param adSolutionId 广告方案ID
+     */
+    public void updateMaterApplyStateAfterSolutionApproved(Long adSolutionId) throws CRMBaseException;
+
+    /**
+     * 物料单审批通过后，回写广告内容，并把其他物料单状态变为作废
+     * 
+     * @author zhanglei35
+     * @param applyId
+     */
+    public void afterMaterialApplyPassed(Long applyId, User user) throws Exception;
+
+    /**
+     * 将物料单状态改为作废
+     * 
+     * @author zhanglei35
+     * @param applyId
+     */
+    public MaterialDetailVO cancelMaterialApplyById(Long applyId, User user, LocaleConstants locale,
+            String processDefineId) throws Exception;
+
+    /**
+     * 撤销物料单
+     * 
+     * @author zhanglei35
+     * @param applyId
+     * @param taskInfo
+     */
+    public MaterialDetailVO withdrawMaterialApplyProcessById(AdvertiseMaterialApply materialApply, User user,
+            LocaleConstants locale, String processDefineId, MaterialApplyState state, String taskPrefix)
+            throws Exception;
+
+    /**
+     * 根据物料单单号获取物料审批界面详情信息
+     * 
+     * @author chenchunhui01
+     * @param number
+     * @return
+     */
+    public MaterialApproveInfoView findMaterialApproveInfoByMaterialApplyId(Long id, LocaleConstants locale);
+
+    /**
+     * 审批操作
+     * 
+     * @author chenchunhui01
+     * @param MaterialApprovalRecord
+     * @return
+     * @throws CRMBaseException
+     */
+    public void saveAndCompleteApproval(MaterialApprovalRecord approvalRecord, User operaterUser,
+            LocaleConstants currentLocale) throws CRMBaseException;
+
+    /**
+     * 根据物料单单号获取审批记录
+     * 
+     * @author chenchunhui01
+     * @param number
+     * @return
+     */
+    public List<MaterialApprovalRecord> findRecordByMaterialApplyId(Long materialApplyId, String processDefineId,
+            LocaleConstants currentLocale);
+
+    /**
+     * 根据物料单单号获取修改記錄
+     * 
+     * @author chenchunhui01
+     * @param materialApplyId
+     * @return
+     * @throws CRMBaseException
+     */
+    public List<Map<String, Object>> findChangeHistoryRecord(String materialApplyId, LocaleConstants locale)
+            throws CRMBaseException;
+
+    /**
+     * 
+     * 功能描述: 物料催办 remindersContentByMail
+     * 
+     * @创建人: chenchunhui01
+     * @创建时间: 2014年5月24日 下午12:48:00
+     * @param id
+     * @param currentLocale
+     * @return void
+     * @exception
+     * @version
+     */
+    public void remindersContentByMail(Long id, LocaleConstants currentLocale);
+
+    public AdvertiseMaterialMenu saveMaterialMenu(AdvertiseMaterialMenu materialMenu);
+
+    public List<AdvertiseMaterialMenu> findMaterialMenusByApplyId(Long applyId);
+
+    public String genrateMaterialApplyNumber();
+
+    public void delete(AdvertiseMaterialApply adMaterialApply);
+
+    public void delete(Long adMaterialApplyId);
+    
+    public void saveMaterialApplyFromContent(AdSolutionContent content);
+    
+    public void initMaterialByCondition();
+}

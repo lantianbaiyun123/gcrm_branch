@@ -1,0 +1,1 @@
+define(["app"],function(t){t.registerController("CtrlCustomerAgent",["$scope","$state","$stateParams","$timeout","Modal",function(){}])});

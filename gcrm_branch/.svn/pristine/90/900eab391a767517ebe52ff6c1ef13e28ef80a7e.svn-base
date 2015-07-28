@@ -1,0 +1,16 @@
+<style>
+.body{font-size:14px;}
+.important{font-weight:bold;}
+</style>
+<div class="body">
+	$operator:</br>
+  </br>
+  
+  The AD content ($contentNumber) of Client ($customerName) is approved to be online ahead.<br/>
+The related contract is $contractNumber, please keep following up the contract approval to make the contract active and documented as soon as possible.<br/> 
+AD content details please click here (<a href="$adSolutionURL">$adSolutionURL</a>).<br/>
+
+This is a system email, please don’t reply.
+</div>
+<br/><br/><br/>
+

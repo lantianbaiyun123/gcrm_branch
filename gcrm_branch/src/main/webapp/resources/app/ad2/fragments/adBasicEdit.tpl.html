@@ -1,0 +1,138 @@
+<div class="panel panel-gcrm gcrm-panel" ng-hide="state.basicReview">
+  <div class="panel-top-heading">
+    <h1>
+      <span>{{'PAGE_AD_SOLUTION' | translate}}</span>
+    </h1>
+  </div>
+  <div class="panel-body">
+    <form action="" class="form-horizontal" class="baseInfoForm" name="myForm">
+      <h5 class="pl10">{{'AD_OPERATOR' | translate}}</h5>
+      <div class="form-group" ng-class="{'has-error': basic.basicCheck && basic.checkOperator && !basic.operatorSelected,'has-warning': basic.basicCheck && !basic.operatorSelected.data}">
+        <label class="control-label col-md-2">{{'AD_BASIC_OPERATOR' | translate}}：</label>
+        <div class="col-md-2">
+          <input type="hidden" ui-select2="basic.optionOperator" ng-model="basic.operatorSelected"
+          yt-focusme="basic.operatorFocus" style="width:150px">
+        </div>
+        <div class="col-md-2 help-block" ng-show="basic.basicCheck && basic.checkOperator && !basic.operatorSelected">{{'AD_BASIC_OPERATOR_NOT_NULL' | translate}}</div>
+        <div class="col-md-6">
+          <div class="btn-group">
+            <a role="button" class="btn btn-default disabled">{{'AD_BASIC_SOLUTION_STATUS' | translate}}:{{'AD_SOLUTION_STATUS_' + basic.solutionStatus | translate}}</a>
+            <a role="button" class="btn btn-default disabled">{{'AD_BASIC_SOLUTION_TYPE' | translate}}:{{'AD_SOLUTION_TYPE_' + basic.solutionType | translate}}</a>
+          </div>
+        </div>
+      </div>
+      <h5 class="bdt ptb10 pl10 ">{{'AD_BASIC_CUSTOMER_INFO' | translate}}</h5>
+      <div class="form-group" ng-class="{'has-error': basic.basicCheck && !basic.customerSelected,'has-warning': basic.basicCheck && !basic.customerSelected.data}">
+        <label class="control-label col-md-2">{{'AD_BASIC_COMPANY_NAME' | translate}}：</label>
+        <div class="col-md-4">
+          <input type="hidden" ui-select2="basic.optionCustomer" ng-model="basic.customerSelected" style="width:310px" ng-change='customerSelectedChanged(basic.customerSelected)'>
+        </div>
+        <div class="col-md-5 help-block">{{'AD_BASIC_COMPANY_NAME_HINT' | translate}}</div>
+      </div>
+      <div id="companyInfo" ng-show="basic.customerI18nView.customer">
+        <div ng-hide="basic.customerI18nView.customer.businessType == 2">
+          <div class="form-group">
+            <label class="control-label col-md-2">{{'AD_BASIC_CUSTOMER_TYPE' | translate}}：</label>
+            <p class="form-control-static col-md-3" id="customerType">{{basic.customerI18nView.customerType}}</p>
+            <label class="control-label col-md-2">{{'AD_BASIC_BELONGS_SALES' | translate}}：</label>
+            <p class="form-control-static col-md-4" id="sale">{{basic.customerI18nView.belongsSales}}</p>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-md-2" ng-show="basic.customerI18nView.customer.businessType == 0">{{'AD_BASIC_AGENT_TYPE' | translate}}：</label>
+            <p class="form-control-static col-md-3" id="agentType" ng-show="basic.customerI18nView.customer.businessType == 0">{{basic.customerI18nView.agentType}}</p>
+            <label class="control-label col-md-2">{{'AD_BASIC_COUNTRY' | translate}}：</label>
+            <p class="form-control-static col-md-4" id="country">{{basic.customerI18nView.country.i18nName}}</p>
+          </div>
+          <div class="form-group" ng-show="basic.customerI18nView.customer.businessType == 0">
+            <label class="control-label col-md-2">{{'AD_BASIC_AGENT_COUNTRY' | translate}}：</label>
+            <p class="form-control-static col-md-3" id="agentCountry">
+              <span ng-repeat="country in basic.customerI18nView.agentCountry">
+                <span ng-if="$index>0">、</span>
+                <span>{{country.i18nName}}</span>
+              </span>
+            </p>
+            <label class="control-label col-md-2">{{'AD_BASIC_AGENT_DISTRICT' | translate}}：</label>
+            <p class="form-control-static col-md-4" id="agentArea">{{basic.customerI18nView.agentRegional.i18nName}}</p>
+          </div>
+        </div>
+        <div ng-show="basic.customerI18nView.customer.businessType == 2">
+          <div class="form-group">
+            <label class="control-label col-md-2">{{'AD_BASIC_CUSTOMER_TYPE' | translate}}：</label>
+            <p class="form-control-static col-md-3" id="customerType">{{basic.customerI18nView.customerType}}</p>
+            <label class="control-label col-md-2">{{'AD_BASIC_BELONGS_SALES' | translate}}：</label>
+            <p class="form-control-static col-md-4" id="sale">{{basic.customerI18nView.belongsSales}}</p>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-md-2">{{'AD_BASIC_AGENT_TYPE' | translate}}：</label>
+            <p class="form-control-static col-md-3" id="agentType">{{basic.customerI18nView.agentType}}</p>
+            <label class="control-label col-md-2">{{'AD_BASIC_COUNTRY' | translate}}：</label>
+            <p class="form-control-static col-md-4" id="country">{{basic.customerI18nView.country.i18nName}}</p>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-md-2">{{'AD_BASIC_AGENT_COUNTRY' | translate}}：</label>
+            <p class="form-control-static col-md-3" id="agentCountry">
+              <span ng-repeat="country in basic.customerI18nView.agentCountry">
+                <span ng-if="$index>0">、</span>
+                <span>{{country.i18nName}}</span>
+              </span>
+            </p>
+            <label class="control-label col-md-2">{{'AD_BASIC_AGENT_DISTRICT' | translate}}：</label>
+            <p class="form-control-static col-md-4" id="agentArea">{{basic.customerI18nView.agentRegional.i18nName}}</p>
+          </div>
+        </div>
+      </div>
+      <h5 class="bdt ptb10 pl10 ">{{'AD_BASIC_CONTRACT' | translate}}</h5>
+      <div class="form-group">
+        <label class="control-label col-md-2">{{'AD_BASIC_HAS_CONTRACT' | translate}}：</label>
+        <div class="col-md-3">
+          <label class="radio radio-inline">
+            <input type="radio" ng-value="true" ng-model="basic.hasContract" />{{'YES' | translate}}
+          </label>
+          <label class="radio radio-inline">
+            <input type="radio" ng-value="false" ng-model="basic.hasContract" />{{'NO' | translate}}
+          </label>
+        </div>
+      </div>
+      <div id="agentTypeBox" ng-show="basic.hasContract">
+        <div class="form-group" ng-class="{'has-error': basic.basicCheck && basic.checkContract && !basic.contract.data}">
+          <label class="control-label col-md-2" for="registerTime">{{'AD_BASIC_CONTRACT_NUMBER' | translate}}：</label>
+          <div class="col-md-4">
+            <input type="hidden" id="thisid" style="width:310px" class="input-xlarge"
+            ui-select2="basic.optionContract" ng-model="basic.contract" ng-disabled="!basic.customerSelected.data"
+            yt-focusme="basic.contractFocus" />
+          </div>
+          <div class="col-md-5 help-block" ng-show="!basic.customerSelected.data">{{'AD_BASIC_CONTRACT_HINT' | translate}}</div>
+          <div class="col-md-3 help-block txt-impt-errors" ng-show="basic.basicCheck && basic.checkContract && basic.customerSelected.data && !basic.contract">{{'AD_BASIC_CONTRACT_WARN' | translate}}</div>
+        </div>
+        <div id="contractInfo" ng-show="basic.contract && basic.contract.data">
+          <div class="form-group">
+            <label class="control-label col-md-2" for="registerTime">{{'AD_BASIC_CONTRACT_BRIEF' | translate}}：</label>
+            <p class="form-control-static col-md-4" id="contractSummary">{{basic.contract.data.summary}}</p>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-md-2" for="registerTime">{{'AD_BASIC_CONTRACT_TYPE' | translate}}：</label>
+            <p class="form-control-static col-md-4" id="contractType">{{'CONTRACT_CATEGORY_' + basic.contract.data.category | translate}}</p>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-md-2" for="belongSales">{{'AD_BASIC_CONTRACT_VALIDITY' | translate}}：</label>
+            <p class="form-control-static col-md-4" id="contractexpDate">{{basic.contract.data.beginDate | date:'yyyy/MM/dd'}} - {{basic.contract.data.endDate
+              | date:'yyyy/MM/dd'}}</p>
+          </div>
+        </div>
+      </div>
+      <h5 class="bdt ptb10 pl10 ">{{'ADVERTISE_TYPE' | translate}}</h5>
+      <div class="form-group">
+        <label class="control-label col-md-2">{{'ADVERTISE_TYPE' | translate}}：</label>
+        <div class="col-md-4">
+          <select class="form-control" ng-model="basic.advertiseType" ng-options="type.value as type.i18nName for type in constant.advertiseTypes">
+          </select>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="panel-footer text-left" ng-if="!OwnerOpers.btn_adsol_detail_cont_save || basic.isOwner">
+    <a id="saveBaseInfo" class="btn btn-primary" ng-click="basicSave();" ng-hide="myForm.$invalid || !BtnIndex.btn_adsol_detail_cont_save">{{'SAVE' | translate}}</a>
+    <a popover="{{'INPUT_CECESSARY_INFO' | translate}}" popover-trigger="mouseenter" class="btn btn-primary" ng-show="myForm.$invalid && BtnIndex.btn_adsol_detail_cont_save">{{'SAVE' | translate}}</a>
+    <a id="cancelBaseInfo" class="btn btn-default" ng-click="basicCancel();" ng-show="state.showBasicCancel">{{'CANCEL' | translate}}</a>
+  </div>
+</div>

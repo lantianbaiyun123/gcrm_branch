@@ -1,0 +1,42 @@
+{
+  "code": 200,
+  "data": [
+    {
+      "businessTypeName": "CASH",
+      "id": 0,
+      "platformList": [
+        {
+          "businessType": 1,
+          "i18nName": "中文广告销售",
+          "id": 3,
+          "name": "中文广告销售"
+        },
+        {
+          "businessType": 2,
+          "i18nName": "中文广告销售",
+          "id": 4,
+          "name": "中文广告销售"
+        },
+        {
+          "businessType": 3,
+          "i18nName": "中文广告销售",
+          "id": 5,
+          "name": "中文广告销售"
+        }
+      ]
+    },
+    {
+      "businessTypeName": "SALE",
+      "id": 1,
+      "platformList": [
+        {
+          "businessType": 1,
+          "i18nName": "中文广告销售",
+          "id": 6,
+          "name": "中文广告销售"
+        }
+      ]
+    }
+  ],
+  "message": "OK"
+}

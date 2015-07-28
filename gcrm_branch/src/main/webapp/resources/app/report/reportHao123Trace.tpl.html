@@ -1,0 +1,99 @@
+<div class="panel panel-default gcrm-panel">
+  <div class="panel-top-heading">
+    <h1>
+      <span>{{'PAGE_HAO123TRACE' | translate}}</span>
+    </h1>
+  </div>
+  <div class="panel-heading">
+    <div class="panel-form panel-query">
+      <div class="row main-row">
+        <div class="col-md-2">
+          <input type="text" class="form-control input-sm datepicker-readonly" ng-model="qForm.startTime" datepicker-popup readonly max="qForm.endTime" yt-placeholder="{{'起始时间' | translate}}">
+        </div>
+        <span class="pull-left time-dash">-</span>
+        <div class="col-md-2">
+          <input type="text" class="form-control input-sm datepicker-readonly" ng-model="qForm.endTime" datepicker-popup readonly min="qForm.startTime" yt-placeholder="{{'结束时间' | translate}}">
+        </div>
+        <div class="col-md-1">
+          <button class="btn btn-primary btn-sm" ng-click="btnQuery()">{{'BTN_QUERY' | translate}}</button>
+        </div>
+        <ul class="nav nav-pills col-md-4">
+          <li class="active"><a href="#">{{'最近7天' | translate}}</a></li>
+          <li><a href="#">{{'最近1月' | translate}}</a></li>
+          <li><a href="#">{{'最近1年' | translate}}</a></li>
+          <li><a href="#">{{'全部' | translate}}</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="panel-body gcrm-list">
+    <table class="table table-bordered table-list table-hover">
+      <thead>
+        <tr>
+          <th colspan="4">广告位置</th>
+          <th colspan="3">投放信息</th>
+          <th colspan="2">合作模式</th>
+          <th colspan="5">产品数据</th>
+        </tr>
+        <tr>
+          <th>{{'站点' | translate}}</th>
+          <th>{{'频道' | translate}}</th>
+          <th>{{'区域' | translate}}</th>
+          <th>{{'位置' | translate}}</th>
+          <!-- <th>{{'类型' | translate}}</th>
+          <th>{{'编号' | translate}}</th> -->
+          <th>{{'广告主' | translate}}</th>
+          <!-- <th>{{'内容编号' | translate}}</th> -->
+          <!-- <th>{{'内容描述' | translate}}</th> -->
+          <!-- <th>{{'类型' | translate}}</th> -->
+          <th>{{'上线时间' | translate}}</th>
+          <th>{{'下线时间' | translate}}</th>
+          <th>{{'单价($)' | translate}}</th>
+          <th>{{'模式' | translate}}</th>
+          <th>{{'impresion' | translate}}</th>
+          <th>{{'UV' | translate}}</th>
+          <th>{{'Click Times' | translate}}</th>
+          <th>{{'Click UV' | translate}}</th>
+          <th>{{'CTR' | translate}}</th>
+          <!-- <th>{{'CVR' | translate}}</th> -->
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="record in recordList">
+          <td>{{record.adSolutionContentNo}}</a></td>
+          <td class="td-max mw150" title="{{record.advertisers}}">{{record.advertisers}}</td>
+          <td class="td-max mw160" title="{{record.description}}">{{record.description}}</td>
+          <td class="td-max mw160" title="{{record.throwTime}}">{{record.throwTime}}</td>
+          <td class="td-max mw250" title="{{record.throwPlace}}">{{record.throwPlace}}</td>
+          <td>{{record.name}}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="row page-row">
+      <div class="pull-left">
+        <div class="btn-group dropup">
+          <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
+              {{pager.pageSize || 10}}&nbsp;&nbsp;<span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" role="menu">
+            <li ng-repeat="item in pager.pageSizeSlots">
+              <a  ng-click="setPageSize(item)">{{item}}</a>
+            </li>
+          </ul>
+        </div>
+        <span class="page-row-text" ng-if="true">
+          {{ 'PAGINATION_TOTAL' | translate }}
+          {{ pager.totalPages+" " || 0 }}
+          {{ 'PAGINATION_PAGES' | translate }},
+          {{ pager.totalCount+" " || 0 }}
+          {{ 'PAGINATION_ROWS' | translate }}
+        </span>
+      </div>
+
+      <div class="pull-right">
+          <pagination direction-links="true" total-items="pager.totalCount" page="pager.pageNumber" class="pagination-sm" items-per-page="pager.pageSize" previous-text="&laquo;" next-text="&raquo;" rotate="false" max-size="10"></pagination>
+      </div>
+    </div>
+  </div>
+</div>

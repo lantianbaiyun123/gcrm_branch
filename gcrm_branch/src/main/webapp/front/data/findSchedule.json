@@ -1,0 +1,23 @@
+json:{"code":200,
+"data":{
+"adContentId":1,
+"adPlatformId":2,
+"advertiser":"ZX",
+"areaId":1,
+"billingModel":"不存在",
+"companyname":"洛克希德",
+"contractnum":"abcdef",
+
+"createTime":"2014-01-14 20:08:32.0",
+"confirmTime":"2014-01-14 20:08:32.0",
+"description":"DD",
+"id":1,
+"insertPeriodDescription":"2014-05-01,2014-05-02",
+"number":11111111,
+"periodDescription":"2014.03.03-2014.05.30,2014.05.02-2014.05.3",
+"positionId":1,
+"siteId":1,
+"status":"schedule.schedulestatus.reserved"
+"guodai":"CESHI"
+},
+"message":"OK"}

@@ -1,0 +1,4 @@
+<iframe frameborder="no" marginwidth="0" marginheight="0" scrolling="no"
+ width="${positionWidth}" height="${positionHeight}" src="/openad?adId=${positionId}&w=${positionWidth}&h=${positionHeight}&url=hao123.com" 
+ allowtransparency="true">
+</iframe>

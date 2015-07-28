@@ -1,0 +1,81 @@
+<style>
+.body{font-size:16px;}
+.important{font-weight:bold;}
+	table { border-collapse: collapse; border-spacing: 0; font-size:12px; }
+    th, td { border: 1px solid #000; padding: 10px; }
+    td { text-align: left; overflow: hidden; text-overflow: ellipsis; max-width: 80px;}
+    ul { list-style-type: none; padding: 0; margin: 0;}
+}
+</style>
+<div class="body">
+#foreach ($ment in $operator) 
+	${ment} #end ：</br>
+You need to complete tasks in $nowtime ,followes：</br>
+</br>
+<p class="important">$PlatName $siteName $channelName</p>
+</br>
+<TABLE width="100%">    
+<thead>
+      <tr>
+        <th style="min-width: 80px;">Advertising content number</th>
+        <th style="min-width: 80px;">positionName</th>
+        <th style="min-width: 60px;">advertisers</th>
+        <th style="min-width: 75px;">Online time</th>
+        <th style="min-width: 75px;">Down time</th>
+        <th style="min-width: 250px">Material list</th>
+        <th style="min-width: 50px;">Do</th>
+      </tr>
+    </thead>
+     <tbody>
+#foreach ($element in $voList) 
+<TR>
+<TD >$element.adContentNumber</TD>
+<TD  style="max-width: 100px;">$element.positionName</TD>
+<TD style="max-width: 100px;">$element.advertisers</TD>
+<TD>$element.planStart</TD>
+<TD>$element.planEnd</TD>
+<TD style="max-width: 250px; word-wrap: break-word; word-break: break-all">
+<ul>
+ 			<li>
+              <span>materialType：</span>
+               #if($element.contentVO.materialType==0)
+              <span>Image</span>
+             	 #end
+             	  #if($element.contentVO.materialType==1)
+              <span>Font</span>
+             	 #end
+             	  #if($element.contentVO.materialType==2)
+              <span>Image+Font</span>
+             	 #end
+            </li>
+            #if($element.contentVO.materialType!=0)
+            <li>
+              <span>title：</span>
+              <span>$element.contentVO.materialTitle</span>
+            </li>
+            #end
+ 			<li>
+              <span>url：</span>
+              <span><a href=$element.contentVO.materialUrl>$element.contentVO.materialUrl</a></span>
+            </li>
+			#if($element.contentVO.materialType==0||$element.contentVO.materialType==2)
+			<li>
+              <span>Details material：</span>
+              #foreach ($mater in $element.contentVO.imageList) 
+              <span><a href=$mater.fileUrl target="_blank">$mater.downloadFileName</a></span>
+              <span>  </span>
+			 	#end
+            </li>
+            #end
+			<li>#if($element.contentVO.codeFile.downloadFileName)
+              <span>url：</span>
+              <span><a href=$element.contentVO.codeFile.fileUrl>$element.contentVO.codeFile.downloadFileName </a></span>
+            #end
+            </li>
+</TD>
+<TD style="width: 50px;"><a href="http://cq01-iit-bkmdev09.vm.baidu.com:8101/gcrm/views/main.jsp#/publicationMgmt?applyNumber=$element.number">View</a></TD>
+</TR> #end </TR>    </tbody></TABLE>
+
+	
+	
+</div>

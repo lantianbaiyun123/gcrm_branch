@@ -1,0 +1,137 @@
+<div class="benchmark-price-approval">
+  <div class="proposal-panel panel gcrm-panel">
+      <div class="panel-heading">
+          <span class="black-block">&nbsp;</span>
+          <span class="panel-heading-text">{{'QUOTATION_BENCHMARK_PRICE' | translate}}</span>
+      </div>
+
+      <div class="panel-body">
+        <div class="gcrm-slots gcrm-slots-m0 row well">
+          <span class="col-md-4">{{'QUOTATION_SERIAL' | translate}}：{{quotationMain.quoteCode}}</span>
+          <span class="col-md-4">{{'QUOTATION_SUBMIT_OPERATOR' | translate}}：{{quotationMain.createrName}}</span>
+          <span class="col-md-4">{{'QUOTATION_SUBMIT_TIME' | translate}}：{{quotationMain.createTime | date: 'yyyy-MM-dd'}}</span>
+        </div>
+      </div>
+      <div class="panel-body">
+        <dl class="dl-horizontal">
+          <dt>{{'QUOTATION_BUSINESS_TYPE' | translate }}：</dt><dd>{{quotationMain.businessType | BusinessTypeFilter | translate}}</dd>
+          <dt>{{'QUOTATION_PLATEFORM' | translate }}：</dt><dd>{{quotationMain.platformName}}</dd>
+          <dt>{{'QUOTATION_PRICE_TYPE' | translate }}：</dt><dd>{{quotationMain.priceType | PriceTypeFilter | translate}}</dd>
+          <dt>{{'QUOTATION_EFFECTIVE_TIME' | translate }}：</dt><dd>{{quotationMain.startTime | date: 'yyyy-MM-dd'}} ~ {{quotationMain.endTime | date: 'yyyy-MM-dd'}}</dd>
+          <dt>{{'QUOTATION_PRICE_DESCRIPTION' | translate }}：</dt><dd>{{quotationMain.descreption}}</dd>
+          <dt>{{'QUOTATION_SITE' | translate }}：</dt><dd>{{quotationMain.siteName}}</dd>
+          <dt>{{'QUOTATION_BENCHMARK_PRICE' | translate }}：</dt>
+          <dd>
+            <table class="table" ng-if="quotationMain.priceType == 'unit'">
+              <thead>
+                <tr>
+                  <th>CPC($)</th>
+                  <th>CPT($)</th>
+                  <th>CPM($)</th>
+                  <th>CPA($)</th>
+                  <th>CPS(%)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{{quotationList[0].unit.cpc.value}}</td>
+                  <td>{{quotationList[0].unit.cpt.value}}</td>
+                  <td>{{quotationList[0].unit.cpm.value}}</td>
+                  <td>{{quotationList[0].unit.cpa.value}}</td>
+                  <td>
+                    <span ng-if="quotationList[0].isUnifyedCPS && quotationList[0].unit.cps[0].value">
+                      {{'QUOTATION_UNIFIED_RATIO' | translate }}：{{quotationList[0].unit.cps[0].value}}%
+                    </span>
+                    <span ng-if="!quotationList[0].isUnifyedCPS">
+                      <span>{{'INDUSTRY_MAIN_TYPE_GAME' | translate}}</span>
+                      <span ng-repeat="one in quotationList[0].unit.cps" ng-if="$index && one.parentId==1">
+                        (<span>{{one.industryTypeName}}：<span ng-if="one.value">{{one.value}}%</span><span ng-if="!one.value">--</span></span>)
+                      </span>
+                      <br>
+                      <span>{{'INDUSTRY_MAIN_TYPE_ECOMMERCE' | translate}}</span>
+                      <span ng-repeat="one in quotationList[0].unit.cps" ng-if="$index && one.parentId==3">
+                        (<span>{{one.industryTypeName}}：<span ng-if="one.value">{{one.value}}%</span><span ng-if="!one.value">--</span></span>)
+                      </span>
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <table class="table" ng-if="quotationMain.priceType == 'ratio'">
+              <thead>
+                <tr>
+                  <th>{{'QUOTATION_RATIO_MINE' | translate }}(%)</th>
+                  <th>{{'QUOTATION_RATIO_CUSTOMER' | translate }}(%)</th>
+                  <th>{{'QUOTATION_RATIO_THIRD' | translate }}(%)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{{quotationList[0].ratio.ratioMine}}%</td>
+                  <td>{{quotationList[0].ratio.ratioCustomer}}%</td>
+                  <td>{{quotationList[0].ratio.ratioThird}}%</td>
+                </tr>
+              </tbody>
+            </table>
+            <span ng-if="quotationMain.priceType == 'rebate'">{{'QUOTATION_REBATE' | translate }}：{{quotationList[0].rebate.ratioRebate}}%</span>
+          </dd>
+          <dt class="multiple">{{'QUOTATION_TESTIFY_MATERIAL' | translate }}：</dt>
+          <dd class="multiple" ng-repeat="material in quotationList[0].quotationMaterialList">
+            <a target="_blank" href="{{material.downLoadUrl}}">{{material.downloadFileName}}</a>
+          </dd>
+        </dl>
+      </div>
+  </div>
+  <div class="proposal-panel panel gcrm-panel">
+      <div class="panel-heading">
+          <span class="black-block">&nbsp;</span>
+          <span class="panel-heading-text">{{'QUOTATION_APPROVAL_OPERATION' | translate}}</span>
+      </div>
+      <div class="panel-body">
+        <div class="form-horizontal clearfix tables-wrap">
+            <div class="form-group">
+                <label class="control-label col-md-2">{{'APPROVAL_AUDIT_OPINION' | translate}}：</label>
+                <div ng-class="{'has-error':checkApprovalStatus && (form.approvalStatus!=1 && form.approvalStatus!=0)}">
+                    <div class="col-md-3">
+                        <label class="radio radio-inline"><input type="radio" ng-value="1" ng-model="form.approvalStatus"/> {{'AGREE' | translate}} </label>
+                        <label class="radio radio-inline"><input type="radio" ng-value="0" ng-model="form.approvalStatus"/> {{'REJECT' | translate}} </label>
+                    </div>
+                    <div class="col-md-7 radio-inline-hint text-danger" ng-show="!submitSuccessful && checkApprovalStatus && (form.approvalStatus!=1 && form.approvalStatus!=0)">
+                        <span class="glyphicon glyphicon-warning-sign"></span>{{'APPROVAL_CHOOSE_AUDIT_OPINION' | translate}}
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-2">{{'AD_CONTENT_OTHER_EXPLAIN' | translate}}：</label>
+                <div class="col-md-6 div-approval-suggestion" ng-class="{'has-error':checkApprovalSuggestion && !form.approvalSuggestion}">
+                    <textarea class="form-control" rows="3" ng-model="form.approvalSuggestion"></textarea>
+                </div>
+                <div class="col-md-3 approval-suggestion-hint text-info" ng-show="form.approvalStatus==0 && !form.approvalSuggestion">
+                    <span class="glyphicon glyphicon-warning-sign"></span>&nbsp;&nbsp;{{'APPROVAL_REVOKE_NOTES' | translate}}
+                </div>
+            </div>
+        </div>
+      </div>
+
+      <div class="panel-footer text-left">
+          <a  class="btn btn-primary" ng-click="submitApproval()" ng-disabled="submitDisabble || !tasksReady || (form.approvalStatus!=0 && form.approvalStatus!=1) || (form.approvalStatus==0 && !form.approvalSuggestion)">{{'APPROVAL_SUBMIT' | translate}}</a>
+          <a  class="btn btn-default" ng-click="goNextTask()" ng-disabled="!(nextTask.foreignKey && nextTask.activityId) || submitDisabble || !tasksReady">{{'APPROVAL_NEXTTASK_TEXT' | translate}}</a>
+      </div>
+  </div>
+  <div class="shortcuts" >
+    <div class="shortcut">
+      <a class="btn btn-default" ng-click="modalApprovalRecord()">{{'APPROVAL_APPROVAL_RECORD' | translate}}</a>
+    </div>
+    <div class="shortcut">
+      <a class="btn btn-default" ng-click="modalModifyRecord()">{{'APPROVAL_UPDATE_RECORD' | translate}}</a>
+    </div>
+    <div class="shortcut">
+      <a ng-click="anchorTo('navBarTop')" class="btn btn-default">
+        &nbsp;
+        <span class="glyphicon glyphicon-chevron-up"></span>
+        <br>
+        {{'APPROVAL_BACK_TO_TOP' | translate}}
+      </a>
+    </div>
+  </div>
+</div>

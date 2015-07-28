@@ -1,0 +1,626 @@
+<div ng-if="taskRecord.adSolutionId && taskRecord.activityId" class="scope-approval">
+    <div class="proposal-panel panel panel-gcrm">
+        <div class="panel-heading">
+            <span class="black-block">&nbsp;</span>
+            <span class="panel-heading-text">{{'SA_AD_SOLUTION' | translate}}</span>
+            <a class="pull-right solution-return-hint" ng-if="solutionInfo.role == 'startUser'" ng-href="#/ad?programId={{taskRecord.adSolutionId}}">
+                <span>{{'APPROVAL_SOLUTION_RETURN_HINT' | translate}}&nbsp;&nbsp;</span>
+                <span class="glyphicon glyphicon-share-alt"></span>
+            </a>
+        </div>
+        <div class="panel-body">
+            <div class="proposal-info well well-sm row">
+                <span class="col-md-3">{{'APPROVAL_ADSOLUTION_NUMBER_LABEL' | translate}}：{{solutionInfo.adSolution.number}}</span>
+                <span class="col-md-3 td-max mw25p">{{'APPROVAL_OPERATOR_LABEL' | translate}}：{{solutionInfo.account.name}}</span>
+                <span ng-class="{'col-md-3': lang=='zh-CN', 'col-md-4': lang=='en-US'}">{{'APPROVAL_CREATETIME_LABEL' | translate}}：{{solutionInfo.adSolution.createTime | date : 'yyyy-MM-dd'}}</span>
+                <span class="proposal-info-last-span" ng-class="{'col-md-3': lang=='zh-CN', 'col-md-2': lang=='en-US'}">{{'APPROVAL_TYPE_LABEL' | translate}}：{{solutionInfo.adSolution.type | AdSolutionTypeFilter | translate}}</span>
+            </div>
+
+            <div class="form-horizontal clearfix">
+                <h5 id="customerInfo" class="bdt ptb10 pl10 mb0 panel-gcrm-msyh">{{'APPROVAL_CUSTOMERINFO_LABEL' | translate}}</h5>
+                <div class="form-group">
+                    <label class="control-label col-md-3">{{'APPROVAL_COMPANY_NAME' | translate}}：</label>
+                    <div class="col-md-9">
+                        <p class="form-control-static">{{solutionInfo.customerI18nView.customer.companyName}}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-3">{{'APPROVAL_CUSTOMER_TYPE' | translate}}：</label>
+                    <p class="form-control-static col-md-9">{{solutionInfo.customerI18nView.customerType}}</p>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-3">{{'APPROVAL_BELONGS_SALES' | translate}}：</label>
+                    <p class="form-control-static col-md-9">{{solutionInfo.customerI18nView.belongsSales}}</p>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-3">{{'APPROVAL_COUNTRY' | translate}}：</label>
+                    <p class="form-control-static col-md-9">{{solutionInfo.customerI18nView.country.i18nName}}</p>
+                </div>
+                <div ng-if="solutionInfo.customerI18nView.agentType">
+                    <div class="form-group">
+                        <label class="control-label col-md-3">{{'APPROVAL_AGENT_TYPE' | translate}}：</label>
+                        <p class="form-control-static col-md-9">{{solutionInfo.customerI18nView.agentType}}</p>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3">{{'APPROVAL_AGENT_COUNTRY' | translate}}：</label>
+                        <p class="form-control-static col-md-9">
+                            <span ng-repeat="country in solutionInfo.customerI18nView.agentCountry"><span ng-if="$index">、</span>{{country.i18nName}}
+                            </span>
+                        </p>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3">{{'APPROVAL_AGENT_AREA' | translate}}：</label>
+                        <p class="form-control-static col-md-9">{{solutionInfo.customerI18nView.agentRegional.i18nName}}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-horizontal clearfix" ng-if="solutionInfo.contract">
+                <h5 class="bdt ptb10 pl10 panel-gcrm-msyh ">{{'APPROVAL_CONTRACT' | translate}}</h5>
+                <div class="form-group">
+                    <label class="control-label col-md-3">{{'APPROVAL_CONTRACT_NUMBER' | translate}}：</label>
+                    <div class="col-md-8">
+                        <p class="form-control-static">
+                            <a ng-href="{{solutionInfo.contractUrl}}" target="_blank">{{solutionInfo.contract.number}}</a>
+                        </p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-3">{{'APPROVAL_CONTRACT_BRIEF' | translate}}：</label>
+                    <div class="col-md-8">
+                        <p class="form-control-static">{{solutionInfo.contract.summary}}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-3">{{'APPROVAL_CONTRACT_TYPE' | translate}}：</label>
+                    <div class="col-md-8">
+                        <p class="form-control-static">{{'CONTRACT_CATEGORY_' + solutionInfo.contract.category | translate}}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-3">{{'APPROVAL_CONTRACT_VALIDITY' | translate}}：</label>
+                    <div class="col-md-8">
+                        <p class="form-control-static">{{solutionInfo.contract.beginDate | date : 'yyyy.MM.dd'}}&nbsp; - &nbsp;{{solutionInfo.contract.endDate | date : 'yyyy.MM.dd'}}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-horizontal clearfix">
+                <h5 class="bdt ptb10 pl10 panel-gcrm-msyh ">{{'ADVERTISE_TYPE' | translate}}</h5>
+                <div class="form-group">
+                    <label class="control-label col-md-3">{{'ADVERTISE_TYPE' | translate}}：</label>
+                    <div class="col-md-9">
+                        <p class="form-control-static">
+                            {{'ADVERTISETYPE_' +  solutionInfo.adSolution.advertiseType | translate}}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="adContent{{$index}}" class="ad-content form-horizontal clearfix" ng-repeat="contentView in solutionInfo.approvalContentViews">
+                <h5 class="bdt ptb10 pl10 panel-gcrm-msyh">
+                    {{'APPROVAL_CONTENT_TITLE' | translate}}&nbsp;{{$index + 1}}&nbsp;【{{contentView.adSolutionContent.number}}】
+                </h5>
+                <div class="tables-wrap">
+                    <table class="table table-bordered">
+                        <tr>
+                            <th rowspan="2" class="content-title col-md-2">{{'AD_ANCHOR_SCROLL_BASIC_INFO' | translate}}</th>
+                            <td class="content-subtitle col-md-2">{{'AD_CONTENT_ADVERTISER_NAME' | translate}}</td>
+                            <td class="col-md-8">{{contentView.adSolutionContent.advertiser}}</td>
+                        </tr>
+                        <tr>
+                            <td class="content-subtitle col-md-2">{{'AD_CONTENT_DESCRIBE' | translate}}</td>
+                            <td class="col-md-8">{{contentView.adSolutionContent.description}}</td>
+                        </tr>
+                    </table>
+
+                    <table class="table table-bordered">
+                        <tr>
+                            <th rowspan="3" class="content-title col-md-2">{{'AD_CONTENT_ADDERSS' | translate}}</th>
+                            <td class="content-subtitle col-md-2">{{'APPROVAL_PRODUCT' | translate}}</td>
+                            <td>{{contentView.adSolutionContent.productName}}</td>
+                        </tr>
+                        <tr>
+                            <td class="content-subtitle col-md-2">{{'APPROVAL_SITE' | translate}}</td>
+                            <td class="col-md-8">{{contentView.adSolutionContent.siteName}}</td>
+                        </tr>
+                        <tr>
+                            <td class="content-subtitle col-md-2">{{'AD_CONTENT_PRODUCT_ADDRESS' | translate}}</td>
+                            <td class="col-md-8">
+                                {{contentView.adSolutionContent.channelName}}<span ng-if="contentView.adSolutionContent.areaName">&nbsp;-&nbsp;</span>{{contentView.adSolutionContent.areaName}}<span ng-if="contentView.adSolutionContent.positionName">&nbsp;-&nbsp;</span>{{contentView.adSolutionContent.positionName}}
+                                <button ng-if="solutionInfo.role=='pm'" class="btn btn-link btn-xs ml10" ng-click="PositionProp(contentView)"><span class="glyphicon glyphicon-list-alt mr2"></span>{{'RESOURCE_POSITION_PROPERTY' | translate}}</button>
+                            </td>
+                        </tr>
+                    </table>
+                    <!-- 价格种类 分成 -->
+                    <!-- <table class="table table-bordered" ng-if="contentView.advertiseQuotation && contentView.advertiseQuotation.priceType == 'ratio'">
+                        <tr>
+                            <th rowspan="5" class="content-title col-md-2">{{'APPROVAL_QUOTATION_INFO' | translate}}</th>
+                            <td class="content-subtitle col-md-2">{{'AD_CONTENT_PRICE_TYPE' | translate}}</td>
+                            <td class="col-md-8">{{'PRICE_TYPE_' + contentView.advertiseQuotation.priceType | translate}}</td>
+                        </tr>
+                        <tr>
+                            <td class="content-subtitle col-md-2">{{'AD_CONTENT_FILING_PROPORTION' | translate}}</td>
+                            <td class="col-md-8" ng-if="contentView.advertiseQuotation.productRatioMine || contentView.advertiseQuotation.productRatioCustomer || contentView.advertiseQuotation.productRatioThird">{{'AD_CONTENT_REALITING_MINE' | translate}}：{{contentView.advertiseQuotation.productRatioMine}}%&nbsp;&nbsp;|&nbsp;&nbsp;{{'AD_CONTENT_REALITING_CURSTOMER' | translate}}：{{contentView.advertiseQuotation.productRatioCustomer}}%&nbsp;&nbsp;|&nbsp;&nbsp;{{'AD_CONTENT_REALITING_THIRD' | translate}}：{{contentView.advertiseQuotation.productRatioThird}}%</td>
+                            <td class="col-md-8" ng-if="!(contentView.advertiseQuotation.productRatioMine || contentView.advertiseQuotation.productRatioCustomer || contentView.advertiseQuotation.productRatioThird)">{{'AD_CONTENT_NOT_RECORD' | translate}}</td>
+                        </tr>
+                        <tr>
+                            <td class="content-subtitle col-md-2">{{'AD_CONTENT_REALITING_PROPORTION' | translate}}</td>
+                            <td class="col-md-8">{{'AD_CONTENT_REALITING_MINE' | translate}}：{{contentView.advertiseQuotation.ratioMine}}%&nbsp;&nbsp;|&nbsp;&nbsp;{{'AD_CONTENT_REALITING_CURSTOMER' | translate}}：{{contentView.advertiseQuotation.ratioCustomer}}%&nbsp;&nbsp;|&nbsp;&nbsp;{{'AD_CONTENT_REALITING_THIRD' | translate}}：{{contentView.advertiseQuotation.ratioThird}}%</td>
+                        </tr>
+                        <tr>
+                            <td class="content-subtitle col-md-2">{{'AD_CONTENT_WHETHER' | translate}}</td>
+                            <td class="col-md-8">{{contentView.advertiseQuotation.reachEstimate | BoolValueFilter | translate}}</td>
+                        </tr>
+                        <tr>
+                            <td class="content-subtitle col-md-2">{{'AD_CONTENT_FALLINTO_EXPLAIN' | translate}}</td>
+                            <td class="col-md-8">
+                                {{contentView.advertiseQuotation.ratioConditionDesc || '--'}}
+                            </td>
+                        </tr>
+                    </table> -->
+
+                     <!-- 价格种类 单价 计费方式CPC -->
+                    <table class="table table-bordered" ng-if="contentView.advertiseQuotation && contentView.advertiseQuotation.priceType == 'unit' && contentView.advertiseQuotation.billingModelId == 1">
+                        <tr>
+                            <th rowspan="9" class="content-title col-md-2">{{'APPROVAL_QUOTATION_INFO' | translate}}</th>
+                            <td class="content-subtitle col-md-2">{{'AD_CONTENT_PRICE_TYPE' | translate}}</td>
+                            <td class="col-md-8">{{'PRICE_TYPE_' + contentView.advertiseQuotation.priceType | translate}}</td>
+                        </tr>
+                        <tr>
+                            <td class="content-subtitle col-md-2">{{'APPROVAL_CHARGING_MODE' | translate}}</td>
+                            <td class="col-md-8">{{contentView.advertiseQuotation.billingModelName}}</td>
+                        </tr>
+                        <tr>
+                            <td class="content-subtitle col-md-2">{{'APPROVAL_PUBLISHED_PRICE' | translate}}($)</td>
+                            <td class="col-md-8">{{contentView.advertiseQuotation.publishPrice || ('AD_CONTENT_NOT_RECORD' | translate )}}</td>
+                        </tr>
+                        <tr>
+                            <td class="content-subtitle col-md-2">{{'APPROVAL_CUSTOMER_QUOTE' | translate}}($)</td>
+                            <td class="col-md-8">{{contentView.advertiseQuotation.customerQuote}}</td>
+                        </tr>
+                        <tr>
+                            <td class="content-subtitle col-md-2">{{'AD_CONTENT_DISCOUNT' | translate}}</td>
+                            <td class="col-md-8">{{contentView.advertiseQuotation.discount}}</td>
+                        </tr>
+                        <tr>
+                            <td class="content-subtitle col-md-2">{{'AD_CONTENT_QUANTIT_ESTIMATE' | translate}}</td>
+                            <td class="col-md-8">
+                                <span>{{contentView.advertiseQuotation.dailyAmount || '--'}}</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="content-subtitle col-md-2">{{'AD_CONTENT_QUANTIT_TOTAL' | translate}}</td>
+                            <td class="col-md-8">
+                                <span>{{contentView.advertiseQuotation.totalAmount || '--'}}</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="content-subtitle col-md-2">{{'AD_CONTENT_BUDGET' | translate}}($)</td>
+                            <td class="col-md-8">
+                                <span>{{contentView.advertiseQuotation.budget}}</span>
+                                <span ng-if="!contentView.advertiseQuotation.budget && contentView.advertiseQuotation.budget != 0">--</span>
+                            </td>
+                        </tr>
+                        <!-- <tr>
+                            <td class="content-subtitle col-md-2">{{'AD_CONTENT_COTALPRICE' | translate}}($)</td>
+                            <td class="col-md-8">{{contentView.advertiseQuotation.totalPrice}}</td>
+                        </tr> -->
+                        <tr>
+                            <td class="content-subtitle col-md-2">{{'AD_CONTENT_PRICE_EXPLAIN' | translate}}</td>
+                            <td class="col-md-8">
+                                {{contentView.advertiseQuotation.ratioConditionDesc || '--'}}
+                            </td>
+                        </tr>
+                    </table>
+
+                    <!-- 价格种类 单价 计费方式CPS -->
+                    <table class="table table-bordered" ng-if="contentView.advertiseQuotation && contentView.advertiseQuotation.priceType == 'unit' && contentView.advertiseQuotation.billingModelId == 2">
+                        <tr>
+                            <th rowspan="7" class="content-title col-md-2">{{'APPROVAL_QUOTATION_INFO' | translate}}</th>
+                            <td class="content-subtitle col-md-2">{{'AD_CONTENT_PRICE_TYPE' | translate}}</td>
+                            <td class="col-md-8">{{'PRICE_TYPE_' + contentView.advertiseQuotation.priceType | translate}}</td>
+                        </tr>
+                        <tr>
+                            <td class="content-subtitle col-md-2">{{'APPROVAL_CHARGING_MODE' | translate}}</td>
+                            <td class="col-md-8">{{contentView.advertiseQuotation.billingModelName}}</td>
+                        </tr>
+                        <tr>
+                            <td class="content-subtitle col-md-2">{{'AD_CONTENT_CUSTOMER_INDUSTRY' | translate}}</td>
+                            <td class="col-md-8">{{contentView.advertiseQuotation.industryType | IndustryTypeFilter | translate}}</td>
+                        </tr>
+                        <tr>
+                            <td class="content-subtitle col-md-2">{{'AD_CONTENT_FILING_PROPORTION' | translate}}</td>
+                            <td class="col-md-8" ng-if="contentView.advertiseQuotation.productRatioMine">{{'AD_CONTENT_REALITING_MINE' | translate}}：{{contentView.advertiseQuotation.productRatioMine}}%</td>
+                            <td class="col-md-8" ng-if="!contentView.advertiseQuotation.productRatioMine">{{'AD_CONTENT_NOT_RECORD' | translate}}</td>
+                        </tr>
+                        <tr>
+                            <td class="content-subtitle col-md-2">{{'AD_CONTENT_REALITING_PROPORTION' | translate}}</td>
+                            <td class="col-md-8">{{'AD_CONTENT_REALITING_MINE' | translate}}：{{contentView.advertiseQuotation.ratioMine}}%&nbsp;&nbsp;|&nbsp;&nbsp;{{'AD_CONTENT_REALITING_CURSTOMER' | translate}}：{{contentView.advertiseQuotation.ratioCustomer}}%&nbsp;&nbsp;|&nbsp;&nbsp;{{'AD_CONTENT_REALITING_THIRD' | translate}}：{{contentView.advertiseQuotation.ratioThird}}%</td>
+                        </tr>
+                        <tr>
+                            <td class="content-subtitle col-md-2">{{'AD_CONTENT_WHETHER' | translate}}</td>
+                            <td class="col-md-8">{{contentView.advertiseQuotation.reachEstimate | BoolValueFilter | translate}}</td>
+                        </tr>
+                        <tr>
+                            <td class="content-subtitle col-md-2">{{'AD_CONTENT_FALLINTO_EXPLAIN' | translate}}</td>
+                            <td class="col-md-8">
+                                {{contentView.advertiseQuotation.ratioConditionDesc || '--'}}
+                            </td>
+                        </tr>
+                    </table>
+
+                    <!-- 价格种类 单价 计费方式CPA -->
+                    <table class="table table-bordered" ng-if="contentView.advertiseQuotation && contentView.advertiseQuotation.priceType == 'unit' && contentView.advertiseQuotation.billingModelId == 3">
+                        <tr>
+                            <th rowspan="7" class="content-title col-md-2">{{'APPROVAL_QUOTATION_INFO' | translate}}</th>
+                            <td class="content-subtitle col-md-2">{{'AD_CONTENT_PRICE_TYPE' | translate}}</td>
+                            <td class="col-md-8">{{'PRICE_TYPE_' + contentView.advertiseQuotation.priceType | translate}}</td>
+                        </tr>
+                        <tr>
+                            <td class="content-subtitle col-md-2">{{'APPROVAL_CHARGING_MODE' | translate}}</td>
+                            <td class="col-md-8">{{contentView.advertiseQuotation.billingModelName}}</td>
+                        </tr>
+                        <tr>
+                            <td class="content-subtitle col-md-2">{{'APPROVAL_PUBLISHED_PRICE' | translate}}($)</td>
+                            <td class="col-md-8">{{contentView.advertiseQuotation.publishPrice || ('AD_CONTENT_NOT_RECORD' | translate)}}</td>
+                        </tr>
+                        <tr>
+                            <td class="content-subtitle col-md-2">{{'APPROVAL_CUSTOMER_QUOTE' | translate}}($)</td>
+                            <td class="col-md-8">{{contentView.advertiseQuotation.customerQuote}}</td>
+                        </tr>
+                        <tr>
+                            <td class="content-subtitle col-md-2">{{'AD_CONTENT_DISCOUNT' | translate}}</td>
+                            <td class="col-md-8">{{contentView.advertiseQuotation.discount}}</td>
+                        </tr>
+                        <tr>
+                            <td class="content-subtitle col-md-2">{{'AD_CONTENT_BUDGET' | translate}}($)</td>
+                            <td class="col-md-8">
+                                <span>{{contentView.advertiseQuotation.budget}}</span>
+                                <span ng-if="!contentView.advertiseQuotation.budget && contentView.advertiseQuotation.budget != 0">--</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="content-subtitle col-md-2">{{'AD_CONTENT_PRICE_EXPLAIN' | translate}}</td>
+                            <td class="col-md-8">
+                                {{contentView.advertiseQuotation.ratioConditionDesc || '--'}}
+                            </td>
+                        </tr>
+                    </table>
+
+                    <!-- 价格种类 单价 计费方式CPM -->
+                    <table class="table table-bordered" ng-if="contentView.advertiseQuotation && contentView.advertiseQuotation.priceType == 'unit' && contentView.advertiseQuotation.billingModelId == 4">
+                        <tr>
+                            <th rowspan="9" class="content-title col-md-2">{{'APPROVAL_QUOTATION_INFO' | translate}}</th>
+                            <td class="content-subtitle col-md-2">{{'AD_CONTENT_PRICE_TYPE' | translate}}</td>
+                            <td class="col-md-8">{{'PRICE_TYPE_' + contentView.advertiseQuotation.priceType | translate}}</td>
+                        </tr>
+                        <tr>
+                            <td class="content-subtitle col-md-2">{{'APPROVAL_CHARGING_MODE' | translate}}</td>
+                            <td class="col-md-8">{{contentView.advertiseQuotation.billingModelName}}</td>
+                        </tr>
+                        <tr>
+                            <td class="content-subtitle col-md-2">{{'APPROVAL_PUBLISHED_PRICE' | translate}}($)</td>
+                            <td class="col-md-8">{{contentView.advertiseQuotation.publishPrice || ('AD_CONTENT_NOT_RECORD' | translate)}}</td>
+                        </tr>
+                        <tr>
+                            <td class="content-subtitle col-md-2">{{'APPROVAL_CUSTOMER_QUOTE' | translate}}($)</td>
+                            <td class="col-md-8">{{contentView.advertiseQuotation.customerQuote}}</td>
+                        </tr>
+                        <tr>
+                            <td class="content-subtitle col-md-2">{{'AD_CONTENT_DISCOUNT' | translate}}</td>
+                            <td class="col-md-8">{{contentView.advertiseQuotation.discount}}</td>
+                        </tr>
+                        <tr>
+                            <td class="content-subtitle col-md-2">{{'AD_CONTENT_QUANTIT_ESTIMATE' | translate}}</td>
+                            <td class="col-md-8">{{contentView.advertiseQuotation.dailyAmount}}</td>
+                        </tr>
+                        <tr>
+                            <td class="content-subtitle col-md-2">{{'AD_CONTENT_QUANTIT_TOTAL' | translate}}</td>
+                            <td class="col-md-8">{{contentView.advertiseQuotation.totalAmount}}</td>
+                        </tr>
+                        <tr>
+                            <td class="content-subtitle col-md-2">{{'AD_CONTENT_BUDGET' | translate}}($)</td>
+                            <td class="col-md-8">
+                                <span>{{contentView.advertiseQuotation.budget}}</span>
+                                <span ng-if="!contentView.advertiseQuotation.budget && contentView.advertiseQuotation.budget != 0">--</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="content-subtitle col-md-2">{{'AD_CONTENT_PRICE_EXPLAIN' | translate}}</td>
+                            <td class="col-md-8">
+                                {{contentView.advertiseQuotation.ratioConditionDesc || '--'}}
+                            </td>
+                        </tr>
+                    </table>
+
+                    <!-- 价格种类 单价 计费方式CPT -->
+                    <table class="table table-bordered" ng-if="contentView.advertiseQuotation && contentView.advertiseQuotation.priceType == 'unit' && contentView.advertiseQuotation.billingModelId == 5">
+                        <tr>
+                            <th rowspan="7" class="content-title col-md-2">{{'APPROVAL_QUOTATION_INFO' | translate}}</th>
+                            <td class="content-subtitle col-md-2">{{'AD_CONTENT_PRICE_TYPE' | translate}}</td>
+                            <td class="col-md-8">{{'PRICE_TYPE_' + contentView.advertiseQuotation.priceType | translate}}</td>
+                        </tr>
+                        <tr>
+                            <td class="content-subtitle col-md-2">{{'APPROVAL_CHARGING_MODE' | translate}}</td>
+                            <td class="col-md-8">{{contentView.advertiseQuotation.billingModelName}}</td>
+                        </tr>
+                        <tr>
+                            <td class="content-subtitle col-md-2">{{'APPROVAL_PUBLISHED_PRICE' | translate}}($)</td>
+                            <td class="col-md-8">{{contentView.advertiseQuotation.publishPrice || ('AD_CONTENT_NOT_RECORD' | translate)}}</td>
+                        </tr>
+                        <tr>
+                            <td class="content-subtitle col-md-2">{{'APPROVAL_CUSTOMER_QUOTE' | translate}}($)</td>
+                            <td class="col-md-8">{{contentView.advertiseQuotation.customerQuote}}</td>
+                        </tr>
+                        <tr>
+                            <td class="content-subtitle col-md-2">{{'AD_CONTENT_DISCOUNT' | translate}}</td>
+                            <td class="col-md-8">{{contentView.advertiseQuotation.discount}}</td>
+                        </tr>
+                        <tr>
+                            <td class="content-subtitle col-md-2">{{'AD_CONTENT_BUDGET' | translate}}($)</td>
+                            <td class="col-md-8">
+                                <span>{{contentView.advertiseQuotation.budget}}</span>
+                                <span ng-if="!contentView.advertiseQuotation.budget && contentView.advertiseQuotation.budget != 0">--</span>
+                            </td>
+                        </tr>
+                        <!-- <tr>
+                            <td class="content-subtitle col-md-2">{{'AD_CONTENT_COTALPRICE' | translate}}($)</td>
+                            <td class="col-md-8">{{contentView.advertiseQuotation.totalPrice}}</td>
+                        </tr> -->
+                        <tr>
+                            <td class="content-subtitle col-md-2">{{'AD_CONTENT_PRICE_EXPLAIN' | translate}}</td>
+                            <td class="col-md-8">
+                                {{contentView.advertiseQuotation.ratioConditionDesc || '--'}}
+                            </td>
+                        </tr>
+                    </table>
+
+                    <table class="table table-bordered">
+                        <tr>
+                            <th rowspan="{{contentView.adSolutionContent.insertPeriodDescription?3:2}}" class="content-title col-md-2">{{'AD_CONTENT_PRODUCT_TIME' | translate}}</th>
+                            <td class="content-subtitle col-md-2">{{'APPROVAL_PRODUCT_TIMES' | translate}}</td>
+                            <td class="col-md-8 period-label-td"><div ng-model="contentView.adSolutionContent.periodDescription" period-label></div></td>
+                        </tr>
+                        <tr ng-if="contentView.adSolutionContent.insertPeriodDescription">
+                            <td class="content-subtitle col-md-2">{{'SCHEDULE_INSERT_TIME' | translate}}</td>
+                            <td class="col-md-8 text-danger period-label-td"><div ng-model="contentView.adSolutionContent.insertPeriodDescription" period-label="danger"></div></td>
+                        </tr>
+                        <tr>
+                            <td class="content-subtitle col-md-2">{{'APPROVAL_TOTAL_PRODUCT_TIMES' | translate}}</td>
+                            <td class="col-md-8">{{contentView.adSolutionContent.totalDays}}&nbsp;{{'AD_CONTENT_INSERT_DAYS' | translate}}</td>
+                        </tr>
+                    </table>
+
+                    <!-- 0-图片、1-文字、2-图片+文字类显示物料信息 -->
+                    <!-- 图片物料，无title -->
+                    <!-- 文字无详细物料信息 -->
+                    <!-- 无URL为自定义物料，不显示物料信息 -->
+                    <table class="table table-bordered" ng-if="contentView.adSolutionContent.materialApplyList.length">
+                        <tbody>
+                            <tr ng-if="contentView.position.materialType==1 || contentView.position.materialType==2">
+                                <th class="content-title col-md-2" rowspan="5" ng-if="contentView.position.materialType==2">{{'AD_CONTENT_MATERIAL' | translate}}</th>
+                                <th class="content-title col-md-2" rowspan="3" ng-if="contentView.position.materialType==1">{{'AD_CONTENT_MATERIAL' | translate}}</th>
+                                <td class="content-subtitle col-md-2">Title</td>
+                                <td class="col-md-8">
+                                    <span ng-if="contentView.adSolutionContent.materialApplyList[0].materialTitle">{{contentView.adSolutionContent.materialApplyList[0].materialTitle}}</span>
+                                    <span ng-if="!contentView.adSolutionContent.materialApplyList[0].materialTitle">{{'NOTHING_YET' | translate}}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="content-title col-md-2" rowspan="4" ng-if="contentView.position.materialType==0">{{'AD_CONTENT_MATERIAL' | translate}}</th>
+                                <td class="content-subtitle col-md-2">URL</td>
+                                <td class="col-md-8">
+                                    <span ng-if="contentView.adSolutionContent.materialApplyList[0].materialUrl" class="limit-long-text">
+                                        <a ng-href="{{contentView.adSolutionContent.materialApplyList[0].materialUrl}}" target="_blank">{{contentView.adSolutionContent.materialApplyList[0].materialUrl}}</a>
+                                    </span>
+                                    <span ng-if="!contentView.adSolutionContent.materialApplyList[0].materialUrl">{{'NOTHING_YET' | translate}}</span>
+                                </td>
+                            </tr>
+                            <tr ng-if="contentView.position.materialType==0 || contentView.position.materialType==2">
+                                <td class="content-subtitle col-md-2">{{'MATERIAL_TYPE' | translate}}</td>
+                                <td class="col-md-8">
+                                    <span class="limit-long-text">
+                                        {{'MATERIALFILETYPE_' + contentView.adSolutionContent.materialApplyList[0].materialFileType | translate}}
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr ng-if="(contentView.position.materialType==0 || contentView.position.materialType==2) && (contentView.adSolutionContent.materialApplyList[0].materialFileType==0 || contentView.adSolutionContent.materialApplyList[0].materialFileType==1)">
+                                <td class="content-subtitle col-md-2">{{'APPROVAL_MATERIAL_DETAIL' | translate}}</td>
+                                <td class="col-md-8">
+                                    <span ng-if="contentView.adSolutionContent.materialApplyList[0].materialList.length" ng-repeat="material in contentView.adSolutionContent.materialApplyList[0].materialList">
+                                        <span ng-if="$index">、</span>
+                                        <a ng-href="{{material.downloadUrl}}" target="_blank">{{material.downloadFileName}}</a>
+                                        <span>
+                                            (<span ng-if="material.picWidth && material.picHeight">{{material.picWidth}}x{{material.picHeight}},&nbsp;</span>
+                                            {{material.fileSize}}k)
+                                        </span>
+                                    </span>
+                                    <span ng-if="!contentView.adSolutionContent.materialApplyList[0].materialList.length">{{'NOTHING_YET' | translate}}</span>
+                                </td>
+                            </tr>
+                            <tr ng-if="contentView.adSolutionContent.materialApplyList[0].materialFileType==2">
+                                <td class="content-subtitle col-md-2">{{'APPROVAL_MATERIAL_EMBED_CODE_CONTENT' | translate}}</td>
+                                <td class="col-md-8">
+                                    <span class="limit-long-text">{{contentView.adSolutionContent.materialApplyList[0].materialEmbedCodeContent}}</span>
+                                    <span ng-if="!contentView.adSolutionContent.materialApplyList[0].materialEmbedCodeContent">{{'NOTHING_YET' | translate}}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="content-subtitle col-md-2">{{'THIRDPARTY_MONITOR' | translate}}</td>
+                                <td class="col-md-8">
+                                    <span class="limit-long-text"  ng-if="contentView.adSolutionContent.materialApplyList[0].monitorUrl">
+                                        <a ng-href="{{contentView.adSolutionContent.materialApplyList[0].monitorUrl}}" target="_blank">{{contentView.adSolutionContent.materialApplyList[0].monitorUrl}}</a>
+                                    </span>
+                                    <span  ng-if="!contentView.adSolutionContent.materialApplyList[0].monitorUrl">{{'NOT_SET_YET' | translate}}</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tbody ng-repeat="mm in contentView.adSolutionContent.materialApplyList[0].materialMenuList">
+                            <tr>
+                                <th class="content-title col-md-2" rowspan="3" style="border-top: 2px solid #fff;">{{'DROPDOWN_MENU' | translate}}{{$index + 1}}</th>
+                                <td class="content-subtitle col-md-2">Title</td>
+                                <td class="col-md-8">
+                                    <span>{{mm.materialTitle}}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="content-subtitle col-md-2">URL</td>
+                                <td class="col-md-8">
+                                    <span class="limit-long-text">
+                                        <a ng-href="{{mm.materialUrl}}" target="_blank">{{mm.materialUrl}}</a>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="content-subtitle col-md-2">{{'APPROVAL_MATERIAL_DETAIL' | translate}}</td>
+                                <td class="col-md-8">
+                                    <span class="limit-long-text">
+                                        <a ng-href="{{mm.material.downloadUrl}}" target="_blank">{{mm.material.downloadFileName}}</a>
+                                        <span>
+                                            (<span ng-if="mm.material.picWidth && mm.material.picHeight">{{mm.material.picWidth}}x{{mm.material.picHeight}},&nbsp;</span>
+                                            {{mm.material.fileSize}}k)
+                                        </span>
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+        <div class="panel-footer text-left" ng-if="solutionInfo.role == 'startUser'">
+            <a  class="btn btn-default" ng-click="goNextTask()" ng-disabled="!(nextTask.adSolutionId && nextTask.activityId) || submitDisabble || !tasksReady">{{'APPROVAL_NEXTTASK_TEXT' | translate}}</a>
+        </div>
+    </div>
+
+    <div class="approval-panel panel panel-gcrm" id="approvalOperation" ng-if="solutionInfo.role != 'startUser'">
+        <div class="panel-heading">
+            <span class="black-block">&nbsp;</span>
+            <span class="panel-heading-text">{{'APPROVAL_APPROVALOPERATION' | translate}}</span>
+        </div>
+
+        <div class="panel-body">
+            <div class="form-horizontal clearfix tables-wrap">
+                <div class="insertion-wrap" ng-if="solutionInfo.role != 'pm' && solutionInfo.role != 'country_leader'">
+                    <table class="table table-bordered table-hover" ng-if="contentView.infoViews && contentView.infoViews.length>0" ng-repeat="contentView in solutionInfo.approvalContentViews">
+                        <caption>{{'APPROVAL_APPROVAL_CONTENT_VIEWS' | translate}}&nbsp;{{$index + 1}}&nbsp;【{{contentView.adSolutionContent.number}}】</caption>
+                        <thead>
+                            <tr class="active">
+                                <th style="width: 160px">{{'APPROVAL_CONFLICT_TIME' | translate}}</th>
+                                <th>{{'APPROVAL_CUSTOMERSNAME' | translate}}</th>
+                                <th>{{'AD_CONTENT_DESCRIBE' | translate}}</th>
+                                <th style="width: 50px">{{'AD_CONTENT_CHARGING_MODE' | translate}}</th>
+                                <th>{{'VIEW' | translate}}</th>
+                                <th style="width: 55px"  ng-if="solutionInfo.role != 'cash_leader' && solutionInfo.role != 'starter_superior'">{{'APPROVAL_BUSINESS_ADVICE' | translate}}</th>
+                                <th style="width: 110px" colspan="2">{{'APPROVAL_IS_ALLOW_INSERT' | translate}}</th>
+                            </tr>
+                        </thead>
+                        <tbody ng-repeat="infoView in contentView.infoViews">
+                            <tr ng-repeat="insertInfo in infoView.insertInfos" ng-class="{'danger':checkAllowInsert && (insertInfo.businessAllow == 1 || solutionInfo.role == 'cash_leader') && (insertInfo.allowInsert != 1 && insertInfo.allowInsert != 0), 'info': insertInfo.conflict}">
+                                <td rowspan="{{infoView.insertInfos.length}}" ng-if="$index==0" class="span-td">{{infoView.date | DatePeriodFilter}}</td>
+                                <td class="td-max" title="{{insertInfo.customerName}}">{{insertInfo.customerName}}</td>
+                                <td class="td-max" title="{{insertInfo.description}}">{{insertInfo.description}}</td>
+                                <td class="td-center">
+                                    <span ng-if="insertInfo.billingModelName">{{insertInfo.billingModelName || '--'}}</span>
+                                    <span ng-if="insertInfo.customerQuote"><br />({{insertInfo.customerQuote}})</span>
+                                </td>
+                                <td>
+                                    <a ng-if="insertInfo.contractUrl" ng-href="{{insertInfo.contractUrl}}" target="_blank">{{'APPROVAL_CONTRACT' | translate}}</a>
+                                    <span ng-if="insertInfo.contractUrl">&nbsp;|&nbsp;</span>
+                                    <a ng-href="#/ad2?id={{insertInfo.adSolutionId}}" target="_blank">{{'APPROVAL_PLAN' | translate}}</a>
+                                </td>
+                                <td class="td-center" ng-if="solutionInfo.role != 'cash_leader' && solutionInfo.role != 'starter_superior'">
+                                    <span class="glyphicon glyphicon-ok text-success" ng-if="insertInfo.businessAllow == 1"></span>
+                                    <span class="glyphicon glyphicon-remove text-danger" ng-if="insertInfo.businessAllow == 0"></span>
+                                </td>
+                                <td class="td-center check-td" ng-if="insertInfo.businessAllow || solutionInfo.role == 'cash_leader' || solutionInfo.role == 'starter_superior'">
+                                    <label class="fill-td-full">
+                                        {{'YES' | translate}}<br />
+                                      <input type="radio" ng-change="allowInsertChange(insertInfo, contentView.infoViews)" ng-value="1" ng-model="insertInfo.allowInsert">
+                                    </label>
+                                </td>
+                                <td class="td-center check-td" ng-if="insertInfo.businessAllow || solutionInfo.role == 'cash_leader' || solutionInfo.role == 'starter_superior'">
+                                    <label class="fill-td-full">
+                                        {{'NO' | translate}}<br />
+                                      <input  type="radio"  ng-change="allowInsertChange(insertInfo, contentView.infoViews)"  ng-value="0" ng-model="insertInfo.allowInsert">
+                                    </label>
+                                </td>
+                                <td class="td-center" class="td-center" ng-if="!insertInfo.businessAllow && solutionInfo.role != 'cash_leader' && solutionInfo.role != 'starter_superior'" colspan="2">--</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-2">{{'APPROVAL_AUDIT_OPINION' | translate}}：</label>
+                    <div ng-class="{'has-error':checkApprovalStatus && (form.approvalStatus!=1 && form.approvalStatus!=0)}">
+                        <div class="col-md-3">
+                            <label class="radio radio-inline"><input type="radio" ng-value="1" ng-model="form.approvalStatus"/> {{'AGREE' | translate}} </label>
+                            <label class="radio radio-inline"><input type="radio" ng-value="0" ng-model="form.approvalStatus"/> {{'REJECT' | translate}} </label>
+                        </div>
+                        <div class="col-md-7 radio-inline-hint text-danger" ng-show="!submitSuccessful && checkApprovalStatus && (form.approvalStatus!=1 && form.approvalStatus!=0)">
+                            <span class="glyphicon glyphicon-warning-sign"></span>{{'APPROVAL_CHOOSE_AUDIT_OPINION' | translate}}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-2">{{'AD_CONTENT_OTHER_EXPLAIN' | translate}}：</label>
+                    <div class="col-md-7 div-approval-suggestion" ng-class="{'has-error':checkApprovalSuggestion && !form.approvalSuggestion}">
+                        <textarea class="form-control" rows="3" ng-model="form.approvalSuggestion"></textarea>
+                    </div>
+                    <div class="col-md-3 approval-suggestion-hint text-info" ng-show=" form.approvalStatus==0 && !form.approvalSuggestion">
+                        <span class="glyphicon glyphicon-warning-sign"></span>&nbsp;&nbsp;{{'APPROVAL_REVOKE_NOTES' | translate}}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel-footer text-left">
+            <a  class="btn btn-primary" ng-click="submitApproval()" ng-disabled="submitDisabble || !tasksReady || (form.approvalStatus!=0 && form.approvalStatus!=1) || (form.approvalStatus==0 && !form.approvalSuggestion)">{{'APPROVAL_SUBMIT' | translate}}</a>
+            <a  class="btn btn-default" ng-click="goNextTask()" ng-disabled="!(nextTask.adSolutionId && nextTask.activityId) || submitDisabble || !tasksReady">{{'APPROVAL_NEXTTASK_TEXT' | translate}}</a>
+        </div>
+    </div>
+
+    <div class="shortcuts" >
+        <div class="shortcut">
+            <a class="btn btn-default" ng-click="modalApprovalRecords()">{{'APPROVAL_APPROVAL_RECORD' | translate}}</a>
+        </div>
+        <div class="shortcut">
+            <a class="btn btn-default" ng-click="modalEditRecords()">{{'APPROVAL_UPDATE_RECORD' | translate}}</a>
+        </div>
+        <div class="shortcut">
+            <a class="btn btn-default" ng-click="anchorTo('customerInfo')">{{'APPROVAL_CUSTOMERINFO_LABEL' | translate}}</a>
+        </div>
+        <div class="shortcut" ng-repeat="contentView in solutionInfo.approvalContentViews">
+            <a ng-click="anchorTo('adContent' + $index)" class="btn btn-default">
+                <span class="panel-heading-text">{{'APPROVAL_CONTENT_TITLE' | translate}}{{$index + 1}}</span>
+            </a>
+        </div>
+        <div class="shortcut" ng-if="solutionInfo.role != 'startUser'">
+            <a ng-click="anchorTo('approvalOperation')" class="btn btn-default">
+                <span class="panel-heading-text">{{'APPROVAL_APPROVALOPERATION' | translate}}</span>
+            </a>
+        </div>
+        <div class="shortcut">
+            <a ng-click="anchorTo('navBarTop')" class="btn btn-default">
+                &nbsp;
+                <span class="glyphicon glyphicon-chevron-up"></span>
+                <br />
+                {{'APPROVAL_BACK_TO_TOP' | translate}}
+            </a>
+        </div>
+    </div>
+</div>
+<div ng-if="!(taskRecord.foreignKey && taskRecord.activityId)"  class="scope-approval">
+    <div class="proposal-panel panel panel-gcrm">
+        <div class="panel-body notask-body">
+            <div class="notask-text">
+                <p>{{'NO_THING_HERE' | translate}}</p>
+            </div>
+        </div>
+        <div class="panel-footer text-left">
+            <a  class="btn btn-default" ng-click="goNextTask()" ng-disabled="!(nextTask.foreignKey && nextTask.activityId) || submitDisabble || !tasksReady">{{'APPROVAL_NEXTTASK_TEXT' | translate}}</a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<g_stock id="1" position_date_id="1" total_stock="1" occupied_stock="0" real_occupied_stock="0" billing_model_id="5" />
+	<g_stock id="2" position_date_id="1" total_stock="1000" occupied_stock="0" real_occupied_stock="0" billing_model_id="4" />
+	
+	<g_stock id="3" position_date_id="2" total_stock="4" occupied_stock="1" real_occupied_stock="1" billing_model_id="5" />
+    <g_stock id="4" position_date_id="2" total_stock="1000" occupied_stock="250" real_occupied_stock="0" billing_model_id="4" />
+	
+</dataset>

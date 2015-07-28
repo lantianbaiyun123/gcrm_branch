@@ -1,0 +1,42 @@
+<div class="panel gcrm-panel customer-account-list">
+  <div class="panel-body">
+    <table class="table table-hover table-vm-td">
+      <thead>
+        <tr>
+          <th class="w20"><a tooltip="{{'ACCOUNT_ADD' | translate}}" ng-click="addAccount()" ng-if="BtnIndex.btn_cust_detail_account_mod"><span class="glyphicon glyphicon-plus"></span></a></th>
+          <th>{{'ACCOUNT_EMAIL' | translate}}</th>
+          <th>{{'ACCOUNT_USERNAME' | translate}}</th>
+          <th>{{'ACCOUNT_STATUS' | translate}}</th>
+          <th>{{'ACCOUNT_CREATETIME' | translate}}</th>
+          <th>{{'ACCOUNT_CREATER' | translate}}</th>
+          <th><a tooltip="{{'ACCOUNT_ADD' | translate}}" ng-click="addAccount()" class="pull-right"  ng-if="BtnIndex.btn_cust_detail_account_mod"><span class="glyphicon glyphicon-plus"></span>&nbsp;{{'ACCOUNT_ADD' | translate}}</a></th>
+        </tr>
+      </thead>
+      <tbody ng-if="accountList.list.length">
+        <tr ng-repeat="item in accountList.list">
+          <td>
+            <span ng-if="item.status=='VERIFIED'" class="glyphicon glyphicon-ok-sign text-success"></span>
+            <span ng-if="item.status=='UNVERIFY'" class="glyphicon glyphicon-question-sign text-info"></span>
+          </td>
+          <td>{{item.email}}</td>
+          <td>{{item.username}}</td>
+          <td>{{'ACCOUNT_STATUS_' + item.status | translate}}</td>
+          <td>{{item.createDate | date: 'yyyy-MM-dd HH:mm'}}</td>
+          <td>{{item.creator}}</td>
+          <td>
+            <span ng-if="BtnIndex.btn_cust_detail_account_mod">
+              <a ng-if="item.status=='UNVERIFY' || item.status=='VERIFIED'" class="btn btn-link btn-xs" ng-click="editAccount(item)">{{'EDIT' | translate}}</a>
+              <a ng-if="item.status=='ENABLE'" class="btn btn-link btn-xs" yt-popover-confirm="updateAccount(item)" yt-popover-title="{{'CONFIRM_DISABLE' | translate}}" yt-popover-ok-class="btn-warning" yt-popover-ok-text="{{'DISABLE' | translate}}">{{'DISABLE' | translate}}</a>
+              <a ng-if="item.status=='DISABLE'" class="btn btn-link btn-xs"  yt-popover-confirm="updateAccount(item)" yt-popover-title="{{'CONFIRM_ENABLE' | translate}}" yt-popover-ok-text="{{'ENABLE' | translate}}">{{'ENABLE' | translate}}</a>
+              &nbsp;|&nbsp;
+              <a class="btn btn-link btn-xs" yt-popover-confirm="removeAccount(item.accountId)" yt-popover-title="{{'CONFIRM_DELETE' | translate}}" yt-popover-ok-class="btn-danger" yt-popover-ok-text="{{'DELETE' | translate}}">{{'DELETE' | translate}}</a>
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div ng-if="!accountList.list.length">
+      {{'ACCOUNT_NO_ITEM' | translate}}
+    </div>
+  </div>
+</div>

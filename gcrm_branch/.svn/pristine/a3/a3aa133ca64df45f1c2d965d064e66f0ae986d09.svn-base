@@ -1,0 +1,471 @@
+{
+    "code": 200,
+    "data": {
+        "adPlatformList": [
+            {
+                "businessType": 0,
+                "i18nName": "Hao123",
+                "id": 17,
+                "status": 1
+            },
+            {
+                "businessType": 1,
+                "i18nName": "凤巢-网盟",
+                "id": 20,
+                "status": 1
+            },
+            {
+                "businessType": 1,
+                "i18nName": "品专",
+                "id": 21,
+                "status": 1
+            },
+            {
+                "businessType": 0,
+                "i18nName": "PC App Store",
+                "id": 16,
+                "status": 1
+            },
+            {
+                "businessType": 1,
+                "i18nName": "中文Hao123",
+                "id": 18,
+                "status": 1
+            },
+            {
+                "businessType": 1,
+                "i18nName": "凤巢-关键字",
+                "id": 19,
+                "status": 1
+            }
+        ],
+        "adSolutionContent": {
+            "adSolutionId": 6411,
+            "advertiser": "Lazada",
+            "approvalDate": 1410192000000,
+            "approvalStatus": "confirmed",
+            "areaId": 1672,
+            "areaName": "Icon区",
+            "changedPosition": false,
+            "channelId": 1659,
+            "channelName": "首页",
+            "contentType": "create",
+            "createOperator": 7539017,
+            "createTime": 1409820687000,
+            "description": "Lazada Affiliate",
+            "id": 6302,
+            "insertPeriodDescription": "",
+            "materialEmbedCode": 0,
+            "materialFileType": 0,
+            "materialTitle": "ช็อปออนไลน์",
+            "materialUrl": "http://ho.lazada.co.th/SH2U0H",
+            "modifyStatus": "MODIFYED",
+            "number": "00012939-01",
+            "periodDescription": "2014-09-09,2014-10-31;",
+            "poNum": "1415GJPO0019",
+            "positionId": 1678,
+            "positionName": "2",
+            "productId": 17,
+            "productName": "Hao123",
+            "siteId": 16,
+            "siteName": "泰国",
+            "submitTime": 1409827603000,
+            "taskInfo": "",
+            "totalDays": 53,
+            "updateOperator": 7539017,
+            "updateTime": 1410337907000
+        },
+        "advertiseMaterials": [
+            {
+                "adSolutionContentId": 6302,
+                "createOperator": 7539017,
+                "createTime": 1410254766000,
+                "downloadFileName": "image.png",
+                "downloadUrl": "/gcrm/material/downloadMaterialFile?materialFileId=209",
+                "fileUrl": "http://10.240.166.3/gcm-storage%2F08c6624f-7efc-444a-86b7-aea7af8f8e56?sign=MBO%3AN29h9ewpiKZHcPVah2p76Tgqb2L9ow13n%3ABRBseVl8a7D1g8zl9xRWNlq7OZ8%3D",
+                "id": 209,
+                "materialApplyId": 1182,
+                "materialFileType": "IMAGE",
+                "updateOperator": 7539017,
+                "updateTime": 1410254766000,
+                "uploadFileName": "/08c6624f-7efc-444a-86b7-aea7af8f8e56"
+            }
+        ],
+        "advertiseQuotation": {
+            "adSolutionContentId": 6302,
+            "billingModelId": 0,
+            "createOperator": 7539017,
+            "createTime": 1409820687000,
+            "discount": 1,
+            "id": 6269,
+            "priceType": "ratio",
+            "ratioConditionDesc": "Commission between Hao123 and Lazada (Gross)\n1) non electronic items Hao 8% : Lazada 92%  \n2)        electronic items Hao 5% : Lazada 95% \n\nCommission between Hao123 and ReadyPlanet (Agency)                                     \n\nHao123 = 85% : ReadyPlanet = 15% (of net revenue)\n\nIt will be applied for commission since August 2014.",
+            "ratioCustomer": 92,
+            "ratioMine": 6.8,
+            "ratioThird": 1.2,
+            "reachEstimate": true,
+            "updateOperator": 7539017,
+            "updateTime": 1409826829000
+        },
+        "areaVOList": [
+            {
+                "hasGuideFile": false,
+                "i18nData": {
+                    "cnExtraName": "Hao123>泰国>首页>Banner区",
+                    "cnName": "Banner区",
+                    "enExtraName": "Hao123>th>homepage>Banner",
+                    "enName": "Banner"
+                },
+                "i18nName": "Banner区",
+                "id": 1660,
+                "indexStr": "17-16-1659-"
+            },
+            {
+                "hasGuideFile": false,
+                "i18nData": {
+                    "cnExtraName": "Hao123>泰国>首页>分类区—游戏",
+                    "cnName": "分类区—游戏",
+                    "enExtraName": "Hao123>th>homepage>category-Game",
+                    "enName": "category-Game"
+                },
+                "i18nName": "分类区—游戏",
+                "id": 1663,
+                "indexStr": "17-16-1659-"
+            },
+            {
+                "hasGuideFile": false,
+                "i18nData": {
+                    "cnExtraName": "Hao123>泰国>首页>Icon区",
+                    "cnName": "Icon区",
+                    "enExtraName": "Hao123>th>homepage>Icon",
+                    "enName": "Icon"
+                },
+                "i18nName": "Icon区",
+                "id": 1672,
+                "indexStr": "17-16-1659-"
+            },
+            {
+                "hasGuideFile": false,
+                "i18nData": {
+                    "cnExtraName": "Hao123>泰国>首页>分类区—电商",
+                    "cnName": "分类区—电商",
+                    "enExtraName": "Hao123>th>homepage>category-Ecommerce",
+                    "enName": "category-Ecommerce"
+                },
+                "i18nName": "分类区—电商",
+                "id": 1679,
+                "indexStr": "17-16-1659-"
+            },
+            {
+                "hasGuideFile": false,
+                "i18nData": {
+                    "cnExtraName": "Hao123>泰国>首页>分类区—汽车",
+                    "cnName": "分类区—汽车",
+                    "enExtraName": "Hao123>th>homepage>category-Auto",
+                    "enName": "category-Auto"
+                },
+                "i18nName": "分类区—汽车",
+                "id": 1954,
+                "indexStr": "17-16-1659-"
+            },
+            {
+                "hasGuideFile": false,
+                "i18nData": {
+                    "cnExtraName": "Hao123>泰国>首页>分类区—旅游",
+                    "cnName": "分类区—旅游",
+                    "enExtraName": "Hao123>th>homepage>category-Travel",
+                    "enName": "category-Travel"
+                },
+                "i18nName": "分类区—旅游",
+                "id": 1961,
+                "indexStr": "17-16-1659-"
+            }
+        ],
+        "channelVOList": [
+            {
+                "hasGuideFile": false,
+                "i18nData": {
+                    "cnExtraName": "Hao123>泰国>图片",
+                    "cnName": "图片",
+                    "enExtraName": "Hao123>th>subpage-image",
+                    "enName": "subpage-image"
+                },
+                "i18nName": "图片",
+                "id": 1642,
+                "indexStr": "17-16-"
+            },
+            {
+                "hasGuideFile": false,
+                "i18nData": {
+                    "cnExtraName": "Hao123>泰国>游戏",
+                    "cnName": "游戏",
+                    "enExtraName": "Hao123>th>subpage-Game",
+                    "enName": "subpage-Game"
+                },
+                "i18nName": "游戏",
+                "id": 1648,
+                "indexStr": "17-16-"
+            },
+            {
+                "hasGuideFile": false,
+                "i18nData": {
+                    "cnExtraName": "Hao123>泰国>首页",
+                    "cnName": "首页",
+                    "enExtraName": "Hao123>th>homepage",
+                    "enName": "homepage"
+                },
+                "i18nName": "首页",
+                "id": 1659,
+                "indexStr": "17-16-"
+            },
+            {
+                "hasGuideFile": false,
+                "i18nData": {
+                    "cnExtraName": "Hao123>泰国>视频",
+                    "cnName": "视频",
+                    "enExtraName": "Hao123>th>subpage-video",
+                    "enName": "subpage-video"
+                },
+                "i18nName": "视频",
+                "id": 1688,
+                "indexStr": "17-16-"
+            }
+        ],
+        "datePeriodState": [
+            {
+                "endChangeable": true,
+                "startChangeable": false
+            }
+        ],
+        "emptyMaterial": false,
+        "onlineApplyAllowed": false,
+        "position": {
+            "areaRequired": "png,48*48",
+            "click": 2500,
+            "hasGuideFile": false,
+            "i18nData": {
+                "cnExtraName": "Hao123>泰国>首页>Icon区>2",
+                "cnName": "2",
+                "enExtraName": "Hao123>th>homepage>Icon>2",
+                "enName": "2"
+            },
+            "i18nName": "2",
+            "id": 1678,
+            "indexStr": "17-16-1659-1672-",
+            "materialType": 2,
+            "pv": 2500000,
+            "rotationType": 0,
+            "salesAmount": 1,
+            "size": "15k",
+            "textlinkLength": 15
+        },
+        "positionVOList": [
+            {
+                "areaRequired": "png,48*48",
+                "click": 2500,
+                "hasGuideFile": false,
+                "i18nData": {
+                    "cnExtraName": "Hao123>泰国>首页>Icon区>1",
+                    "cnName": "1",
+                    "enExtraName": "Hao123>th>homepage>Icon>1",
+                    "enName": "1"
+                },
+                "i18nName": "1",
+                "id": 1673,
+                "indexStr": "17-16-1659-1672-",
+                "materialType": 2,
+                "pv": 2500000,
+                "rotationType": 0,
+                "salesAmount": 1,
+                "size": "15k",
+                "textlinkLength": 15
+            },
+            {
+                "areaRequired": "png,48*48",
+                "click": 2500,
+                "hasGuideFile": false,
+                "i18nData": {
+                    "cnExtraName": "Hao123>泰国>首页>Icon区>6",
+                    "cnName": "6",
+                    "enExtraName": "Hao123>th>homepage>Icon>6",
+                    "enName": "6"
+                },
+                "i18nName": "6",
+                "id": 1674,
+                "indexStr": "17-16-1659-1672-",
+                "materialType": 2,
+                "pv": 2500000,
+                "rotationType": 0,
+                "salesAmount": 1,
+                "size": "15k",
+                "textlinkLength": 15
+            },
+            {
+                "areaRequired": "png,48*48",
+                "click": 2500,
+                "hasGuideFile": false,
+                "i18nData": {
+                    "cnExtraName": "Hao123>泰国>首页>Icon区>5",
+                    "cnName": "5",
+                    "enExtraName": "Hao123>th>homepage>Icon>5",
+                    "enName": "5"
+                },
+                "i18nName": "5",
+                "id": 1675,
+                "indexStr": "17-16-1659-1672-",
+                "materialType": 2,
+                "pv": 2500000,
+                "rotationType": 0,
+                "salesAmount": 1,
+                "size": "15k",
+                "textlinkLength": 15
+            },
+            {
+                "areaRequired": "png,48*48",
+                "click": 2500,
+                "hasGuideFile": false,
+                "i18nData": {
+                    "cnExtraName": "Hao123>泰国>首页>Icon区>4",
+                    "cnName": "4",
+                    "enExtraName": "Hao123>th>homepage>Icon>4",
+                    "enName": "4"
+                },
+                "i18nName": "4",
+                "id": 1676,
+                "indexStr": "17-16-1659-1672-",
+                "materialType": 2,
+                "pv": 2500000,
+                "rotationType": 0,
+                "salesAmount": 1,
+                "size": "15k",
+                "textlinkLength": 15
+            },
+            {
+                "areaRequired": "png,48*48",
+                "click": 2500,
+                "hasGuideFile": false,
+                "i18nData": {
+                    "cnExtraName": "Hao123>泰国>首页>Icon区>3",
+                    "cnName": "3",
+                    "enExtraName": "Hao123>th>homepage>Icon>3",
+                    "enName": "3"
+                },
+                "i18nName": "3",
+                "id": 1677,
+                "indexStr": "17-16-1659-1672-",
+                "materialType": 2,
+                "pv": 2500000,
+                "rotationType": 0,
+                "salesAmount": 1,
+                "size": "15k",
+                "textlinkLength": 15
+            },
+            {
+                "areaRequired": "png,48*48",
+                "click": 2500,
+                "hasGuideFile": false,
+                "i18nData": {
+                    "cnExtraName": "Hao123>泰国>首页>Icon区>2",
+                    "cnName": "2",
+                    "enExtraName": "Hao123>th>homepage>Icon>2",
+                    "enName": "2"
+                },
+                "i18nName": "2",
+                "id": 1678,
+                "indexStr": "17-16-1659-1672-",
+                "materialType": 2,
+                "pv": 2500000,
+                "rotationType": 0,
+                "salesAmount": 1,
+                "size": "15k",
+                "textlinkLength": 15
+            },
+            {
+                "areaRequired": "48*48",
+                "click": 1000,
+                "hasGuideFile": false,
+                "i18nData": {
+                    "cnExtraName": "Hao123>泰国>首页>Icon区>7",
+                    "cnName": "7",
+                    "enExtraName": "Hao123>th>homepage>Icon>7",
+                    "enName": "7"
+                },
+                "i18nName": "7",
+                "id": 1970,
+                "indexStr": "17-16-1659-1672-",
+                "materialType": 2,
+                "pv": 1000000,
+                "rotationType": 0,
+                "salesAmount": 1,
+                "size": "5k",
+                "textlinkLength": 15
+            }
+        ],
+        "siteList": [
+            {
+                "allowCanceled": false,
+                "checked": false,
+                "i18nName": "阿联酋",
+                "id": 10,
+                "timeZoneOffset": "0"
+            },
+            {
+                "allowCanceled": false,
+                "checked": false,
+                "i18nName": "埃及",
+                "id": 11,
+                "timeZoneOffset": "0"
+            },
+            {
+                "allowCanceled": false,
+                "checked": false,
+                "i18nName": "巴西",
+                "id": 12,
+                "timeZoneOffset": "0"
+            },
+            {
+                "allowCanceled": false,
+                "checked": false,
+                "i18nName": "摩洛哥",
+                "id": 13,
+                "timeZoneOffset": "0"
+            },
+            {
+                "allowCanceled": false,
+                "checked": false,
+                "i18nName": "沙特",
+                "id": 15,
+                "timeZoneOffset": "0"
+            },
+            {
+                "allowCanceled": false,
+                "checked": false,
+                "i18nName": "泰国",
+                "id": 16,
+                "timeZoneOffset": "0"
+            },
+            {
+                "allowCanceled": false,
+                "checked": false,
+                "i18nName": "台湾地区",
+                "id": 17,
+                "timeZoneOffset": "0"
+            },
+            {
+                "allowCanceled": false,
+                "checked": false,
+                "i18nName": "越南",
+                "id": 18,
+                "timeZoneOffset": "0"
+            },
+            {
+                "allowCanceled": false,
+                "checked": false,
+                "i18nName": "印尼",
+                "id": 19,
+                "timeZoneOffset": "0"
+            }
+        ]
+    },
+    "message": "OK"
+}

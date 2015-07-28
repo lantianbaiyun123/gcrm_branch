@@ -1,0 +1,176 @@
+{
+    "code": 200,
+    "data": {
+        "busiTypeRights": [
+            {
+                "hasRights": false,
+                "rightsId": 0,
+                "rightsName": "变现"
+            },
+            {
+                "hasRights": true,
+                "rightsId": 1,
+                "rightsName": "销售"
+            }
+        ],
+        "platformRights": [
+            {
+                "hasRights": false,
+                "rightsId": 12,
+                "rightsName": "晓丽"
+            },
+            {
+                "hasRights": true,
+                "rightsId": 1,
+                "rightsName": "hao123变现"
+            },
+            {
+                "hasRights": true,
+                "rightsId": 6,
+                "rightsName": "网游变现"
+            },
+            {
+                "hasRights": false,
+                "rightsId": 9,
+                "rightsName": "1"
+            },
+            {
+                "hasRights": true,
+                "rightsId": 3,
+                "rightsName": "中文广告销售"
+            },
+            {
+                "hasRights": false,
+                "rightsId": 11,
+                "rightsName": "a1"
+            },
+            {
+                "hasRights": false,
+                "rightsId": 8,
+                "rightsName": "手游变现"
+            },
+            {
+                "hasRights": false,
+                "rightsId": 10,
+                "rightsName": "test2"
+            },
+            {
+                "hasRights": false,
+                "rightsId": 7,
+                "rightsName": "PCF变现"
+            }
+        ],
+        "siteRights": [
+            {
+                "hasRights": true,
+                "rightsId": 1,
+                "rightsName": "测试站点1"
+            },
+            {
+                "hasRights": true,
+                "rightsId": 2,
+                "rightsName": "测试站点2"
+            },
+            {
+                "hasRights": false,
+                "rightsId": 3,
+                "rightsName": "测试站点1"
+            },
+            {
+                "hasRights": true,
+                "rightsId": 4,
+                "rightsName": "zh_CN1"
+            },
+            {
+                "hasRights": true,
+                "rightsId": 5,
+                "rightsName": "zh_CN"
+            },
+            {
+                "hasRights": false,
+                "rightsId": 6,
+                "rightsName": "zh_CN"
+            },
+            {
+                "hasRights": false,
+                "rightsId": 7,
+                "rightsName": "zh_CN01"
+            },
+            {
+                "hasRights": false,
+                "rightsId": 8,
+                "rightsName": "test001_CN"
+            },
+            {
+                "hasRights": false,
+                "rightsId": 9,
+                "rightsName": "zh_CN"
+            },
+            {
+                "hasRights": false,
+                "rightsId": 10,
+                "rightsName": "zh_CN"
+            },
+            {
+                "hasRights": false,
+                "rightsId": 11,
+                "rightsName": "zh_CN"
+            },
+            {
+                "hasRights": false,
+                "rightsId": 12,
+                "rightsName": "zh_CN"
+            },
+            {
+                "hasRights": true,
+                "rightsId": 13,
+                "rightsName": "zh_CN"
+            },
+            {
+                "hasRights": false,
+                "rightsId": 14,
+                "rightsName": "zh_CN"
+            },
+            {
+                "hasRights": false,
+                "rightsId": 15,
+                "rightsName": "zh_CN"
+            },
+            {
+                "hasRights": false,
+                "rightsId": 16,
+                "rightsName": "zh_CN"
+            },
+            {
+                "hasRights": false,
+                "rightsId": 18,
+                "rightsName": "印度"
+            },
+            {
+                "hasRights": false,
+                "rightsId": 19,
+                "rightsName": "印度2"
+            },
+            {
+                "hasRights": false,
+                "rightsId": 20,
+                "rightsName": "zh_CN"
+            },
+            {
+                "hasRights": false,
+                "rightsId": 21,
+                "rightsName": "zh_CN"
+            },
+            {
+                "hasRights": false,
+                "rightsId": 22,
+                "rightsName": "zh_CN"
+            },
+            {
+                "hasRights": false,
+                "rightsId": 24
+            }
+        ]
+    },
+    "message": "OK"
+}

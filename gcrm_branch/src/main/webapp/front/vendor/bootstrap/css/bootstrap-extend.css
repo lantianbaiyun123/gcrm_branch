@@ -1,0 +1,405 @@
+.navbar-brand{padding:3px 5px;}
+
+.txt-impt-errors,.txt-impt{
+	margin-right: 4px;
+	color: #CC0000;
+}
+
+.table > thead > tr > td.muted,
+.table > tbody > tr > td.muted,
+.table > tfoot > tr > td.muted,
+.table > thead > tr > th.muted,
+.table > tbody > tr > th.muted,
+.table > tfoot > tr > th.muted,
+.table > thead > tr.muted > td,
+.table > tbody > tr.muted > td,
+.table > tfoot > tr.muted > td,
+.table > thead > tr.muted > th,
+.table > tbody > tr.muted > th,
+.table > tfoot > tr.muted > th {
+  background-color: #efefef;
+}
+
+.table-hover > tbody > tr > td.muted:hover,
+.table-hover > tbody > tr > th.muted:hover,
+.table-hover > tbody > tr.muted:hover > td,
+.table-hover > tbody > tr.muted:hover > th {
+  background-color: #e2e2e2;
+}
+
+.table-gcrm > thead > tr > th,
+.table-gcrm > tbody > tr > th,
+.table-gcrm > tfoot > tr > th,
+.table-gcrm > thead > tr > td,
+.table-gcrm > tbody > tr > td,
+.table-gcrm > tfoot > tr > td {
+  padding: 5px 2px;
+  text-align: center;
+}
+
+.table-gcrm > thead > tr > th,
+.table-gcrm > tbody > tr > th,
+.table-gcrm > tfoot > tr > th,
+.table-gcrm > thead > tr > td > input,
+.table-gcrm > tbody > tr > td > input,
+.table-gcrm > tfoot > tr > td > input {
+  padding: 5px 2px;
+}
+
+.table-gcrm > thead > tr > th.w-50,
+.table-gcrm > tbody > tr > th.w-50,
+.table-gcrm > tfoot > tr > th.w-50,
+.table-gcrm > thead > tr > td.w-50,
+.table-gcrm > tbody > tr > td.w-50,
+.table-gcrm > tfoot > tr > td.w-50 {
+  width:50px;
+}
+.table-gcrm > thead > tr > th.w-80,
+.table-gcrm > tbody > tr > th.w-80,
+.table-gcrm > tfoot > tr > th.w-80,
+.table-gcrm > thead > tr > td.w-80,
+.table-gcrm > tbody > tr > td.w-80,
+.table-gcrm > tfoot > tr > td.w-80 {
+  width:80px;
+}
+
+.table-gcrm > tbody > tr > td:last-child{
+	line-height: 38px;
+}
+
+/* reset has-class color #ccc */
+.has-success .help-block,
+.has-success .control-label,
+.has-success .radio,
+.has-success .checkbox,
+.has-success .radio-inline,
+.has-success .checkbox-inline {
+  color: #333;
+}
+.has-success .form-control{
+	border-color:#ccc;
+}
+.has-success .form-control:focus{
+	border-color:#ccc;
+}
+.has-success .input-group-addon{
+	background-color: #eee;
+	border-color: #ccc;
+	color:#555;
+}
+.has-error .selectpicker{border-color:#A94442;}
+.has-error .filter-option{
+	color:#A94442;
+}
+
+/*!*/
+.tab-content > .tab-pane > .panel{
+	border-top:none;
+	border-radius: 0 0 4px 4px;
+}
+.nav-tabs > li.active > a:focus{
+	outline: none;
+}
+.dl-horizontal dt, .dl-horizontal dd{
+	line-height: 38px;
+}
+
+/*!*/
+.companyHeader{
+	padding-bottom:20px;
+}
+.companyHeader a.btn{
+	background-color:#f8f8f8;
+}
+.companyHeader h3{
+	display:inline-block;
+	margin:0;
+}
+.clear-float{
+	clear:both;
+}
+.tableBorder{
+	border: 1px solid #ddd;
+}
+
+.bussinessChanceList dt{
+    width:220px;
+}
+
+.gray{
+	color: #999999;
+}
+
+.bussinessChanceHeader{
+	background-color:#f1f1f1;
+	margin:25px 0;
+	padding:5px;
+}
+.bussinessChanceHeader h4{
+	display:inline-block;
+	margin:0;
+}
+.padding0{
+	padding:0;
+}
+.arrowPoint{
+	position:relative;
+	background-color:#f2f2f2;
+	display:inline-block;
+	padding:3px 5px;
+	margin-right:15px;
+}
+.arrowPoint>div{
+	position:absolute;
+	border-color: transparent transparent transparent #f2f2f2;
+	border-width: 14px 0px 14px 14px;
+	top:0;
+	right:-14px;
+	border-style: solid;
+	display:inline-block;
+}
+/*--end---*/
+
+/************** SuWeiRong Extend Begin	*************/
+.gcrm-relative{
+	position:relative;
+}
+.gcrm-absolute{
+	position: absolute;
+	right: 10px;
+	z-index: 1;
+}
+#businessChance .col-md-2{
+	width:20%;
+}
+
+.baseInfo-check .col-md-4{
+	text-align:right;
+	font-weight:bold;
+}
+.baseInfo-check .col-md-6{
+	min-height:38px;
+}
+.baseInfo-check .col-md-8{
+	overflow: hidden;
+	overflow-wrap: break-word;
+	text-overflow: ellipsis;
+}
+.marginBottom10{
+	margin-bottom:10px;
+}
+.marginBottom0{
+	margin-bottom:0;
+}
+.marginTop10{
+	margin-top:10px;
+}
+.marginTop0{
+	margin-top:0;
+}
+.tableBorderBottom,
+#agentQualificationForm .table,
+.materialsTable-check{
+	border-bottom: 1px solid #dddddd;
+}
+.paddingBottom0{
+	padding-bottom:0;
+}
+.paddingBottom12{
+	padding-bottom:12px;
+}
+.paddingTop12{
+	padding-top:12px;
+}
+#contactsEdit #contactPersonTable input[type='checkbox']{
+	margin-top:0;
+}
+
+/**************	SuWeiRong Extend End	*************/
+
+.searchBar1,.searchBar2,.searchBar3,.searchBar4,.searchBar5,.searchBar6,.searchBar7{ }
+.panel-body .searchBar1{
+	width: 10%;
+	padding-right: 3px;
+}
+.panel-body .searchBar2{
+	width: 13%;
+}
+.panel-body .searchBar3{
+	width: 18%;
+}
+.panel-body .searchBar4{
+	width: 18%;
+}
+.panel-body .searchBar5{
+	width: 18%;
+}
+.panel-body .searchBar6{
+	width: 18%;
+}
+.panel-body .searchBar7{
+	width: 5%;
+}
+.panel-body .searchBar20{
+	width: 20%;
+}
+.panel-body .setPad0{ padding:0px}
+.panel-body .setPad3{ padding:0 0 0 5px}
+
+.btn-default-dashed{
+	padding:9px 0;
+	border:1px dashed #d1d1d1;
+	background-color: #fff;
+}
+.btn-default-dashed:hover{
+	border:1px dashed #5bb95b;
+	background-color: #e0efd8;
+}
+
+.form-group lable{font-weight: normal;}
+
+.form-group .control-label,
+.J_baseInfoContainer .col-md-4{
+	font-weight: 500;
+	font-family: '宋体';
+}
+
+/* 分辨率高于1200使用以下样式。 */
+@media (min-width: 1200px) {
+  	.container {
+    	width: 990px;
+  	}
+
+  	/*右边快捷键的样式*/
+	.shortcuts,#shortcuts{
+		display:inline-block;
+		bottom:70px;
+		position:fixed;
+		right:44px;
+	}
+	.shortcut{
+		margin-bottom:5px;
+	}
+
+	.shortcut .btn{
+		display: block;
+	}
+}
+
+
+#newAdContentForm .marLe{ margin-left: 0px;}
+#newAdContentForm .help-block{ margin-bottom: 0}
+#newAdContentForm .resetmar0{ margin: 0px;} .textDeco{text-decoration:underline;}
+#newAdContentForm .resetPadd{ padding: 0}
+#newAdContentForm .adDateTime{ outline: none;}
+
+
+/*2014.3.4 增加的迭代一样式  Begin */
+.navbar-inverse .navbar-nav > li.active > a,
+.navbar-inverse .navbar-nav > li.active:hover > a,
+.navbar-inverse .navbar-nav > li.active:focus > a{
+	background-color: #363c47;
+}
+.breadcrumb,
+#contactsEdit thead{
+	font-size: 12px;
+	font-family: '宋体';
+
+}
+#contactsEdit thead tr th,
+#agentQualificationForm thead tr th{
+	font-weight: normal;
+}
+.breadcrumb > li >a{
+	color: #999;
+	cursor: pointer;
+}.breadcrumb > li >a:hover{
+	color: #2a6496;
+}
+.breadcrumb > li.active{
+	color: #333;
+}
+.breadcrumb > li.active a {
+	color: #333;
+	cursor: default;
+	text-decoration: none;
+}
+#baseInfoForm div[id^=agentCountry] .checkbox-inline{
+	width:120px;
+	margin-left:0;
+	//margin-right:10px;
+}
+.page-header .pull-right a,
+.page-header .pull-right input{
+	font-family: "宋体";
+}
+.page-header .pull-right a.submit,
+.page-header .pull-right .submitToApprove,
+.page-header .pull-right a.btn-primary,
+.text-center a.submit{
+	font-weight: bold;
+}
+#J_agentQualificationContainer dt{
+	font-weight:normal;
+}
+#agentQualificationForm .alert-info{
+	font: normal 12px '宋体';
+}
+#BaseInfoSubmitBox {
+	background-color: #ffffff;
+	border-top: 1px solid #e5e5e5;
+}
+.textRight{
+	text-align:right;
+}
+.textCenter{
+	text-align:center;
+}
+.textLeft{
+	text-align:left;
+}
+#changeSalesCustomerName,
+#changeSalesName,
+#changeSalesToBox {
+	padding-left:23px;
+}
+.top2{
+	top:2px;
+}
+.paddingTop6{
+	padding-top:6px;
+}
+.paddingRight0{
+	padding-right:0px;
+}
+.paddingLeft0{
+	padding-left:0px;
+}
+.fontBlack{
+	color:black;
+}
+#customerSearchFrom,
+#customerSearchFrom p,
+#customerSearchFrom a,
+#customerSearchFrom select,
+#customerSearchFrom button,
+#customerSearchFrom input{
+	font-size:12px;
+}
+#customerSearchFrom button,
+#customerSearchFrom a.btn{
+	line-height: 20px;
+}
+.displayInlineBlock{
+	display:inline-block;
+}
+/*End 2014.3.4 增加的迭代一样式 */
+.panel-gcrm-msyh,
+.modal-header,
+.scheduleDetailContainer h3{
+	font-family: 'Microsoft YaHei';
+}
+
+textarea.form-control {
+	margin-top: 8px;
+}

@@ -1,0 +1,58 @@
+<div class="panel-body pt30">
+  <form action="" class="form-horizontal">
+    <div class="form-group">
+      <label class="control-label col-md-2">{{'TITLE' | translate}}：</label>
+      <div class="col-md-8">
+        <p class="form-control-static">{{notice.title}}</p>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-md-2">{{'CONTENT' | translate}}：</label>
+      <div class="col-md-8">
+        <p class="form-control-static" ng-bind-html="deliberatelyTrustDangerousContent()"></p>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-md-2">{{'NOTICE_DELIVERY_SCOPE' | translate}}：</label>
+      <div class="col-md-6">
+        <p class="form-control-static">{{'NOTICE_RECEIVE_SCOPE_' + notice.receiveScope | translate}}</p>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-md-2">{{'NOTICE_DELIVERY_RECEIVER' | translate}}：</label>
+      <div class="col-md-8">
+        <p class="form-control-static" ng-if="notice.receiveScope==='internal'">
+          <span ng-repeat="user in notice.users">
+            <span ng-if="$index">、</span>
+            <span>{{user.realName}}</span>
+          </span>
+          <span ng-if="!notice.users.length">{{'ALL' | translate}}</span>
+        </p>
+        <p class="form-control-static" ng-if="notice.receiveScope==='external'">
+          <span ng-repeat="customer in notice.customers">
+            <span ng-if="$index">、</span>
+            <span>{{customer.value}}</span>
+          </span>
+          <span ng-if="!notice.customers.length">{{'ALL' | translate}}</span>
+        </p>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-md-2">{{'STATUS' | translate}}：</label>
+      <div class="col-md-8">
+        <p class="form-control-static">{{'NOTICE_STATUS_' + notice.status | translate}}</p>
+      </div>
+    </div>
+    <div class="form-group" ng-if="notice.status!=='draft'">
+      <label class="control-label col-md-2">{{'SEND_TIME' | translate}}：</label>
+      <div class="col-md-8">
+        <p class="form-control-static">{{notice.sentTime | date:'yyyy-MM-dd HH:mm'}}</p>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="panel-footer text-left" ng-if="notice.status==='sent' || (notice.status==='draft' && btnPermit.edit)">
+  <button class="btn btn-primary" ng-click="copy()" ng-if="notice.status==='sent'">{{'COPY' | translate}}</button>
+  <button class="btn btn-primary" ng-click="send()" ng-if="notice.status==='draft' && btnPermit.send">{{'SEND' | translate}}</button>
+  <button class="btn btn-default" ng-click="edit()" ng-if="notice.status==='draft' && btnPermit.edit">{{'EDIT' | translate}}</button>
+</div>

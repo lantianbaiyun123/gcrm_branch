@@ -1,0 +1,157 @@
+/**
+ * [CtrlScheduleList description]
+ * this is controller for feature 'schedule'
+ */
+define(['app',
+    '../../_services/Select2Suggest',
+    '../../_services/http/Customer',
+    '../../_services/http/Schedules',
+    '../../_filters/ScheduleListStatusFilter',
+    '../../_services/PageSet',
+    '../../_directives/ytInputDropdown',
+    '../../_directives/ytPositionSelect',
+    'anuglar-ui-select2'
+  ],
+  function (app) {
+
+  app.registerController('CtrlScheduleList', [
+    '$scope',
+    'Customer',
+    'APP_CONTEXT',
+    '$http',
+    'Schedules',
+    'Select2Suggest',
+    '$filter',
+    'PageSet',
+    'ScheduleListConstant',
+    '$timeout',
+    'dateFilter',
+    '$window',
+    function ( $scope, Customer, APP_CONTEXT, $http, Schedules, Select2Suggest, $filter, PageSet, ScheduleListConstant, $timeout, dateFilter, $window ) {
+      PageSet.set({
+        activeIndex: 2,
+        siteName: 'scheduleList'
+      });
+      var query = {
+        initQuery: function () {
+          $scope.q = {};
+          $scope.queryTypes = ScheduleListConstant.queryTypes;
+          $scope.queryStatusMap = ScheduleListConstant.queryStatusMap;
+          $scope.queryType = $scope.queryTypes[0];
+          $scope.queryStatus = $scope.queryStatusMap[0];
+          $scope.optionCustomer = Select2Suggest.getCustomerOptionForAdOwner();//初始化广告主Suggestion
+          $scope.pager = {
+            pageNumber: 1,
+            pageSize: 10,
+            pageSizeSlots: [10,20,30,50],
+            totalCount: 0
+          };
+          $timeout( function () {
+            query.doQuery();
+          });
+        },
+        doQuery: function () {
+          Schedules.getList( this.getQueryParams() ).success( function (response) {
+            if ( response.code === 200 ) {
+              $scope.scheduleList = response.data.result;
+              $scope.pager.totalCount = response.data.totalCount;
+              $scope.pager.totalPages = response.data.totalPages;
+            }
+          });
+        },
+        getQueryParams: function () {
+          var postData = {
+            queryType: $scope.q.queryType && $scope.q.queryType.value,
+            queryStr: $scope.q.queryString,
+            scheduleStatus: $scope.q.queryStatus && $scope.q.queryStatus.value,
+            startDate: dateFilter( $scope.q.startDate, this.dateFormat ),
+            endDate: dateFilter( $scope.q.endDate, this.dateFormat ),
+            pageSize: $scope.pager.pageSize,
+            pageNumber: $scope.pager.pageNumber
+          };
+          if ( $scope.q.positionSelected ) {
+            postData.platFormId = $scope.q.positionSelected.platform.id;
+            postData.siteId = $scope.q.positionSelected.site.id;
+            postData.channelId = $scope.q.positionSelected.channel.id;
+            postData.areaId = $scope.q.positionSelected.area.id;
+            postData.positionId = $scope.q.positionSelected.position.id;
+          }
+          return postData;
+        },
+        resetPageNumber: function () {
+          $scope.pager.pageNumber = 1;
+        },
+        dateFormat: 'yyyy-MM-dd'
+      };
+      query.initQuery();
+      //当前页变化监听，相当于点击了分页
+      $scope.$watch( "pager.pageNumber", function( newValue, oldValue ){
+        if ( newValue && oldValue && newValue !== oldValue ) {
+          query.doQuery();
+        }
+      });
+
+      //“更多...” / “精简”切换
+      $scope.toggleQueryMore = function () {
+        $scope.queryMoreShow = !$scope.queryMoreShow;
+      };
+      //点击了查询
+      $scope.btnQuery = function () {
+        query.resetPageNumber();
+        query.doQuery();
+      };
+      //更改分页大小
+      $scope.setPageSize = function (size) {
+        $scope.pager.pageSize = size;
+        query.resetPageNumber();
+        query.doQuery();
+      };
+      $scope.navToContent = function (item) {
+        if ( item.adContentId ) {
+          $window.open('#/adContentDetail?id=' + item.adContentId);
+          // $state.go('adContentDetail', {
+          //   id: item.adContentId
+          // });
+        }
+      };
+    }
+  ]);
+  app.registerService('ScheduleListConstant', ['$filter', function ($filter) {
+    var translateFilter = $filter('translate');
+    return {
+      noContentWarn: translateFilter('AD_SOLUTION_LIST_NO_CONTENT'),
+      queryStatusMap: [
+        {
+          i18nName: translateFilter('SCHEDULE_RESERVED'),
+          value: '0'
+        },
+        {
+          i18nName: translateFilter('SCHEDULE_CONFIRMED'),
+          value: '1'
+        },
+        {
+          i18nName: translateFilter('SCHEDULE_LOCKED'),
+          value: '2'
+        },
+        {
+          i18nName: translateFilter('SCHEDULE_RELEASED'),
+          value: '3'
+        }
+      ],
+      queryTypes: [
+        {
+          i18nName: translateFilter('ADVERTISER'),
+          value: 'advertisers'
+        },
+        {
+          i18nName: translateFilter('SCHEDULE_NUMBER'),
+          value: 'schedulenum'
+        },
+        {
+          i18nName: translateFilter('SCHEDULE_LIST_AD_CONTENT_NUMBER'),
+          value: 'adcontentnum'
+        }
+      ]
+    };
+  }]);
+});

@@ -1,0 +1,150 @@
+<div class="panel gcrm-panel">
+  <div class="panel-sub-heading">
+    <h2>
+      <span ng-if="qualification.state == 'addEditing'">
+        <span class="black-block">&nbsp;</span> {{'AGENT_QUALIFICATION' | translate}}
+      </span>
+      <span class="pull-right" ng-if="(!OwnerOpers.btn_cust_detail_busiopp_mod || isOwner) && BtnIndex.btn_cust_detail_busiopp_mod && qualification.state == 'detailViewing' && customerApplyInfo.companyStatus != 2">
+        <a class="btn btn-default" ng-click="btnEdit()">
+          {{'MODIFY' | translate}}
+        </a>
+      </span>
+    </h2>
+  </div>
+  <div class="panel-body" ng-if="qualification.state != 'detailViewing'">
+    <div class="alert alert-info">{{'CUSTOMER_NEED_TO_UPLOAD_QUALIFICATION_MATERIAL' | translate}}</div>
+    <form class="form-horizontal" name="formqualification">
+      <div class="form-group">
+        <label class="control-label col-md-2">
+          {{'CUSTOMER_MAIN_PARTNERS' | translate}}：
+        </label>
+        <div class="col-md-3">
+          <div class="input-group">
+              <span class="input-group-addon">TOP1</span>
+              <input type="text" class="form-control" ng-model="qualification.parterTop1">
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="input-group">
+              <span class="input-group-addon">TOP2</span>
+              <input type="text" class="form-control" ng-model="qualification.parterTop2">
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="input-group">
+              <span class="input-group-addon">TOP3</span>
+              <input type="text" class="form-control" ng-model="qualification.parterTop3">
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-md-2">{{'CUSTOMER_MAIN_RESOURCES' | translate}}：</label>
+        <div class="col-md-9">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>{{'CUSTOMER_NUM' | translate}}</th>
+                <th>{{'CUSTOMER_INDUSTRY' | translate}}</th>
+                <th class="col-xs-1">{{'CUSTOMER_ADVERTISERS_COMPANY' | translate}}</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="col-md-1" style="padding-top: 16px">TOP1</td>
+                <td class="col-md-2">
+                  <input type="text" class="form-control" ng-model="qualification.customerResources[0].industry"/>
+                </td>
+                <td class="col-md-3">
+                  <input type="text" class="form-control" ng-model="qualification.customerResources[0].advertisersCompany1"/>
+                </td>
+                <td class="col-md-2">
+                  <input type="text" class="form-control" ng-model="qualification.customerResources[0].advertisersCompany2"/>
+                </td>
+                <td class="col-md-2">
+                  <input type="text" class="form-control" ng-model="qualification.customerResources[0].advertisersCompany3"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="col-md-1" style="padding-top: 16px">TOP2</td>
+                <td class="col-md-2">
+                  <input type="text" class="form-control" ng-model="qualification.customerResources[1].industry"/>
+                </td>
+                <td class="col-md-3">
+                  <input type="text" class="form-control" ng-model="qualification.customerResources[1].advertisersCompany1"/>
+                </td>
+                <td class="col-md-2">
+                  <input type="text" class="form-control" ng-model="qualification.customerResources[1].advertisersCompany2"/>
+                </td>
+                <td class="col-md-2">
+                  <input type="text" class="form-control" ng-model="qualification.customerResources[1].advertisersCompany3"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="col-md-1" style="padding-top: 16px">TOP3</td>
+                <td class="col-md-2">
+                  <input type="text" class="form-control" ng-model="qualification.customerResources[2].industry"/>
+                </td>
+                <td class="col-md-3">
+                  <input type="text" class="form-control" ng-model="qualification.customerResources[2].advertisersCompany1"/>
+                </td>
+                <td class="col-md-2">
+                  <input type="text" class="form-control" ng-model="qualification.customerResources[2].advertisersCompany2"/>
+                </td>
+                <td class="col-md-2">
+                  <input type="text" class="form-control" ng-model="qualification.customerResources[2].advertisersCompany3"/>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-md-2">{{'CUSTOMER_PERFORMANCE_HIGHLIGHTS' | translate}}：</label>
+        <div class="col-md-9">
+          <textarea class="form-control" rows="3" cols="30" ng-model="qualification.performanceHighlights"></textarea>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="panel-body" ng-if="qualification.state == 'detailViewing'">
+    <dl class="dl-horizontal" ng-if="qualification">
+      <dt>{{'CUSTOMER_MAIN_PARTNERS' | translate}}：</dt>
+      <dd>
+        <span class="label label-info">{{qualification.parterTop1}}</span>
+        <span class="label label-info">{{qualification.parterTop2}}</span>
+        <span class="label label-info">{{qualification.parterTop3}}</span>
+      </dd>
+      <dt>{{'CUSTOMER_MAIN_RESOURCES' | translate}}：</dt>
+      <dd class="pr20">
+        <table class="table table-resources">
+          <thead>
+            <tr>
+              <th class="w60"></th>
+              <th>{{'CUSTOMER_INDUSTRY' | translate}}</th>
+              <th>{{'CUSTOMER_ADVERTISERS_COMPANY' | translate}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="resource in qualification.customerResources">
+              <td>top{{$index+1}}</td>
+              <td>{{resource.industry}}</td>
+              <td>
+                <span>{{resource.advertisersCompany}}</span>
+                <!-- <span>{{resource.advertisersCompany1}}</span>
+                <span>{{resource.advertisersCompany2}}</span>
+                <span>{{resource.advertisersCompany3}}</span> -->
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </dd>
+      <dt>{{'CUSTOMER_PERFORMANCE_HIGHLIGHTS' | translate}}：</dt><dd>{{qualification.performanceHighlights}}</dd>
+    </dl>
+  </div>
+  <div class="panel-footer" ng-if="qualification.state == 'detailEditing'">
+    <a  class="btn btn-primary" ng-click="btnSave()">{{'SAVE' | translate}}</a>
+    <a  class="btn btn-default" ng-click="btnCancel()">{{'CANCEL' | translate}}</a>
+  </div>
+</div>

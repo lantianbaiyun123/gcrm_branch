@@ -1,0 +1,12 @@
+<style>
+.body{font-size:14px;}
+.important{font-weight:bold;}
+.red{color:red;}
+</style>
+<div class="body">
+	Respected customer: </br></br> 
+	${operator} is now opening an account of Baidu Advertising Data Platform for you, your email verification code is <span class="red">${verifyCode}</span></br>
+	Please forward this verification code to ${operator}(or the Baidu staff in contact with you), in order to complete the register of account.</br>
+	Thank you for your support and cooperation!</br>
+	This is a system message, please do not reply.
+</div>

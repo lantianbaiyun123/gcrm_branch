@@ -1,0 +1,429 @@
+package com.baidu.gcrm.ad.dao.impl;
+
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import com.baidu.gcrm.ad.dao.AdvertiseSolutionRepositoryCustom;
+import com.baidu.gcrm.ad.model.AdvertiseSolution;
+import com.baidu.gcrm.ad.model.AdvertiseSolutionApproveState;
+import com.baidu.gcrm.ad.web.utils.AdvertiseSolutionCondition;
+import com.baidu.gcrm.ad.web.utils.ContractUrlUtilHelper;
+import com.baidu.gcrm.ad.web.vo.AdvertiseSolutionListView;
+import com.baidu.gcrm.common.DateUtils;
+import com.baidu.gcrm.common.PatternUtil;
+import com.baidu.gcrm.common.auth.RequestThreadLocal;
+import com.baidu.gcrm.common.page.HqlPageQuery;
+import com.baidu.gcrm.common.page.Page;
+import com.baidu.gcrm.valuelistcache.model.BillingModel;
+
+@Repository
+public class AdvertiseSolutionRepositoryCustomImpl implements
+		AdvertiseSolutionRepositoryCustom {
+
+	@PersistenceContext
+	private EntityManager entityManager;
+	
+	@SuppressWarnings("rawtypes")
+	@Autowired
+	private HqlPageQuery hqlPageQuery;
+		/**
+	 * 广告方案列表
+	 */
+	@SuppressWarnings("unchecked")
+	public Page<AdvertiseSolutionListView> findAdSolutionPage(AdvertiseSolutionCondition adSolutionCondition){
+		Page<AdvertiseSolutionListView> page = new Page<AdvertiseSolutionListView>();
+		//adSolutionCondition.getSolutionIdList()!=null 来源于选择了日期段查询，如果其size为0，表示没有记录可查，直接返回空page
+		if(adSolutionCondition.getSolutionIdList() != null &&
+				adSolutionCondition.getSolutionIdList().size() == 0){
+			return page;
+		}
+		
+		
+		Map<String,Object> params = new HashMap<String,Object>();
+		//查询列
+		StringBuilder columnStr = new StringBuilder();
+		
+		//查询total
+		StringBuilder countStr = new StringBuilder();
+		
+		//表及条件
+		StringBuilder sqlStr = new StringBuilder();
+		//处理查询条件
+		sqlStr.append(processConditionForPageQuery(adSolutionCondition,params));
+		
+		if(StringUtils.isNotBlank(adSolutionCondition.getStartDate())
+				|| StringUtils.isNotBlank(adSolutionCondition.getEndDate())
+				|| AdvertiseSolutionCondition.QueryType.advertisers.equals(adSolutionCondition.getQueryType())
+				|| StringUtils.isNotBlank(adSolutionCondition.getCustomerName())
+				|| AdvertiseSolutionCondition.QueryType.ponumber.equals(adSolutionCondition.getQueryType())){
+			columnStr.append("SELECT distinct a.number,a.contractNumber, a.createOperator, a.operator,")
+			.append("b.companyName,(SELECT c.state FROM Contract c WHERE a.contractNumber=c.number) AS state,")
+			.append("a.type,a.id,a.approvalStatus,a.contractStatus,c.realname,a.taskInfo,a.contractType");
+			
+			countStr = countStr.append("select count(distinct a.id) as count ").append(sqlStr);
+		}else{
+			columnStr.append("SELECT a.number,a.contractNumber, a.createOperator, a.operator,")
+			.append("b.companyName,(SELECT c.state FROM Contract c WHERE a.contractNumber=c.number) AS state,")
+			.append("a.type,a.id,a.approvalStatus,a.contractStatus,c.realname,a.taskInfo,a.contractType");
+			countStr = countStr.append("select count(*) as count ").append(sqlStr);
+		}
+		
+		//排序
+		sqlStr.append(" order by a.createTime desc");
+		
+		//组合查询列表及条件，拼成完整sql
+		sqlStr = columnStr.append(sqlStr);
+		
+		//释放 columnStr
+		columnStr = null;
+		
+		hqlPageQuery.executePageQuery(entityManager, sqlStr,countStr, params,adSolutionCondition);
+		
+		List<AdvertiseSolutionListView> resList = new ArrayList<AdvertiseSolutionListView> ();
+		for(int i = 0; i < adSolutionCondition.getContent().size(); i++){
+			Object[] obj = (Object[]) adSolutionCondition.getContent().get(i);
+			AdvertiseSolutionListView view = new AdvertiseSolutionListView();
+			if(obj[0]!=null){
+			    view.setNumber(String.valueOf(obj[0]));			    
+			}
+			if(obj[1]!=null){
+				view.setContract_number(String.valueOf(obj[1]));
+				view.setCmsUrl(ContractUrlUtilHelper.getContractDetailUrl(String.valueOf(obj[1])));
+			}
+			
+			Long loginUcId = RequestThreadLocal.getLoginUserId();
+			if ((null != obj[2] && obj[2].equals(loginUcId)) || (null != obj[3] && obj[3].equals(loginUcId))) {
+				view.setIsOwner(true);
+			}else {
+				view.setIsOwner(false);
+			}
+			
+			view.setCompanyName(String.valueOf(obj[4]));
+			if(obj[5] !=null){
+				view.setContract_state(String.valueOf(obj[5]));
+			}
+			
+			view.setType(String.valueOf(obj[6]));
+			if (obj[7] != null) {
+				view.setId(Long.valueOf(String.valueOf(obj[7])));
+			}
+			
+			if (obj[8] != null) {
+				view.setApproval_status(String.valueOf(obj[8]));
+			}
+			
+			if (obj[9] != null) {
+				view.setContractStatus(String.valueOf(obj[9]));
+			}
+			
+			if (obj[10] != null) {
+				view.setOperatorName(String.valueOf(obj[10]));
+			}
+			
+			if (obj[11] != null) {
+				view.setTaskInfo(String.valueOf(obj[11]));
+			}
+			
+			if (obj[12] != null) {
+				view.setContractType(String.valueOf(obj[12]));
+			}
+			
+			resList.add(view);
+		}
+		page.setResult(resList);
+	//	page.setPageNo(adSolutionCondition.getPageNumber());
+		page.setPageSize(adSolutionCondition.getPageSize());
+		page.setResultClass(adSolutionCondition.getResultClass());
+    	page.setTotalCount(adSolutionCondition.getTotal());
+		
+		return page;
+	}
+	
+	@SuppressWarnings("incomplete-switch")
+	private StringBuilder processConditionForPageQuery(AdvertiseSolutionCondition adSolutionCondition,Map<String,Object> params){
+		String queryStr = adSolutionCondition.getQueryStr();
+		
+		StringBuilder sqlStr = new StringBuilder();
+		
+		sqlStr.append(" FROM AdvertiseSolution a,Customer b,User c");
+		
+		if(StringUtils.isNotBlank(adSolutionCondition.getStartDate())
+				|| StringUtils.isNotBlank(adSolutionCondition.getEndDate())
+				|| AdvertiseSolutionCondition.QueryType.advertisers.equals(adSolutionCondition.getQueryType())
+				|| StringUtils.isNotBlank(adSolutionCondition.getCustomerName())
+				|| AdvertiseSolutionCondition.QueryType.ponumber.equals(adSolutionCondition.getQueryType())){
+			sqlStr.append(",AdSolutionContent f ");
+			
+			sqlStr.append(" WHERE a.customerNumber = b.customerNumber and a.operator = c.ucid and a.id = f.adSolutionId");
+			
+			if(StringUtils.isNotBlank(adSolutionCondition.getCustomerName())){
+				sqlStr.append(" and f.advertiser = :customerName ");
+				params.put("customerName", adSolutionCondition.getCustomerName());
+			}
+			
+			if(AdvertiseSolutionCondition.QueryType.advertisers.equals(adSolutionCondition.getQueryType())
+					&& !PatternUtil.isBlank(queryStr)){
+				queryStr = queryStr.trim();
+				
+				sqlStr.append(" and f.advertiser like :advertiser");
+				queryStr = new StringBuilder("%").append(queryStr).append("%").toString();
+				params.put("advertiser", queryStr);
+			}
+			
+			// 如果选择了按日期查询，adSolutionCondition.getSolutionIdList()不会为null，size>0时拼接sql
+			if (adSolutionCondition.getSolutionIdList() != null
+					&& adSolutionCondition.getSolutionIdList().size() > 0) {
+				sqlStr.append(" and a.id in (");
+
+				for (int i = 0; i < adSolutionCondition.getSolutionIdList()
+						.size(); i++) {
+					sqlStr.append(":soId" + i).append(",");
+				}
+
+				sqlStr = sqlStr.deleteCharAt(sqlStr.length() - 1);
+
+				sqlStr.append(")");
+
+				for (int i = 0; i < adSolutionCondition.getSolutionIdList()
+						.size(); i++) {
+					params.put("soId" + i, adSolutionCondition
+							.getSolutionIdList().get(i));
+				}
+			}
+			
+		}else{
+			sqlStr.append(" WHERE a.customerNumber = b.customerNumber and a.operator = c.ucid");
+		}
+		
+		if(StringUtils.isNotBlank(adSolutionCondition.getCreateStartDate())){
+			sqlStr.append(" AND a.createTime > :createTime");
+			params.put("createTime", DateUtils.getString2Date(DateUtils.YYYY_MM_DD, adSolutionCondition.getCreateStartDate()));
+		}
+		
+		if(adSolutionCondition.getCreateOperator() != null){
+			sqlStr.append(" AND a.createOperator = :createOperator");
+			params.put("createOperator", adSolutionCondition.getCreateOperator());
+		}
+		
+		AdvertiseSolutionCondition.QueryType queryType = adSolutionCondition.getQueryType();
+		
+		if(queryType != null && !PatternUtil.isBlank(queryStr)){
+			queryStr = queryStr.trim();
+			switch(queryType){
+			case number://方案编号
+				sqlStr.append(" and a.number like :number ");
+				params.put("number", "%" + queryStr +"%");
+				break;
+			case contractnum://所属合同编号
+				sqlStr.append(" and a.contractNumber like :contractNumber ");
+				params.put("contractNumber", "%" + queryStr + "%");
+				break;
+			case customerid://客户id
+				sqlStr.append(" and b.customerNumber = :customerid ");
+				params.put("customerid", Long.valueOf(queryStr));
+				break;
+			case ponumber://po编号
+				sqlStr.append(" and f.poNum like :poNum ");
+				params.put("poNum", "%" + queryStr + "%");
+				break;
+			}
+		}
+		
+		AdvertiseSolutionApproveState solutionStatus = adSolutionCondition.getSolutionStatus();
+		if(solutionStatus != null ){//状态
+			sqlStr.append(" AND a.approvalStatus = :approvalStatus");
+			params.put("approvalStatus", solutionStatus);
+		}
+		
+		if(CollectionUtils.isNotEmpty(adSolutionCondition.getSolutionStatusList())){
+			sqlStr.append(" AND a.approvalStatus in (:approvalStatusList)");
+			params.put("approvalStatusList", adSolutionCondition.getSolutionStatusList());
+		}
+		
+		if(StringUtils.isNotBlank(adSolutionCondition.getCusid())){
+			sqlStr.append(" and b.id = :cusid ");
+			params.put("cusid", Long.valueOf(adSolutionCondition.getCusid()));
+		}
+		
+		if(CollectionUtils.isNotEmpty(adSolutionCondition.getOperatorIdList())){
+			if(adSolutionCondition.getOperatorIdList().size()  == 1){
+				sqlStr.append(" AND (a.createOperator  = :operator OR a.operator  = :operator)");
+				params.put("operator", RequestThreadLocal.getLoginUserId());
+			}else if(adSolutionCondition.getOperatorIdList().size()  > 1){
+				sqlStr.append(" AND ((a.createOperator = :operator OR a.operator = :operator)");
+				sqlStr.append(" OR ((a.createOperator in (:operatorIdList) OR a.operator in (:operatorIdList)) and exists (from ApprovalRecord ap where ap.adSolutionId=a.id)))");
+				params.put("operator", RequestThreadLocal.getLoginUserId());
+				params.put("operatorIdList", adSolutionCondition.getOperatorIdList());
+			}
+		}
+		return sqlStr;
+	}
+	/**
+	* 功能描述： 查询一段时间内的创建型且审批通过的方案数量  
+	* 创建人：yudajun    
+	* 创建时间：2014-5-17 下午2:17:05   
+	* 修改人：yudajun
+	* 修改时间：2014-5-17 下午2:17:05   
+	* 修改备注：   
+	* 参数： @param startDate
+	* 参数： @param endDate
+	* 参数： @return
+	* @version
+	 */
+	public Long findSolutionCountCreatAndApproved(Date startDate,Date endDate){
+		StringBuffer sb = new StringBuffer();
+		sb.append("SELECT COUNT(a.id) FROM g_advertise_solution a left join ")
+		  .append(" (SELECT c.ad_solution_id,max(c.create_time) approveTime FROM g_ad_approval_record c group by c.ad_solution_id) b")
+		  .append(" on a.id = b.ad_solution_id where a.approval_status = :approved or a.approval_status = :effective ");
+		if(startDate != null){
+			sb.append(" AND b.approveTime > :startDate");
+		}
+		
+        if(endDate != null){
+        	sb.append(" AND b.approveTime < :endDate");
+		}
+		
+		Query query = entityManager.createNativeQuery(sb.toString());
+        
+		query.setParameter("approved", AdvertiseSolutionApproveState.approved.ordinal());
+		
+		query.setParameter("effective", AdvertiseSolutionApproveState.effective.ordinal());
+		
+        if(startDate != null){
+        	query.setParameter("startDate", startDate);
+		}
+		
+        if(endDate != null){
+        	query.setParameter("endDate", endDate);
+		}
+		
+		BigInteger totals = (BigInteger)query.getSingleResult();
+        
+        long total = 0L;
+        total += totals == null ? 0 : totals.longValue();
+		return total;
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<AdvertiseSolution> findSolutionCount(Date startDate,
+			Date endDate,String operateType) {
+		List<AdvertiseSolution> result = new ArrayList<AdvertiseSolution>();
+		
+        if(StringUtils.isBlank(operateType)){
+			return result;
+		}
+		
+		StringBuffer sb = new StringBuffer();
+		if("create".equals(operateType)){
+			sb.append("select a.* from g_advertise_solution a");
+			sb.append(" where a.create_time > :startDate AND a.create_time < :endDate")
+			.append(" AND a.type = 0");
+		}else if("update".equals(operateType)){
+			sb.append("select a.* from g_advertise_solution a");
+			sb.append(" where a.create_time > :startDate AND a.create_time < :endDate")
+			.append(" AND a.type = 1");
+		}else if("approve".equals(operateType)){
+			sb.append("select a.* from g_advertise_solution a");
+			sb.append(" left join ")
+			.append(" (SELECT c.ad_solution_id,max(c.create_time) approveTime FROM g_ad_approval_record c group by c.ad_solution_id) b ")
+			.append(" on a.id = b.ad_solution_id ")
+			.append(" where b.approveTime > :startDate AND b.approveTime < :endDate")
+			.append(" and a.approval_status in (")
+			.append(AdvertiseSolutionApproveState.approving.ordinal()).append(",")
+			.append(AdvertiseSolutionApproveState.approved.ordinal()).append(")");
+		}else if("confirmed".equals(operateType)){
+			sb.append("select distinct a.* from g_advertise_solution a");
+			sb.append(" left join ")
+			.append(" g_advertise_solution_content b on a.id = b.advertise_solution_id ")
+			.append(" left join ")
+			.append(" g_schedule c on b.id = c.ad_content_id ")
+			.append(" where c.confirm_time > :startDate AND c.confirm_time < :endDate ")
+			.append(" AND c.status in(1,2)");
+		}else if("unconfirmed".equals(operateType)){
+			sb.append("select distinct a.* from g_advertise_solution a");
+			sb.append(" left join ")
+			.append(" g_advertise_solution_content b on a.id = b.advertise_solution_id ")
+			.append(" left join ")
+			.append(" g_schedule c on b.id = c.ad_content_id ")
+			.append(" where c.create_time > :startDate AND c.create_time < :endDate ")
+			.append(" AND c.status = 0");
+		}
+		
+		Query query = entityManager.createNativeQuery(sb.toString(),AdvertiseSolution.class);
+        
+		query.setParameter("startDate", startDate);
+		query.setParameter("endDate", endDate);
+		result = (List<AdvertiseSolution>)query.getResultList();
+		
+		return result;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public Map<Long, String> getIdNumberMap() {
+		Map<Long, String> results = new HashMap<Long, String>();
+		String sql = "select id, number from AdvertiseSolution";
+		Query query = entityManager.createQuery(sql.toString());
+		List<Object[]> objects = query.getResultList();
+		for (Object[] object : objects) {
+			results.put((Long)object[0], (String)object[1]);
+		}
+		return results;
+	}
+
+	@Override
+	public void moveToHistory(Long adSolutionId) {
+		StringBuilder sql = new StringBuilder();
+		sql.append("insert into g_advertise_solution_history (")
+			.append("id,customer_number,contract_number,operator,")
+			.append("approval_status,contract_type,contract_status,")
+			.append("type,budget,currency_type,start_time,end_time,")
+			.append("locked,task_info,create_time,create_operator,")
+			.append("last_update_time,last_update_operator,number,old_solution_id) ")
+			.append(" select id,customer_number,contract_number,operator,")
+			.append("approval_status,contract_type,contract_status,")
+			.append("type,budget,currency_type,start_time,end_time,")
+			.append("locked,task_info,create_time,create_operator,")
+			.append("last_update_time,last_update_operator,number,old_solution_id ")
+			.append(" from g_advertise_solution where id=?");
+		
+		Query query = entityManager.createNativeQuery(sql.toString());
+		query.setParameter(1, adSolutionId);
+		query.executeUpdate();
+		
+	}
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<AdvertiseSolution> findInfluencedAdSolution(Set<Long> positionDateIds, Long excludeAdSolutionId) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("select s.* from g_advertise_solution s,g_advertise_solution_content c, ")
+                .append("g_adcontent_position_date_relation r,g_advertise_quotation q ")
+                .append(" where r.ad_content_id=c.id and c.advertise_solution_id=s.id and r.position_occ_id in(:positionDateIds) ")
+                .append(" and c.id=q.advertise_solution_content_id and q.billing_model_id not in(:cpmId,:cptId)")
+                .append(" and s.id<>:excludeAdSolutionId")
+                .append(" group by s.id ");
+        Query query = entityManager.createNativeQuery(sql.toString(), AdvertiseSolution.class);
+        query.setParameter("positionDateIds", positionDateIds);
+        query.setParameter("cpmId", BillingModel.CPM_ID);
+        query.setParameter("cptId", BillingModel.CPT_ID);
+        query.setParameter("excludeAdSolutionId", excludeAdSolutionId);
+        List<AdvertiseSolution> result = (List<AdvertiseSolution>) query.getResultList();
+        return result;
+    }
+}

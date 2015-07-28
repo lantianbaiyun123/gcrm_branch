@@ -1,0 +1,11 @@
+<style>
+.body{font-size:14px;}
+.important{font-weight:bold;}
+</style>
+<div class="body">
+	Dear ${receiverName}：</br>
+	We would like to remind you that ${adSolutionOperator}'s AD Campaign (${adSolutionNumber}) will grab the traffic of resource positon
+	(${positionName}) from ${timeRange} because of a higher priority.<br/>
+	Your Campaign (${influencedAdSolutionNumber}) cannot be display during the time.</br>
+	This is a system email,please don’t reply.</br>
+</div>

@@ -1,0 +1,33 @@
+package com.baidu.gcrm.occupation1.dao;
+
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+
+import com.baidu.gcrm.occupation1.model.PositionDate;
+import com.baidu.gcrm.occupation1.model.PositionDate.PositionDateStatus;
+
+public interface PositionDateRepository extends JpaRepository<PositionDate, Long>, PositionDateRepositoryCustom {
+
+    List<PositionDate> findByPositionId(Long positionId);
+
+    PositionDate findByPositionIdAndDate(Long positionId, Date date);
+
+    @Modifying
+    @Query("update PositionDate po set po.status = ?1 where po.date >= ?2 and po.positionId = ?3")
+    int updateStatus(PositionDateStatus status, Date date, Long positionId);
+
+    List<PositionDate> findByPositionIdInAndDateBetween(Collection<Long> positionIds, Date fromDate, Date toDate);
+    
+    List<PositionDate> findByPositionIdAndDateIn(Long positionId, Collection<Date> dates);
+    
+    @Query("select id from PositionDate where positionId = ?1 and date between ?2 and ?3")
+    List<Long> findPositionDateIdsByPositionIdAndDateBetween(Long positionId, Date fromDate, Date toDate);
+
+    @Query("select date from PositionDate where id in (?1) order by date")
+    List<Date> findDateByIdIn(Collection<Long> ids);
+}

@@ -1,0 +1,42 @@
+<div class="panel-body pt30">
+  <form class="form-horizontal" name="formNotice">
+    <div class="form-group">
+      <label class="control-label col-md-2"><span class="required-mark" ng-if="state.onSave && formNotice.noticeTitle.$error.required">*</span>{{'TITLE' | translate}}：</label>
+      <div class="col-md-8" ng-class="{'has-error': state.onSave && formNotice.noticeTitle.$error.required}">
+        <input type="text" class="form-control" ng-model="e.formData.title" name="noticeTitle" required>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-md-2"><span class="required-mark" ng-if="state.onSave && !e.formData.content">*</span>{{'CONTENT' | translate}}：</label>
+      <div class="col-md-8" ng-class="{'has-error': state.onSave && !e.formData.content}">
+        <!-- <textarea class="form-control" rows="6" ng-maxlength="5000"></textarea> -->
+        <div summernote config="summernoteOpts" ng-model="e.formData.content"></div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-md-2">{{'NOTICE_DELIVERY_SCOPE' | translate}}：</label>
+      <div class="col-md-6">
+        <label class="radio radio-inline">
+          <input type="radio" ng-model="e.formData.receiveScope" value="internal">{{'NOTICE_RECEIVE_SCOPE_internal' | translate}}
+        </label>
+        <label class="radio radio-inline">
+          <input type="radio" ng-model="e.formData.receiveScope" value="external">{{'NOTICE_RECEIVE_SCOPE_external' | translate}}
+        </label>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-md-2">{{'NOTICE_DELIVERY_RECEIVER' | translate}}：</label>
+      <div class="col-md-8">
+        <input type="hidden" ui-select2="e.userOption" ng-model="e.formData.users" ng-if="e.formData.receiveScope==='internal'" style="width:100%">
+        <input type="hidden" ui-select2="e.adOwnerOption" ng-model="e.formData.customers" ng-if="e.formData.receiveScope==='external'" style="width:100%">
+      </div>
+    </div>
+  </form>
+</div>
+<div class="panel-footer text-left clearfix">
+  <div class="pull-left">
+    <button class="btn btn-primary" ng-click="saveSend()" ng-if="btnPermit.saveSend">{{'SAVE_SEND' | translate}}</button>
+    <button class="btn btn-default" ng-click="save()" ng-if="btnPermit.save">{{'SAVE' | translate}}</button>
+  </div>
+  <button class="btn btn-default pull-right" ng-click="cancel()">{{'CANCEL' | translate}}</button>
+</div>

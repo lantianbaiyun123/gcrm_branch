@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<g_adcontent_position_date_relation id="1" ad_content_id="1" position_occ_id="1"/>
+	<g_adcontent_position_date_relation id="2" ad_content_id="2" position_occ_id="1"/>
+	<g_adcontent_position_date_relation id="3" ad_content_id="2" position_occ_id="2"/>
+</dataset>

@@ -1,0 +1,36 @@
+/*scope-approval*/
+.scope-approval .proposal-panel .panel-body { padding-top: 10px; }
+.solution-return-hint { margin-top: 5px; margin-bottom: 0px; }
+.scope-approval .proposal-info { font-size: 12px; margin: 0 0 15px 0; padding: 4px 0; }
+.scope-approval .proposal-info>span { line-height: 25px; border-right: dashed 1px #ccc; text-align: center; }
+.scope-approval .proposal-info .proposal-info-last-span { border-right: none; }
+.scope-approval .proposal-panel .form-horizontal .form-group { /*margin-left: 40px;*/ margin-bottom: 5px; }
+.scope-approval .proposal-panel .tables-wrap { padding: 0 15px; }
+.scope-approval .ad-content .table, .scope-approval .approval-panel .table { font-size: 12px; margin-bottom: 15px }
+.scope-approval .ad-content .table th, .scope-approval .approval-panel .table th, .scope-approval .ad-content .table td, .scope-approval .approval-panel .table td{ vertical-align: middle; /*word-break: break-word;*/ }
+.scope-approval .limit-long-text { width: 429px; display: block; text-overflow: ellipsis; word-break: break-word; overflow: hidden; }
+.scope-approval .ad-content .content-title{ background-color: #ddd; text-align: center; }
+.scope-approval .ad-content .content-subtitle{ text-align: right; }
+.scope-approval .ad-content { margin-top: 10px; }
+.scope-approval .approval-panel .table { margin-bottom: 30px; }
+.scope-approval .approval-panel .table .td-center { text-align: center; }
+.scope-approval .approval-panel .table caption { font-size: 14px; text-align: left; padding-left: 2px; padding-bottom: 10px; }
+.scope-approval .approval-panel .control-label { width: 82px; }
+.scope-approval .check-td { width: 40px; }
+.scope-approval .fill-td-full { cursor: pointer; width: inherit; margin-bottom: 0; }
+.solution-approval-record .modal-dialog { width: 800px; }
+.scope-approval .table-hover>tbody .span-td { background-color: #fff; }
+.table-hover > tbody > tr > td.span-td:hover, .table-hover > tbody > tr > th.span-td:hover, .table-hover > tbody > tr.danger:hover .span-td, .table-hover > tbody > tr.danger:hover .span-td { background-color: #fff; }
+.solution-approval-record .insert-table { font-size: 12px; }
+.solution-approval-record .insert-table caption{ text-align: left; padding-left: 2px; padding-bottom: 10px; }
+.approval-record-table, .modify-record-table  { margin-bottom: 0; }
+.modify-record-table  { font-size: 12px; margin-bottom: 0; border: 1px solid #ddd; }
+.modify-record-table caption{ text-align: left; padding-left: 2px; padding-bottom: 10px; padding-top: 20px; }
+.modify-record-table.first-record-table  caption{ padding-top: 0; }
+.approval-record-table>tbody .dash-top>td, .approval-record-table>tbody .dash-top>th { border-top: 1px dashed #ddd; }
+.radio-inline-hint { margin-top: 9px; margin-bottom: -2px; }
+.approval-suggestion-hint { margin-top: 7px; margin-left: 5px; }
+.message { position: absolute; left: 250px; }
+.position-prop-modal .dl-horizontal dt,
+.position-prop-modal  .dl-horizontal dd { line-height: 34px; }
+/*end scope-approval*/

@@ -1,0 +1,80 @@
+<div class="container scheduleDetailContainer">
+  <div class="panel noRadius">
+    <div class="panel-body schedulePanelBody">
+      <div class="row headerRow">
+        <div class="col-md-2" style="width:20%">
+          <h3>
+            {{'PAGE_AD_SCHEDULEDETAIL' | translate}}
+          </h3>
+        </div>
+        <div class="pull-right">
+          <div class="proposal-info well well-sm row">
+                    <span class="pull-left ng-binding">{{ 'SCHEDULE_NUMBER' | translate }}：{{headerObj.number}}</span>
+                    <span class="pull-left ng-binding">{{ 'SCHEDULE_BLONG_GENERATION' | translate }}：{{headerObj.guodai}}</span>
+                    <span class="pull-left ng-binding">{{ 'SCHEDULE_DETAIL_STATUS' | translate }}：{{headerObj.status | ScheduleListStatusFilter | translate }}</span>
+                    <span class="pull-left ng-binding">{{ 'SCHEDULE_DETAIL_CREATE_TIME' | translate }}：{{headerObj.createTime}}</span>
+                    <span class="pull-left proposal-info-last-span ng-binding" ng-show="{{!!headerObj.confirmTime}}">{{ 'SCHEDULE_DETAIL_CHANGE_TIME' | translate }}：{{headerObj.confirmTime}}</span>
+              </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-gcrm noRadius">
+    <div class="page-header">
+      <div class="panel-heading">
+        <span class="black-block">&nbsp;</span>
+          <span class="panel-heading-text ng-binding">{{'AD_ANCHOR_SCROLL_BASIC_INFO' | translate}}</span>
+      </div>
+    </div>
+    <div class="panel-body">
+      <div class="row mb10 pb10">
+        <div class="col-md-2 align-right">{{'AD_BASIC_COMPANY_NAME' | translate}}：</div>
+        <div class="col-md-9">{{baseInfo.companyname}}</div>
+      </div>
+      <div class="row mb10 pb10">
+        <div class="col-md-2 align-right">{{'AD_CONTENT_ADVERTISER_NAME' | translate}}：</div>
+        <div class="col-md-9">{{baseInfo.advertiser}}</div>
+      </div>
+      <div class="row mb10 pb10">
+        <div class="col-md-2 align-right">{{ 'SCHEDULE_DETAIL_AD_CONTENT_DESCRIPTION' | translate }}：</div>
+        <div class="col-md-9">{{baseInfo.description}}</div>
+      </div>
+      <div class="row mb10 pb10">
+        <div class="col-md-2 align-right">{{ 'SCHEDULE_AD_CONTENT_NUMBER' | translate }}：</div>
+        <div class="col-md-9"><a ng-click="navToAdSolutionDetail(baseInfo)">{{baseInfo.contractnum}}</a></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel panel-gcrm noRadius">
+    <div class="page-header">
+      <div class="panel-heading">
+        <span class="black-block">&nbsp;</span>
+          <span class="panel-heading-text ng-binding">{{ 'SCHEDULE_DETAIL_SITE_AND_TIME' | translate }}</span>
+      </div>
+    </div>
+    <div class="panel-body">
+      <div class="row mb10 pb10">
+        <div class="col-md-2 align-right">{{'AD_CONTENT_PRODUCT_ADRRESS' | translate}}：</div>
+        <div class="col-md-9">{{platAndTime.adPlatformName}}&nbsp;&gt;&nbsp;{{platAndTime.siteId}}&nbsp;&gt;&nbsp;{{platAndTime.channelName}}&nbsp;&gt;&nbsp;{{platAndTime.areaName}}&nbsp;&gt;&nbsp;{{platAndTime.positionName}}</div>
+      </div>
+      <div class="row mb10 pb10">
+        <div class="col-md-2 align-right">{{'AD_CONTENT_PRODUCT_TIME' | translate}}：</div>
+        <div class="col-md-9">
+          <div ng-repeat="item in platAndTime.periodDescription">{{item}}</div>
+        </div>
+      </div>
+      <div class="row mb10 pb10" ng-show="!!platAndTime.insertPeriodDescription[0]">
+        <div class="col-md-2 align-right">{{'SCHEDULE_INSERT_TIME' | translate}}：</div>
+        <div class="col-md-9">
+          <div ng-repeat="item in platAndTime.insertPeriodDescription" ng-if="!!item">{{item}}</div>
+        </div>
+      </div>
+      <div class="row mb10 pb10">
+        <div class="col-md-2 align-right" ng-if="!!platAndTime.billingModel">{{'AD_CONTENT_CHARGING_MODE' | translate}}：</div>
+        <div class="col-md-2 align-right" ng-if="!platAndTime.billingModel">{{'AD_CONTENT_PRICE_TYPE' | translate}}：</div>
+        <div class="col-md-9">{{platAndTime.billingModel || ('AD_CONTENT_FALL_INTO' | translate)}}</div>
+      </div>
+    </div>
+  </div>
+</div>

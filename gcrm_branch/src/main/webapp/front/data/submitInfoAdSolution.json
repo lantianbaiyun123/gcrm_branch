@@ -1,0 +1,53 @@
+{
+  "code": 200,
+  "data": [
+    {
+      "approval_status": "saving",
+      "companyName": "代理-3",
+      "id": 1775,
+      "number": "27037973",
+      "operatorName": "安欢",
+      "taskInfoMessage": "",
+      "contract_state": "INVALID",
+      "type": "create"
+    },
+    {
+      "approval_status": "confirmed",
+      "companyName": "代理-3",
+      "contractStatus": "display",
+      "id": 1537,
+      "number": "68422860",
+      "operatorName": "黎亚洲",
+      "taskInfo": "advertise.solution.cms.task:2014-05-05 15:52,黎亚洲",
+      "taskInfoMessage": "黎亚洲",
+      "contract_state": "VALID",
+      "type": "update"
+    },
+    {
+      "approval_status": "cancel",
+      "cmsUrl": "http://10.81.13.209:8200/cmsnew/contract/admin/viewWorkflow.html?num=2333333",
+      "companyName": "代理-3",
+      "contractStatus": "display",
+      "contract_number": "2333333",
+      "contract_state": "VALID",
+      "id": 1532,
+      "number": "99142113",
+      "operatorName": "黎亚洲",
+      "taskInfo": "advertise.solution.cms.task:2014-05-03 16:51,黎亚洲",
+      "taskInfoMessage": "黎亚洲",
+      "type": "create"
+    },
+    {
+      "approval_status": "approving",
+      "companyName": "直客-晓丽hqtjzVUb6N",
+      "id": 1524,
+      "number": "04057794",
+      "operatorName": "安欢",
+      "contract_state": "VALID",
+      "taskInfo": "advertise.solution.approval.task:2014-04-30 12:05,PM 黎亚洲 PM 当前用户 PM 黎亚洲 yuyande chenchengxing ",
+      "taskInfoMessage": "PM-黎亚洲, PM-当前用户",
+      "type": "create"
+    }
+  ],
+  "message": "OK"
+}

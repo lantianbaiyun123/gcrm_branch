@@ -1,0 +1,1 @@
+define(["app"],function(t){t.registerFactory("DateStatus",["$http","APP_CONTEXT",function(t,n){return{get:function(e,a){t({method:"post",url:n+"occupation/queryDateOccupation",data:JSON.stringify(e)}).then(function(t){a(t.data)})},getMaxDate:function(e){return t({method:"get",url:n+"occupation/maxDate/"+e.id})}}}])});

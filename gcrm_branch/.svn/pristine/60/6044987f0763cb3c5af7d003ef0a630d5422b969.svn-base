@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+<g_site id="1" ad_platform_id="1"/>
+<g_i18n id="1" key_name="site.1" key_value="测试站点" locale="zh_CN"/>
+<g_i18n id="2" key_name="g_billing_model.1" key_value="CPC" locale="zh_CN"/>
+<g_quotation id="1" advertising_platform_id="2" site_id="6" billing_model_id="2" ratio_mine="0.2123" ratio_third="0.7877" ratio_customer="0.7877" price_type="0" industry_type="1"/>
+<g_quotation id="2" advertising_platform_id="2" site_id="6" billing_model_id="1" publish_price="222.5" price_type="0"/>
+<g_quotation id="4" advertising_platform_id="2" site_id="6" billing_model_id="6" ratio_mine="0.01" ratio_third="0.99" ratio_customer="0.01" price_type="1"/>
+<g_quotation id="5" advertising_platform_id="2" site_id="9" billing_model_id="1" publish_price="111" price_type="0"/>
+<g_modify_table_info id="1" table_name="Quotation" table_field="billingModelId" field_name="计费方式"/>
+<g_modify_table_info id="2" table_name="Quotation" table_field="siteId" field_name="位置信息"/>
+<g_modify_record id="1" table_name="Quotation" modified_data_id="1" modify_field="siteId" operate_type="modify" old_value="2" new_value="3" create_operator="1"/>
+<g_modify_record id="2" table_name="Quotation" modified_data_id="1" modify_field="billingModelId" operate_type="modify" old_value="1" new_value="2" create_operator="1"/>
+</dataset>

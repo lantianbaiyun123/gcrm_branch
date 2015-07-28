@@ -1,0 +1,111 @@
+{
+<<<<<<< .mine
+  "code": 200,
+  "data": {
+    "positionId": 1662,
+    "rotation": true,
+    "schedules": [
+      {
+        "adContentId": 6386,
+        "adSolutionId": 6454,
+        "advertiser": "Luxola",
+        "billingModel": "CPT",
+        "dates": [
+          "2014-11-11",
+          "2014-11-12",
+          "2014-11-13",
+          "2014-11-14",
+          "2014-11-15",
+          "2014-11-16"
+=======
+    "code": 200,
+    "data": {
+        "positionId": 1338,
+        "rotation": true,
+        "schedules": [
+            {
+            	"adSolutionId": 6673,
+            	"adContentId": 1000,
+            	"number" : "00000000",
+                "advertiser": "STARK INTERACTIVE TECHNOLOGY LIMITED",
+                "billingModel": "CPC",
+                "dates": [
+                    "2014-11-11",
+                    "2014-11-12"
+                ],
+                "operator": "徐智",
+                "status": "reserved"
+            },
+            {
+            	"adSolutionId": 6616,
+            	"adContentId": 2000,
+            	"number" : "11111111",
+                "advertiser": "cms-customer20140819",
+                "billingModel": "CPC",
+                "dates": [
+                    "2014-11-13",
+                    "2014-11-14",
+                    "2014-11-15"
+                ],
+                "operator": "徐智",
+                "status": "confirmed"
+            },
+            {
+            	"adSolutionId": 6626,
+            	"adContentId": 3000,
+            	"number" : "22222222",
+                "advertiser": "SLY_testAD2",
+                "billingModel": "CPA",
+                "dates": [
+                    "2014-11-16"
+                ],
+                "operator": "徐智",
+                "status": "confirmed"
+            }
+>>>>>>> .r12656
+        ],
+        "number": "00018323-02",
+        "operator": "YuYenTe",
+        "status": "confirmed"
+      },
+      {
+        "adContentId": 6387,
+        "adSolutionId": 6454,
+        "advertiser": "Luxola",
+        "billingModel": "CPT",
+        "dates": [
+          "2014-11-17",
+          "2014-11-18",
+          "2014-11-19",
+          "2014-11-20",
+          "2014-11-21",
+          "2014-11-22",
+          "2014-11-23"
+        ],
+        "number": "00018323-03",
+        "operator": "YuYenTe",
+        "status": "reserved"
+      },
+      {
+        "adContentId": 6388,
+        "adSolutionId": 6454,
+        "advertiser": "Luxola",
+        "billingModel": "CPT",
+        "dates": [
+          "2014-11-24",
+          "2014-11-25",
+          "2014-11-26",
+          "2014-11-27",
+          "2014-11-28",
+          "2014-11-29",
+          "2014-11-30"
+        ],
+        "number": "00018323-04",
+        "operator": "YuYenTe",
+        "status": "confirmed"
+      }
+    ],
+    "totalCount": 3
+  },
+  "message": "OK"
+}

@@ -1,0 +1,19 @@
+<ehcache updateCheck="false">
+	<diskStore path="../ehcachedb" />
+
+	<cacheManagerPeerListenerFactory
+		class="net.sf.ehcache.distribution.RMICacheManagerPeerListenerFactory"
+		properties="port=9424,socketTimeoutMillis=120000" />
+
+	<defaultCache maxElementsInMemory="10000" overflowToDisk="true"
+		eternal="false" memoryStoreEvictionPolicy="LRU" maxElementsOnDisk="10000000"
+		diskExpiryThreadIntervalSeconds="600" timeToIdleSeconds="3600"
+		timeToLiveSeconds="100000" diskPersistent="false">
+	</defaultCache>
+
+
+
+	<!-- 值列表对象缓存 -->
+	<cache name="objectCache" maxEntriesLocalHeap="10000"
+		maxElementsOnDisk="1000000" eternal="true" />
+</ehcache>

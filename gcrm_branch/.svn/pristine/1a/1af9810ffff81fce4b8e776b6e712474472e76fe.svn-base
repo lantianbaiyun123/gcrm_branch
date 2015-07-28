@@ -1,0 +1,46 @@
+{
+  "code":200,
+  "data":{
+    "content":[
+      {
+        "approvalStatus":3,
+        "approvalStatusName":"approved",
+        "belongSales":1000,
+        "belongSalesName":"current",
+        "agentRegionalName": "ffdfff",
+        "agentCompanyName": "fffdddff",
+        "businessType":1,
+        "businessTypeName":"direct",
+        "companyName":"直客-谷歌YcmcxX8Uh8",
+        "country":31,
+        "countryName":"阿曼",
+        "customerNumber":"567839650",
+        "id":743,
+        "status":1,
+        "buttonRole":{
+            "addAccount":true,
+            "changeSaler":true,
+            "discard":true,
+            "recovery":true,
+            "reminders":true,
+            "show":true,
+            "withdraw":true
+        }
+      }
+    ],
+    "offset":0,
+    "pageNumber":1,
+    "pageSize":2,
+    "queryAll":false,
+    "queryStr":"直客-谷歌YcmcxX8Uh8",
+    "queryType":"COMPANY",
+    "result":[
+
+    ],
+    "resultClass":"com.baidu.gcrm.customer.web.helper.CustomerListBean",
+    "total":1,
+    "totalCount":1,
+    "totalPages":1
+  },
+  "message":"OK"
+}

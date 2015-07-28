@@ -1,0 +1,393 @@
+<div class="container publication-mgmt">
+  <div class="panel panel-default gcrm-panel">
+    <div class="panel-top-heading">
+      <h1>
+        <span>{{'PAGE_PUBLICATION_MGMT' | translate}}</span>
+        <span class="pull-right" ng-if="BtnIndex.btn_pub_manage_user_config">
+          <a ui-sref="publicationMember" class="btn btn-default"><span class="glyphicon glyphicon-user"></span>&nbsp;{{'PUBLICATION_HANDLER_CONFIG' | translate}}</a>
+        </span>
+      </h1>
+    </div>
+    <div class="panel-heading">
+      <div class="panel-form panel-query">
+        <div class="row main-row">
+          <div class="col-sm-4">
+            <div class="col-sm-6 pr0 input-container btn-group">
+              <button type="button" class="btn btn-default btn-sm btn-full-width dropdown-toggle select-code-type" data-toggle="dropdown">
+              <span class="col-sm-11 btn-text">{{qForm.queryType.name}}</span>
+              <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu" role="menu">
+                <li ng-repeat="type in qTypes" ng-click="setQueryType(type)"><a>{{type.name}}</a></li>
+              </ul>
+            </div>
+            <div class="col-sm-6 pl0">
+              <input type="text" class="form-control input-sm input-code-type" ng-model="qForm.queryString">
+            </div>
+          </div>
+          <div class="col-sm-7">
+            <label class="pull-left label-position">{{'PUBLICATION_LAUNCH_POSITION' | translate}}：</label>
+            <div yt-position-select="positionOpts" position-selected="qForm.positionSelected"></div>
+          </div>
+          <div class="col-sm-1">
+            <div>
+              <button class="btn btn-primary btn-sm" ng-click="btnQuery()">{{'BTN_QUERY' | translate}}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="btn btn-link mt10" ng-show="isQuery" ng-click="todoQuery('today')"><span class="glyphicon glyphicon-circle-arrow-left"></span>&nbsp;{{'BACK_TO_LIST' | translate}}</button>
+    <div class="panel-body panel-tab" ng-hide="isQuery">
+      <div tabset class="tabset-todo">
+        <div tab class="tab tab-todo {{tabKey}}" ng-repeat="(index, tabKey) in notSorted(tabset)" active="tabset[tabKey].active" select="todoQuery(tabKey)">
+          <div tab-heading>
+            <h4>{{tabset[tabKey].date}}&nbsp;<span>{{tabset[tabKey].day}}</span></h4>
+            <p>{{'PUBLICATION_TAB_TOTAL' | translate }}<span class="tab-total">&nbsp;{{tabset[tabKey].total}}&nbsp;</span>{{'PUBLICATION_TAB_UNIT' | translate}}</p>
+          </div>
+          <dl class="dl-horizontal">
+            <dt>{{'PUBLICATION_OPERATE_TYPE' | translate}}：</dt>
+            <dd>
+              <ul class="nav nav-pills">
+                <li ng-class="{'active': type.selected}" ng-repeat="type in tabset[tabKey].operate">
+                  <a ng-click="setOptType(tabKey, $index)">
+                    <span>{{type.name | OperateTypeFilter | translate}}</span>
+                    <span ng-if="$index && type.total">&nbsp;(<span class="text-danger">{{type.total}}</span>)</span>
+                  </a>
+                </li>
+              </ul>
+            </dd>
+            <dt>{{'PUBLICATION_PLATFORM' | translate}}：</dt>
+            <dd>
+              <ul class="nav nav-pills">
+                <li ng-class="{'active': platform.selected}" ng-repeat="(platformId, platform) in tabset[tabKey].platformList">
+                  <a ng-click="setPlatform(tabKey, platformId)">
+                    <span>{{platform.name}}</span>
+                    <span ng-if="platform.total">&nbsp;(<span class="text-danger">{{platform.total}}</span>)</span>
+                  </a>
+                </li>
+              </ul>
+            </dd>
+            <dt>{{'PUBLICATION_SITE' | translate}}：</dt>
+            <dd>
+              <ul class="nav nav-pills">
+                <li ng-class="{'active': site.selected}" ng-repeat="(siteId, site) in tabset[tabKey].siteList">
+                  <a ng-click="setSite(tabKey, siteId)">
+                    <span>{{site.name}}</span>
+                    <span ng-if="site.total">&nbsp;(<span class="text-danger">{{site.total}}</span>)</span>
+                  </a>
+                </li>
+              </ul>
+            </dd>
+            <!-- <dt ng-if="tabset[tabKey].channel"></dt> -->
+            <dd ng-if="tabset[tabKey].channelList.length">
+              <div class="alert alert-info">
+                <label ng-click="todoQuery(tabKey)" class="checkbox-inline" ng-repeat="channel in tabset[tabKey].channelList">
+                  <input type="checkbox" ng-model="channel.selected">{{channel.name}}
+                </label>
+              </div>
+            </dd>
+          </dl>
+        </div>
+
+        <div tab class="pull-right tab tab-done" ng-show="initialized" select="historyQuery()">
+          <div tab-heading>
+            <div class="circle-ok"></div>
+            <h4>&nbsp;{{'OPERATOR_HISTORY' | translate}}</h4>
+            <p class="text-danger">可查询今日</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="panel-body panel-table-body">
+      <div class="table-publication-wrap gcrm-list">
+        <table class="table table-publication" ng-if="!isHistory && pList.length">
+          <thead>
+            <tr>
+              <th></th>
+              <th>{{'PUBLICATION_APPLY_NUMBER' | translate}}</th>
+              <th>{{'PUBLICATION_AD_CONTENT_NUMBER' | translate}}</th>
+              <th>{{'ADVERTISER' | translate}}</th>
+              <th>{{'AD_CONTENT_DESCRIBE' | translate}}</th>
+              <th>{{'LAUNCH_POSITION' | translate}}</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="{{p.number}}" ng-repeat="p in pList">
+            <tr class="active">
+              <td>
+                <button class="btn btn-default btn-xs" ng-click="toggleDetail(p)">
+                  <span class="glyphicon" ng-class="{'glyphicon-plus': !p.showDetail, 'glyphicon-minus': p.showDetail}"></span>
+                </button>
+              </td>
+              <td title="{{'PUBLICATION_APPLY_NUMBER' | translate}}">{{p.number}}</td>
+              <td title="{{'PUBLICATION_AD_CONTENT_NUMBER' | translate}}">{{p.adContentNumber}}</td>
+              <td class="td-max mw120" title="{{'ADVERTISER' | translate}}：{{p.advertisers}}">{{p.advertisers}}</td>
+              <td class="td-max mw150" title="{{'AD_CONTENT_DESCRIBE' | translate}}：{{p.adContentDesc}}">{{p.adContentDesc}}</td>
+              <td class="td-max mw200" title="{{'LAUNCH_POSITION' | translate}}：{{p.positionName}}">{{p.positionName}}</td>
+              <td class="td-operation">
+                <button class="btn btn-link btn-xs" yt-popover-confirm="terminate(p.number)" yt-popover-ok-class="btn-danger" yt-popover-title="{{'PUBLICATION_CONFIRM_GIVE_UP_ALL_RESOURCE' | translate}}" yt-popover-msg="terminateMsg" ng-disabled="!p.showGiveUpAll" ng-if="BtnIndex.btn_pub_manage_launch_term">{{'PUBLICATION_OPERATION_TERMINATE' | translate}}</button>
+                <span>&nbsp;|&nbsp;</span>
+                <button class="btn btn-link btn-xs" yt-popover-confirm="materialUpdate(p.number)" yt-popover-title="{{'PUBLICATION_CONFIRM_MATERIAL_CHANGE_DONE' | translate}}" ng-disabled="!p.showMaterialOnline" ng-if="BtnIndex.btn_pub_manage_mater_publish">{{'PUBLICATION_OPERATION_MATERIAL_ONLINE' | translate}}</button>
+              </td>
+            </tr>
+            <tr ng-show="p.showDetail" class="tr-sub-table">
+              <td colspan="7">
+                <h6>
+                  <span class="head">{{'PUBLICATION_PLACEMENT_TIME' | translate}}</span>
+                  <span>
+                    [&nbsp;<a ng-href="#/scheduleDetail?scheduleId={{p.scheduleId}}" target="_blank">{{'SCHEDULE_NUMBER' | translate}}&nbsp;{{p.scheduleNumber}}</a>&nbsp;]
+                  </span>
+                </h6>
+                <div class="table-period-wrap">
+                  <table class="table table-period table-hover">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>{{'PLAN_START_TIME' | translate}}</th>
+                        <th>{{'PLAN_END_TIME' | translate}}</th>
+                        <th>{{'ACTUAL_START_TIME' | translate}}</th>
+                        <th>{{'ACTUAL_END_TIME' | translate}}</th>
+                        <th>{{'ONLINE_OPERATOR' | translate}}</th>
+                        <th>{{'OFFLINE_OPERATOR' | translate}}</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr ng-repeat="period in p.detail.publishDate">
+                        <td>{{period.indexText}}</td>
+                        <td>{{period.planStart | date: 'yyyy-MM-dd'}}</td>
+                        <td>{{period.planEnd | date: 'yyyy-MM-dd'}}</td>
+                        <td>{{period.acturalStart | date: 'yyyy-MM-dd HH:mm'}}</td>
+                        <td>{{period.acturalEnd | date: 'yyyy-MM-dd HH:mm'}}</td>
+                        <td class="td-max mw70" title="{{period.startOperator}}">{{period.startOperator}}</td>
+                        <td class="td-max mw70" title="{{period.endOperator}}">{{period.endOperator}}</td>
+                        <td>
+                          <button class="btn btn-link btn-xs" yt-popover-confirm="publish(period.id)" yt-popover-title="{{'PUBLICATION_CONFIRM_ONLINE_DONE' | translate}}"  ng-disabled="!period.showOnline" ng-if="BtnIndex.btn_pub_manage_publish">{{'PUBLICATION_OPERATION_PUBLISH' | translate}}</button>
+                          <span ng-if="BtnIndex.btn_pub_manage_offline">&nbsp;|&nbsp;</span>
+                          <button class="btn btn-link btn-xs" yt-popover-confirm="publishFinish(period.id)" yt-popover-title="{{'PUBLICATION_CONFIRM_OFFLINE_DONE' | translate}}" yt-popover-before-show="isEarlyFinish(period)" yt-popover-msg="publishFinishMsg"  ng-disabled="!period.showOffline" yt-popover-ok-class="{{publishFinishBtnClass}}" ng-if="BtnIndex.btn_pub_manage_offline">{{'PUBLICATION_OPERATION_UNPUBLISH' | translate}}</button>
+                          <!-- <span ng-if="BtnIndex.btn_pub_manage_force_publish">&nbsp;|&nbsp;</span>
+                          <button class="btn btn-link btn-xs" ng-click="forcePublish(period.id)" ng-disabled="!period.showForceOnline" ng-if="BtnIndex.btn_pub_manage_force_publish">{{'PUBLICATION_OPERATION_FORCE_PUBLISH' | translate}}</button> -->
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <h6>
+                  <span class="head">
+                    {{'PUBLICATION_CURRENT_MATERIAL' | translate}}
+                  </span>
+                  <span ng-if="p.detail.materialEmptyType==2">
+                    [&nbsp;<a ng-href="#/materialDetail?contentId={{p.detail.adContentId}}" target="_blank">{{'MATERIAL_BILL_NUMBER' | translate}}&nbsp;{{p.detail.materialNumber}}</a>&nbsp;]
+                  </span>
+                  <span ng-if="p.detail.materialEmptyType<2" class="fwn">
+                    <span ng-if="!p.detail.materialEmptyType">{{'NOTHING_YET' | translate}}&nbsp;</span>
+                    <a ng-click="sendReminder(p.id)"><span class="glyphicon glyphicon-envelope"></span>{{'PUBLICATION_REMINDER_MATERIAL_SUBMIT' | translate}}</a>
+                  </span>
+                </h6>
+                <dl ng-if="p.detail.materialEmptyType" class="dl-horizontal">
+                  <dt>{{'POSITION_TYPE' | translate}}：</dt>
+                  <dd>{{p.detail.materialType | PositionFilter: 'materialType' | translate}}</dd>
+                  <dt ng-if="p.detail.materialType==1 || p.detail.materialType==2">title：</dt>
+                  <dd ng-if="p.detail.materialType==1 || p.detail.materialType==2">
+                    <span ng-if="p.detail.materialTitle">{{p.detail.materialTitle}}</span>
+                    <span ng-if="!p.detail.materialTitle">{{'NOTHING_YET' | translate}}</span>
+                  </dd>
+                  <dt>URL：</dt>
+                  <dd>
+                    <a ng-if="p.detail.materialUrl" ng-href="{{p.detail.materialUrl}}" target="_blank">{{p.detail.materialUrl}}</a>
+                    <span ng-if="!p.detail.materialUrl">{{'NOTHING_YET' | translate}}</span>
+                  </dd>
+                  <div ng-if="p.detail.materialType==0 || p.detail.materialType==2">
+                    <dt>{{'MATERIAL_TYPE' | translate}}：</dt>
+                    <dd>
+                      {{'MATERIALFILETYPE_' + p.detail.materialFileType | translate}}
+                    </dd>
+                  </div>
+                  <div ng-if="p.detail.materialFileType==0 || p.detail.materialFileType==1">
+                    <dt>{{'MATERIAL_DETAIL_INFO' | translate}}：</dt>
+                    <dd>
+                      <span ng-if="p.detail.materialList && p.detail.materialList.length" class="mb5" ng-repeat="image in p.detail.materialList">
+                        <span ng-if="$index"><br></span>
+                        <a ng-href="{{image.downloadUrl}}" target="_blank">{{image.downloadFileName}}</a>
+                        <span ng-if="image.fileDownloadUrl">[<a ng-href="{{image.fileDownloadUrl}}" target="_blank">{{'DOWNLOAD' | translate}}</a>]</span>
+                      </span>
+                      <span ng-if="!(p.detail.materialList && p.detail.materialList.length)">{{'NOTHING_YET' | translate}}</span>
+                    </dd>
+                  </div>
+                  <div ng-if="p.detail.materialFileType==2">
+                    <dt>
+                      <span>{{'EMBED_CODE' | translate}}：</span>
+                    </dt>
+                    <dd>
+                      <span class="limit-long-text">{{p.detail.materialEmbedCodeContent}}</span>
+                      <span ng-if="!p.detail.materialEmbedCodeContent">{{'NOTHING_YET' | translate}}</span>
+                    </dd>
+                  </div>
+                  <dt>
+                    <span>{{'THIRDPARTY_MONITOR' | translate}}：</span>
+                  </dt>
+                  <dd>
+                    <span class="limit-long-text"  ng-if="p.detail.monitorUrl">
+                      <a ng-href="{{p.detail.monitorUrl}}" target="_blank">{{p.detail.monitorUrl}}</a>
+                    </span>
+                    <span  ng-if="!p.detail.monitorUrl">{{'NOT_SET_YET' | translate}}</span>
+                  </dd>
+                  <div ng-if="p.detail.materialMenuList.length">
+                    <dt>
+                      <span>{{'DROPDOWN_MENU' | translate}}：</span>
+                    </dt>
+                    <dd>
+                      <table class="table">
+                        <thead>
+                          <tr>
+                            <th class="w100"></th>
+                            <th>Title</th>
+                            <th>URL</th>
+                            <th>{{'MATERIAL_DETAIL_INFO' | translate}}</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr ng-repeat="mm in p.detail.materialMenuList">
+                            <td>{{'DROPDOWN_MENU' | translate}}{{$index + 1}}</td>
+                            <td class="td-max" title="{{mm.materialTitle}}">{{mm.materialTitle}}</td>
+                            <td class="td-max mw160" title="{{mm.materialUrl}}">
+                              <a href="{{mm.materialUrl}}" target="_blank">{{mm.materialUrl}}</a>
+                            </td>
+                            <td class="td-max mw200" title="{{mm.material.downloadFileName}}">
+                              <a href="{{mm.material.fileUrl}}" target="_blank">{{mm.material.downloadFileName}}</a>
+                              <span ng-if="mm.fileDownloadUrl">[<a ng-href="{{mm.fileDownloadUrl}}" target="_blank">{{'DOWNLOAD' | translate}}</a>]</span>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </dd>
+                  </div>
+                </dl>
+
+                <h6 ng-if="p.onlineNumber">
+                  <span class="head">{{'PUBLICATION_ONLINE_CODE' | translate}}</span>
+                  <span class="fwn">
+                    {{p.onlineNumber}}&nbsp;<span ng-if="p.property==1" class="label label-success">new</span>
+                  </span>
+                </h6>
+
+                <!-- 强制上线凭证 -->
+                <!-- <h6 ng-if="p.detail.proof" class="mt20">
+                  <span class="head">{{'PUBLICATION_FORCE_ONLINE_CERTIFICATION' | translate}}</span>
+                  <span ng-if="!p.detail.proof.online_approval && !p.detail.proof.offline_attachment" class="fwn">{{'NOTHING' | translate}}</span>
+                </h6>
+                <dl ng-if="p.detail.proof" class="dl-horizontal">
+                  <dt ng-if="p.detail.proof.online_approval">{{'PUBLICATION_CERTIFICATION_ONLINE' | translate}}：</dt>
+                  <dd ng-if="p.detail.proof.online_approval">
+                    <a ng-href="{{p.detail.proof.online_approval[0].approvalUrl}}" target="_blank">{{p.detail.proof.online_approval[0].approvalUrl}}</a>
+                  </dd>
+                  <dt ng-if="p.detail.proof.offline_attachment">{{'PUBLICATION_CERTIFICATION_ATTACHMENT' | translate}}：</dt>
+                  <dd ng-if="p.detail.proof.offline_attachment">
+                    <span ng-repeat="attachment in p.detail.proof.offline_attachment">
+                      <span ng-if="$index">、</span>
+                      <a ng-href="{{attachment.downloaddownloadUrl}}" target="_blank">{{attachment.downloadFilename}}</a>
+                    </span>
+                  </dd>
+                </dl> -->
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <table class="table table-publication mb0" ng-if="isHistory && history.list.length">
+          <thead>
+            <tr>
+              <th></th>
+              <th>{{'PUBLICATION_APPLY_NUMBER' | translate}}</th>
+              <th>{{'PUBLICATION_AD_CONTENT_NUMBER' | translate}}</th>
+              <th>{{'ADVERTISER' | translate}}</th>
+              <th>{{'AD_CONTENT_DESCRIBE' | translate}}</th>
+              <th>{{'LAUNCH_POSITION' | translate}}</th>
+              <th>{{'PUBLICATION_CURRENT_STATUS' | translate}}</th>
+            </tr>
+          </thead>
+          <tbody ng-repeat="p in history.list">
+            <tr class="active">
+              <td>
+                <button class="btn btn-default btn-xs" ng-click="toggleDoneDetail(p)">
+                  <span class="glyphicon" ng-class="{'glyphicon-plus': !p.showDetail, 'glyphicon-minus': p.showDetail}"></span>
+                </button>
+              </td>
+              <td title="{{'PUBLICATION_APPLY_NUMBER' | translate}}">{{p.number}}</td>
+              <td title="{{'PUBLICATION_AD_CONTENT_NUMBER' | translate}}">{{p.adContentNumber}}</td>
+              <td class="td-max mw120" title="{{'ADVERTISER' | translate}}：{{p.advertisers}}">{{p.advertisers}}</td>
+              <td class="td-max mw200" title="{{'AD_CONTENT_DESCRIBE' | translate}}：{{p.adContentDesc}}">{{p.adContentDesc}}</td>
+              <td class="td-max mw200" title="{{'LAUNCH_POSITION' | translate}}：{{p.positionName}}">{{p.positionName}}</td>
+              <td title="{{'PUBLICATION_CURRENT_STATUS' | translate}}">{{'PUBLICATION_CURRENT_STATUS_' + p.publishStatus | translate}}</td>
+            </tr>
+            <tr ng-show="p.showDetail" class="tr-sub-table">
+              <td colspan="7">
+                <h6>
+                  <span class="head">{{'OPERATOR_HISTORY' | translate}}</span>
+                  <span>
+                    [&nbsp;<a ng-href="#/scheduleDetail?scheduleId={{p.scheduleId}}" target="_blank">{{'SCHEDULE_NUMBER' | translate}}&nbsp;{{p.scheduleNumber}}</a>&nbsp;]
+                  </span>
+                </h6>
+                <div class="table-period-wrap">
+                  <table class="table table-period table-hover">
+                    <thead>
+                      <tr>
+                        <th>{{'OPERATE_TYPE' | translate}}</th>
+                        <th>{{'PLAN_OPERATION_TIME' | translate}}</th>
+                        <th>{{'ACTUAL_OPERATION_TIME'| translate}}</th>
+                        <th>{{'OPERATOR' | translate}}</th>
+                        <th>{{'MATERIAL_BILL_NUMBER' | translate}}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr ng-repeat="one in p.detail">
+                        <td>{{one.type | OperationTypeFilter | translate}}</td>
+                        <td>
+                          {{one.planDate | date:'yyyy-MM-dd'}}
+                          <span ng-if="!one.planDate">--</span>
+                        </td>
+                        <td>{{one.date | date:'yyyy-MM-dd HH:mm'}}</td>
+                        <td class="td-max" title="{{one.operatorName}}">{{one.operatorName}}</td>
+                        <td>
+                          <a ng-if="one.materialNumber" ng-href="#/materialDetail?contentId={{p.adContentId}}" target="_blank">{{one.materialNumber}}</a>
+                          <span ng-if="!one.materialNumber">--</span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="alert alert-info mt5" ng-if="(!isHistory && !pList.length) || (isHistory && !history.list.length)">{{'PUBLICATION_NO_ITEM' | translate}}</div>
+        <div class="row page-row">
+          <div class="pull-left">
+            <div class="btn-group dropup">
+              <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
+                  {{pager.pageSize || 10}}&nbsp;&nbsp;<span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu" role="menu">
+                <li ng-repeat="item in pager.pageSizeSlots">
+                  <a  ng-click="setPageSize(item)">{{item}}</a>
+                </li>
+              </ul>
+            </div>
+            <span class="page-row-text" ng-if="true">
+              {{ 'PAGINATION_TOTAL' | translate }}
+              {{ pager.totalPages+" " || 0 }}
+              {{ 'PAGINATION_PAGES' | translate }},
+              {{ pager.totalCount+" " || 0 }}
+              {{ 'PAGINATION_ROWS' | translate }}
+            </span>
+          </div>
+
+          <div class="pull-right">
+            <pagination direction-links="true" total-items="pager.totalCount" page="pager.pageNumber" class="pagination-sm" items-per-page="pager.pageSize" previous-text="&laquo;" next-text="&raquo;" rotate="false" max-size="10"></pagination>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

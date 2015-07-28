@@ -1,0 +1,48 @@
+<div class="container publication-member">
+  <div class="panel panel-default gcrm-panel">
+    <div class="panel-top-heading">
+      <h1>
+        <span>{{'PAGE_PUBLICATION_MEMBER' | translate}}</span>
+      </h1>
+    </div>
+    <div class="panel-body">
+      <div tabset>
+        <div tab ng-repeat="platform in t.platformList" heading="{{platform.i18nName}}" select="changePlatform(platform)">
+        </div>
+      </div>
+      <div class="pt10 pl10 pr10">
+        <table class="table table-member mb0 table-hover">
+          <thead>
+            <tr>
+              <th class="col-md-3">{{'SITE' | translate}}</th>
+              <th class="col-md-3">{{'CHANNEL' | translate}}</th>
+              <th class="col-md-5">{{'PUBLICATION_HANDLER' | translate}}</th>
+              <th class="col-md-1"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="item in list">
+              <td>{{item.siteName}}</td>
+              <td>{{item.channelName}}</td>
+              <td>
+                <span ng-repeat="user in item.user" class="label label-info">
+                  <!-- <span ng-if="$index">、</span> -->
+                  <span>
+                    {{user.username}}
+                    <button class="btn btn-link btn-remove" tooltip="{{'REMOVE' | translate}}" tooltip-append-to-body="true" ng-click="removeUser(user, item, $index)">
+                      <span class="glyphicon glyphicon-trash"></span>
+                    </button>
+                  </span>
+                </span>
+              </td>
+              <td class="td-operation">
+                <button class="btn btn-link btn-xs" ng-click="addMember(item)">{{'ADD' | translate}}</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>

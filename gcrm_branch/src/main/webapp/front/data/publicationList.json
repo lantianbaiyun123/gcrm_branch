@@ -1,0 +1,34 @@
+{
+    "code": 200,
+    "data": {
+        "result": [ ],
+        "offset": 0,
+        "pageNumber": 1,
+        "pageSize": 1,
+        "queryAll": false,
+        "content": [
+            {
+                "adContentDesc": "201404101500",
+                "adContentNumber": "25410965-01",
+                "advertisers": "直客-1",
+                "areaId": 374,
+                "channelId": 373,
+                "id": 1,
+                "number": "1234567890",
+                "positionId": 375,
+                "positionName": "hao123变现/印度/印度1/印度1/非轮播",
+                "productId": 1,
+                "scheduleNumber": "0987654321",
+                "showGiveUpAll": true,
+                "showMaterialOnline": true,
+                "siteId": 18,
+                "status": "publishing",
+                "type": "material"
+            }
+        ],
+        "total": 1,
+        "totalCount": 1,
+        "totalPages": 1
+    },
+    "message": "OK"
+}

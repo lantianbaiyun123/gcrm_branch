@@ -1,0 +1,15 @@
+package com.baidu.gcrm.ws.service;
+
+import javax.jws.WebService;
+import javax.jws.soap.SOAPBinding;
+
+/**
+ * gcrm为bpm提供的触发事件接口，功能：完成广告方案审核流程，并发起每个广告内容的竞价排期流程
+ * @author anhuan
+ *
+ */
+@WebService(targetNamespace = "http://gcrm.baidu.com")
+@SOAPBinding(style = SOAPBinding.Style.RPC)
+public interface ICompleteADProcessService {
+	void completeProcess(String startUser, String adSolutionId);
+}

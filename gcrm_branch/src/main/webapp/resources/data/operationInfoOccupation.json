@@ -1,0 +1,56 @@
+{
+  "code": 200,
+  "data": [
+    {
+      "channelList": [
+        {
+          "channelId": 403,
+          "channelName": "卖场",
+          "ratio": "0",
+          "salesAmount": "1",
+          "soldAmount": "0"
+        },
+        {
+          "channelId": 408,
+          "channelName": "销售1",
+          "ratio": "0",
+          "salesAmount": "1",
+          "soldAmount": "0"
+        },
+        {
+          "channelId": 411,
+          "channelName": "销售",
+          "ratio": "0",
+          "salesAmount": "0",
+          "soldAmount": "0"
+        }
+      ],
+      "siteId": 2,
+      "siteName": "测试站点2"
+    },
+    {
+      "channelList": [
+        {
+          "channelId": 1,
+          "channelName": "测试频道1",
+          "ratio": "100",
+          "salesAmount": "12",
+          "soldAmount": "12"
+        }
+      ],
+      "siteId": 3,
+      "siteName": "测试站点1"
+    },
+    {
+      "channelList": [],
+      "siteId": 4,
+      "siteName": "zh_CN1"
+    },
+    {
+      "channelList": [],
+      "siteId": 6,
+      "siteName": "zh_CN"
+    }
+  ],
+  "message": "OK"
+}

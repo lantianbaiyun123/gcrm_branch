@@ -1,0 +1,83 @@
+<div class="scope-header">
+    <div id="navBarTop" class="navbartop">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-5 pull-right text-right">
+                    <!-- <a href="" class="btn btn-xs btn-noborder" ng-click='goFirstMyTask()'>
+                        {{'HEAD_TODO' | translate}} <span class="icon icon-tip" ng-show="myTaskCount">{{myTaskCount}}</span>
+                    </a> -->
+
+                    <div class="btn btn-xs btn-noborder btn-group">
+                        <a href="" class="btn btn-xs btn-noborder dropdown-toggle" data-toggle="dropdown">
+                            Language&nbsp;{{ currLanguage | translate }}
+                        </a>
+                        <ul style="z-index:1; min-width:100%; text-align: left;" class="dropdown-menu" role="menu">
+                            <li ng-click="changeLanguage('zh-CN')" >
+                                <a>{{ 'AD_ANCHOR_LANGUAGE_CH' | translate }}</a>
+                            </li>
+                            <li ng-click="changeLanguage('en-US')" >
+                                <a>{{ 'AD_ANCHOR_LANGUAGE_EN' | translate }}</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <a href="" class="btn btn-xs btn-noborder  dropdown-toggle" data-toggle="dropdown">
+                       <span class="glyphicon glyphicon-user"></span>
+                      {{CURRENT_USER_NAME.realname}}
+                    </a>
+                    <ul style="z-index:1; text-align: left;" class="dropdown-menu" role="menu">
+                        <li>
+                          <a ng-href="{{page.url}}" ng-click="changePsw()">{{'CHANGE_PSW' | translate}}</a>
+                        </li>
+                    </ul>
+                    <a href="/gcrm/logout" class="btn btn-xs btn-noborder">
+                      <span class="glyphicon glyphicon-log-out"></span>
+                      {{'LOGOUT' | translate}}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <nav class="navbar navbar-inverse" role="navigation">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">
+                </a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li  ng-repeat="item in headNavs" ng-class="{ 'active' : activeIndex==$index }" ng-click="navClick($index);">
+                      <a ng-if="item.url" ng-href="{{item.url}}" target="_blank">{{ item.text | translate }}<span class="caret" ng-if="item.sub.length"></span></a>
+                      <a ng-if="!item.url && item.text!='HEAD_TASK'" ng-href="">{{ item.text | translate }}<span class="caret" ng-if="item.sub.length"></span></a>
+                      <a ng-if="item.text=='HEAD_TASK'" ng-click="goFirstMyTask()">{{ item.text | translate }}(<span ng-class="{'text-alert': myTaskCount }">{{myTaskCount}}</span>)</a>
+                      <ul class="dropdown-menu" ng-if="item.sub.length">
+                        <li ng-repeat="page in item.sub">
+                          <a ng-href="{{page.url}}">{{page.text}}</a>
+                        </li>
+                      </ul>
+                    </li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div>
+    </nav>
+    <div class="container">
+        <ol class="breadcrumb">
+            <li ng-repeat="crumb in breadcrumb" ng-class="{'active': $index == breadcrumb.length - 1, 'disabled': !crumb.url}">
+                <a ng-href="{{crumb.url}}" ng-if="$index < breadcrumb.length - 1">
+                  {{crumb.text}}
+                </a>
+                <a ng-if="$index == breadcrumb.length - 1">
+                  {{crumb.text}}
+                </a>
+            </li>
+        </ol>
+    </div>
+</div>

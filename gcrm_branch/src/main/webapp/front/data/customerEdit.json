@@ -1,0 +1,184 @@
+{
+    "code": 200,
+    "data": {
+        "agentRegionals": [
+            {
+                "i18nName":"泰语区",
+                "id":1,
+                "name":"泰语区"
+            },
+            {
+                "i18nName":"葡萄语区",
+                "id":3,
+                "name":"西葡语区"
+            },
+            {
+                "i18nName":"印尼语区",
+                "id":2,
+                "name":"印尼语区"
+            },
+            {
+                "i18nName":"阿语区",
+                "id":4,
+                "name":"阿语区"
+            }
+        ],
+        "agentTypes": [
+            "exclusive",
+            "normal",
+            "second"
+        ],
+        "attachmentTypes": [
+            "businesslicense",
+    "creditreference",
+    "cooperationprove",
+    "agentcertificate"
+        ],
+        "businessType": [
+            "CASH",
+            "SALE"
+        ],
+        "companySizes": [
+            "less_50",
+            "less_100",
+            "less_200",
+            "less_500",
+            "less_1000",
+            "more_1000"
+        ],
+        "currencyTypes": [
+            {
+                "i18nName": "泰国铢",
+                "id": 3,
+                "name": "THB",
+                "radio": 5.2749
+            },
+            {
+                "i18nName": "美元",
+                "id": 1,
+                "name": "USD",
+                "radio": 0.1647
+            },
+            {
+                "i18nName": "巴西币",
+                "id": 4,
+                "name": "BRC",
+                "radio": 1049.5771
+            },
+            {
+                "i18nName": "人民币",
+                "id": 2,
+                "name": "CNY",
+                "radio": 1
+            }
+        ],
+        "customerTypes": [
+            "offline",
+            "direct",
+            "nondirect",
+            "union"
+        ],
+        "industrys": [
+            {
+                "i18nName": "互联网（图片）",
+                "id": 18,
+                "name": "互联网（图片）"
+            },
+            {
+                "i18nName": "航空",
+                "id": 2,
+                "name": "航空"
+            },
+            {
+                "i18nName": "互联网（音乐）",
+                "id": 17,
+                "name": "互联网（音乐）"
+            },
+            {
+                "i18nName": "电商",
+                "id": 7,
+                "name": "电商"
+            },
+            {
+                "i18nName": "房地产",
+                "id": 10,
+                "name": "房地产"
+            },
+            {
+                "i18nName": "酒店",
+                "id": 6,
+                "name": "酒店"
+            },
+            {
+                "i18nName": "互联网（游戏）",
+                "id": 14,
+                "name": "互联网（游戏）"
+            },
+            {
+                "i18nName": "零售（食品饮料服装等）",
+                "id": 8,
+                "name": "零售（食品饮料服装等）"
+            },
+            {
+                "i18nName": "出版物（图书杂志报刊等）",
+                "id": 12,
+                "name": "出版物（图书杂志报刊等）"
+            },
+            {
+                "i18nName": "教育",
+                "id": 4,
+                "name": "教育"
+            },
+            {
+                "i18nName": "医药",
+                "id": 5,
+                "name": "医药"
+            },
+            {
+                "i18nName": "旅游",
+                "id": 1,
+                "name": "旅游"
+            },
+            {
+                "i18nName": "交通",
+                "id": 3,
+                "name": "交通"
+            },
+            {
+                "i18nName": "互联网（门户）",
+                "id": 13,
+                "name": "互联网（门户）"
+            },
+            {
+                "i18nName": "互联网（社交）",
+                "id": 16,
+                "name": "互联网（社交）"
+            },
+            {
+                "i18nName": "金融",
+                "id": 9,
+                "name": "金融"
+            },
+            {
+                "i18nName": "互联网（视频）",
+                "id": 15,
+                "name": "互联网（视频）"
+            },
+            {
+                "i18nName": "互联网（其他）",
+                "id": 19,
+                "name": "互联网（其他）"
+            },
+            {
+                "i18nName": "消费电子（电脑平板手机数码家电等）",
+                "id": 11,
+                "name": "消费电子（电脑平板手机数码家电等）"
+            },
+            {
+                "id": 20,
+                "name": "其他"
+            }
+        ]
+    },
+    "message": "OK"
+}

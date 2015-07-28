@@ -1,0 +1,230 @@
+define([
+  'app',
+  '../_services/http/Material',
+  '../_directives/ytJqueryFileUpload',
+  '../_directives/ytAjaxupload',
+  '../_directives/ytPlaceholder',
+  '../_directives/ytMaxlength'
+], function ( app ) {
+app.registerFactory( 'MaterialEditModal', [
+  '$modal',
+  '$q',
+  'Material',
+  'STATIC_DIR',
+function ( $modal, $q, Material, STATIC_DIR ) {
+  return {
+    show: function (opts) {
+      var deferred = $q.defer();
+      var optsDefault = {
+        title: 'MATERIAL_EDIT'
+      };
+      var modalInstance = $modal.open({
+        templateUrl: STATIC_DIR + 'app/material/editModal.tpl.html',
+        controller: 'CtrlMaterialEdit',
+        windowClass: 'material-edit-modal',
+        backdrop: 'static',
+        resolve: {
+          opts : function () {
+            return angular.extend(optsDefault, opts);
+          }
+        }
+      });
+
+      modalInstance.result.then(function (result) {
+        deferred.resolve(result);
+        // if (result.btnType === 'ok') {
+        //   cbfn(result.response);
+        // }
+      });
+
+      return deferred.promise;
+    }
+  };
+}]);
+
+app.registerController('CtrlMaterialEdit', [
+  '$scope',
+  '$log',
+  '$modalInstance',
+  '$filter',
+  '$q',
+  'Utils',
+  'Material',
+  'opts',
+function ($scope, $log, $modalInstance, $filter, $q, Utils, Material, opts) {
+  var translateFilter = $filter('translate');
+  $scope.title = opts.title;
+  $scope.adContentInfo = opts.adContentInfo;
+
+  $scope.s = {
+    isContentSave: opts.isContentSave
+  };
+  $scope.e = {};
+  $scope.e.materialSaveType = opts.saveType;
+  $scope.e.materialApply = opts.materialData.materialApply || {};
+  if (!$scope.e.materialApply.materialList) {
+    $scope.e.materialApply.materialList = [];
+  }
+  if (!$scope.e.materialApply.materialMenuList) {
+    $scope.e.materialApply.materialMenuList = [];
+  }
+
+  setMaterialFileTypes();
+  setMonitor();
+
+  //物料上传控件配置
+  $scope.materialUploadOpts = {
+    uploadedText: $filter('translate')('MATERIAL_UPLOAD_MATERIAL'),
+    formatErrorText: "UPLOAD_FILE_TYPE_FORBIDDEN"
+  };
+
+  $scope.handleSetMonitorChanged = function () {
+    if (!$scope.e.setMonitor) {
+      $scope.e.materialApply.monitorUrl = null;
+    }
+  };
+
+  $scope.handleFileTypeChanged = function () {
+    $scope.e.materialApply.materialList = [];
+    $scope.e.materialEmbedCodeContent = null;
+  };
+
+  $scope.beginUpload = function () {
+    $scope.submitDisabled = true;
+  };
+
+  $scope.uploaded = function () {
+    // 只允许上传1个物料 R2sprint3 #1486
+    if ($scope.e.materialApply.materialList.length > 1) {
+      $scope.e.materialApply.materialList.length = 1;
+    }
+    $scope.submitDisabled = false;
+  };
+
+
+  $scope.removeCodeFile = function () {
+    $scope.e.codeFile = {};
+  };
+
+  $scope.removeMaterial = function (index) {
+    $scope.e.materialApply.materialList.splice(index,1);
+  };
+
+  $scope.cancel = function () {
+    $modalInstance.dismiss('cancel');
+  };
+
+  $scope.submit = function (formMaterial) {
+    $scope.submitDisabled = true;
+    $scope.e.isValidating = true;
+    isMenuMaterialGood = checkMenuMaterial();
+    if (formMaterial.$valid && checkMaterialDetail() && isMenuMaterialGood) {
+      prepareSubmitData();
+      var promise = Material.save($scope.e);
+      promise.success(function (response) {
+        if ( response.code === 200 ) {
+          // response.data.materialApply = $scope.e.materialApply;
+          // response.data.materialApply.id = response.data.materialApplyVoList[0].applyId;
+          $modalInstance.close({
+            btnType: 'submit',
+            response: response
+          });
+        }
+      });
+      promise['finally'](function () {
+        $scope.submitDisabled = false;
+      });
+    } else {
+      $scope.submitDisabled = false;
+    }
+  };
+
+  $scope.confirm = function (formMaterial) {
+    $scope.submitDisabled = true;
+    $scope.e.isValidating = true;
+    isMenuMaterialGood = checkMenuMaterial();
+    if (formMaterial.$valid && checkMaterialDetail() && isMenuMaterialGood) {
+      var response = {
+        data: {
+          materialApply: $scope.e.materialApply
+        }
+      }
+      $modalInstance.close({
+        btnType: 'confirm',
+        response: response
+      });
+    }
+    $scope.submitDisabled = false;
+  };
+
+  $scope.addMenu = function () {
+    $scope.e.materialApply.materialMenuList.push({});
+  };
+
+  $scope.removeMenu = function (index) {
+    $scope.e.materialApply.materialMenuList.splice(index, 1);
+  };
+
+  $scope.removeMenuMaterial = function (menuItem) {
+    menuItem.material = null;
+  };
+
+  function checkMaterialDetail() {
+    var isMaterialDetailGood = true;
+    if ( ~~$scope.adContentInfo.materialType === 0 || ~~$scope.adContentInfo.materialType === 2 ) {
+      var materialFileType = $scope.e.materialApply.materialFileType;
+
+      if (~~materialFileType === 0 || ~~materialFileType === 1) {
+        isMaterialDetailGood = !!$scope.e.materialApply.materialList.length;
+      }
+    }
+    return isMaterialDetailGood;
+  }
+
+  function checkMenuMaterial() {
+    var isManuMaterialAllGood = true;
+    for (var i = $scope.e.materialApply.materialMenuList.length - 1; i >= 0; i--) {
+      $scope.e.materialApply.materialMenuList[i].isValidating = true;
+      if (!$scope.e.materialApply.materialMenuList[i].material) {
+        isManuMaterialAllGood = false;
+        break;
+      }
+    }
+    return isManuMaterialAllGood;
+  }
+
+  function prepareSubmitData () {
+    // for (var i = $scope.e.materialApply.materialList.length - 1; i >= 0; i--) {
+    //   $scope.e.materialApply.materialList[i].materialFileType = 'IMAGE';
+    // }
+    var materialApply = $scope.e.materialApply;
+    if (materialApply.materialMenuList.length) {
+      materialApply.materialMenuEnabled = true;
+    }
+    $scope.e.materialApply.adSolutionContentId = $scope.adContentInfo.adContentId;
+  }
+
+  function setMaterialFileTypes () {
+    $scope.s.materialFileTypes = [
+      {id:0, i18nName: translateFilter('MATERIALFILETYPE_0')},
+      {id:1, i18nName: translateFilter('MATERIALFILETYPE_1')},
+      {id:2, i18nName: translateFilter('MATERIALFILETYPE_2')}
+    ];
+    if ($scope.adContentInfo.materialType === 2) {
+      $scope.e.materialApply.materialFileType = 0;
+      for (var i = $scope.s.materialFileTypes.length - 1; i > 0; i--) {
+        $scope.s.materialFileTypes[i].disabled = true;
+      }
+    } else if ($scope.adContentInfo.materialType === 0 && !$scope.e.materialApply.materialFileType) {
+      $scope.e.materialApply.materialFileType = 0;
+    }
+  }
+
+  function setMonitor () {
+    if ($scope.e.materialApply.monitorUrl) {
+      $scope.e.setMonitor = true;
+    }
+  }
+}]);
+
+});

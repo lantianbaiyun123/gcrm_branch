@@ -1,0 +1,166 @@
+<div class="modal-header">
+    <h4><span>{{title | translate}}</span></h4>
+</div>
+<div class="modal-body">
+  <form class="form-horizontal" name="formMaterial" novalidate>
+    <div class="form-group" ng-if="adContentInfo.materialType==1 || adContentInfo.materialType==2">
+      <label class="control-label col-md-3">Title：</label>
+      <div ng-class="{'has-error':(e.isValidating && formMaterial.materialTitle.$error.required)}">
+        <div class="col-md-4">
+          <input placeholder="" type="text" class="form-control" name="materialTitle" ng-model="e.materialApply.materialTitle" required>
+        </div>
+        <p class="col-md-3 form-control-static text-danger" ng-show="e.isValidating && formMaterial.materialTitle.$error.required && !(e.materialApply.materialTitle.length > adContentInfo.textlinkLength)">
+          {{'AD_CONTENT_NO_MATERIAL_TITLE' | translate}}
+        </p>
+        <p class="col-md-3 form-control-static text-danger" ng-show="e.materialApply.materialTitle.length > adContentInfo.textlinkLength">
+          {{'MAX_LENGTH_OVERFLOW' | translate}}&nbsp;({{adContentInfo.textlinkLength}}&nbsp;{{'CHARACTER' | translate}})
+        </p>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-md-3">URL：</label>
+      <div ng-class="{'has-error':e.isValidating && formMaterial.materialUrl.$error.required}">
+        <div class="col-md-4">
+          <input placeholder="" type="url" class="form-control" name="materialUrl" ng-model="e.materialApply.materialUrl" ng-required="e.materialApply.materialFileType != 2">
+        </div>
+        <p class="col-md-5 form-control-static" ng-class="{'text-danger': e.isValidating, 'text-muted': !e.isValidating}" ng-show="(e.isValidating && formMaterial.materialUrl.$error.required) || formMaterial.materialUrl.$error.url">
+          {{'VALIDATE_URL' | translate}}
+        </p>
+      </div>
+    </div>
+    <div ng-if="adContentInfo.materialType == 0 || adContentInfo.materialType == 2">
+      <div class="form-group">
+        <label class="control-label col-md-3">{{'MATERIAL_FILE_TYPE' | translate}}：</label>
+        <div class="col-md-6">
+          <label class="radio radio-inline" ng-repeat="type in s.materialFileTypes">
+            <input type="radio" name="materialFileType" ng-model="e.materialApply.materialFileType" ng-change="handleFileTypeChanged()" value="{{type.id}}" ng-disabled="type.disabled" required>
+            {{type.i18nName}}
+          </label>
+        </div>
+      </div>
+      <div ng-if="e.materialApply.materialFileType == 0 || e.materialApply.materialFileType == 1">
+        <div class="form-group">
+          <label class="control-label col-md-3">{{'AD_CONTENT_MATERIAL_DETAIL' | translate}}：</label>
+          <div class="col-md-6" ng-class="{'has-error':e.isValidating && !e.materialApply.materialList.length}">
+            <div class="form-control-static pb5" ng-if="!e.materialApply.materialList.length">
+              <span class="btn btn-success btn-xs upload-material" yt-ajaxupload="{{materialUploadOpts}}" ng-model="e.materialApply.materialList" upload-url="material/uploadMaterialFile" is-splice-to="true" upload-invalidatetype="exe|msi|bat|sh" send-begin-cbfn="beginUpload()" uploaded-cbfn="uploaded()">
+                <span class="glyphicon glyphicon-plus"></span>
+                <span class="upload-text">{{'MATERIAL_UPLOAD_MATERIAL' | translate}}</span>
+              </span>
+              <span class="alert alert-info material-info" ng-if="adContentInfo.areaRequired || adContentInfo.size">
+                <span ng-if="adContentInfo.areaRequired">{{adContentInfo.areaRequired}}</span>
+                <span ng-if="adContentInfo.areaRequired && adContentInfo.size">&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+                <span ng-if="adContentInfo.size">{{adContentInfo.size}}</span>
+              </span>
+            </div>
+            <p class="pt4 mb0" ng-repeat="material in e.materialApply.materialList" ng-if="e.materialApply.materialList.length">
+              <button type="button" class="btn btn-link btn-remove" ng-click="removeMaterial($index)" tooltip="{{'MATERIAL_DELETE_MATERIAL' | translate}}"><span class="glyphicon glyphicon-trash"></span></button>
+              <span class="material">
+                <a target="_blank" ng-href="{{material.downloadUrl}}" ng-if="material.id">{{material.downloadFileName}}</a>
+                <span ng-if="!material.id">{{material.downloadFileName}}</span>
+              </span>
+            </p>
+          </div>
+          <div class="col-md-3">
+            <p class="form-control-static text-danger" ng-show="e.isValidating && !e.materialApply.materialList.length">{{'MATERIAL_UPLOAD_FILES' | translate}}</p>
+          </div>
+        </div>
+      </div>
+      <div class="form-group" ng-if="e.materialApply.materialFileType == 2">
+        <label class="control-label col-md-3">{{'CODE' | translate}}：</label>
+        <div class="col-md-5">
+          <textarea class="form-control" name="materialEmbedCodeContent" ng-model="e.materialApply.materialEmbedCodeContent"
+          rows="3" yt-maxlength="5000" required>
+          </textarea>
+        </div>
+        <p class="col-md-4 form-control-static text-danger" ng-show="e.isValidating && formMaterial.materialEmbedCodeContent.$error.required">
+          {{'FORM_VALIDATE_INFO_REQUIRED' | translate}}
+        </p>
+        <p class="col-md-4 form-control-static text-danger" ng-show="formMaterial.materialEmbedCodeContent.$error.ytMaxlength">
+          {{'MAX_LENGTH_NOT_EXCEED' | translate}}5000
+        </p>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-md-3">
+        {{'SET_MONITOR' | translate}}：
+      </label>
+      <div ng-class="{'has-error':e.isValidating && formMaterial.monitorUrl.$error.required}">
+        <div class="col-md-4">
+          <div class="input-group">
+            <span class="input-group-addon bckgrd-w">
+              <input type="checkbox" ng-model="e.setMonitor" ng-change="handleSetMonitorChanged()">
+            </span>
+            <input yt-placeholder="{{'PLACEHOLDER_VALIDATE_MONITOR' | translate}}" type="url" class="form-control" name="monitorUrl" ng-model="e.materialApply.monitorUrl" ng-disabled="!e.setMonitor" ng-required="e.setMonitor">
+          </div>
+        </div>
+        <p class="col-md-5 form-control-static text-muted" ng-show="formMaterial.monitorUrl.$error.url">
+          {{'VALIDATE_URL' | translate}}
+        </p>
+        <p class="col-md-5 form-control-static text-danger" ng-show="e.isValidating && formMaterial.monitorUrl.$error.required && !formMaterial.monitorUrl.$error.url">
+          {{'PLACEHOLDER_VALIDATE_MONITOR' | translate}}
+        </p>
+      </div>
+    </div>
+    <div class="form-group" ng-if="adContentInfo.materialType==2">
+      <label class="control-label col-md-3">{{'SET_DROPDOWN_MENU' | translate}}：</label>
+      <div class="col-md-6">
+        <p class="form-control-static">
+          <button class="btn btn-default btn-xs" ng-click="addMenu()" ng-disabled="e.materialApply.materialMenuList.length>2"><span class="glyphicon glyphicon-plus"></span>{{'ADD_DROPDOWN_MENU' | translate}}</button>
+        </p>
+      </div>
+    </div>
+    <div ng-form="formMenu" novalidate="novalidate" class="dropdown-material" ng-repeat="item in e.materialApply.materialMenuList">
+      <h5>
+        <a class="btn btn-link btn-remove" ng-click="removeMenu($index)">{{'DELETE' | translate}}</a>
+        <span class="pr5">{{'DROPDOWN_MENU' | translate}}{{$index + 1}}</span>
+      </h5>
+      <div class="form-group">
+        <label class="control-label col-md-3">Title：</label>
+        <div ng-class="{'has-error':(item.isValidating && formMenu.title.$error.required)}">
+          <div class="col-md-4">
+            <input placeholder="" type="text" class="form-control" name="title" ng-model="item.materialTitle" required>
+          </div>
+          <p class="col-md-3 form-control-static text-danger" ng-show="item.isValidating && formMenu.title.$error.required">{{'AD_CONTENT_NO_MATERIAL_TITLE' | translate}}</p>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-md-3">URL：</label>
+        <div ng-class="{'has-error':item.isValidating && formMenu.url.$error.required}">
+          <div class="col-md-4">
+            <input placeholder="" type="url" class="form-control" name="url" ng-model="item.materialUrl" required>
+          </div>
+          <p class="col-md-5 form-control-static" ng-class="{'text-danger': item.isValidating, 'text-muted': !item.isValidating}" ng-show="(item.isValidating && formMenu.url.$error.required) || formMenu.url.$error.url">
+            {{'VALIDATE_URL' | translate}}
+          </p>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-md-3">{{'AD_CONTENT_MATERIAL_DETAIL' | translate}}：</label>
+        <div class="col-md-4" ng-class="{'has-error':item.isValidating && !item.material}">
+          <div class="form-control-static pb5" ng-if="!item.material">
+            <span class="btn btn-success btn-xs upload-material" yt-ajaxupload="{{materialUploadOpts}}" ng-model="item.material" upload-url="material/uploadMaterialFile" upload-invalidatetype="exe|msi|bat|sh" send-begin-cbfn="beginUpload()" uploaded-cbfn="uploaded()">
+              <span class="glyphicon glyphicon-plus"></span>
+              <span class="upload-text">{{'MATERIAL_UPLOAD_MATERIAL' | translate}}</span>
+            </span>
+          </div>
+          <p class="pt4 mb0" ng-if="item.material">
+            <button type="button" class="btn btn-link btn-remove" ng-click="removeMenuMaterial(item)" tooltip="{{'MATERIAL_DELETE_MATERIAL' | translate}}"><span class="glyphicon glyphicon-trash"></span></button>
+            <span class="material">
+              <a target="_blank" ng-href="{{item.material.downloadUrl}}" ng-if="item.material.id">{{item.material.downloadFileName}}</a>
+              <span ng-if="!item.material.id">{{item.material.downloadFileName}}</span>
+            </span>
+          </p>
+        </div>
+        <div class="col-md-3">
+          <p class="form-control-static text-danger" ng-show="item.isValidating && !item.material">{{'MATERIAL_UPLOAD_FILES' | translate}}</p>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-primary" ng-click="ok(formMaterial)" ng-disabled="submitDisabled">{{'MATERIAL_EDIT_SUBMIT' | translate}}</button>
+  <span></span>
+  <button class="btn btn-default" ng-click="cancel()">{{'CANCEL' | translate}}</button>
+</div>

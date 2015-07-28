@@ -1,0 +1,8 @@
+<div>
+  <label class="checkbox checkbox-inline" ng-repeat="choice in choices" ng-if="!isI18nList">
+    <input type="checkbox" ng-click="checkOne(choice, $index)" ng-disabled="checkboxesDisabled" />{{ typeName + choice | translate}}
+  </label>
+  <label class="checkbox checkbox-inline" ng-repeat="choice in choices" ng-if="isI18nList">
+    <input type="checkbox" ng-click="checkOne(choice, $index)" ng-disabled="checkboxesDisabled" />{{ choice.i18nName }}
+  </label>
+</div>

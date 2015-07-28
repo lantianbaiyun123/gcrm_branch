@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<fis:html>
+	<head>
+		<meta charset="UTF-8" />
+
+		<title>Basic Demo</title>
+		<fis:require name="../resources/lib/bootstrap/css/bootstrap-extend.css"></fis:require>
+	</head>
+
+	<body>
+		<header class="container">
+			<h1>Basic Demo</h1>
+		</header>
+
+		<div class="container">
+			<div class="form-group input-append">
+				<label for="name" class="add-on"><span class="icon-asterisk"></span> Name</label>
+				<input class="form-control" type="text" name="name" id="name" form="form" data-required />
+			</div>
+
+			<form id="form">
+				<div class="form-group input-append">
+					<label for="nickname" class="add-on"><span class="icon-asterisk"></span> Nickname</label>
+					<input class="form-control" type="text" name="nickname" id="nickname" data-required="true" />
+				</div>
+
+				<div class="form-group input-append">
+					<label for="site" class="add-on">Site</label>
+					<input class="form-control" type="text" name="site" id="site" />
+				</div>
+
+				<div class="form-group input-append">
+					<label for="age" class="add-on"><span class="icon-asterisk"></span> Age</label>
+					<input class="form-control" type="text" name="age" id="age" data-required data-pattern="^[0-9]+$" />
+				</div>
+				<div class="form-group input-append">
+					<label for="age" class="add-on"><span class="icon-asterisk"></span>邮件</label>
+					<input class="form-control" type="text" name="age" id="age" data-required data-pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" >
+				</div>
+				<div class="form-group input-append">
+					<label for="age" class="add-on"><span class="icon-asterisk"></span>手机</label>
+					<input class="form-control" type="text" name="age" id="age" data-required data-pattern="^(13[0-9]{9})| (18[0-9]{9}) |(15[89][0-9]{8})$" >
+				</div>
+
+				<div class="btn-group">
+					<button type="submit" class="btn btn-primary">Send</button>
+
+					<button type="reset" class="btn">Reset</button>
+				</div>
+			</form>
+			
+			<div class="panel panel-default" style="margin-top:20px;">
+				<div class="panel-heading">正则表达式</div>
+	            <div class="panel-body">
+	                <table class="table table-striped">
+				        <tbody>
+				          	<tr>
+					            <td>邮件</td>
+					            <td>/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/</td>
+				          	</tr>
+				          	<tr>
+					            <td>手机</td>
+					            <td>/^(13[0-9]{9})| (18[0-9]{9}) |(15[89][0-9]{8})$/</td>
+				          	</tr>
+				        </tbody>
+				    </table>
+	            </div>
+	        </div><!--panel-default-->
+	    </div>
+		<script src="/gcrm/resources/lib/js/jquery.min.js"></script>
+		<script src="/gcrm/resources/lib/js/jquery-validate.js"></script>
+
+		<script>
+			$('form').validate({
+				onKeyup : true,
+				eachValidField : function() {
+
+					$(this).closest('div').removeClass('error').addClass('success');
+				},
+				eachInvalidField : function() {
+
+					$(this).closest('div').removeClass('success').addClass('error');
+				}
+			});
+		</script>
+	</body>
+</fis:html>

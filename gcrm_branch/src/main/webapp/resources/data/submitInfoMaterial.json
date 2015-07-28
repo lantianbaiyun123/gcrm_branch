@@ -1,0 +1,50 @@
+{
+  "code": 200,
+  "data": [
+    {
+      "adContentId": 1036,
+      "adSolutionId": 1608,
+      "advertiser": "直客-1",
+      "applyId": 213,
+      "applyState": "submit",
+      "contentNumber": "83341793-01",
+      "description": "压测",
+      "number": "61409469",
+      "taskInfor": "PM物料审核 liyazhou,liudisheng,yuyande 国代 liyazhou,liudisheng,yuyande,chenchengxing,zhangxiaobin01"
+    },
+    {
+      "adContentId": 1042,
+      "adSolutionId": 1614,
+      "advertiser": "直客-1",
+      "applyId": 219,
+      "applyState": "cancel",
+      "contentNumber": "49599522-01",
+      "description": "压测",
+      "number": "86690862",
+      "taskInfor": "Saler   黎亚洲"
+    },
+    {
+      "adContentId": 1064,
+      "adSolutionId": 1621,
+      "advertiser": "直客-腾讯YswlTcRAjm",
+      "applyId": 229,
+      "applyState": "submit",
+      "contentNumber": "71464906-01",
+      "description": "05081644",
+      "number": "98981233",
+      "taskInfor": ""
+    },
+    {
+      "adContentId": 1016,
+      "adSolutionId": 1577,
+      "advertiser": "直客-谷歌YcmcxX8Uh8",
+      "applyId": 221,
+      "applyState": "submit",
+      "contentNumber": "86315971-01",
+      "description": "11",
+      "number": "73668983",
+      "taskInfor": "PM物料审核 liyazhou,liudisheng,yuyande 国代 liyazhou,liudisheng,yuyande,chenchengxing,zhangxiaobin01"
+    }
+  ],
+  "message": "OK"
+}

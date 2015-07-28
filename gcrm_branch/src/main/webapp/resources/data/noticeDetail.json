@@ -1,0 +1,58 @@
+{
+    "code": 200,
+    "data": {
+        "notice": {
+       		"id": 4,
+            "status": "draft",
+            "title": "hao123的一个公告",
+            "content":"<p>尊敬的客户：</p><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; hao123埃及blabalkajdflkadjflkjdf时代付款了的卷发乐山大佛辣椒粉</p><p>kjdfkadsjf框架楼房的空间</p><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; 请知晓，见谅<br></p>",
+            "createOperator": 100088,
+            "createTime": 1392803492000,
+            "sentTime": 1392803492000,
+            "receiveScope": "external",
+            "users": [
+          		  {
+                        "email": "wujun@baidu.com",
+                        "id": 3,
+                        "realname": "吴俊",
+                        "role": "国代",
+                        "status": 1,
+                        "ucid": 10000000,
+                        "username": "wujun"
+                    },
+                    {
+                        "email": "dangqianyonghu@baidu.com",
+                        "id": 4,
+                        "realname": "当前用户",
+                        "role": "PM",
+                        "status": 1,
+                        "ucid": 1000,
+                        "username": "current"
+                    }
+            ],
+            "customers": [
+                {
+                    "data": 917145191,
+                    "value": "www1"
+                },
+                {
+                    "data": 345262364,
+                    "value": "www1"
+                },
+                {
+                    "data": 959879323,
+                    "value": "www2"
+                },
+                {
+                    "data": 799143487,
+                    "value": "www3"
+                },
+                {
+                    "data": 100920620,
+                    "value": "www4"
+                }
+            ]
+        }
+    },
+    "message": "OK"
+}

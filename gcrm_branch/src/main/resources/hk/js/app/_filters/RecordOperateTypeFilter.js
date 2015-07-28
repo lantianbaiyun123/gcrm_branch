@@ -1,0 +1,1 @@
+define(["app"],function(e){e.registerFilter("RecordOperateTypeFilter",function(){var e={modify:"MODIFY",insert:"INSERT","delete":"DELETE"};return function(r){return r in e?e[r]:"--"}})});

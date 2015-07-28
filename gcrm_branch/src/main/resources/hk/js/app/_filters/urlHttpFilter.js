@@ -1,0 +1,1 @@
+define(["app"],function(t){t.registerFilter("urlHttpFilter",function(){return function(t){return t.indexOf("http://")<0?"http://"+t:t}})});

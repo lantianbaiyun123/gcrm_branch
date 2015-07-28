@@ -1,0 +1,15 @@
+<style>
+.body{font-size:16px;}
+.important{font-weight:bold;}
+</style>
+<div class="body">
+	${sendTo}：</br>
+	您在 ${adSubmitTime}提交的 广告内容（${adContentNumber} ）的投放时间，在 <span class="important">${scheduleUpdateTime}</span>被<span class="important">国代：${countryAgent}</span></br>
+	由${oldOccupationPeriods}</br>
+	变更为 ${occupationPeriods}
+	</br>
+	#if(${needConfrim})
+	请在<span class="important">72小时内完成确认</span>，否则将释放预定的排期时间</br>
+	#end
+	若有问题请与国代（${countryAgent}）联系</br>
+</div>

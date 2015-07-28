@@ -1,0 +1,1 @@
+define(["app"],function(e){e.registerFilter("BusinessTypeFilter",function(){var e={SALE:"BUSINESS_TYPE_SALE",CASH:"BUSINESS_TYPE_CASH"};return function(n){return e[n]?e[n]:n}})});

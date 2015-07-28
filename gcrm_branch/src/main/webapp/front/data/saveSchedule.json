@@ -1,0 +1,32 @@
+{
+	"positionId":123,
+	"billingModelId":123,
+	"startDate": "2014-04-01",
+	"endDate": "2015-05-01",
+	"scheduleDates":[
+		{
+			"id":123,
+			"adContentId":1231,
+			"occupyPeriod":[123,456,789],
+			"insertPeriod":[98,654]
+		},
+
+		{
+			"id":123,
+			"adContentId":1232,
+			"occupyPeriod":[123,456,789],
+			"insertPeriod":[98,654]
+		}
+	],
+	"conflictInfos":[
+		{
+			"date":"2014-05-01",
+			"contentIds":[1232,1231,1233]
+		},
+		{
+			"date":"2014-05-02",
+			"contentIds":[1232,1231,1233]
+		}
+	]
+
+}

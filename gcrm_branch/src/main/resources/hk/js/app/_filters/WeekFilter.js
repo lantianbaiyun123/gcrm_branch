@@ -1,0 +1,1 @@
+define(["app"],function(S){S.registerFilter("WeekFilter",function(){var S={normal:["SUNDAY","MONDAY","TUESDAY","WEDNESDAY","THURSDAY","FRIDAY","SATURDAY"],"short":["SUNDAY_SHORT","MONDAY_SHORT","TUESDAY_SHORT","WEDNESDAY_SHORT","THURSDAY_SHORT","FRIDAY_SHORT","SATURDAY_SHORT"]};return function(A,D){return D&&S[D]&&S[D][A]?S[D][A]:"--"}})});

@@ -1,0 +1,32 @@
+<style>
+.body{font-size:14px;}
+.important{font-weight:bold;}
+table td, table th{text-align:center}
+</style>
+<div class="body">
+#foreach ($element in $Operator) 
+	${element} #end ：</br>
+	#if(${MaiType}=="reminders")
+	您在${AdsubmitTime} 提交广告内容，还未提交物料；或物料审核未通过。请尽快提交物料信息，避免延误上线时间。#end</br>
+	#if(${MaiType}=="terminate")
+	您在${AdsubmitTime} 提交广告内容；在${PmterminateDate}操作终止投放；原投放排期时间已全部释放。#end</br>
+	#if(${MaiType}=="online")
+	您在${AdsubmitTime} 提交广告内容，PM已在${PmstartDate}操作上线。#end</br>
+	#if(${MaiType}=="offline")
+	您在${AdsubmitTime} 提交广告内容，已在${PmendDate}操作下线。当前广告内容下一个投放时间段上线时间为
+	${NextDate}
+	#end</br>
+	#if(${MaiType}=="materOngoing")
+	您对广告内容${adContenNumber}，已在${materialSubtime}提交的物料变更，PM已在${materialUpdatetime}操作上线。#end</br>
+	广告内容信息如下：</br>
+	广告主：    ${Customer}</br>
+	内容描述：${Description}</br>
+	投放时间：${PeriodDescript}</br>
+	#if(${MaiType}=="reminders")
+	点击<a href=${materialUrl}>此处</a>，进入物料信息管理界面#end
+	</br>
+	</br>
+	</br>
+	#if(${MaiType}!="reminders")
+	如有问题请及时与平台相关PM联系 #end
+</div>

@@ -1,0 +1,1173 @@
+
+/*==============================================================*/
+/* DBMS name:      MySQL 5.0                                    */
+/* Created on:     2013/12/17 16:21:51                          */
+/*==============================================================*/
+
+
+drop table if exists g_account;
+
+drop table if exists g_advertising_platform;
+
+drop table if exists g_agenct_country;
+
+drop table if exists g_agent_qualification;
+
+drop table if exists g_agent_regional;
+
+drop table if exists g_attachment;
+
+drop table if exists g_billing_model;
+
+drop table if exists g_contact_person;
+
+drop table if exists g_country;
+
+drop table if exists g_currency_type;
+
+drop table if exists g_customer;
+
+drop table if exists g_customer_resource;
+
+drop table if exists g_industry;
+
+drop table if exists g_opportunity;
+
+drop table if exists g_opportunity_platform;
+
+drop table if exists g_user;
+
+drop table if exists g_contract;
+
+drop table if exists g_site;
+
+drop table if exists g_position;
+
+drop table if exists g_advertise_solution_content;
+
+drop table if exists g_position_occupation;
+
+drop table if exists g_adcontent_position_date_relation;
+
+drop table if exists g_ad_approval_record;
+
+drop table if exists g_ad_approval_insert_record;
+
+/*==============================================================*/
+/* Table: g_account                                             */
+/*==============================================================*/
+create table g_account
+(
+   id                   bigint not null auto_increment,
+   customer_number      bigint,
+   ucid					bigint,
+   name                 varchar(128),
+   utype				enum('INNER','OUTER','AGENT'),
+   email                varchar(128),
+   status               enum('DISABLE','VERIFIED','UNVERIFY','ENABLE') DEFAULT NULL,
+   create_time          datetime,
+   create_operator      bigint,
+   last_update_time     datetime,
+   last_update_operator bigint,
+   verify_code 			varchar(10),
+   primary key (id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*==============================================================*/
+/* Table: g_advertising_platform                                */
+/*==============================================================*/
+create table g_advertising_platform
+(
+   id                   bigint not null auto_increment,
+   name                 varchar(128),
+   business_type		int,
+   primary key (id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*==============================================================*/
+/* Table: g_agenct_country                                      */
+/*==============================================================*/
+create table g_agenct_country
+(
+   id                   bigint not null auto_increment,
+   regional_id          bigint,
+   country_id           bigint,
+   primary key (id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*==============================================================*/
+/* Table: g_agent_qualification                                 */
+/*==============================================================*/
+create table g_agent_qualification
+(
+   id                   bigint not null auto_increment,
+   customer_number      bigint,
+   parter_top1          varchar(128),
+   parter_top2          varchar(128),
+   parter_top3          varchar(128),
+   performance_highlights varchar(512),
+   create_time          datetime,
+   create_operator      bigint,
+   last_update_time     datetime,
+   last_update_operator bigint,
+   primary key (id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*==============================================================*/
+/* Table: g_agent_regional                                      */
+/*==============================================================*/
+create table g_agent_regional
+(
+   id                   bigint not null auto_increment,
+   name                 varchar(128),
+   primary key (id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*==============================================================*/
+/* Table: g_attachment                                          */
+/*==============================================================*/
+create table g_attachment
+(
+   id                   bigint not null auto_increment,
+   customer_number      bigint,
+   upload_file_name     varchar(512),
+   type                 int,
+   name                 varchar(128),
+   url                  varchar(512),
+   primary key (id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*==============================================================*/
+/* Table: g_billing_model                                       */
+/*==============================================================*/
+create table g_billing_model
+(
+   id                   bigint not null auto_increment,
+   name                 varchar(128),
+   type			        int,
+   primary key (id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*==============================================================*/
+/* Table: g_contact_person                                      */
+/*==============================================================*/
+create table g_contact_person
+(
+   id                   bigint not null auto_increment,
+   customer_number      bigint,
+   name                 varchar(512),
+   gender               int,
+   position_name        varchar(128),
+   superiors_position   varchar(128),
+   department           varchar(128),
+   mobile               varchar(32),
+   telephone            varchar(32),
+   email                varchar(128),
+   is_business_entity   int,
+   is_decision_maker    int,
+   create_time          datetime,
+   create_operator      bigint,
+   last_update_time     datetime,
+   last_update_operator bigint,
+   primary key (id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*==============================================================*/
+/* Table: g_country                                             */
+/*==============================================================*/
+create table g_country
+(
+   id                   bigint not null auto_increment,
+   name                 varchar(128),
+   code                 varchar(64),
+   primary key (id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*==============================================================*/
+/* Table: g_currency_type                                       */
+/*==============================================================*/
+create table g_currency_type
+(
+   id                   bigint not null auto_increment,
+   name                 varchar(128),
+   radio                double,
+   primary key (id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*==============================================================*/
+/* Table: g_customer                                            */
+/*==============================================================*/
+CREATE TABLE `g_customer` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `customer_number` bigint(20) DEFAULT NULL,
+  `company_name` varchar(256) DEFAULT NULL,
+  `company_size` int(11) DEFAULT NULL,
+  `registration_time` datetime DEFAULT NULL,
+  `registered_capital` bigint(20) DEFAULT NULL,
+  `currency_type` int(11) DEFAULT NULL,
+  `address` varchar(512) DEFAULT NULL,
+  `url` varchar(256) DEFAULT NULL,
+  `description` varchar(512) DEFAULT NULL,
+  `business_type` varchar(20) DEFAULT NULL,
+  `business_scope` varchar(512) DEFAULT NULL,
+  `business_license` varchar(256) DEFAULT NULL,
+  `country` int(11) DEFAULT NULL,
+  `belongs_sales` bigint(20) DEFAULT NULL,
+  `belongs_manager` bigint(20) DEFAULT NULL,
+  `customer_type` int(11) DEFAULT NULL,
+  `approval_status` int(11) DEFAULT NULL,
+  `company_status` int(11) DEFAULT NULL,
+  `agenct_type` int(11) DEFAULT NULL,
+  `agenct_regional` int(11) DEFAULT NULL,
+  `agenct_country` varchar(128) DEFAULT NULL,
+  `industry` int(11) DEFAULT NULL,
+  `agenct_company` int(11) DEFAULT NULL,
+  `create_time` datetime DEFAULT NULL,
+  `create_operator` bigint(20) DEFAULT NULL,
+  `last_update_time` datetime DEFAULT NULL,
+  `last_update_operator` bigint(20) DEFAULT NULL,
+  `task_info` varchar(400) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `g_customer_approve_record`;
+CREATE TABLE `g_customer_approve_record` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'Ψһ',
+  `customer_id` bigint(20) DEFAULT NULL COMMENT '뵥',
+  `actdef_id` varchar(42) DEFAULT NULL COMMENT 'task',
+  `activity_id` varchar(42) DEFAULT NULL COMMENT ' ID',
+  `approval_status` char(255) DEFAULT NULL COMMENT '审核状态',
+  `approval_suggestion` varchar(512) DEFAULT NULL,
+  `create_time` datetime DEFAULT NULL COMMENT 'ʱ',
+  `create_operator` bigint(20) DEFAULT NULL,
+  `process_id` varchar(42) DEFAULT NULL COMMENT 'ʵID',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*==============================================================*/
+/* Table: g_customer_resource                                   */
+/*==============================================================*/
+create table g_customer_resource
+(
+   id                   bigint not null auto_increment,
+   agent_qualification_id bigint,
+   industry             varchar(128),
+   advertisers_company1 varchar(128),
+   advertisers_company2 varchar(128),
+   advertisers_company3 varchar(128),
+   primary key (id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*==============================================================*/
+/* Table: g_industry                                            */
+/*==============================================================*/
+create table g_industry
+(
+   id                   bigint not null auto_increment,
+   name                 varchar(128),
+   primary key (id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*==============================================================*/
+/* Table: g_opportunity                                         */
+/*==============================================================*/
+create table g_opportunity
+(
+   id                   bigint not null auto_increment,
+   g_b_id               bigint,
+   customer_number      bigint,
+   budget               bigint,
+   currency_type        int,
+   spending_time        varchar(128),
+   payment              int,
+   payment_period       varchar(128),
+   billing_model        varbinary(128),
+   business_type        varchar(50),
+   description          varchar(512),
+   create_time          datetime,
+   create_operator      bigint,
+   last_update_time     datetime,
+   last_update_operator bigint,
+   primary key (id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*==============================================================*/
+/* Table: g_opportunity_platform                                */
+/*==============================================================*/
+create table g_opportunity_platform
+(
+   id                   int not null auto_increment,
+   g_a_id               bigint,
+   opportunity_id       int,
+   business_type        int,
+   platform_id          int,
+   primary key (id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*==============================================================*/
+/* Table: g_user                                                */
+/*==============================================================*/
+create table g_user
+(
+   id                   bigint not null auto_increment,
+   ucid					bigint,
+   username             varchar(256),
+   realname             varchar(256),
+   email                varchar(256),
+   phonenumber			varchar(64),
+   status				tinyint(2),
+   role                 varchar(64),
+   dept					varchar(256),
+   supervisor			varchar(256),
+   create_time			datetime,
+   create_operator		bigint,
+   last_update_time		datetime,
+   last_update_operator bigint,
+   uuap_name		    varchar(256) ,
+   primary key (id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE  g_contract (
+    number VARCHAR(50) NOT NULL,
+    category VARCHAR(30) NOT NULL,
+    customer_id bigint NOT NULL,
+    summary varchar(4000) NOT NULL,
+    state varchar(30) ,
+    begin_date DATETIME ,
+    end_date DATETIME,
+    sync_date DATETIME,
+    applier VARCHAR(30),
+    sales VARCHAR(30),
+    parent_number VARCHAR(50),
+    advertise_solution_id bigint,
+    PRIMARY KEY (number)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+/*==============================================================*/
+/* Table: g_site                                                */
+/*==============================================================*/
+create table g_site
+(
+   id            bigint not null AUTO_INCREMENT,
+   code          varchar(20),
+   primary key (id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+-- ----------------------------
+-- Table structure for g_position
+-- ----------------------------
+DROP TABLE IF EXISTS `g_position`;
+CREATE TABLE `g_position` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `ad_platform_id` bigint(20) DEFAULT NULL,
+  `site_id` bigint(20) DEFAULT NULL,
+  `type` int(11) DEFAULT NULL,
+  `rotation_type` int(11) DEFAULT NULL,
+  `area_required` varchar(128) DEFAULT NULL,
+  `text_size` varchar(128) DEFAULT NULL,
+  `size` varchar(128) DEFAULT NULL,
+  `sales_amount` int(11) DEFAULT NULL,
+  `status` int(11) DEFAULT NULL,
+  `property_status` int,
+  `material_type` int(11) DEFAULT NULL,
+  `click` bigint(20) DEFAULT NULL,
+  `pv` bigint(20) DEFAULT NULL,
+  `parent_id` bigint(20) DEFAULT NULL,
+  `index_str` varchar(256) DEFAULT NULL,
+  `guide_url` varchar(256) DEFAULT NULL,
+  `guide_file_name` varchar(128) DEFAULT NULL,
+  `guidefile_download_name` varchar(128) DEFAULT NULL,
+  `create_time` datetime DEFAULT NULL,
+  `create_operator` bigint(20) DEFAULT NULL,
+  `last_update_time` datetime DEFAULT NULL,
+  `last_update_operator` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+drop table if exists g_advertise_solution;
+
+/*==============================================================*/
+/* Table: g_advertise_solution                                  */
+/*==============================================================*/
+create table g_advertise_solution
+(
+   id                   bigint not null auto_increment,
+   customer_number      bigint,
+   contract_number      varchar(50),
+   operator             bigint,
+   approval_status      int,
+   contract_type   		varchar(64),
+   contract_status   	varchar(64), 
+   type                 int,
+   budget               float,
+   currency_type        int,
+   start_time           datetime,
+   end_time             datetime,
+   locked               int,
+   task_info 		varchar(512),
+   create_time          datetime,
+   create_operator      bigint,
+   last_update_time     datetime,
+   last_update_operator bigint,
+   number               varchar(20),
+   old_solution_id      bigint,
+   primary key (id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+/*==============================================================*/
+/* Table: g_advertise_solution_content                          */
+/*==============================================================*/
+create table g_advertise_solution_content
+(
+   id                   bigint not null AUTO_INCREMENT,
+   advertise_solution_id bigint,
+   advertisers          varchar(128),
+   advertiser_id        bigint,
+   description          varchar(512),
+   approval_status      varchar(64),
+   site_id              bigint,
+   product_id           int,
+   channel_id       	bigint,
+   area_id      		bigint,
+   position_id       	bigint,
+   position_guide_url   varchar(256),
+   period_description   varchar(512),
+   insert_period_description varchar(512),
+   total_days           int,
+   allow_insert         int,
+   material_embed_code  int,
+   material_embed_code_content varchar(512),
+   material_title       varchar(256),
+   material_url         varchar(256),
+   task_info 			varchar(512),
+   create_time          datetime,
+   create_operator      bigint,
+   last_update_time     datetime,
+   last_update_operator bigint,
+   allow_insert_description varchar(256),
+   schedule_id			bigint,
+   content_type         varchar(64),
+   old_content_id 		bigint(20),
+   number               varchar(20),
+   submit_time          datetime,
+   po_num               varchar(64),
+   approval_date		date,
+   primary key (id),
+   UNIQUE uni_content_number (number)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*==============================================================*/
+/* Table: g_position_occupation                                 */
+/*==============================================================*/
+create table g_position_occupation
+(
+   id                   bigint not null AUTO_INCREMENT,
+   position_id			bigint,
+   `date`             	date,
+   total_amount			int,
+   sold_amount			int,
+   status				int,
+   cur_schedule_number	varchar(256),
+   history_schedules	varchar(256),
+   primary key (id),
+   unique key unique_key (position_id, date)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*==============================================================*/
+/* Table: g_adcontent_position_date_relation                    */
+/*==============================================================*/
+create table g_adcontent_position_date_relation
+(
+   id                   bigint not null AUTO_INCREMENT,
+   ad_content_id 		bigint,
+   position_occ_id		bigint,
+   primary key (id),
+   unique key unique_key (ad_content_id, position_occ_id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+/*==============================================================*/
+/* Table: g_schedule							                */
+/*==============================================================*/
+create table g_schedule
+(
+   id                   bigint not null AUTO_INCREMENT,
+   number				varchar(20),
+   ad_content_id 		bigint,
+   position_id			bigint,
+   billing_model_id		bigint,
+   occupy_period		varchar(6000),
+   insert_period		varchar(6000),
+   period_description	varchar(2000),
+   insert_period_description	varchar(2000),
+   status				int,
+   completed			int,
+   create_time			datetime,
+   confirm_time  		datetime,
+   lock_time			datetime,
+   release_time			datetime,
+   create_operator      bigint,
+   confirm_operator     bigint,
+   primary key (id),
+   UNIQUE uni_schedule_number (number)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+drop table if exists g_quotation;
+
+/*==============================================================*/
+/* Table: g_quotation                                           */
+/*==============================================================*/
+create table g_quotation
+(
+   id                   bigint not null auto_increment,
+   advertising_platform_id bigint,
+   site_id              bigint,
+   billing_model_id     bigint,
+   publish_price        double,
+   ratio_mine           double,
+   ratio_third          double,
+   ratio_customer       double,
+   start_time           timestamp,
+   end_time             timestamp,
+   price_type           int,
+   industry_type        int,
+   ratio_rebate         double        COMMENT'返点比例',
+   business_type        int(11)       COMMENT'业务类型',
+   quotation_main_id    bigint        COMMENT'主表id',
+   primary key (id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*==============================================================*/
+/* Table: g_advertise_quotation                                           */
+/*==============================================================*/
+CREATE TABLE `g_advertise_quotation` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `advertise_solution_content_id` bigint(20) DEFAULT NULL,
+  `price_type` int(11) DEFAULT NULL,
+  `billing_model_id` bigint(20) DEFAULT NULL,
+  `currency_type` int(11) DEFAULT NULL,
+  `publish_price` double DEFAULT NULL,
+  `customer_quote` double DEFAULT NULL,
+  `traffic_amount` bigint(20) DEFAULT NULL,
+  `click_amount` bigint(20) DEFAULT NULL,
+  `discount` double DEFAULT NULL,
+  `budget` double DEFAULT NULL,
+  `total_price` double DEFAULT NULL,
+  `product_ratio_mine` double DEFAULT NULL,
+  `product_ratio_customer` double DEFAULT NULL,
+  `product_ratio_third` double DEFAULT NULL,
+  `industry_type` int(11) DEFAULT NULL,
+  `ratio_mine` double DEFAULT NULL,
+  `ratio_customer` double DEFAULT NULL,
+  `ratio_third` double DEFAULT NULL,
+  `ratio_condition` varchar(128) DEFAULT NULL,
+  `ratio_condition_desc` varchar(1024) DEFAULT NULL,
+  `reach_estimate` int(11) DEFAULT NULL,
+  `daily_amount` bigint(20) DEFAULT NULL,
+  `total_amount` bigint(20) DEFAULT NULL,
+  `create_time` datetime DEFAULT NULL,
+  `create_operator` bigint(20) DEFAULT NULL,
+  `last_update_time` datetime DEFAULT NULL,
+  `last_update_operator` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+/*==============================================================*/
+/* Table: g_advertise_material                                  */
+/*==============================================================*/
+create table g_advertise_material
+(
+   id                   bigint not null AUTO_INCREMENT,
+   advertise_solution_content_id bigint,
+   file_url             varchar(512),
+   upload_file_name     varchar(128),
+   download_file_name   varchar(128),
+   create_time          datetime,
+   create_operator      bigint,
+   last_update_time     datetime,
+   last_update_operator bigint,
+   primary key (id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE `g_i18n` (
+   `id` int(11) NOT NULL AUTO_INCREMENT,
+   `key_name` varchar(255) NOT NULL,
+   `key_value` varchar(255) NOT NULL,
+   `locale` varchar(64) NOT NULL,
+   PRIMARY KEY (`id`)
+ )ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ 
+/*==============================================================*/
+/* Table: g_ad_approval_record                                  */
+/*==============================================================*/
+create table g_ad_approval_record
+(
+   id                   bigint not null AUTO_INCREMENT,
+   ad_solution_id       bigint,
+   process_id			varchar(64),
+   task_id              varchar(64),
+   activity_id          varchar(64),
+   approval_status      int,
+   approval_suggestion  varchar(512),
+   create_time          datetime,
+   create_operator      bigint,
+   is_history           int,
+   ad_content_id        bigint,
+   primary key (id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+/*==============================================================*/
+/* Table: g_ad_approval_insert_record                           */
+/*==============================================================*/
+create table g_ad_approval_insert_record
+(
+   id                   bigint not null AUTO_INCREMENT,
+   approval_record_id   bigint,
+   adsolution_content_id bigint,
+   inserted_adsolution_content_id bigint,
+   insert_period        varchar(128),
+   allow_insert         int,
+   is_history 			int,
+   create_time          datetime,
+   create_operator      bigint,
+   primary key (id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*==============================================================*/
+/* Table: g_modify_record                                       */
+/*==============================================================*/
+CREATE TABLE `g_modify_record` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `table_name` varchar(128) DEFAULT NULL,
+  `modified_data_id` bigint(20) DEFAULT NULL,
+  `modify_field` varchar(128) DEFAULT NULL,
+  `operate_type` varchar(36) DEFAULT NULL,
+  `old_value` varchar(512) DEFAULT NULL,
+  `new_value` varchar(512) DEFAULT NULL,
+  `create_time` datetime DEFAULT NULL,
+  `create_operator` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*==============================================================*/
+/* Table: g_modify_table_info                                   */
+/*==============================================================*/
+CREATE TABLE `g_modify_table_info` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `table_name` varchar(128) DEFAULT NULL,
+  `table_field` varchar(128) DEFAULT NULL,
+  `field_name` varchar(256) DEFAULT NULL,
+  `desc` varchar(512) DEFAULT NULL,
+  `local` varchar(20) DEFAULT NULL,
+  `create_time` datetime DEFAULT NULL,
+  `create_operator` bigint(20) DEFAULT NULL,
+  `last_update_time` datetime DEFAULT NULL,
+  `last_update_operator` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+drop table if exists g_activity_name_i18n;
+/*==============================================================*/
+/* Table: g_activity_name_i18n                           		*/
+/*==============================================================*/
+create table g_activity_name_i18n
+(
+   id                   bigint not null AUTO_INCREMENT,
+   process_define_id	varchar(128) not null,
+   activity_id			varchar(64) not null,
+   activity_name		varchar(128) not null,
+   locale				varchar(64) not null,
+   primary key (id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+drop table if exists g_process_name_i18n;
+/*==============================================================*/
+/* Table: g_process_name_i18n                           		*/
+/*==============================================================*/
+create table g_process_name_i18n
+(
+   id                   bigint not null AUTO_INCREMENT,
+   process_define_id	varchar(128) not null,
+   process_name			varchar(128) not null,
+   locale				varchar(64) not null,
+   primary key (id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+drop table if exists g_participant;
+/*==============================================================*/
+/* Table: g_participant                                         */
+/*==============================================================*/
+create table g_participant
+(
+   id                   bigint not null auto_increment,
+   process_define_id    varchar(64),
+   participant_id       varchar(128),
+   username             varchar(64),
+   key_str         		varchar(64),
+   description			varchar(64),
+   primary key (id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*==============================================================*/
+/* author : luge                                                */
+/* explain:	 表g_adcontent_cancel_record                                            */
+/*                      */
+/* Created on:     2014/03/25 						*/
+/*==============================================================*/
+CREATE TABLE `g_adcontent_cancel_record` (
+   `id` bigint(20) NOT NULL AUTO_INCREMENT,
+   `advertise_solution_content_id` bigint(20) DEFAULT NULL,
+   `cancel_reason` varchar(64) DEFAULT NULL,
+   `advertisers` varchar(128) DEFAULT NULL,
+   `advertise_solution_id` bigint(20) DEFAULT NULL,
+   `create_time` datetime DEFAULT NULL,
+   `create_operator` bigint(20),
+   `submit_time` datetime DEFAULT NULL,
+   `cancel_time` datetime DEFAULT NULL,
+   `ad_number` varchar(64) DEFAULT NULL,
+   `last_update_time` datetime DEFAULT NULL,
+   `last_update_operator` bigint(20) DEFAULT NULL,
+   PRIMARY KEY (`id`)
+ ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+-- ----------------------------
+-- Table structure for g_advertise_material_apply
+-- ----------------------------
+DROP TABLE IF EXISTS `g_advertise_material_apply`;
+CREATE TABLE `g_advertise_material_apply` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `advertise_solution_content_id` bigint(20) DEFAULT NULL,
+  `schedule_id` bigint(20) DEFAULT NULL,
+  `number` varchar(20) DEFAULT NULL,
+  `apply_state` varchar(20) DEFAULT NULL,
+  `create_time` datetime DEFAULT NULL,
+  `create_operator` bigint(20) DEFAULT NULL,
+  `last_update_time` datetime DEFAULT NULL,
+  `last_update_operator` bigint(20) DEFAULT NULL,
+  `material_title` varchar(256) DEFAULT NULL,
+  `material_url` varchar(256) DEFAULT NULL,
+  `task_info` varchar(512) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+drop table if exists `g_quotation_material`;
+
+-- ----------------------------
+-- Table structure for g_advertise_material
+-- ----------------------------
+DROP TABLE IF EXISTS `g_advertise_material`;
+CREATE TABLE `g_advertise_material` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `advertise_solution_content_id` bigint(20) DEFAULT NULL,
+  `file_url` varchar(512) DEFAULT NULL,
+  `upload_file_name` varchar(128) DEFAULT NULL,
+  `download_file_name` varchar(128) DEFAULT NULL,
+  `create_time` datetime DEFAULT NULL,
+  `create_operator` bigint(20) DEFAULT NULL,
+  `last_update_time` datetime DEFAULT NULL,
+  `last_update_operator` bigint(20) DEFAULT NULL,
+  `material_apply_id` bigint(20) DEFAULT NULL,
+  `material_file_type` tinyint(2) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS g_quotation_main;
+
+/*==============================================================*/
+/* Table: g_quotation_main                                           */
+/*==============================================================*/
+CREATE TABLE g_quotation_main
+(
+   id                   BIGINT NOT NULL AUTO_INCREMENT,
+   advertising_platform_id BIGINT     COMMENT'平台',
+   site_id              BIGINT        COMMENT'站点',
+   start_time           datetime     COMMENT'开始时间',
+   end_time             datetime     COMMENT'结束时间',
+   price_type           INT           COMMENT'价格种类',
+   create_time          datetime      COMMENT'提交日期',
+   create_operator      BIGINT        COMMENT'提交操作人',
+   last_update_time     datetime,
+   last_update_operator bigint,
+   cancel_time          datetime      COMMENT'作废日期',
+   cancel_operator      BIGINT        COMMENT'作废操作人',
+   STATUS               INT(11)       COMMENT'状态',
+   approve_status       INT(11)       COMMENT'审批状态',
+   quote_code           VARCHAR(32)   COMMENT'编号',
+   task_info            VARCHAR(512)  COMMENT'审批任务提示',
+   descreption          VARCHAR(512)  COMMENT'定价说明',
+   business_type        INT(11)       COMMENT'业务类型',
+   PRIMARY KEY (id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+DROP TABLE IF EXISTS g_quote_approval_record;
+/*==============================================================*/
+/* Table: g_quote_approval_record                                  */
+/*==============================================================*/
+create table g_quote_approval_record
+(
+   id                   bigint not null AUTO_INCREMENT,
+   quote_main_id        bigint,
+   process_id			varchar(64),
+   task_id              varchar(64),
+   activity_id          varchar(64),
+   approval_status      int,
+   approval_suggestion  varchar(512),
+   create_time          datetime,
+   create_operator      bigint,
+   is_history           int,
+   quote_content_id        bigint,
+   primary key (id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE `g_attachment` ADD INDEX `idx_customer_number` (`customer_number`);
+ALTER TABLE `g_contact_person` ADD INDEX `idx_customer_number` (`customer_number`);
+ALTER TABLE `g_advertise_solution_content` ADD INDEX `idx_solution_d` (`advertise_solution_id`);
+ALTER TABLE `g_advertise_quotation` ADD INDEX `idx_content_id` (`advertise_solution_content_id`);
+
+drop table if exists g_process_activity_type;
+CREATE TABLE `g_process_activity_type` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `process_define_id` varchar(64) NOT NULL,
+  `type` varchar(32) NOT NULL,
+  `sub_type` varchar(32) NOT NULL,
+  `param_key` varchar(32) NOT NULL,
+  PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `g_ad_platform_site_relation` (
+    `id` BIGINT NOT NULL AUTO_INCREMENT,
+    `ad_platform_id` BIGINT,
+    `site_id` BIGINT,
+    `status` INT,
+    `create_time` DATETIME,
+    `create_operator` BIGINT,
+    `last_update_time` DATETIME,
+    `last_update_operator` BIGINT,
+    PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE `g_advertising_platform` ADD COLUMN `status` INT;
+ALTER TABLE `g_advertising_platform` ADD COLUMN `create_time` DATETIME ;
+ALTER TABLE `g_advertising_platform` ADD COLUMN `create_operator` BIGINT ;
+ALTER TABLE `g_advertising_platform` ADD COLUMN `last_update_time` DATETIME ;
+ALTER TABLE `g_advertising_platform` ADD COLUMN `last_update_operator` BIGINT ;
+
+ALTER TABLE `g_position` ADD COLUMN `position_number` varchar(50) ;
+ALTER TABLE `g_position` ADD COLUMN `textlink_length` INT;
+ALTER TABLE `g_position` ADD COLUMN `cpt_benchmark_price` DOUBLE;
+ALTER TABLE `g_advertise_solution_content` ADD COLUMN `modify_status` INT;
+ALTER TABLE `g_i18n` ADD COLUMN `key_extra_value` VARCHAR(512);
+
+drop table if exists g_schedule_task;
+/*==============================================================*/
+/* Table: g_schedule_task                                       */
+/*==============================================================*/
+create table g_schedule_task
+(
+   id                    bigint not null AUTO_INCREMENT,
+   advertise_solution_id bigint,
+   advertise_content_id  bigint,
+   start_user		     varchar(64),
+   log				     varchar(512),
+   status				 varchar(16),
+   create_time           datetime,
+   create_operator       bigint,
+   last_update_time      datetime,
+   last_update_operator  bigint,
+   primary key (id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+drop table if exists g_code;
+CREATE TABLE g_code (
+   id bigint(20) NOT NULL AUTO_INCREMENT,
+   code_type varchar(128) DEFAULT NULL,
+   code_order int(11) DEFAULT NULL,
+   code_value varchar(64) DEFAULT NULL,
+   code_enum varchar(32) DEFAULT NULL,
+   code_desc varchar(256) DEFAULT NULL,
+   PRIMARY KEY (`id`),
+   UNIQUE KEY `I_CODE_TYPE_ORDER_UNIQUE` (`code_type`,`code_order`)
+ )ENGINE=InnoDB DEFAULT CHARSET=utf8;
+ 
+ DROP TABLE IF EXISTS `g_material_approve_record`;
+CREATE TABLE `g_material_approve_record` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '唯一主键',
+  `ad_material_apply_id` bigint(20) DEFAULT NULL COMMENT '物料申请单编号',
+  `task_id` varchar(42) DEFAULT NULL COMMENT '工作流task编号',
+  `activity_id` varchar(42) DEFAULT NULL COMMENT ' 工作流活动ID',
+  `approval_status` char(255) DEFAULT NULL COMMENT '审批状态 0：退回,1：通過，，2：拒絕',
+  `approval_suggestion` varchar(512) DEFAULT NULL COMMENT '审批意见',
+  `create_time` datetime DEFAULT NULL COMMENT '审批时间',
+  `create_operator` bigint(20) DEFAULT NULL COMMENT '审批操作人',
+  `process_id` varchar(42) DEFAULT NULL COMMENT '工作流实例ID',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE `g_material_approve_record` CHANGE COLUMN `task_id` `actdef_id` VARCHAR (42) COMMENT 'task' AFTER `ad_material_apply_id`;
+
+drop table if exists g_publish;
+
+/*==============================================================*/
+/* Table: g_publish                                             */
+/*==============================================================*/
+create table g_publish
+(
+   id                   bigint not null AUTO_INCREMENT,
+   number               varchar(20) not null comment '上线单编号',
+   online_number		varchar(20) not null comment '投放编号',
+   position_id          bigint not null comment '位置id',
+   ad_content_id        bigint not null comment '广告内容id',
+   as_number            varchar(20) not null comment '广告方案编号',
+   ac_number            varchar(20) not null comment '广告内容编号',
+   s_number             varchar(20) not null comment '排期单编号',
+   m_number             varchar(20) comment '物料编号',
+   pos_number           varchar(20) not null comment '资源位编号',
+   c_number				varchar(20) not null comment '客户编号',
+   status               int not null comment '上线状态',
+   type                 varchar(20) not null comment '上线类型',
+   property				tinyint not null comment '属性，目前只表示上线码是否新生成',
+   create_time          datetime,
+   create_operator      bigint,
+   last_update_time     datetime,
+   last_update_operator bigint,
+   primary key (id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+drop table if exists g_publish_date;
+
+/*==============================================================*/
+/* Table: g_publish_date                                        */
+/*==============================================================*/
+create table g_publish_date
+(
+   id                   bigint not null AUTO_INCREMENT,
+   p_number             varchar(20),
+   plan_start           date,
+   plan_end             date,
+   actural_start        datetime,
+   actural_end          datetime,
+   start_operator       bigint,
+   end_operator         bigint,
+   status               varchar(32),
+   primary key (id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+drop table if exists g_publish_record;
+
+/*==============================================================*/
+/* Table: g_publish_record	                                    */
+/*==============================================================*/
+create table g_publish_record
+(
+   id                   bigint not null AUTO_INCREMENT,
+   p_number             varchar(20),
+   date                 datetime,
+   m_number				varchar(20),
+   type                 varchar(32),
+   operator             bigint,
+   primary key (id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+drop table if exists g_publish_owner;
+
+/*==============================================================*/
+/* Table: g_publish_owner                                       */
+/*==============================================================*/
+create table g_publish_owner
+(
+   id                   bigint not null AUTO_INCREMENT,
+   position_id          bigint,
+   owner                varchar(64),
+   primary key (id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*==============================================================*/
+/* Table: g_publish_record	                                    */
+/*==============================================================*/
+drop table if exists g_force_publish_proof;
+create table g_force_publish_proof
+(
+   id                   bigint not null AUTO_INCREMENT,
+   p_number             varchar(20),
+   record_id			bigint,
+   type                 varchar(32),
+   approval_url			varchar(256),
+   file_url             varchar(256),
+   upload_file_name     varchar(128),
+   download_file_name   varchar(128),
+   create_time          datetime,
+   operator             bigint,
+   primary key (id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+drop table if exists g_adcontent_publish_data;
+
+create table g_adcontent_publish_data
+(
+   id                   bigint not null auto_increment,
+   publish_number       varchar(50),
+   customer_number      bigint,
+   ad_content_number    varchar(50),
+   position_id          bigint,
+   site_code            varchar(20),
+   publish_time         datetime,
+   site_url             varchar(256),
+   click                bigint,
+   uv                   bigint,
+   create_time          datetime,
+   primary key (id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+drop table if exists g_operate_report;
+
+CREATE TABLE g_operate_report (
+  id bigint(20) NOT NULL AUTO_INCREMENT,
+  operate_type varchar(32) NOT NULL,
+  report_type varchar(32) NOT NULL,
+  amount bigint(20) DEFAULT '0',
+  order_number int(1) DEFAULT NULL,
+  PRIMARY KEY (id),
+  UNIQUE KEY operate_report_unique (operate_type,report_type)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+-- ----------------------------
+-- Table structure for `g_rights_func`
+-- ----------------------------
+DROP TABLE IF EXISTS `g_rights_func`;
+CREATE TABLE `g_rights_func` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `func_id` bigint(20) DEFAULT NULL,
+  `func_url` varchar(1000) DEFAULT NULL,
+  `func_desc` varchar(200) DEFAULT NULL,
+  `func_tag` varchar(200) DEFAULT NULL,
+  `create_time` datetime DEFAULT NULL,
+  `create_operator` bigint(20) DEFAULT NULL,
+  `last_update_time` datetime DEFAULT NULL,
+  `last_update_operator` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for `g_rights_menu`
+-- ----------------------------
+DROP TABLE IF EXISTS `g_rights_menu`;
+CREATE TABLE `g_rights_menu` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `menu_id` bigint(20) DEFAULT NULL,
+  `menu_name` varchar(200) DEFAULT NULL,
+  `menu_url` varchar(1000) DEFAULT NULL,
+  `parent_menu_id` bigint(20) DEFAULT NULL,
+  `func_tag` varchar(200) DEFAULT NULL,
+  `create_time` datetime DEFAULT NULL,
+  `create_operator` bigint(20) DEFAULT NULL,
+  `last_update_time` datetime DEFAULT NULL,
+  `last_update_operator` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+-- ----------------------------
+-- Table structure for `g_rights_position`
+-- ----------------------------
+DROP TABLE IF EXISTS `g_rights_position`;
+CREATE TABLE `g_rights_position` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `pos_id` bigint(20) DEFAULT NULL,
+  `pos_name` varchar(200) DEFAULT NULL,
+  `pos_tag` varchar(200) DEFAULT NULL,
+  `pos_parent_ids` varchar(1000) DEFAULT NULL,
+  `pos_del_mark` tinyint(2) DEFAULT NULL,
+  `create_time` datetime DEFAULT NULL,
+  `create_operator` bigint(20) DEFAULT NULL,
+  `last_update_time` datetime DEFAULT NULL,
+  `last_update_operator` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for `g_rights_position_sub`
+-- ----------------------------
+DROP TABLE IF EXISTS `g_rights_position_sub`;
+CREATE TABLE `g_rights_position_sub` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `pos_id` bigint(20) DEFAULT NULL,
+  `pos_sub_id` bigint(20) DEFAULT NULL,
+  `direct_sub` tinyint(2) DEFAULT NULL COMMENT '是否是直接子节点',
+  `create_time` datetime DEFAULT NULL,
+  `create_operator` bigint(20) DEFAULT NULL,
+  `last_update_time` datetime DEFAULT NULL,
+  `last_update_operator` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+-- ----------------------------
+-- Table structure for `g_rights_role`
+-- ----------------------------
+DROP TABLE IF EXISTS `g_rights_role`;
+CREATE TABLE `g_rights_role` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `role_id` bigint(20) DEFAULT NULL,
+  `role_desc` varchar(200) DEFAULT NULL,
+  `role_tag` varchar(200) DEFAULT NULL,
+  `create_time` datetime DEFAULT NULL,
+  `create_operator` bigint(20) DEFAULT NULL,
+  `last_update_time` datetime DEFAULT NULL,
+  `last_update_operator` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for `g_rights_role_func`
+-- ----------------------------
+DROP TABLE IF EXISTS `g_rights_role_func`;
+CREATE TABLE `g_rights_role_func` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `role_id` bigint(20) DEFAULT NULL,
+  `func_id` bigint(20) DEFAULT NULL,
+  `func_url` varchar(1000) DEFAULT NULL,
+  `func_tag` varchar(200) DEFAULT NULL,
+  `create_time` datetime DEFAULT NULL,
+  `create_operator` bigint(20) DEFAULT NULL,
+  `last_update_time` datetime DEFAULT NULL,
+  `last_update_operator` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for `g_rights_user_position`
+-- ----------------------------
+DROP TABLE IF EXISTS `g_rights_user_position`;
+CREATE TABLE `g_rights_user_position` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `uc_id` bigint(20) DEFAULT NULL,
+  `pos_id` bigint(20) DEFAULT NULL,
+  `create_time` datetime DEFAULT NULL,
+  `create_operator` bigint(20) DEFAULT NULL,
+  `last_update_time` datetime DEFAULT NULL,
+  `last_update_operator` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for `g_rights_user_role`
+-- ----------------------------
+DROP TABLE IF EXISTS `g_rights_user_role`;
+CREATE TABLE `g_rights_user_role` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `role_id` bigint(20) DEFAULT NULL,
+  `uc_id` bigint(20) DEFAULT NULL,
+  `create_time` datetime DEFAULT NULL,
+  `create_operator` bigint(20) DEFAULT NULL,
+  `last_update_time` datetime DEFAULT NULL,
+  `last_update_operator` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+

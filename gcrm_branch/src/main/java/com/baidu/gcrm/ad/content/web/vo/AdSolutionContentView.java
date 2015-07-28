@@ -1,0 +1,202 @@
+package com.baidu.gcrm.ad.content.web.vo;
+
+import java.util.List;
+
+import org.apache.commons.collections.CollectionUtils;
+
+import com.baidu.gcrm.ad.content.model.AdContentCancelRecord;
+import com.baidu.gcrm.ad.content.model.AdSolutionContent;
+import com.baidu.gcrm.ad.content.model.AdSolutionContentApply.ApprovalStatus;
+import com.baidu.gcrm.ad.model.AdvertiseMaterial;
+import com.baidu.gcrm.ad.model.AdvertiseQuotation;
+import com.baidu.gcrm.ad.model.AdvertiseSolutionApproveState;
+import com.baidu.gcrm.ad.model.AdvertiseSolutionType;
+import com.baidu.gcrm.occupation.helper.DatePeriod;
+import com.baidu.gcrm.resource.position.web.vo.PositionVO;
+import com.baidu.gcrm.resource.site.model.Site;
+import com.baidu.gcrm.valuelistcache.model.AdvertisingPlatform;
+
+public class AdSolutionContentView {
+
+    private AdSolutionContent adSolutionContent;
+    private AdvertiseQuotation advertiseQuotation;
+    private AdvertiseMaterial advertiseCodeMaterial;
+
+    private List<DatePeriod> periods;
+
+    private List<AdvertisingPlatform> adPlatformList;
+    private List<Site> siteList;
+    private List<PositionVO> channelVOList;
+    private List<PositionVO> areaVOList;
+    private List<PositionVO> positionVOList;
+
+    // 当前位置信息
+    private PositionVO position;
+
+    private AdContentCancelRecord CancelRecord;
+
+    private AdvertiseSolutionApproveState approvalStatus;
+    private AdvertiseSolutionType type;
+    private String oldContentNumber;
+    private boolean emptyMaterial;
+    private boolean onlineApplyAllowed;
+    private ApprovalStatus onlineApplyApprovalStatus;
+    private Long onlineApplyId;
+    private List<DatePeriodState> datePeriodState;
+
+    public AdvertiseSolutionApproveState getApprovalStatus() {
+        return approvalStatus;
+    }
+
+    public void setApprovalStatus(AdvertiseSolutionApproveState approvalStatus) {
+        this.approvalStatus = approvalStatus;
+    }
+
+    public AdvertiseSolutionType getType() {
+        return type;
+    }
+
+    public void setType(AdvertiseSolutionType type) {
+        this.type = type;
+    }
+
+    public AdSolutionContent getAdSolutionContent() {
+        return adSolutionContent;
+    }
+
+    public void setAdSolutionContent(AdSolutionContent adSolutionContent) {
+        this.adSolutionContent = adSolutionContent;
+    }
+
+    public AdvertiseQuotation getAdvertiseQuotation() {
+        return advertiseQuotation;
+    }
+
+    public void setAdvertiseQuotation(AdvertiseQuotation advertiseQuotation) {
+        this.advertiseQuotation = advertiseQuotation;
+    }
+
+    public List<DatePeriod> getPeriods() {
+        return periods;
+    }
+
+    public void setPeriods(List<DatePeriod> periods) {
+        this.periods = periods;
+    }
+
+    public List<AdvertisingPlatform> getAdPlatformList() {
+        return adPlatformList;
+    }
+
+    public void setAdPlatformList(List<AdvertisingPlatform> adPlatformList) {
+        this.adPlatformList = adPlatformList;
+    }
+
+    public List<Site> getSiteList() {
+        return siteList;
+    }
+
+    public void setSiteList(List<Site> siteList) {
+        this.siteList = siteList;
+    }
+
+    public List<PositionVO> getChannelVOList() {
+        return channelVOList;
+    }
+
+    public void setChannelVOList(List<PositionVO> channelVOList) {
+        this.channelVOList = channelVOList;
+    }
+
+    public List<PositionVO> getAreaVOList() {
+        return areaVOList;
+    }
+
+    public void setAreaVOList(List<PositionVO> areaVOList) {
+        this.areaVOList = areaVOList;
+    }
+
+    public List<PositionVO> getPositionVOList() {
+        return positionVOList;
+    }
+
+    public void setPositionVOList(List<PositionVO> positionVOList) {
+        this.positionVOList = positionVOList;
+    }
+
+    public AdContentCancelRecord getCancelRecord() {
+        return CancelRecord;
+    }
+
+    public void setCancelRecord(AdContentCancelRecord cancelRecord) {
+        CancelRecord = cancelRecord;
+    }
+
+    public String getOldContentNumber() {
+        return oldContentNumber;
+    }
+
+    public void setOldContentNumber(String oldContentNumber) {
+        this.oldContentNumber = oldContentNumber;
+    }
+
+    public AdvertiseMaterial getAdvertiseCodeMaterial() {
+        return advertiseCodeMaterial;
+    }
+
+    public void setAdvertiseCodeMaterial(AdvertiseMaterial advertiseCodeMaterial) {
+        this.advertiseCodeMaterial = advertiseCodeMaterial;
+    }
+
+    public boolean isEmptyMaterial() {
+        if (adSolutionContent != null) {
+            emptyMaterial = CollectionUtils.isEmpty(adSolutionContent.getMaterialApplyList());
+        }
+        return emptyMaterial;
+    }
+
+    public void setEmptyMaterial(boolean emptyMaterial) {
+        this.emptyMaterial = emptyMaterial;
+    }
+
+    public boolean isOnlineApplyAllowed() {
+        return onlineApplyAllowed;
+    }
+
+    public void setOnlineApplyAllowed(boolean onlineApplyAllowed) {
+        this.onlineApplyAllowed = onlineApplyAllowed;
+    }
+
+    public ApprovalStatus getOnlineApplyApprovalStatus() {
+        return onlineApplyApprovalStatus;
+    }
+
+    public void setOnlineApplyApprovalStatus(ApprovalStatus onlineApplyApprovalStatus) {
+        this.onlineApplyApprovalStatus = onlineApplyApprovalStatus;
+    }
+
+    public PositionVO getPosition() {
+        return position;
+    }
+
+    public void setPosition(PositionVO position) {
+        this.position = position;
+    }
+
+    public Long getOnlineApplyId() {
+        return onlineApplyId;
+    }
+
+    public void setOnlineApplyId(Long onlineApplyId) {
+        this.onlineApplyId = onlineApplyId;
+    }
+
+    public List<DatePeriodState> getDatePeriodState() {
+        return datePeriodState;
+    }
+
+    public void setDatePeriodState(List<DatePeriodState> datePeriodState) {
+        this.datePeriodState = datePeriodState;
+    }
+
+}

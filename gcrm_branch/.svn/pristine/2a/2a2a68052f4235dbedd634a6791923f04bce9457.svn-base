@@ -1,0 +1,102 @@
+<div class="container benchmark-price-current">
+  <div class="panel panel-default gcrm-panel">
+    <div class="panel-top-heading">
+      <h1>
+        <span>{{'PAGE_BENCHMARK_PRICE_CURRENT' | translate}}</span>
+      </h1>
+    </div>
+
+    <div class="panel-body">
+      <div ng-if="!businessTypes.length">
+        <div class="alert alert-info">{{'QUOTATION_NO_PLATFORM' | translate}}</div>
+      </div>
+      <div tabset ng-if="businessTypes.length">
+        <div tab ng-repeat="one in businessTypes" heading="{{one.businessTypeName | BusinessTypeFilter | translate}}" ng-click="setBusinessType(one)">
+          <ul class="nav nav-pills">
+            <li ng-class="{'active': platform.active}" ng-repeat="platform in one.platformList"><a ng-click="selectPlatform(platform)">{{platform.i18nName}}</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <table class="table table-current table-hover" ng-if="businessTypes.length && currentQuotation.quotationList.length">
+        <thead>
+          <tr>
+            <th rowspan="2" class="align-center border-right" ng-if="!(currentQuotation.showRebate && !(currentQuotation.showUnit || currentQuotation.showRatio))">{{'QUOTATION_SITE_AREA' | translate}}</th>
+            <th rowspan="1" class="align-center border-right"  ng-if="currentQuotation.showRebate && !(currentQuotation.showUnit || currentQuotation.showRatio)">{{'QUOTATION_SITE_AREA' | translate}}</th>
+            <th colspan="5" class="align-center border-right th-middle" ng-if="currentQuotation.showUnit || !(currentQuotation.showUnit || currentQuotation.showRatio || currentQuotation.showRebate)">{{'PRICE_TYPE_unit' | translate}}</th>
+            <th colspan="3" class="align-center border-right th-middle" ng-if="currentQuotation.showRatio || !(currentQuotation.showUnit || currentQuotation.showRatio || currentQuotation.showRebate)">{{'PRICE_TYPE_ratio' | translate}}&nbsp;(%)</th>
+            <th rowspan="2" class="align-center" ng-if="(currentQuotation.showRebate &&  (currentQuotation.showUnit || currentQuotation.showRatio)) || !(currentQuotation.showUnit || currentQuotation.showRatio || currentQuotation.showRebate)">{{'PRICE_TYPE_rebate' | translate}}&nbsp;(%)</th>
+            <th rowspan="1" class="align-center" ng-if="currentQuotation.showRebate && !(currentQuotation.showUnit || currentQuotation.showRatio)">{{'PRICE_TYPE_rebate' | translate}}&nbsp;(%)</th>
+          </tr>
+          <tr>
+            <th ng-if="currentQuotation.showUnit || !(currentQuotation.showUnit || currentQuotation.showRatio || currentQuotation.showRebate)">CPC&nbsp;($)</th>
+            <th ng-if="currentQuotation.showUnit || !(currentQuotation.showUnit || currentQuotation.showRatio || currentQuotation.showRebate)">CPT&nbsp;($)</th>
+            <th ng-if="currentQuotation.showUnit || !(currentQuotation.showUnit || currentQuotation.showRatio || currentQuotation.showRebate)">CPM&nbsp;($)</th>
+            <th ng-if="currentQuotation.showUnit || !(currentQuotation.showUnit || currentQuotation.showRatio || currentQuotation.showRebate)">CPA&nbsp;($)</th>
+            <th ng-if="currentQuotation.showUnit || !(currentQuotation.showUnit || currentQuotation.showRatio || currentQuotation.showRebate)" class="border-right">CPS&nbsp;(%)</th>
+            <th ng-if="currentQuotation.showRatio || !(currentQuotation.showUnit || currentQuotation.showRatio || currentQuotation.showRebate)">{{'QUOTATION_RATIO_MINE' | translate}}</th>
+            <th ng-if="currentQuotation.showRatio || !(currentQuotation.showUnit || currentQuotation.showRatio || currentQuotation.showRebate)">{{'QUOTATION_RATIO_CUSTOMER' | translate}}</th>
+            <th ng-if="currentQuotation.showRatio || !(currentQuotation.showUnit || currentQuotation.showRatio || currentQuotation.showRebate)" class="border-right">{{'QUOTATION_RATIO_THIRD' | translate}}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="quotation in currentQuotation.quotationList">
+            <td class="border-right">{{quotation.siteIi8nName}}</td>
+            <td ng-if="currentQuotation.showUnit || !(currentQuotation.showUnit || currentQuotation.showRatio || currentQuotation.showRebate)">
+              <span ng-if="quotation.cpc">{{quotation.cpc.value}}</span>
+              <span ng-if="!quotation.cpc">--</span>
+            </td>
+            <td ng-if="currentQuotation.showUnit || !(currentQuotation.showUnit || currentQuotation.showRatio || currentQuotation.showRebate)">
+              <span ng-if="quotation.cpt">{{quotation.cpt.value}}</span>
+              <span ng-if="!quotation.cpt">--</span>
+            </td>
+            <td ng-if="currentQuotation.showUnit || !(currentQuotation.showUnit || currentQuotation.showRatio || currentQuotation.showRebate)">
+              <span ng-if="quotation.cpm">{{quotation.cpm.value}}</span>
+              <span ng-if="!quotation.cpm">--</span>
+            </td>
+            <td ng-if="currentQuotation.showUnit || !(currentQuotation.showUnit || currentQuotation.showRatio || currentQuotation.showRebate)">
+              <span ng-if="quotation.cpa">{{quotation.cpa.value}}</span>
+              <span ng-if="!quotation.cpa">--</span>
+            </td>
+            <td ng-if="currentQuotation.showUnit || !(currentQuotation.showUnit || currentQuotation.showRatio || currentQuotation.showRebate)" class="border-right">
+              <span ng-if="quotation.unifiedCPS">
+                <span>{{'QUOTATION_UNIFIED_RATIO' | translate}}：</span>
+                <span>{{quotation.unifiedCPS.value}}%</span>
+              </span>
+              <span ng-repeat="(cateName, quotationOne) in quotation.differentCPS">
+                <span>{{cateName}}{{'INDUSTRY_MAIN_CATEGORY' | translate}}</span>
+                <span ng-repeat="one in quotationOne">
+                  (<span ng-if="!one.industryName">{{'QUOTATION_UNIFIED_RATIO' | translate}}：</span>
+                  <span ng-if="one.industryName">{{one.industryName}}：</span>
+                  <span>{{one.value}}%</span>)
+                </span>
+                <br>
+              </span>
+              <span ng-if="!(quotation.cps && quotation.cps.length)">--</span>
+            </td>
+            <td ng-if="currentQuotation.showRatio || !(currentQuotation.showUnit || currentQuotation.showRatio || currentQuotation.showRebate)">
+              <span ng-if="quotation.ratioMine">{{quotation.ratioMine}}%</span>
+              <span ng-if="!quotation.ratioMine">--</span>
+            </td>
+            <td ng-if="currentQuotation.showRatio || !(currentQuotation.showUnit || currentQuotation.showRatio || currentQuotation.showRebate)">
+              <span ng-if="quotation.ratioCustomer">{{quotation.ratioCustomer}}%</span>
+              <span ng-if="!quotation.ratioCustomer">--</span>
+            </td>
+            <td ng-if="currentQuotation.showRatio || !(currentQuotation.showUnit || currentQuotation.showRatio || currentQuotation.showRebate)" class="border-right">
+              <span ng-if="quotation.ratioThird">{{quotation.ratioThird}}%</span>
+              <span ng-if="!quotation.ratioThird">--</span>
+            </td>
+            <td ng-if="currentQuotation.showRebate || !(currentQuotation.showUnit || currentQuotation.showRatio || currentQuotation.showRebate)">
+              <span ng-if="quotation.ratioRebate">{{quotation.ratioRebate}}%</span>
+              <span ng-if="!quotation.ratioRebate">--</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div ng-if="businessTypes.length && !currentQuotation.quotationList.length">
+        <div class="alert alert-info">{{'QUOTATION_LIST_NO_ITEM' | translate}}</div>
+      </div>
+    </div>
+  </div>
+</div>

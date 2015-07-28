@@ -1,0 +1,31 @@
+{
+    "code": 200,
+    "message": "OK",
+    "data": {
+        "state": "success",
+        "submitMsg": [
+            {
+                "adContentId": 123456,
+                "adContentNumber": "1234567890-11",
+                "advertiser":"百度",
+                "originalDays": "30",
+                "nowDays":10,
+                "originalOccupy": "2013-11-01 ~ 2013-11-30",
+                "nowOccupy": "2013-11-05 ~ 2013-12-04",
+                "originalInsertOccupy": "2013-11-24",
+                "nowInsertOccupy": "2013-11-24"
+            },
+            {
+                "adContentId": 133356,
+                "adContentNumber": "1234567890-22",
+                "advertiser":"千度",
+                "originalDays": "30",
+                "nowDays":30,
+                "originalOccupy": "2013-11-01 ~ 2013-11-30",
+                "nowOccupy": "2013-11-05 ~ 2013-12-04",
+                "originalInsertOccupy": "2013-11-24",
+                "nowInsertOccupy": "2013-11-24"
+            }
+        ]
+    }
+}

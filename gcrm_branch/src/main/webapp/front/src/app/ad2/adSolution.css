@@ -1,0 +1,49 @@
+.ad-solution .ad-brand{font-size: 24px;border-bottom: 1px solid #e8e8e8;}
+.ad-solution .ad-basic-info{font-size: 12px; margin: 18px 30px 0 30px; padding: 4px 0; overflow: hidden;}
+.ad-solution .ad-basic-info > span{line-height: 25px;border-right: dashed 1px #ccc;text-align: center;left: 6px;}
+.ad-solution .page-header{margin-bottom: 0;}
+.ad-solution h5{padding: 10px 0px;}
+.ad-solution h5.first-h5{margin: 0;}
+.ad-solution .expected-period span{font-size: 12px;color: #555;}
+.ad-solution .scheduled-period span{font-size: 12px;color: #d9534f;}
+
+.ad-solution .old-content-number{margin: 18px 0 0;}
+.ad-solution .old-content-number .slot-xs{width: 9%;}
+.ad-solution .old-content-number .slot-sm{width: 10%;}
+.ad-solution .old-content-number .slot-md{width: 13%;}
+.ad-solution .old-content-number .slot-mdd{width: 14%;}
+.ad-solution .old-content-number .slot-lg{width: 15.5%;}
+.ad-solution .old-content-number .slot-xlg{width: 17%;}
+.ad-solution .gcrm-slots > span{left: 6px;}
+.ad-solution .old-content-number-task-info .alert{margin-left: 0;margin-right: 0;}
+
+.operator-transfer-modal .select2-container .select2-choice { overflow: visible; }
+
+.en-US .po-modal-form label.col-md-2{width: 30%;}
+
+.modal-pub-apply .modal-dialog { width: 760px; }
+.pub-apply-contract .select2-results{}
+.pub-apply-contract .headDrop{font-weight: bold;}
+.pub-apply-contract .headDrop span,
+.pub-apply-contract .bodyDrop span{display: inline-block;margin-right: 15px;vertical-align: middle;}
+.pub-apply-contract .headDrop span.dropCol1,
+.pub-apply-contract .bodyDrop span.dropCol1{width: 120px;}
+.pub-apply-contract .headDrop span.dropCol2,
+.pub-apply-contract .bodyDrop span.dropCol2{width: 80px;}
+.pub-apply-contract .headDrop span.dropCol3,
+.pub-apply-contract .bodyDrop span.dropCol3{width: 70px;}
+.pub-apply-contract .headDrop span.dropCol4,
+.pub-apply-contract .bodyDrop span.dropCol4{width: 170px;}
+.modal-pub-apply .modal-header h4.with-btn { line-height: 32px; margin-bottom: 5px; }
+.modal-pub-apply .modal-body legend { font-size: 14px; font-weight: 700; padding-bottom: 5px; margin-bottom: 15px; }
+.modal-pub-apply .attachments-wrap { display: block; margin-top: 10px; }
+.modal-pub-apply .attachment { display: inline-block; margin-bottom: 5px; }
+.modal-pub-apply .attachments-wrap .attachment { display: block; margin-bottom: 5px; }
+.pub-apply-contract .select2-search { display: none; }
+
+.fixed-btn-group { position: fixed; bottom: 0; width: 100%; background: url(../images/500-back.jpg) repeat; }
+.fixed-btn-group .container > div { padding-top: 10px; height: 100px; border-top: 1px #ccc dashed; }
+.ad-solution { margin-bottom: 35px; }
+
+.ad-solution .min-stock-hint span { display: inline-block; vertical-align: top; }
+.ad-solution .min-stock-hint .min-stock-period { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 160px;}

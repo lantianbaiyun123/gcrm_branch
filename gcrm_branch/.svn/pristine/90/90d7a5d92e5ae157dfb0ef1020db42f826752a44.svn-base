@@ -1,0 +1,24 @@
+{ 
+    "code": 200, 
+    "data": [ 
+        { 
+            "email": "wujun@baidu.com", 
+            "id": 3, 
+            "realname": "吴俊", 
+            "role": "国代", 
+            "status": 1, 
+            "ucid": 10000000, 
+            "username": "wujun"
+        }, 
+        { 
+            "email": "dangqianyonghu@baidu.com", 
+            "id": 4, 
+            "realname": "当前用户", 
+            "role": "PM", 
+            "status": 1, 
+            "ucid": 1000, 
+            "username": "current"
+        }
+    ], 
+    "message": "OK"
+}

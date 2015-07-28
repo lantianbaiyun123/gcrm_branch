@@ -1,0 +1,1 @@
+define(["app"],function(t){t.registerFactory("Task",["$http","APP_CONTEXT",function(t,n){return{taskGet:function(e,o){t({method:"get",url:n+"process/tasks",params:e}).then(function(t){o(t.data)})},toDoCount:function(e){return t({method:"get",url:n+"process/taskCount",params:e})}}}])});

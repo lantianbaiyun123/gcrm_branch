@@ -1,0 +1,305 @@
+<div class="panel gcrm-panel">
+  <div class="panel-sub-heading">
+    <h2>
+      <span>
+        <span class="black-block">&nbsp;</span>{{'CUSTOMER_BASIC_INFO' | translate}}</span>
+      <span class="pull-right" ng-if="(!OwnerOpers.btn_cust_detail_baseinfo_mod || isOwner) && BtnIndex.btn_cust_detail_baseinfo_mod && basic.state == 'detailViewing' && customerApplyInfo.companyStatus != 2">
+        <a class="btn btn-default" ng-click="btnEdit()">
+          {{'MODIFY' | translate}}
+        </a>
+      </span>
+      <span class="pull-right label label-warning" ng-if="basic.state == 'detailEditing' && customerApplyInfo.approveState == 'approving'">{{'CUSTOMER_SHOULD_MODIFY_AFTER_WITHDRAW' | translate}}</span>
+    </h2>
+  </div>
+  <div class="panel-body" ng-if="basic.state != 'detailViewing'">
+    <form class="form-horizontal" name="formBasic">
+      <div class="form-group" id="anchorCustomerTop">
+        <label class="control-label col-md-3">
+          <span class="required-star">*</span>{{'COMPANY_NAME' | translate}}：
+        </label>
+        <div class="col-md-3">
+          <input type="text" ng-model="basic.companyName" class="form-control" ng-disabled="customerApplyInfo.approveState == 'approving'" />
+        </div>
+        <div class="col-md-3 help-block-error" ng-show="basic.isValidating && !basic.companyName">
+          {{'INPUT_COMPANY_NAME' | translate}}
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-md-3">
+          <span class="required-star">*</span>{{'CUSTOMER_TYPE' | translate}}：
+        </label>
+        <div class="col-md-3">
+          <div yt-input-dropdown="basic.customerTypes" dropdown-selected="basic.customerType" dropdown-type="customer" dropdown-disabled="customerApplyInfo.approveState == 'approving' || typeChangeNotAllowed" />
+        </div>
+        <div class="col-md-3 help-block-error" ng-show="basic.isValidating && !basic.customerType">
+          {{'SELECT_CUSTOMER_TYPE' | translate}}
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-md-3">
+          <span class="required-star">*</span>{{'BELONGING_COUNTRY' | translate}}：
+        </label>
+        <div class="col-md-3">
+          <input type="text" disabled="disabled" ng-model="basic.country.i18nName"  ng-if="customerApplyInfo.approveState == 'approving'" class="form-control" />
+          <input type="hidden" ui-select2="countrySuggestOption" ng-model="basic.country" style="width:230px" ng-if="customerApplyInfo.approveState != 'approving'" />
+        </div>
+        <div class="col-md-3 help-block-error" ng-show="basic.isValidating && !basic.country">
+          {{'SELECT_BELONGING_COUNTRY' | translate}}
+        </div>
+      </div>
+      <div class="form-group" ng-if="basic.customerType != 'offline'">
+        <label class="control-label col-md-3">
+          <span class="required-star">*</span>{{'BELONGING_INDUSTRY' | translate}}：
+        </label>
+        <div class="col-md-3">
+          <div yt-input-dropdown="basic.industryTypes" dropdown-selected="basic.industry" dropdown-type="i18n" dropdown-disabled="customerApplyInfo.approveState == 'approving'" />
+        </div>
+        <div class="col-md-3 help-block-error" ng-show="basic.isValidating && !basic.industry.id">
+          {{'SELECT_BELONGING_INDUSTRY' | translate}}
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-md-3">
+          {{'BUSINESSLICENSE_NUMBER' | translate}}：
+        </label>
+        <div class="col-md-3">
+          <input class="form-control" type="text" ng-model="basic.businessLicense" ng-disabled="customerApplyInfo.approveState == 'approving'" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-md-3">
+          {{'REGTIME' | translate}}：
+        </label>
+        <div class="col-md-3">
+          <input type="text" class="form-control datepicker-readonly" ng-model="basic.registerTime" mode="1" datepicker-popup="dd-MM-yyyy" readonly="readonly" ng-disabled="customerApplyInfo.approveState == 'approving'" max="basic.maxDate" />
+        </div>
+        <!-- <div class="col-md-3 help-block-error" ng-show="basic.isValidating && !basic.registerTime">
+          {{'SELECT_REGTIME' | translate}}
+        </div> -->
+      </div>
+      <div class="form-group">
+        <label class="control-label col-md-3">
+          <span class="required-star">*</span>{{'COMPANY_URL' | translate}}：
+        </label>
+        <div class="col-md-3">
+          <input class="form-control" type="url" name="companyUrl" placeholder="e.g http://www.baidu.com" ng-model="basic.url" ng-disabled="customerApplyInfo.approveState == 'approving'">
+        </div>
+        <div class="col-md-6" ng-if="!basic.isValidating && formBasic.companyUrl.$invalid">
+          <p class="form-control-static txt-hint">{{'INPUT_COMPANY_URL' | translate}}</p>
+        </div>
+        <div class="col-md-3 help-block-error" ng-show="basic.isValidating && !basic.url">
+          {{'INPUT_COMPANY_URL' | translate}}
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-md-3">
+          <span class="required-star">*</span>{{'BUSINESS_TYPE' | translate}}：
+        </label>
+        <div class="col-md-3">
+          <label class="checkbox checkbox-inline" ng-repeat="role in basic.businessTypes">
+            <input type="checkbox" checklist-model="basic.businessTypesSelected" checklist-value="role" ng-disabled="customerApplyInfo.approveState == 'approving'"> {{ 'BUSSINESS_' + role | translate}}
+          </label>
+          <!-- <div yt-input-checkboxes="basic.businessTypes" checkboxes-selected="basic.businessTypesSelected" check-type="bussiness" checkboxes-disabled="customerApplyInfo.approveState == 'approving'"></div> -->
+        </div>
+        <div class="col-md-3 help-block-error" ng-show="basic.isValidating && !basic.businessTypesSelected.length">
+          {{'SELECT_BUSINESS_TYPE' | translate}}
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-md-3">
+          <span class="required-star">*</span>{{'BELONGING_SALES' | translate}}：
+        </label>
+        <div class="col-md-3">
+          <input type="hidden" ui-select2="belongSalesSuggestOption" ng-model="basic.belongSales" style="width:230px" />
+        </div>
+        <div class="col-md-3 help-block-error" ng-show="basic.isValidating && !basic.belongSales">
+          {{'INPUT_BELONGING_SALES' | translate}}
+        </div>
+      </div>
+      <div class="form-group" ng-if="basic.belongSales">
+        <label class="control-label col-md-3">
+          {{'CUSTOMER_SALES_AUTHORITIES' | translate}}：
+        </label>
+        <div class="col-md-3">
+          <input class="form-control" type="text" ng-model="basic.belongManager.name" readonly="readonly" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-md-3">
+          {{'COMPANY_SIZE' | translate}}：
+        </label>
+        <div class="col-md-3">
+          <div yt-input-dropdown="basic.companySizeTypes" dropdown-selected="basic.companySize" dropdown-type="companySize" dropdown-disabled="customerApplyInfo.approveState == 'approving'" please-text="false" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-md-3">
+          {{'REGISTERED_CAPITAL' | translate}}：
+        </label>
+        <div class="col-md-1" style="width:10%">
+          <div yt-input-dropdown="basic.currencyTypes" dropdown-selected="basic.currencyType" dropdown-type="i18n" please-text="false" />
+        </div>
+        <div class="col-md-2" style="width:15%">
+          <input type="text" class="form-control" ng-model="basic.registerCapital" ng-pattern="/^[1-9]\d*$/" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-md-3">
+          {{'BUSINESS_SCOPE' | translate}}：
+        </label>
+        <div class="col-md-3">
+          <input class="form-control" type="text" ng-model="basic.businessScope" ng-disabled="customerApplyInfo.approveState == 'approving'" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-md-3">
+          <span class="required-star">*</span>{{'COMPANY_ADDRESS' | translate}}：
+        </label>
+        <div class="col-md-3">
+          <input class="form-control" type="text" ng-model="basic.address" />
+        </div>
+        <div class="col-md-3 help-block-error" ng-show="basic.isValidating && !basic.address">
+          {{'INPUT_COMPANY_ADDRESS' | translate}}
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-md-3">
+          {{'DESCRIPTION' | translate}}：
+        </label>
+        <div class="col-md-3">
+          <textarea class="form-control" ng-model="basic.description">
+
+          </textarea>
+        </div>
+      </div>
+      <div class="form-group" ng-if="basic.customerType == 'nondirect'">
+        <label class="control-label col-md-3">
+          <span class="required-star">*</span>{{'BELONGING_ANGENT_COMPANY' | translate}}：
+        </label>
+        <div class="col-md-3" ng-if="!basic.stateAddingAgent">
+          <input type="text" class="form-control" ng-model="basic.agentCompany.name" disabled="disabled" ng-if="customerApplyInfo.approveState == 'approving'" />
+          <input type="hidden" ui-select2="agentCompanySuggestOption" ng-model="basic.agentCompany" style="width:230px" ng-if="customerApplyInfo.approveState != 'approving'" />
+        </div>
+        <div class="pull-left mr5" ng-if="!basic.stateAddingAgent" ng-hide="customerApplyInfo.approveState == 'approving'">
+          <button class="btn btn-success" ng-click="basic.stateAddingAgent=true">{{'ADD_ANGENT_COMPANY' | translate}}</button>
+        </div>
+        <div class="col-md-5" ng-if="basic.stateAddingAgent">
+          <div class="input-group">
+            <input type="text" class="form-control" ng-model="newAgentCompanyName" yt-placeholder="{{'CUSTOMER_NEW_AGENT_COMPANY_NAME' | translate}}" />
+            <span class="input-group-btn">
+              <button class="btn btn-success" ng-click="addAgentCompany(newAgentCompanyName)">
+                <span class="glyphicon glyphicon-plus"></span>{{'CONFIRM' | translate}}
+              </button>
+              <button class="btn btn-default" ng-click="basic.stateAddingAgent=false">{{'CANCEL' | translate}}</button>
+            </span>
+          </div>
+        </div>
+        <div class="col-md-4 help-block-error" ng-show="basic.isValidating && !basic.agentCompany">
+          {{'SELECT_BELONGING_ANGENT_COMPANY' | translate}}
+        </div>
+        <div class="col-md-4 text-warning form-control-static text-danger" ng-if="basic.agentCompany && basic.agentCompany.companyStatus!=1 && !basic.stateAddingAgent">
+          <span class="glyphicon glyphicon-warning-sign"></span>
+          <span>{{'ANGENT_QUALIFICATION_HAS_NOT_CERTIFIED' | translate}}</span>
+        </div>
+      </div>
+      <div ng-if="basic.customerType == 'offline'">
+        <div class="form-group">
+          <label class="control-label col-md-3">
+            <span class="required-star">*</span>{{'AGENT_TYPE' | translate}}：
+          </label>
+          <div class="col-md-9">
+            <div yt-input-radio="basic.agentTypes" radio-selected="basic.agentType" radio-type="agent" radio-disabled="customerApplyInfo.approveState == 'approving'"></div>
+          </div>
+          <div class="col-md-3 help-block-error" ng-show="basic.isValidating && !basic.agentType">
+            {{'SELECT_AGENT_TYPE' | translate}}
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-md-3">
+            <span class="required-star">*</span>{{'AGENT_AREA' | translate}}：
+          </label>
+          <div class="col-md-9">
+            <div yt-input-radio="basic.agentRegionals" radio-selected="basic.agentRegional" select-change="agentRegionalChange()" radio-disabled="customerApplyInfo.approveState == 'approving' || basic.agentCountriesLoading"></div>
+          </div>
+          <div class="col-md-3 help-block-error" ng-show="basic.isValidating && !basic.agentRegional">
+            {{'SELECT_AGENT_AREA' | translate}}
+          </div>
+        </div>
+        <div class="form-group" ng-if="basic.agentRegional">
+          <label class="control-label col-md-3">
+            <span class="required-star">*</span>{{'AGENT_COUNTRY' | translate}}：
+          </label>
+          <div class="col-md-8" ng-if="basic.agentCountries.length && !basic.agentCountriesLoading">
+            <label class="checkbox checkbox-inline" ng-repeat="role in basic.agentCountries">
+              <input type="checkbox" checklist-model="basic.agentCountrySelected" checklist-value="role" ng-disabled="customerApplyInfo.approveState == 'approving'"> {{role.i18nName}}
+            </label>
+            <!-- <div yt-input-radio="basic.agentCountries" radio-selected="basic.agentCountry" select-change="agentCountryChange()"></div> -->
+            <!-- <div yt-input-checkboxes="basic.agentCountries" checkboxes-selected="basic.agentCountrySelected" check-type="i18n" checkboxes-disabled="customerApplyInfo.approveState == 'approving'"></div> -->
+          </div>
+          <div class="col-md-8" ng-if="basic.agentCountriesLoading">
+            <p class="form-control-static">{{'LOADING' | translate}}...</p>
+          </div>
+          <div class="col-md-3 help-block-error" ng-show="basic.isValidating && !basic.agentCountrySelected.length">
+            {{'SELECT_AGENT_COUNTRY' | translate}}
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="panel-body" ng-if="basic.state == 'detailViewing'">
+    <div class="row basic-info">
+      <dl class="dl-horizontal">
+        <dt>{{'CUSTOMER_COMPANY_NAME' | translate}}：</dt>
+        <dd>
+          {{basic.companyName}}
+
+          <span class="label label-info" ng-class="{'label-info': basic.companyStatus == 1, 'label-warning': basic.companyStatus == 0, 'label-danger': basic.companyStatus == 2}">{{'COMPANY_STATUS_' + basic.companyStatus | translate}}</span>
+          <!-- <span class="label label-warning" ng-if="basic.companyStatus == 0">{{'未认证' | translate}}</span>
+          <span class="label label-danger" ng-if="basic.companyStatus == 2">{{'已作废' | translate}}</span> -->
+        </dd>
+        <dt>{{'CUSTOMER_TYPE' | translate}}：</dt><dd>{{'CUSTOMER_' + basic.customerType | translate}}</dd>
+        <dt>{{'BELONGING_COUNTRY' | translate}}：</dt><dd>{{basic.country.i18nName}}</dd>
+        <div>
+          <dt>{{'BUSINESS_SCOPE' | translate}}：</dt><dd>{{basic.businessScope || '--'}}</dd>
+        </div>
+        <div ng-if="basic.customerType != 'offline'">
+          <dt>{{'BELONGING_INDUSTRY' | translate}}：</dt><dd>{{basic.industry.i18nName}}</dd>
+        </div>
+        <div>
+          <dt>{{'BUSINESSLICENSE_NUMBER' | translate}}：</dt><dd>{{basic.businessLicense || '--'}}</dd>
+        </div>
+        <dt>{{'COMPANY_SIZE' | translate}}：</dt><dd>{{'COMPANYSIZE_' + basic.companySize | translate}}</dd>
+        <dt>{{'REGTIME' | translate}}：</dt>
+        <dd>
+          <span>{{basic.registerTime | date: 'dd-MM-yyyy'}}</span>
+          <span ng-if="!basic.registerTime">--</span>
+        </dd>
+        <div>
+          <dt>{{'REGISTERED_CAPITAL' | translate}}：</dt><dd>{{basic.currencyType.sign}}{{basic.registerCapital | number:2}}<span ng-if="!(basic.registerCapital && basic.currencyType.sign)">--</span></dd>
+        </div>
+        <dt>{{'COMPANY_ADDRESS' | translate}}：</dt><dd>{{basic.address}}</dd>
+        <dt>{{'COMPANY_URL' | translate}}：</dt><dd><a ng-href="{{basic.url}}" target="_blank">{{basic.url}}</a></dd>
+        <dt>{{'BUSINESS_TYPE' | translate}}：</dt><dd><span ng-repeat="item in basic.businessTypesSelected"><span ng-if="$index">、</span>{{'BUSINESS_TYPE_' + item | translate}}</span></dd>
+        <div>
+          <dt>{{'DESCRIPTION' | translate}}：</dt><dd>{{basic.description}}<span ng-if="!basic.description">--</span></dd>
+        </div>
+        <div>
+          <dt>{{'BELONGING_SALES' | translate}}：</dt><dd>{{basic.belongSales.name || '--'}}</dd>
+          <dt>{{'CUSTOMER_SALES_AUTHORITIES' | translate}}：</dt><dd>{{basic.belongManager.name || basic.belongManager.realname || '--'}}</dd>
+        </div>
+        <div ng-if="basic.customerType == 'nondirect'">
+          <dt>{{'BELONGING_ANGENT_COMPANY' | translate}}：</dt><dd>{{basic.agentCompany.name}}</dd>
+        </div>
+        <div ng-if="basic.customerType == 'offline'">
+          <dt>{{'AGENT_TYPE' | translate}}：</dt><dd>{{'AGENT_' + basic.agentType | translate}}</dd>
+          <dt>{{'AGENT_AREA' | translate}}：</dt><dd>{{basic.agentRegionalShow.i18nName}}</dd>
+          <dt>{{'AGENT_COUNTRY' | translate}}：</dt><dd><span ng-repeat="item in basic.agentCountrySelected"><span ng-if="$index">、</span>{{item.i18nName}}</span></dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+  <div class="panel-footer" ng-if="basic.state == 'detailEditing'">
+    <a  class="btn btn-primary" ng-click="btnSave()">{{'SAVE' | translate}}</a>
+    <a  class="btn btn-default" ng-click="btnCancel()">{{'CANCEL' | translate}}</a>
+  </div>
+</div>

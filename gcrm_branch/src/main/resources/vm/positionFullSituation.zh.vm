@@ -1,0 +1,41 @@
+<style>
+.body{font-size:14px;}
+.important{font-weight:bold;}
+	table { border-collapse: collapse; border-spacing: 0; font-size:12px; }
+    th, td { border: 1px solid #000; padding: 10px; }
+    td { text-align: left; overflow: hidden; text-overflow: ellipsis; max-width: 80px;}
+    ul { list-style-type: none; padding: 0; margin: 0;}
+}
+</style>
+<div class="body">
+</br>
+	本周各站点满载率情况，如下：</br>
+  </br>
+
+  </br>
+<TABLE  style="min-width: 500px;">
+    <thead>
+      <tr>
+        <th style="min-width: 80px;">时间</th>
+        <th style="min-width: 80px;">平台</th>
+        <th style="min-width: 60px;">站点</th>
+        <th style="min-width: 80px;">频道</th>
+        <th style="min-width: 60px;">所有广告位置数量</th>
+        <th style="min-width: 60px;">已售出广告位置数量</th>
+        <th style="min-width: 80px;">满载率</th>
+      </tr>
+    </thead>
+     <tbody>
+#foreach ($element in $voList) 
+<TR>
+<TD >$element.date</TD>
+<TD  style="min-width: 80px;">#if($element.platName)$element.platName #end</TD>
+<TD style="min-width: 80px;">#if($element.siteName)$element.siteName #end</TD>
+<TD>#if($element.channelName)$element.channelName #end</TD>
+<TD>$element.salesAmount</TD>
+<TD style="style="min-width: 80px;" word-wrap: break-word; word-break: break-all">
+$element.soldAmount
+</TD>
+<TD style="min-width: 80px;">$element.ratio  %</TD>
+</TR> #end </TR></tbody></TABLE>
+</div>

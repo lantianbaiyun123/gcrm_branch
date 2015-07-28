@@ -1,0 +1,31 @@
+/*customerList*/
+.customer-list .sub-row .customer-type label { padding-right: 5px; }
+.customer-list .sub-row .customer-type .input-container { margin-left: -1px; }
+.customer-list .table-list .text-disabled { color: #bbb; }
+/*customerList END*/
+.contacts-table input[type="checkbox"] { margin-top: 9px; width: 100%; height: 16px; }
+body .tooltip {z-index: 9999;}
+/*customerList END*/
+
+/*customerApproval*/
+.customer-approval .dl-horizontal { font-size: 12px; }
+.customer-approval .dl-horizontal dt,
+.customer-approval .dl-horizontal dd { line-height: 32px; }
+.customer-approval .dl-horizontal dt { width: 190px; }
+.customer-approval .dl-horizontal dd { margin-left: 200px; }
+.customer-approval .dl-horizontal dd .label { font-size: 90%; }
+.customer-approval .table-contact-wrap { padding: 0 15px; }
+.customer-approval .table-contact-wrap .table td { min-width: 45px; }
+.customer-approval .mr13 { margin-right: 13px; }
+.customer-approval .table-resources thead tr th { border-bottom: 1px solid #dddddd; color: #ccc; }
+.customer-approval .table-resources tbody tr td { padding: 5px 8px; }
+/*customerApproval END*/
+
+.customer-attachment .tr-attachment{line-height: 34px;text-align: center;}
+.customer-detail .nav-tabs{background-color: transparent; padding-top: 0;}
+.table > tbody > tr > td.contact-td{padding-top: 12px;}
+.customer-adsolution-list .ad-solution-list{padding-left: 0;padding-right: 0;}
+.customer-adsolution-list .ad-solution-list > .panel{border-radius: 0;
+border-top: none;}
+
+.en-US .customer-opportunity label.col-md-2{width: 25%;}

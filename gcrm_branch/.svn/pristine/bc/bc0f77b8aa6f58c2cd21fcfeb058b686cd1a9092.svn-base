@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" type="text/css" href="/gcrm/resources/lib/bootstrap/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="/gcrm/resources/lib/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="/gcrm/resources/lib/bootstrap/css/bootstrap-extend.css">
+	<style type="text/css">
+		body{ background: #fff!important}
+	</style>
+	<script type="text/javascript" src="/gcrm/resources/lib/js/jquery.js"></script>
+	<script type="text/javascript" src="/gcrm/resources/lib/jqueryValidation/jquery.validate.js"></script>
+	<script type="text/javascript" src="/gcrm/resources/lib/jqueryValidation/additional-methods.js"></script>
+	<script type="text/javascript">
+	jQuery.extend(jQuery.validator.messages, {
+	  	required: "必选字段",
+	  	remote: "请修正该字段",
+	  	email: "请输入正确格式的电子邮件",
+	  	url: "请输入合法的网址",
+	  	date: "请输入合法的日期",
+	  	dateISO: "请输入合法的日期 (ISO).",
+	  	number: "请输入合法的数字",
+	  	digits: "只能输入整数",
+	  	creditcard: "请输入合法的信用卡号",
+	  	equalTo: "请再次输入相同的值",
+	  	accept: "请输入拥有合法后缀名的字符串",
+	  	maxlength: jQuery.validator.format("请输入一个 长度最多是 {0} 的字符串"),
+	  	minlength: jQuery.validator.format("请输入一个 长度最少是 {0} 的字符串"),
+	  	rangelength: jQuery.validator.format("请输入 一个长度介于 {0} 和 {1} 之间的字符串"),
+	  	range: jQuery.validator.format("请输入一个介于 {0} 和 {1} 之间的值"),
+	  	max: jQuery.validator.format("请输入一个最大为{0} 的值"),
+	  	min: jQuery.validator.format("请输入一个最小为{0} 的值")
+	});
+	</script>
+</head>
+<body>
+	<div class="container">
+	  	
+		<form action="">
+			<div class="form-group clearfix"><!--名字-->
+			    <label class="control-label col-md-1"><span class="txt-impt">*</span>名字：</label>
+			    <div class="col-md-3">
+			        <input type="text" name="myName" class="form-control" />
+			    </div>
+			    
+			</div>
+			
+			<div class="form-group clearfix"><!--邮箱-->
+			    <label class="control-label col-md-1"><span class="txt-impt">*</span>邮箱：</label>
+			    <div class="col-md-3">
+			        <input type="text" name="email" class="form-control" />
+			    </div>
+			    <div class="col-md-3" id="emailMessages"></div>
+			</div>
+
+			<div class="form-group clearfix"><!--下拉菜单-->
+			    <div class="col-md-3">
+			    	<select name="country" id="country" >
+                        <option value="-1">国籍</option>
+                        <option value="0">中国</option>
+                        <option value="1">美国</option>
+                        <option value="2">法国</option>
+                	</select>
+			    </div>
+			    
+			</div>
+
+			<div class="form-group clearfix"><!--年龄-->
+			    <label class="control-label col-md-1"><span class="txt-impt">*</span>年龄：</label>
+			    <div class="col-md-3">	
+			        <input type="text" name="age" id="age" class="form-control"/>
+			    </div>
+			    
+			</div>
+
+			<div class="form-group clearfix">
+			    <label class="control-label col-md-1"><span class="txt-impt">*</span>密码：</label>
+			    <div class="col-md-3">
+			        <input type="password" name="password" id="password" class="form-control"/>
+			    </div>
+			    
+			</div>
+
+			<div class="form-group clearfix">
+			    <label class="control-label col-md-1"><span class="txt-impt">*</span>确认密码：</label>
+			    <div class="col-md-3">
+			        <input type="password" name="confirm" id="confirm" class="form-control" />
+			    </div>
+			    
+			</div>
+
+			<div class="form-group clearfix"><!--手机-->
+			    <label class="control-label col-md-1"><span class="txt-impt">*</span>手机：</label>
+			    <div class="col-md-3">	
+			        <input type="text" name="phone" id="phone" class="form-control"/> 
+			    </div>
+			    
+			</div>
+			 
+			<div class="form-group clearfix">
+				<div class="col-md-1">
+					<label for="" class="radio-inline">
+						<input type="radio" value="0" name="sex" />男
+					</label>
+				</div>
+				<div class="col-md-1">
+					<label for="" class="radio-inline">
+						<input type="radio" value="0" name="sex" />女
+					</label>
+				</div>
+			</div>
+			
+			<div class="form-group clearfix">
+			    <label class="control-label col-md-1">业务类型：</label>
+			    <div class="col-md-2">
+			        <label class="checkbox checkbox-inline" style="margin:0">
+			            <input id="agentType" type="checkbox" name="agentType" value="0">销售
+			        </label>
+			        <label class="checkbox checkbox-inline">
+			            <input id="realization" type="checkbox" name="realization" value="1">变现
+			        </label>
+			    </div>  
+			</div>
+
+		    <div class="btn-group">
+                    <button type="submit" class="btn btn-primary formBtn">Send</button>
+                    <button type="reset" class="btn">Reset</button>
+            </div>
+			
+		</form>
+	</div>
+</body>
+</html>
+<script type="text/javascript">
+
+	jQuery.validator.setDefaults({
+	  errorClass: "txt-impt",
+	  errorElement: "div"
+	})
+	jQuery.validator.addMethod("regex",function(value, element, params) { //扩展方法示例 　　　　　　　　　　　　　　　　　　　
+		var exp = new RegExp(params);
+		return exp.test(value); 
+	},"输入格式有误"); 
+
+	$("#country").change(function(){
+		var elVal=$(this).find("option:selected").val();
+		if(elVal==1){
+			$("#agentType,#realization").rules("remove");
+			reDiv=$("#agentType").parents(".form-group").find("div.txt-impt");
+			reDiv.hide();
+		}else{
+			if(typeof reDiv!="undefined"){
+				$("#agentType").rules("add",{required:true});
+				reDiv.show();
+			}
+		}
+	})
+
+	$(function(){
+
+			$("form").validate({
+	        rules: {
+			    myName:"required",//通过 元素name值选择对应的规则
+		   		email: {
+		   			required:true,
+		   			email:true     
+		   		},
+		   		country:"required",
+		   		age: {
+		   			required:true,
+		   			digits:true,    //digits验证规则 必须为整数
+		   			max: 100,       //设置最大值
+		   			min: 5          //最小值
+		   		},
+		   		sex:"required",
+		   		phone: {
+		   			required:true,
+		   			regex:/^(1(([35][0-9])|(47)|[8][01236789]))\d{8}$/
+		   		},
+		   		agentType:"required"
+		   	},
+		   	messages:{    //重新定义提示信息
+				myName:"Name不能为空",
+				email:{
+					required:"E-mail不能为空",
+					email:"E-mail地址格式不正确"
+				},
+				age:{
+					digits:"请输入正确的年龄",
+				}
+			},
+			errorPlacement: function(error, element) {
+				if(element.parents('.form-group').find('div.help-block').length>0){
+					return false;
+				}else{
+					if ( element.is(":radio")||element.is(":checkbox")){
+						error.appendTo( element.parents('.form-group'));
+					}else{
+						error.insertAfter(element.parent()); 
+					}
+				}
+			}
+		})
+	})
+	
+	$('.addElement').click(function(){
+		var appendElement=$('<input type="text" name="wo"/>');  //动态添加元素可以绑定验证，html结构需要含有form-group
+		$('form').append(appendElement);
+	})
+	
+	
+		
+
+	
+
+</script>

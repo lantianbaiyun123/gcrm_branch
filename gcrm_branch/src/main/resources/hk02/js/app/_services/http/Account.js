@@ -1,0 +1,1 @@
+define(["app"],function(t){t.registerFactory("Account",["$http","APP_CONTEXT",function(t,e){return{get:function(n){return t({method:"get",url:e+"adbaseinfo/accountSuggest",params:n})},suggestUser:function(n){return t({method:"get",url:e+"publish/suggestUser",params:n})}}}])});

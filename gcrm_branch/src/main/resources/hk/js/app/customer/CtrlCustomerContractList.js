@@ -1,0 +1,1 @@
+define(["app"],function(t){t.registerController("CtrlCustomerContractList",["$scope","$window",function(t,n){t.navToContractDetail=function(t){n.open(t.detailUrl)}}])});

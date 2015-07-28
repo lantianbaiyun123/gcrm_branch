@@ -1,0 +1,29 @@
+<style>
+.body{font-size:14px;}
+.important{font-weight:bold;}
+</style>
+<div class="body">
+	${operator}：</br>
+	${submitTer}在${createTime}The benchmark price information submitted is approved
+</br>
+	type：${type}</br>
+	platformName：${platformName} </br>
+	PriceType：${PriceType}</br>
+	ValidDate：${ValidDate}</br>
+	PriceMessage：${PriceMessage}</br>	
+	siteName(The area of agency)：${siteName}</br>	
+	benchmark price：</br>
+	#if(${PriceType}=="广告单价")
+	CPC：${cpc}</br>
+	CPT：${cpt}</br>
+	CPM：${cpm}</br>
+	CPA：${cpa}</br>
+	${cps1} #end</br>
+	#if(${PriceType}=="分成")
+	RatioCustomer：${RatioCustomer}% 	RatioMine：${RatioMine}%  RatioThird: ${RatioThird}%	#end</br>
+	#if(${PriceType}=="返点")
+	RatioRebate：${RatioRebate}%#end</br>
+	Proof Materials:${url}</br>
+	<a href=${quoUrl}>benchmark content</a> 
+	
+</div>

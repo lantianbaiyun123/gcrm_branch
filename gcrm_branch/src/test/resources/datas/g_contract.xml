@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+<g_customer id="707" customer_number="251383554" company_name="测试客户" company_size="3" registration_time="2014-03-01 00:00:00" 
+ registered_capital="80000" currency_type="1" address="西二旗"  url="http://www.baidu.com" description="desc null" business_type="0"
+ business_scope="game" business_license="代理直客" country="24" belongs_sales="11" belongs_manager="1" customer_type="1"
+ approval_status="3" company_status="0" agenct_type="1" agenct_regional="1" agenct_country="11" industry="2" agenct_company="120" create_time="2014-03-13 14:42:20"
+ create_operator="1" last_update_time="2014-03-13 14:45:07" last_update_operator="1"/>
+
+<g_contact_person id="12" customer_number="251383554" name="小白" gender="1" position_name="tester" superiors_position="test manager" 
+ department="相关部门" mobile="12309876910" telephone="010-12345678" email="test@test.com" is_business_entity="0"
+  is_decision_maker="1" create_time="2014-03-04 20:13:38" create_operator="1" last_update_time="2014-03-04 20:13:38"
+   last_update_operator="1"/>
+   
+   <g_contact_person id="13" customer_number="251383554" name="小白2" gender="1" position_name="tester" superiors_position="test manager" 
+ department="相关部门" mobile="12309876910" telephone="010-12345678" email="test@test.com" is_business_entity="0"
+  is_decision_maker="1" create_time="2014-03-04 20:13:38" create_operator="1" last_update_time="2014-03-04 20:13:38"
+   last_update_operator="1"/>
+   
+   <g_attachment id="1" customer_number="251383554" upload_file_name="/34deee5d-3a94-4033-a2e1-31bed709d900" 
+    type="0" name="QQ截图20131230105651.gif" url="http://bcs-sandbox.baidu.com/gcm-storage%2F34deee5d-3a94-4033-a2e1-31bed709d900?sign=MBO%3AcNDCkbD8viASpw7OhpzgGkexgrTvMO0PQk%3AE94uT6AweXfuFYmCae6OisUGomY%3D"/>
+   
+   <g_advertise_solution id="21" customer_number="251383554" contract_number="123132" 
+   operator="1" old_solution_id="11" approval_status="0" type="0" budget="12.0" currency_type="1"
+    start_time="2014-03-04 20:13:38" end_time="2014-03-04 20:13:38" locked="1" number="17006893" 
+    task_info="123" create_time="2014-03-04 20:13:38" 
+    create_operator="1" last_update_time="2014-03-04 20:13:38" last_update_operator="1"/>
+    
+    <g_advertise_solution_content id="21" advertise_solution_id="21" advertisers="测试客户" 
+    description="反反复复" approval_status="approved" site_id="3" product_id="3" channel_id="1" area_id="2"
+     position_id="12" position_guide_url="132" period_description="2014-04-03;2014-04-05,2014-04-10;"
+     insert_period_description="123" total_days="8" allow_insert="1" material_embed_code="1" material_embed_code_content="1212"
+     material_title="453" material_url="123" allow_insert_description="123" create_time="2014-03-04 20:13:38" 
+       create_operator="1" last_update_time="2014-03-04 20:13:38" last_update_operator="1" schedule_id="123" 
+     number="17006893-02" old_content_id="123" task_info="123" content_type="create" />
+   
+   <g_advertise_quotation id="123" advertise_solution_content_id="21" price_type="0" billing_model_id="1"
+    currency_type="1" publish_price="50" customer_quote="46" traffic_amount="1000" click_amount="1000" discount="0.92" 
+    budget="90000" total_price="92000" create_time="2014-03-04 20:13:38" 
+       create_operator="1" last_update_time="2014-03-04 20:13:38" last_update_operator="1" />
+
+<g_quotation id="1" advertising_platform_id="2" site_id="6" billing_model_id="2" ratio_mine="0.21" ratio_third="0.78" ratio_customer="0.01" price_type="0" industry_type="1" quotation_main_id="1"/>
+
+<g_quotation_main id="1" advertising_platform_id="2" site_id="6" last_update_time="2014-04-04 20:13:38" status="1"/>
+</dataset>

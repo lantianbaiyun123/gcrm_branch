@@ -1,0 +1,38 @@
+package com.baidu.gcrm.stock.dao;
+
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+
+import com.baidu.gcrm.stock.model.Stock;
+
+public interface StockRepository extends JpaRepository<Stock, Long>, StockRepositoryCustom {
+
+    @Query("select pd, s, p.salesAmount from Stock s, PositionDate pd, Position p where pd.positionId = p.id"
+            + " and s.positionDateId = pd.id and p.status = 1 and pd.date >= ?1 and s.billingModelId = ?2"
+            + " and pd.positionId in(?3)")
+    List<Object[]> findStocks(Date fromDate, Long billingModelId, Collection<Long> positionIds);
+	
+    @Modifying(clearAutomatically = true)
+    @Query("update Stock set occupiedStock = ?1 where id = ?2 and occupiedStock = ?3")
+    int updateOccupiedStock(Long occupiedStock, Long id, Long oldOccupiedStock);
+	
+	@Modifying(clearAutomatically = true)
+    @Query("update Stock set occupiedStock = ?1,realOccupiedStock = ?2 where id = ?3 and occupiedStock = ?4")
+    int updateOccupiedStock(Long occupiedStock, Long realOccupiedStock, Long id, Long oldOccupiedStock);
+    
+	List<Stock> findByPositionDateIdIn(Collection<Long> positionDateIds);
+	
+    List<Stock> findByPositionDateIdAndBillingModelId(Long positionDateId, Long billingModelId);
+    
+    List<Stock> findByPositionDateIdInAndBillingModelId(Collection<Long> positionDateIds, Long billingModelId);
+    
+    @Query("select pd, s, p.salesAmount from Stock s, PositionDate pd, Position p where pd.positionId = p.id"
+            + " and s.positionDateId = pd.id and p.status = 1 and pd.date >= ?1 and weekday(pd.date) = ?2"
+            + " and s.billingModelId = ?3 and pd.positionId in(?4)")
+    List<Object[]> findStocksOfWeekday(Date fromDate, int weekday, Long billingModelId, Collection<Long> positionIds);
+}

@@ -1,0 +1,22 @@
+{
+  "code": 200,
+  "data": [
+    {
+      "display": true,
+      "moduleType": "unprocess"
+    },
+    {
+      "display": true,
+      "moduleType": "submit"
+    },
+    {
+      "display": true,
+      "moduleType": "operation"
+    },
+    {
+      "display": true,
+      "moduleType": "moduleCount"
+    }
+  ],
+  "message": "OK"
+}

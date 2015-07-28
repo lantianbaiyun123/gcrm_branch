@@ -1,0 +1,55 @@
+{
+    "code": 200,
+    "data": [
+        {
+            "adSolutionContentId":400,
+            "adSolutionContentNumber":400,
+            "adSolutionContentName":"test",
+            "insertedAdSolutionContent":[
+                {
+                    "id":100,
+                    "insertPeriod":"2014-10-10",
+                    "advertiser":"google",
+                    "approvalRecordId": "123124",
+                    "approvalRecordNumber": "123124222-12",
+                    "insertedAdsolutionContentId":2000,
+                    "allowInsert":1
+                },
+                {
+                    "id":200,
+                    "insertPeriod":"2014-10-10",
+                    "advertiser":"google",
+                    "approvalRecordId": "12ad34",
+                    "approvalRecordNumber": "123124222-12",
+                    "insertedAdsolutionContentId":2010,
+                    "allowInsert":0
+                }
+            ]
+        },
+        {
+            "adSolutionContentId":500,
+            "adSolutionContentName":"test",
+            "insertedAdSolutionContent":[
+                {
+                    "id":300,
+                    "insertPeriod":"2014-10-10",
+                    "advertiser":"google",
+                    "approvalRecordId": "1234564",
+                    "approvalRecordNumber": "123124222-12",
+                    "insertedAdsolutionContentId":2020,
+                    "businessAllow":1
+                },
+                {
+                    "id":400,
+                    "insertPeriod":"2014-10-10",
+                    "advertiser":"google",
+                    "approvalRecordId": "1266334",
+                    "approvalRecordNumber": "123124222-12",
+                    "insertedAdsolutionContentId":2030,
+                    "businessAllow":1
+                }
+            ]
+        }
+    ],
+    "message": "OK"
+}

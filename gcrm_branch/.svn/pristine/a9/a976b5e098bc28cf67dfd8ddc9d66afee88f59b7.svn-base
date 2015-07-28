@@ -1,0 +1,73 @@
+<div class="container notice-list">
+  <div class="panel panel-default gcrm-panel">
+    <div class="panel-top-heading">
+      <h1>
+        <span>{{'PAGE_NOTICE_MGMT' | translate}}</span>
+        <span class="pull-right">
+          <a href="#/notice" class="btn btn-success">{{'NOTICE_NEW' | translate}}</a>
+        </span>
+      </h1>
+    </div>
+
+    <div class="panel-body gcrm-list">
+      <table class="table table-list table-hover">
+        <thead>
+          <tr>
+            <th>{{'TITLE' | translate}}</th>
+            <th>{{'CREATER' | translate}}</th>
+            <th>{{'NOTICE_DELIVERY_SCOPE' | translate}}</th>
+            <th>{{'NOTICE_DELIVERY_RECEIVER' | translate}}</th>
+            <th>{{'STATUS' | translate}}</th>
+            <th>{{'SEND_TIME' | translate}}</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="notice in noticeList">
+            <td class="td-max mw250" title="{{notice.title}}">{{notice.title}}</td>
+            <td class="td-max" title="{{notice.createOperatorName}}">{{notice.createOperatorName}}</td>
+            <td>{{'NOTICE_RECEIVE_SCOPE_' + notice.receiveScope | translate}}</td>
+            <td class="td-max mw250" title="{{notice.receiverText}}">
+              <span>{{notice.receiverText}}</span>
+              <span ng-if="!notice.receiverText">{{'ALL' | translate}}</span>
+            </td>
+            <td>{{'NOTICE_STATUS_' + notice.status | translate}}</td>
+            <td>
+              <span>{{notice.sentTime | date:'yyyy-MM-dd HH:mm'}}</span>
+              <span ng-if="!notice.sentTime">--</span>
+            </td>
+            <td>
+              <a ng-href="#/notice?id={{notice.id}}">{{'VIEW' | translate}}</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="row page-row">
+        <div class="pull-left">
+          <div class="btn-group dropup">
+            <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+              <span>{{pager.pageSize || 10}}&nbsp;&nbsp;</span>
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+              <li ng-repeat="item in pager.pageSizeSlots">
+                <a ng-click="setPageSize(item)">{{item}}</a>
+              </li>
+            </ul>
+          </div>
+          <span class="page-row-text">
+            {{ 'PAGINATION_TOTAL' | translate }}
+            {{ pager.totalPages+" " || 0 }}
+            {{ 'PAGINATION_PAGES' | translate }},
+            {{ pager.totalCount+" " || 0 }}
+            {{ 'PAGINATION_ROWS' | translate }}
+          </span>
+        </div>
+        <div class="pull-right">
+          <pagination direction-links="true" total-items="pager.totalCount" page="pager.pageNumber" class="pagination-sm" items-per-page="pager.pageSize" previous-text="&laquo;" next-text="&raquo;" rotate="false" max-size="10"></pagination>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

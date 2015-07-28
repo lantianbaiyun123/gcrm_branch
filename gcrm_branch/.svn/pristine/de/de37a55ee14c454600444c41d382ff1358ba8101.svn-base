@@ -1,0 +1,37 @@
+package com.baidu.gcrm.stock.helper;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
+public class CalculatorHelper {
+    
+    /**
+     * 按照公式dividend / divisor * multiplier计算，结果向上取整
+     */
+    public static Long cal1(Long dividend, Long divisor, Long multiplier) {
+        if (divisor <= 0L || multiplier <= 0L) {
+            return 0L;
+        }
+        BigDecimal b1 = new BigDecimal(dividend.toString());
+        BigDecimal b2 = new BigDecimal(divisor.toString());
+        BigDecimal b3 = new BigDecimal(multiplier.toString());
+        BigDecimal divResult = b1.divide(b2, 4, BigDecimal.ROUND_HALF_UP);
+        BigDecimal mulResult = divResult.multiply(b3).setScale(0, RoundingMode.CEILING);
+        return new Double(mulResult.doubleValue()).longValue();
+    }
+    
+    /**
+     * 按照公式dividend * multiplier / divisor计算，结果向上取整
+     */
+    public static Long cal(Long dividend, Long divisor, Long multiplier) {
+        if (divisor <= 0L || multiplier <= 0L) {
+            return 0L;
+        }
+        BigDecimal b1 = new BigDecimal(dividend.toString());
+        BigDecimal b2 = new BigDecimal(divisor.toString());
+        BigDecimal b3 = new BigDecimal(multiplier.toString());
+        BigDecimal mulResult = b1.multiply(b3);
+        BigDecimal divResult = mulResult.divide(b2).setScale(0, RoundingMode.CEILING);
+        return new Double(divResult.doubleValue()).longValue();
+    }
+}

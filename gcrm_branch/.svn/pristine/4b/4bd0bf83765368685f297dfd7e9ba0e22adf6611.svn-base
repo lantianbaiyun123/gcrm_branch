@@ -1,0 +1,85 @@
+{
+    "code": 200,
+    "data": {
+        "applyState": 2,
+        "materialApply": {
+            "adSolutionContentId": 6592,
+            "applyState": "confirm",
+            "createOperator": 7426946,
+            "createTime": 1414723686000,
+            "id": 1310,
+            "materialTitle": "it likes shit",
+            "materialFileType": 0,
+            "materialList": [
+                {
+                    "adSolutionContentId": 6592,
+                    "createOperator": 7426946,
+                    "createTime": 1414723686000,
+                    "downloadFileName": "高福春.jpg",
+                    "downloadUrl": "http://localhost:8080/gcrm/material/downloadMaterialFile?materialFileId=634",
+                    "fileSize": 33,
+                    "fileUrl": "http://bcs-sandbox.baidu.com/gcm-storage%2Fa5e45764-be0b-4a16-9b06-6cb353af2c40?sign=MBO%3AcqKYLqQNYOdk%3AD%2BIo7O7sLoGC1EwusWcFgR8ZHhQ%3D",
+                    "id": 634,
+                    "materialApplyId": 1310,
+                    "materialFileType": "IMAGE",
+                    "picHeight": 598,
+                    "picWidth": 441,
+                    "updateOperator": 7426946,
+                    "updateTime": 1414723686000,
+                    "uploadFileName": "/a5e45764-be0b-4a16-9b06-6cb353af2c40"
+                }
+            ],
+            "materialMenuEnabled": false,
+            "materialMenuList": [
+                {
+<<<<<<< .mine
+                    "createOperator": 7426946,
+                    "createTime": 1414569896000,
+                    "material": {
+                        "downloadFileName": "高福春.jpg",
+                        "downloadUrl": "http://localhost:8080/gcrm/material/downloadMaterialFile?materialFileId=1",
+                        "fileSize": 33,
+                        "fileUrl": "http://bcs-sandbox.baidu.com/gcm-storage%2Fe5b02618-b2a0-4dcf-9f39-361e9b5f309a?sign=MBO%3AcqKYLqQNYOdk%3AWz4tmSeGwjCZAdsBq001x9pMSBg%3D",
+                        "picHeight": 598,
+                        "picWidth": 441,
+                        "uploadFileName": "/e5b02618-b2a0-4dcf-9f39-361e9b5f309a"
+                    },
+                    "id": 1,
+                    "materialApplyId": 1310,
+                    "materialTitle": "aaa",
+                    "materialUrl": "http://hetu.baidu.com/api/php/index",
+                    "updateOperator": 7426946,
+                    "updateTime": 1414569896000
+=======
+                    "adSolutionContentId": 6592, 
+                    "createOperator": 7426946, 
+                    "createTime": 1414723686000, 
+                    "id": 634, 
+                    "material": {
+                        "downloadFileName": "高福春.jpg", 
+                        "downloadUrl": "http://localhost:8080/gcrm/material/downloadMaterialFile?materialFileId=634", 
+                        "fileUrl": "http://bcs-sandbox.baidu.com/gcm-storage%2Fa5e45764-be0b-4a16-9b06-6cb353af2c40?sign=MBO%3AcqKYLqQNYOdk%3AD%2BIo7O7sLoGC1EwusWcFgR8ZHhQ%3D", 
+                        "fileSize": 33, 
+                        "picHeight": 598, 
+                        "picWidth": 441, 
+                        "uploadFileName": "/a5e45764-be0b-4a16-9b06-6cb353af2c40"
+                    }, 
+                    "materialApplyId": 1310, 
+                    "materialFileType": "IMAGE", 
+                    "updateOperator": 7426946, 
+                    "updateTime": 1414723686000
+>>>>>>> .r12420
+                }
+            ],
+            "materialUrl": "http://www.dajie.com/home",
+            "monitorUrl": "http://www.dajie.com/home",
+            "number": "00011905",
+            "periodDescription": "2014-06-23,2014-06-26;",
+            "taskInfo": "",
+            "updateOperator": 7426890,
+            "updateTime": 1414737445000
+        }
+    },
+    "errors": { },
+    "message": "OK"
+}

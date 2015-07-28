@@ -1,0 +1,51 @@
+{
+    "code": 200,
+    "message": "OK",
+    "data": {
+        "state": "warning",
+        "validateMsg": [
+            {
+                "type": "change",
+                "advertiser": "百度",
+                "originalNumber": 30,
+                "newNumber": 25
+            },
+            {
+                "type": "change",
+                "advertiser": "千度",
+                "originalNumber": 30,
+                "newNumber": 25
+            },
+            {
+                "type": "change",
+                "advertiser": "千度",
+                "originalNumber": 30,
+                "newNumber": 28
+            }
+        ],
+        "submitMsg": [
+            {
+                "adContentId": 123456,
+                "adContentNumber": "1234567890-11",
+                "advertiser":"百度",
+                "originalDays": "30",
+                "nowDays":10,
+                "originalOccupy": "2014-04-01,2014-04-04;2014-06-06,2014-06-07;2014-04-01,2014-04-08;2014-06-09,2014-06-10;",
+                "nowOccupy": "2014-04-01,2014-04-04;2014-06-06,2014-06-07;2014-04-01,2014-04-08;2014-06-09,2014-06-10;",
+                "originalInsertOccupy": "",
+                "nowInsertOccupy": ""
+            },
+            {
+                "adContentId": 133356,
+                "adContentNumber": "1234567890-22",
+                "advertiser":"千度",
+                "originalDays": "30",
+                "nowDays":30,
+                "originalOccupy": "2013-11-01 ~ 2013-11-30",
+                "nowOccupy": "2013-11-05 ~ 2013-12-04",
+                "originalInsertOccupy": "2013-11-24",
+                "nowInsertOccupy": "2013-11-24"
+            }
+        ]
+    }
+}

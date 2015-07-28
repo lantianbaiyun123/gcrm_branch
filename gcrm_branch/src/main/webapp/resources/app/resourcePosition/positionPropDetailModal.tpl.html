@@ -1,0 +1,29 @@
+<div class="modal-header">
+  <h4>
+    <!-- <span>{{'RESOURCE_POSITION_PROPERTY' | translate}}</span> -->
+    <span>{{modalDatas.positionStr}}</span>
+  </h4>
+</div>
+<div class="modal-body">
+  <dl class="dl-horizontal mb0">
+    <dt>{{'ROTATION_TYPE' | translate}}：</dt><dd>{{modalDatas.rotationType | PositionFilter:'rotationTypeInt' | translate }}</dd>
+    <dt>{{'POSITION_TYPE' | translate}}：</dt><dd>{{modalDatas.materialType | PositionFilter:'materialType' | translate }}</dd>
+    <div ng-if="modalDatas.materialType==0 || modalDatas.materialType==2">
+      <dt>{{'IMAGE_AREA_REQUIRED' | translate}}：</dt><dd>{{modalDatas.areaRequired}}<span ng-if="!modalDatas.areaRequired">{{'NOTHING_YET' | translate}}</span></dd>
+      <dt>{{'IMAGE_SIZE' | translate}}：</dt><dd>{{modalDatas.size}}<span ng-if="!modalDatas.size">{{'NOTHING_YET' | translate}}</span></dd>
+    </div>
+    <div ng-if="modalDatas.materialType==1 || modalDatas.materialType==2">
+      <dt>{{'TEXT_LINK_LENGTH' | translate}}：</dt><dd>{{modalDatas.textlinkLength}}<span ng-if="!modalDatas.textlinkLength">{{'NOTHING_YET' | translate}}</span></dd>
+    </div>
+    <dt>{{'SALES_AMOUNT' | translate}}：</dt><dd>{{modalDatas.salesAmount}}</dd>
+    <dt>{{'PV' | translate}}：</dt>
+    <dd>
+      PV&nbsp;<span class="label label-primary mr20">{{modalDatas.pv}}</span>
+      {{'RESOURCE_POSITION_MODAL_CLICK' | translate}}&nbsp;<span class="label label-success">{{modalDatas.click}}</span>
+    </dd>
+    <!-- <dt>标杆价：</dt><dd><span>$</span>22.99</dd> -->
+  </dl>
+</div>
+<div class="modal-footer mt0">
+    <button class="btn btn-default" ng-click="cancel()">{{'CLOSE' | translate}}</button>
+</div>

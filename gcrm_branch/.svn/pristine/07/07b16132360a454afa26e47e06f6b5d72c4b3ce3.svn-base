@@ -1,0 +1,344 @@
+{
+    "res": {
+        "resources/css/common.css": {
+            "uri": "/gcrm/resources/css/common.css",
+            "type": "css"
+        },
+        "resources/css/core.css": {
+            "uri": "/gcrm/resources/css/core.css",
+            "type": "css"
+        },
+        "resources/css/jquery-ui-1.10.3.custom.min.css": {
+            "uri": "/gcrm/resources/css/jquery-ui-1.10.3.custom.min.css",
+            "type": "css"
+        },
+        "resources/css/signin.css": {
+            "uri": "/gcrm/resources/css/signin.css",
+            "type": "css"
+        },
+        "resources/css/jquery-autocomplete-styles.css": {
+            "uri": "/gcrm/resources/css/jquery-autocomplete-styles.css",
+            "type": "css"
+        },
+        "resources/js/addMaterials.js": {
+            "uri": "/gcrm/resources/js/addMaterials.js",
+            "type": "js"
+        },
+        "resources/js/common.js": {
+            "uri": "/gcrm/resources/js/common.js",
+            "type": "js"
+        },
+        "resources/js/detail.js": {
+            "uri": "/gcrm/resources/js/detail.js",
+            "type": "js"
+        },
+        "resources/js/detailAgentQualification.js": {
+            "uri": "/gcrm/resources/js/detailAgentQualification.js",
+            "type": "js"
+        },
+        "resources/js/detailAgentQualificationEmpty.js": {
+            "uri": "/gcrm/resources/js/detailAgentQualificationEmpty.js",
+            "type": "js"
+        },
+        "resources/js/detailBaseInfo.js": {
+            "uri": "/gcrm/resources/js/detailBaseInfo.js",
+            "type": "js"
+        },
+        "resources/js/detailBusinessChance.js": {
+            "uri": "/gcrm/resources/js/detailBusinessChance.js",
+            "type": "js"
+        },
+        "resources/js/detailBusinessChanceEmpty.js": {
+            "uri": "/gcrm/resources/js/detailBusinessChanceEmpty.js",
+            "type": "js"
+        },
+        "resources/js/detailConcatInfo.js": {
+            "uri": "/gcrm/resources/js/detailConcatInfo.js",
+            "type": "js"
+        },
+        "resources/js/detailConcatInfoEmpty.js": {
+            "uri": "/gcrm/resources/js/detailConcatInfoEmpty.js",
+            "type": "js"
+        },
+        "resources/js/detailMaterials.js": {
+            "uri": "/gcrm/resources/js/detailMaterials.js",
+            "type": "js"
+        },
+        "resources/js/detailMaterialsEmpty.js": {
+            "uri": "/gcrm/resources/js/detailMaterialsEmpty.js",
+            "type": "js"
+        },
+        "resources/js/index.js": {
+            "uri": "/gcrm/resources/js/index.js",
+            "type": "js"
+        },
+        "resources/js/jquery-ui-1.10.3.custom.min.js": {
+            "uri": "/gcrm/resources/js/jquery-ui-1.10.3.custom.min.js",
+            "type": "js"
+        },
+        "resources/js/list.js": {
+            "uri": "/gcrm/resources/js/list.js",
+            "type": "js"
+        },
+        "resources/js/main.js": {
+            "uri": "/gcrm/resources/js/main.js",
+            "type": "js",
+            "deps": [
+                "jquery"
+            ]
+        },
+        "resources/js/newCustomer.js": {
+            "uri": "/gcrm/resources/js/newCustomer.js",
+            "type": "js"
+        },
+        "resources/js/newBusinessChance.js": {
+            "uri": "/gcrm/resources/js/newBusinessChance.js",
+            "type": "js"
+        },
+        "resources/js/newAgentQualification.js": {
+            "uri": "/gcrm/resources/js/newAgentQualification.js",
+            "type": "js"
+        },
+        "resources/js/newConcatInfo.js": {
+            "uri": "/gcrm/resources/js/newConcatInfo.js",
+            "type": "js"
+        },
+        "resources/js/newMaterials.js": {
+            "uri": "/gcrm/resources/js/newMaterials.js",
+            "type": "js"
+        },
+        "resources/js/pinyinEngine.full.js": {
+            "uri": "/gcrm/resources/js/pinyinEngine.full.js",
+            "type": "js"
+        },
+        "resources/lib/bootstrap/css/bootstrap-datetimepicker.min.css": {
+            "uri": "/gcrm/resources/lib/bootstrap/css/bootstrap-datetimepicker.min.css",
+            "type": "css"
+        },
+        "resources/lib/bootstrap/css/bootstrap-extend.css": {
+            "uri": "/gcrm/resources/lib/bootstrap/css/bootstrap-extend.css",
+            "type": "css"
+        },
+        "resources/lib/bootstrap/css/bootstrap-select.css": {
+            "uri": "/gcrm/resources/lib/bootstrap/css/bootstrap-select.css",
+            "type": "css"
+        },
+        "resources/lib/bootstrap/css/bootstrap.css": {
+            "uri": "/gcrm/resources/lib/bootstrap/css/bootstrap.css",
+            "type": "css"
+        },
+        "resources/lib/bootstrap/css/bootstrap.min.css": {
+            "uri": "/gcrm/resources/lib/bootstrap/css/bootstrap.min.css",
+            "type": "css"
+        },
+        "resources/lib/bootstrap/js/bootstrap-datetimepicker.min.js": {
+            "uri": "/gcrm/resources/lib/bootstrap/js/bootstrap-datetimepicker.min.js",
+            "type": "js"
+        },
+        "resources/lib/bootstrap/js/bootstrap-datetimepicker.zh-CN.js": {
+            "uri": "/gcrm/resources/lib/bootstrap/js/bootstrap-datetimepicker.zh-CN.js",
+            "type": "js"
+        },
+        "resources/lib/bootstrap/js/bootstrap-select.js": {
+            "uri": "/gcrm/resources/lib/bootstrap/js/bootstrap-select.js",
+            "type": "js"
+        },
+        "resources/lib/bootstrap/js/bootstrap.js": {
+            "uri": "/gcrm/resources/lib/bootstrap/js/bootstrap.js",
+            "type": "js"
+        },
+        "resources/lib/bootstrap/js/bootstrap.min.js": {
+            "uri": "/gcrm/resources/lib/bootstrap/js/bootstrap.min.js",
+            "type": "js"
+        },
+        "resources/lib/jqueryUpload/css/jquery.fileupload-ui.css": {
+            "uri": "/gcrm/resources/lib/jqueryUpload/css/jquery.fileupload-ui.css",
+            "type": "css"
+        },
+        "resources/lib/jqueryUpload/css/jquery.fileupload.css": {
+            "uri": "/gcrm/resources/lib/jqueryUpload/css/jquery.fileupload.css",
+            "type": "css"
+        },
+        "resources/lib/jqueryUpload/jquery.fileupload-ui.css": {
+            "uri": "/gcrm/resources/lib/jqueryUpload/jquery.fileupload-ui.css",
+            "type": "css"
+        },
+        "resources/lib/jqueryUpload/jquery.fileupload.css": {
+            "uri": "/gcrm/resources/lib/jqueryUpload/jquery.fileupload.css",
+            "type": "css"
+        },
+        "resources/lib/jqueryUpload/jquery.fileupload.js": {
+            "uri": "/gcrm/resources/lib/jqueryUpload/jquery.fileupload.js",
+            "type": "js",
+            "deps": [
+                "resources/lib/jqueryUpload/jquery.fileupload.css"
+            ]
+        },
+        "resources/lib/jqueryUpload/js/jquery.fileupload.js": {
+            "uri": "/gcrm/resources/lib/jqueryUpload/js/jquery.fileupload.js",
+            "type": "js"
+        },
+        "resources/lib/jqueryValidation/additional-methods.js": {
+            "uri": "/gcrm/resources/lib/jqueryValidation/additional-methods.js",
+            "type": "js"
+        },
+        "resources/lib/jqueryValidation/jquery.validate.js": {
+            "uri": "/gcrm/resources/lib/jqueryValidation/jquery.validate.js",
+            "type": "js"
+        },
+        "resources/lib/js/additional-methods.js": {
+            "uri": "/gcrm/resources/lib/js/additional-methods.js",
+            "type": "js"
+        },
+        "resources/lib/js/html5shiv.js": {
+            "uri": "/gcrm/resources/lib/js/html5shiv.js",
+            "type": "js"
+        },
+        "resources/lib/js/html5shiv.min.js": {
+            "uri": "/gcrm/resources/lib/js/html5shiv.min.js",
+            "type": "js"
+        },
+        "resources/lib/js/jquery-validate.js": {
+            "uri": "/gcrm/resources/lib/js/jquery-validate.js",
+            "type": "js"
+        },
+        "resources/lib/js/jquery-validate.min.js": {
+            "uri": "/gcrm/resources/lib/js/jquery-validate.min.js",
+            "type": "js"
+        },
+        "resources/lib/js/jquery.form.js": {
+            "uri": "/gcrm/resources/lib/js/jquery.form.js",
+            "type": "js"
+        },
+        "resources/lib/js/jquery.iframe-transport.js": {
+            "uri": "/gcrm/resources/lib/js/jquery.iframe-transport.js",
+            "type": "js"
+        },
+        "resources/lib/js/jquery.js": {
+            "uri": "/gcrm/resources/lib/js/jquery.js",
+            "type": "js"
+        },
+        "resources/lib/js/jquery.loadScript.js": {
+            "uri": "/gcrm/resources/lib/js/jquery.loadScript.js",
+            "type": "js"
+        },
+        "resources/lib/js/jquery.min.js": {
+            "uri": "/gcrm/resources/lib/js/jquery.min.js",
+            "type": "js"
+        },
+        "resources/lib/js/jquery.suggestion.js": {
+            "uri": "/gcrm/resources/lib/js/jquery.suggestion.js",
+            "type": "js"
+        },
+        "resources/lib/js/jquery.ui.widget.min.js": {
+            "uri": "/gcrm/resources/lib/js/jquery.ui.widget.min.js",
+            "type": "js"
+        },
+        "resources/lib/js/respond.min.js": {
+            "uri": "/gcrm/resources/lib/js/respond.min.js",
+            "type": "js"
+        },
+        "resources/lib/js/sea-debug.js": {
+            "uri": "/gcrm/resources/lib/js/sea-debug.js",
+            "type": "js"
+        },
+        "resources/lib/js/selectivizr.js": {
+            "uri": "/gcrm/resources/lib/js/selectivizr.js",
+            "type": "js"
+        },
+        "resources/lib/js/selectivizr.min.js": {
+            "uri": "/gcrm/resources/lib/js/selectivizr.min.js",
+            "type": "js"
+        },
+        "resources/js/validateCustomerDetail.js": {
+            "uri": "/gcrm/resources/js/validateCustomerDetail.js",
+            "type": "js"
+        },
+        "resources/js/customer-undone.js": {
+            "uri": "/gcrm/resources/js/customer-undone.js",
+            "type": "js"
+        },
+        "resources/js/quote/utils.js": {
+            "uri": "/gcrm/resources/js/quote/utils.js",
+            "type": "js"
+        },
+        "resources/lib/js/jquery.autocomplete.js": {
+            "uri": "/gcrm/resources/lib/js/jquery.autocomplete.js",
+            "type": "js"
+        },
+        "resources/lib/js/sea.js": {
+            "uri": "/gcrm/resources/lib/js/sea.js",
+            "type": "js"
+        },
+        "resources/js/ad/new.js": {
+            "uri": "/gcrm/resources/js/ad/new.js",
+            "type": "js"
+        },
+        "resources/js/ad/widget/adContent.js": {
+            "uri": "/gcrm/resources/js/ad/widget/adContent.js",
+            "type": "js"
+        },
+        "resources/js/ad/widget/baseInfo.js": {
+            "uri": "/gcrm/resources/js/ad/widget/baseInfo.js",
+            "type": "js"
+        },
+        "resources/lib/select2-3.4.5/select2.css": {
+            "uri": "/gcrm/resources/lib/select2-3.4.5/select2.css",
+            "type": "css"
+        },
+        "resources/css/ad/ad.css": {
+            "uri": "/gcrm/resources/css/ad/ad.css",
+            "type": "css"
+        },
+        "resources/lib/requirejs/require.js": {
+            "uri": "/gcrm/resources/lib/requirejs/require.js",
+            "type": "js"
+        },
+         "resources/js/app/app-init.js": {
+            "uri": "/gcrm/resources/js/app/app-init.js",
+            "type": "js"
+        },
+        "resources/js/app/app-templates.js": {
+            "uri": "/gcrm/resources/js/app/app-templates.js",
+            "type": "js"
+        },
+        "resources/js/app/app.js": {
+            "uri": "/gcrm/resources/js/app/app.js",
+            "type": "js"
+        },
+        "resources/js/app/main.js": {
+            "uri": "/gcrm/resources/js/app/main.js",
+            "type": "js"
+        },
+        "resources/js/app/routeDefs.js": {
+            "uri": "/gcrm/resources/js/app/routeDefs.js",
+            "type": "js"
+        },
+        "resources/lib/js/es5-shim.js": {
+            "uri": "/gcrm/resources/lib/js/es5-shim.js",
+            "type": "js"
+        },
+        "resources/lib/angular-loading-bar/loading-bar.css": {
+            "uri": "/gcrm/resources/lib/angular-loading-bar/loading-bar.css",
+            "type": "css"
+        },
+        "resources/css/approval/approvalMain.css": {
+            "uri": "/gcrm/resources/css/approval/approvalMain.css",
+            "type": "css"
+        },
+        "resources/css/task/task.css": {
+            "uri": "/gcrm/resources/css/task/task.css",
+            "type": "css"
+        },
+        "resources/css/schedule/scheduleMain.css": {
+            "uri": "/gcrm/resources/css/schedule/scheduleMain.css",
+            "type": "css"
+        },
+        "resources/js/app/app.css": {
+            "uri": "/gcrm/resources/js/app/app.css",
+            "type": "css"
+        }
+        
+    },
+    "pkg": {}
+}

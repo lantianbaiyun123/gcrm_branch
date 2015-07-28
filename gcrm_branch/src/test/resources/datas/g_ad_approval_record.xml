@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+<g_ad_approval_record id="1" ad_solution_id="1" task_id="1" activity_id="act1"  approval_status="1" approval_suggestion="ok,pass" create_time="2014-01-01 18:09:20" create_operator="1" />
+<g_ad_approval_insert_record id="1" approval_record_id="1" adsolution_content_id="122" inserted_adsolution_content_id="121" insert_period="2014-02-03" allow_insert="1" create_operator="1" create_time="2014-01-01 18:09:20"/>
+<g_advertise_solution_content id="121" description="广告内容1" />
+<g_advertise_solution_content id="122" description="广告内容2" />
+
+</dataset>

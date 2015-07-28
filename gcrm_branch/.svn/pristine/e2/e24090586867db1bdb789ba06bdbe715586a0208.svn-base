@@ -1,0 +1,43 @@
+package com.baidu.gcrm.ws.service.impl;
+
+import javax.jws.WebService;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.baidu.gcrm.ad.material.service.IMaterialManageService;
+import com.baidu.gcrm.ad.service.IAdvertiseSolutionService;
+import com.baidu.gcrm.common.Constants;
+import com.baidu.gcrm.common.exception.CRMWebServiceRuntimeException;
+import com.baidu.gcrm.common.log.LoggerHelper;
+import com.baidu.gcrm.ws.service.ICompleteADProcessService;
+
+@WebService(endpointInterface = "com.baidu.gcrm.ws.service.ICompleteADProcessService", targetNamespace = "http://gcrm.baidu.com")
+@Service("CompleteADProcessServiceImpl")
+public class CompleteADProcessServiceImpl implements ICompleteADProcessService {
+	@Autowired
+	private IAdvertiseSolutionService adService;
+	
+	@Override
+	public void completeProcess(String startUser, String adSolutionId) {
+		if (StringUtils.isEmpty(adSolutionId)) {
+			throw new IllegalArgumentException("广告方案id不能为空");
+		}
+		try {
+			int index = adSolutionId.indexOf(Constants.FOREIGN_KEY_SPLIT);
+			if (index != -1) {
+				String adContentId = adSolutionId.substring(index + 1);
+				adSolutionId = adSolutionId.substring(0, index);
+				adService.completeSingleContentApproveAndCreateSchedule(Long.valueOf(adSolutionId), Long.valueOf(adContentId), startUser);
+			} else {
+				adService.completeAdApproveAndCreateSchedule(Long.valueOf(adSolutionId), startUser);
+			}
+			
+		} catch (Exception e) {
+			String s = String.format("Complete ad plan process error, ad id: %s, start user: %s", adSolutionId, startUser);
+			LoggerHelper.err(getClass(), s, e);
+			throw new CRMWebServiceRuntimeException(e);
+		}
+	}
+}

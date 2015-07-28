@@ -1,0 +1,199 @@
+{
+  "code": 200,
+  "data": {
+    "agentCountry": [
+      {
+        "code": "TW",
+        "i18nName": "台湾",
+        "id": 4,
+        "name": "台湾地区"
+      }
+    ],
+    "industry": {
+      "code": "TW",
+      "i18nName": "互联网",
+      "id": 4,
+      "name": "台湾地区"
+    },
+    "agentRegional": {
+      "i18nName": "泰语区",
+      "id": 1,
+      "name": "泰语区"
+    },
+    "agentType": "exclusive",
+    "approvalStatus": "saving",
+    "attachments": [
+      {
+        "customerNumber": 803,
+        "delete": false,
+        "id": 66,
+        "name": "29039F50D16D706369414B2404071865.JPG",
+        "tempUrl": "/9a4d6a81-0394-40f5-80fa-1c3eb314085f",
+        "type": "agentcertificate",
+        "url": "http://bcs-sandbox.baidu.com/gcm-storage%2F9a4d6a81-0394-40f5-80fa-1c3eb314085f?sign=MBO%3AcNDCkbD8viASpw7OhpzgGkexgrTvMO0PQk%3AIOgwpeg%2BlEZigRgM5g%2BsYOekG8A%3D"
+      },
+      {
+        "customerNumber": 803,
+        "delete": false,
+        "id": 67,
+        "name": "41q-rseTojL.jpg",
+        "tempUrl": "/bfa95461-072a-4c09-b5cc-b9145174473f",
+        "type": "creditreference",
+        "url": "http://bcs-sandbox.baidu.com/gcm-storage%2Fbfa95461-072a-4c09-b5cc-b9145174473f?sign=MBO%3AcNDCkbD8viASpw7OhpzgGkexgrTvMO0PQk%3A4aMMdNT71Y16VxkEEOCug39i0sQ%3D"
+      }
+    ],
+    "belongSales": {
+      "customerNumber": 10000000,
+      "id": 4,
+      "name": "wujun",
+      "status": "ENABLE",
+      "type": "INNER",
+      "ucid": 10000000
+    },
+    "belongManager": {
+      "customerNumber": 10000000,
+      "id": 4,
+      "name": "wujun",
+      "status": "ENABLE",
+      "type": "INNER",
+      "ucid": 10000000
+    },
+    "companySize": "less_50",
+    "contacts": [
+      {
+        "createOperator": 1000,
+        "createTime": 1400220631000,
+        "gender": "male",
+        "customerNumber": 803,
+        "department": "麦哲伦食品部",
+        "email": "anhuan@baidu.com",
+        "id": 66,
+        "isDecisionMaker": "DISABLE",
+        "isLegalPerson": "ENABLE",
+        "mobile": "+86 186-6628-2708",
+        "name": "李晓丽",
+        "noNeedSave": false,
+        "positionName": "吃饭睡觉",
+        "superiorPosition": "肥安欢",
+        "telephone": "010-82826042",
+        "updateOperator": 1000,
+        "updateTime": 1400220631000
+      },
+      {
+        "createOperator": 1000,
+        "createTime": 1400220631000,
+        "customerNumber": 803,
+        "department": "大麦哲伦饮料部",
+        "email": "lixiaoli01@baidu.com",
+        "id": 67,
+        "isDecisionMaker": "ENABLE",
+        "isLegalPerson": "DISABLE",
+        "mobile": "186-6628-2708",
+        "name": "安欢",
+        "gender": "others",
+        "noNeedSave": false,
+        "positionName": "贡茶螺蛳粉",
+        "superiorPosition": "瘦安欢",
+        "telephone": "010-82826042",
+        "updateOperator": 1000,
+        "updateTime": 1400220631000
+      }
+    ],
+    "country": {
+      "code": "JO",
+      "i18nName": "约旦",
+      "id": 29,
+      "name": "约旦"
+    },
+    "currencyType": {
+      "i18nName": "美元",
+      "id": 1,
+      "name": "USD",
+      "radio": 0.1647,
+      "sign": "$"
+    },
+    "agentCompany": {
+      "address": "123",
+      "agentCountry": "4",
+      "agentRegional": 1,
+      "agentType": "exclusive",
+      "approvalStatus": 0,
+      "belongSales": 10000000,
+      "businessLicense": "1321312",
+      "businessScope": "123",
+      "businessType": "CASH,SALE",
+      "companyName": "12312",
+      "companySize": "less_50",
+      "country": 29,
+      "createOperator": 1000,
+      "createTime": 1400220631000,
+      "currencyType": 1,
+      "customerType": "offline",
+      "description": "123",
+      "id": 803,
+      "registerCapital": 123,
+      "registerTime": 1399996800000,
+      "updateOperator": 1000,
+      "updateTime": 1400220631000,
+      "url": "http://dsfsdf"
+    },
+    "customer": {
+      "address": "123",
+      "agentCountry": "4",
+      "agentRegional": 1,
+      "agentType": "exclusive",
+      "approvalStatus": 0,
+      "belongSales": 10000000,
+      "businessLicense": "1321312",
+      "businessScope": "123",
+      "businessType": "CASH,SALE",
+      "companyName": "12312",
+      "companySize": "less_50",
+      "country": 29,
+      "createOperator": 1000,
+      "createTime": 1400220631000,
+      "currencyType": 1,
+      "customerType": "offline",
+      "description": "这是一个公司blablablalbalballablablalablabl",
+      "id": 803,
+      "registerCapital": 123,
+      "registerTime": 1399996800000,
+      "updateOperator": 1000,
+      "updateTime": 1400220631000,
+      "url": "http://dsfsdf"
+    },
+    "customerType": "offline",
+    "qualification": {
+      "state": "addEditing",
+      "customerResources": [
+        {
+          "industry": "11",
+          "advertisersCompany": "1111、1234、1222",
+          "advertisersCompany1": "11",
+          "advertisersCompany2": "111",
+          "advertisersCompany3": "111"
+        },
+        {
+          "industry": "222",
+          "advertisersCompany": "1111、1234、1222",
+          "advertisersCompany1": "222",
+          "advertisersCompany2": "22",
+          "advertisersCompany3": "22"
+        },
+        {
+          "industry": "22",
+          "advertisersCompany": "1111、1234、1222",
+          "advertisersCompany1": "22",
+          "advertisersCompany2": "22",
+          "advertisersCompany3": "222"
+        }
+      ],
+      "partner": "1223、1222、sdfsdfd",
+      "parterTop1": "111",
+      "parterTop2": "111",
+      "parterTop3": "111",
+      "performanceHighlights": "22222"
+    }
+  },
+  "message": "OK"
+}

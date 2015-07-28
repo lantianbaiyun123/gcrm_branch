@@ -1,0 +1,20 @@
+define(['app'], function (app) {
+    app.registerFilter('AdSolutionStatusFilter', function () {
+        var status = {
+            saving: 'AD_SOLUTION_STATUS_saving',
+            refused: 'AD_SOLUTION_STATUS_refused',
+            approving: 'AD_SOLUTION_STATUS_approving',
+            approved: 'AD_SOLUTION_STATUS_approved',
+            unconfirmed: 'AD_SOLUTION_STATUS_unconfirmed',
+            confirmed: 'AD_SOLUTION_STATUS_confirmed',
+            effective: 'AD_SOLUTION_STATUS_effective',
+            cancel: 'AD_SOLUTION_STATUS_cancel'
+        };
+        return function ( input ) {
+            if( input && status[input] ) {
+                return status[ input ];
+            }
+            return '--';
+        };
+    });
+});

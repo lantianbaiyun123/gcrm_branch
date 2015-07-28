@@ -1,0 +1,105 @@
+<div class="panel gcrm-panel customer-opportunity">
+  <div class="panel-sub-heading">
+    <h2>
+      <span ng-if="opportunity.state == 'addEditing'">
+        <span class="black-block">&nbsp;</span>{{'BUSINESS_OPPORTUNITY' | translate}}</span>
+      <span class="pull-right" ng-if="(!OwnerOpers.btn_cust_detail_busiopp_mod || isOwner) && BtnIndex.btn_cust_detail_busiopp_mod && opportunity.state == 'detailViewing' && customerApplyInfo.companyStatus != 2">
+        <a class="btn btn-default" ng-click="btnEdit()">
+          {{'MODIFY' | translate}}
+        </a>
+      </span>
+    </h2>
+  </div>
+  <div class="panel-body" ng-if="opportunity.state != 'detailViewing'">
+    <form class="form-horizontal">
+      <div class="form-group">
+        <label class="control-label col-md-2">
+          {{'CUSTOMER_ONLINE_AD_BUDGET' | translate}}：
+        </label>
+        <div class="col-md-3 pl0 pr0">
+          <div class="col-md-5">
+            <div yt-input-dropdown="opportunity.currencyTypes" dropdown-selected="opportunity.currencyType" dropdown-type="i18n" please-text="false" />
+          </div>
+          <div class="col-md-7">
+            <input type="text" class="form-control" ng-model="opportunity.budget" ng-pattern="/^[1-9]\d*$/" />
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-md-2">
+          {{'CUSTOMER_BUDGET_LAUNCH_TIME' | translate}}：
+        </label>
+        <div class="col-md-3">
+          <input type="text" yt-placeholder="{{'CUSTOMER_BUDGET_LAUNCH_TIME_PLACEHOLDER' | translate}}" class="form-control" ng-model="opportunity.spendingTime" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-md-2">{{'CUSTOMER_ACCEPTABLE_PAYMENT_MODE' | translate}}：</label>
+        <div class="col-md-3">
+          <div yt-input-radio="opportunity.payTypes" radio-selected="opportunity.payment" radio-type="payType"></div>
+        </div>
+        <div class="col-md-2" ng-if="opportunity.payment == 'after'">
+          <div class="input-group">
+            <input type="text" class="form-control" yt-placeholder="{{'CUSTOMER_NEEDED_PAYMENT_CYCLE' | translate}}" ng-pattern="/^[1-9]\d*$/" ng-model="opportunity.paymentPeriod">
+            <span class="input-group-addon">{{'DAY_S' | translate}}</span>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-md-2">{{'CUSTOMER_EXPECT_CHARGE_MODE' | translate}}：</label>
+        <div class="col-md-5">
+          <label class="checkbox checkbox-inline" ng-repeat="role in opportunity.billingModels">
+            <input type="checkbox" checklist-model="opportunity.billingModelsSelected" checklist-value="role"> {{role}}
+          </label>
+          <!-- <div yt-input-checkboxes="opportunity.billingModels" checkboxes-selected="opportunity.billingModelsSelected" check-type="billingModel"></div> -->
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-md-2">{{'COOPERATION_BUSINESS_TYPE' | translate}}：</label>
+        <div class="col-md-4">
+          <label class="checkbox checkbox-inline" ng-repeat="role in opportunity.businessTypes">
+            <input type="checkbox" checklist-model="opportunity.businessTypesSelected" checklist-value="role"> {{'BUSSINESS_' + role | translate}}
+          </label>
+          <!-- <div yt-input-checkboxes="opportunity.businessTypes" checkboxes-selected="opportunity.businessTypesSelected" check-type="bussiness"></div> -->
+        </div>
+      </div>
+      <div class="form-group" ng-if="opportunity.platforms.length">
+        <label class="control-label col-md-2">{{'LAUNCH_PLATFORM' | translate}}：</label>
+        <div class="col-md-9">
+          <label class="checkbox checkbox-inline" ng-repeat="role in opportunity.platforms">
+            <input type="checkbox" checklist-model="opportunity.platformsSelected" checklist-value="role"> {{role.i18nName}}
+          </label>
+          <!-- <div yt-input-checkboxes="opportunity.platforms" checkboxes-selected="opportunity.platformsSelected" check-type="i18n"></div> -->
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-md-2">{{'OTHER_DESCRIPTION' | translate}}：</label>
+        <div class="col-md-5">
+          <textarea yt-placeholder="{{'OTHER_DESCRIPTION' | translate}}" cols="30" rows="3" class="form-control" ng-model="opportunity.description"></textarea>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="panel-body" ng-if="opportunity.state == 'detailViewing'">
+    <dl class="dl-horizontal">
+      <dt>{{'CUSTOMER_ONLINE_AD_BUDGET' | translate}}：</dt>
+      <dd><span>{{opportunity.currencyType.sign}}</span>{{opportunity.budget | number:2}}</dd>
+      <dt>{{'CUSTOMER_BUDGET_LAUNCH_TIME' | translate}}：</dt>
+      <dd>{{opportunity.spendingTime}}</dd>
+      <dt>{{'CUSTOMER_ACCEPTABLE_PAYMENT_MODE' | translate}}：</dt>
+      <dd><span ng-if="opportunity.payment">{{'PAYTYPE_' + opportunity.payment | translate}}</span></dd>
+      <dt>{{'CUSTOMER_NEEDED_PAYMENT_CYCLE' | translate}}：</dt>
+      <dd><span ng-if="opportunity.paymentPeriod">{{opportunity.paymentPeriod}}{{'DAY_S' | translate}}</span></dd>
+      <dt>{{'CUSTOMER_EXPECT_CHARGE_MODE' | translate}}：</dt><dd><span ng-repeat="item in opportunity.billingModelsSelected"><span ng-if="$index">、</span>{{item}}</span></dd>
+      <dt>{{'COOPERATION_BUSINESS_TYPE' | translate}}：</dt>
+      <dd><span ng-repeat="item in opportunity.businessTypesSelected"><span ng-if="$index">、</span>{{'BUSSINESS_' + item | translate}}</span></dd>
+      <dt>{{'LAUNCH_PLATFORM' | translate}}：</dt>
+      <dd><span ng-repeat="platform in opportunity.advertisingPlatforms"><span ng-if="$index">、</span>{{platform.i18nName}}</span></dd>
+      <dt>{{'OTHER_DESCRIPTION' | translate}}：</dt><dd>{{opportunity.description}}</dd>
+    </dl>
+  </div>
+  <div class="panel-footer" ng-if="opportunity.state == 'detailEditing'">
+    <a  class="btn btn-primary" ng-click="btnSave()">{{'SAVE' | translate}}</a>
+    <a  class="btn btn-default" ng-click="btnCancel()">{{'CANCEL' | translate}}</a>
+  </div>
+</div>

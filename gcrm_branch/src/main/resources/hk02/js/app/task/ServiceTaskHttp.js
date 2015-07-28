@@ -1,0 +1,1 @@
+define(["app"],function(p){p.registerFactory("TaskHttp",["$http","APP_CONTEXT",function(p,n){return{pubApplyApprovalInfo:function(t){return p({method:"get",url:n+"adapprovalinfo/viewOnlineApplyApproval",params:t})},pubApplyApprovalSubmit:function(t){return p({method:"post",url:n+"adcontent/applyOnline/approve",data:angular.toJson(t)})}}}])});

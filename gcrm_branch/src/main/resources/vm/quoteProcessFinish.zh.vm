@@ -1,0 +1,33 @@
+<style>
+.body{font-size:14px;}
+.important{font-weight:bold;}
+</style>
+<div class="body">
+	${operator}：</br>
+	${submitTer}在${createTime}提交的标杆价信息已审批通过</br>
+	业务类型：${type}</br>
+	投放平台：${platformName} </br>
+	价格种类：${PriceType}</br>
+	生效时间为：${ValidDate}</br>
+	定价说明：${PriceMessage}</br>	
+	投放站点（代理区域）：${siteName}</br>	
+	标杆价：</br>
+	#if(${PriceType}=="广告单价")
+	CPC：${cpc}</br>
+	CPT：${cpt}</br>
+	CPM：${cpm}</br>
+	CPA：${cpa}</br>
+	${cps1} #end</br>
+	#if(${PriceType}=="分成")
+	我方：${RatioCustomer}% 	客户方：${RatioMine}%  第三方: ${RatioThird}%	#end</br>
+	#if(${PriceType}=="返点")
+	返点：${RatioRebate}%#end</br>
+	举证材料:
+	#foreach ($element in $url) 
+	#foreach ($item in $element.entrySet()) 
+	<a href=$item.value>$item.key </a></br>
+	#end
+	#end
+	<a href=${quoUrl}>标杆价详情</a> 
+	
+</div>

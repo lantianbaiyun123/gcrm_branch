@@ -1,0 +1,20 @@
+<div class="modal-header">
+  <h4>{{'PUBLICATION_ADD_HANDLER' | translate}}</h4>
+</div>
+<div class="modal-body">
+  <form class="form-horizontal">
+    <div class="form-group">
+      <label class="control-label" ng-class="{'col-md-3': lang=='zh-CN', 'col-md-4': lang=='en-US'}">{{'PUBLICATION_HANDLER' | translate}}：</label>
+      <div class="col-md-4">
+        <input type="hidden" ui-select2="e.userOption" ng-model="e.user" style="width:180px" />
+      </div>
+      <!-- <div class="col-md-7">
+        <span class="label label-info" ng-repeat="user in e.users track by user.ucid">{{user.username}}</span>
+      </div> -->
+    </div>
+  </form>
+</div>
+<div class="modal-footer mt0">
+  <button type="button" class="btn btn-primary"  ng-click="ok()" ng-disabled="!e.user">{{'ADD' | translate}}</button>
+  <button type="button" class="btn btn-default" ng-click="cancel()">{{'CANCEL' | translate}}</button>
+</div>

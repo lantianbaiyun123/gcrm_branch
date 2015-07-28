@@ -1,0 +1,87 @@
+package com.baidu.gcrm;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
+import junit.framework.Assert;
+
+import org.junit.Test;
+
+import com.baidu.gcrm.common.DateUtils;
+import com.baidu.gcrm.common.util.DoubleMath;
+import com.baidu.gcrm.data.bean.WeekImpressions;
+import com.baidu.gcrm.data.model.PositionDataSample;
+
+public class DoubleTest {
+
+	@Test
+	public void test() {
+		BigDecimal sum = new BigDecimal("0");
+    	Double a = new Double(10.05);
+    	Double b = new Double(88.35);
+    	Double c = new Double(1.6);
+    	sum = sum.add(new BigDecimal(a.toString())).add(new BigDecimal(b.toString())).add(new BigDecimal(c.toString()));
+    	Assert.assertTrue(sum.doubleValue() == 100.00d);
+	}
+
+	@Test
+	public void testDivToFloor() {
+		double a = 10d;
+		double b = 3d;
+		Assert.assertEquals(3d, DoubleMath.divToFloor(a, b));
+		Assert.assertEquals(3l, new Double(DoubleMath.divToFloor(a, b)).longValue());
+	}
+	
+	@Test
+    public void testSetScale() {
+        double a = 1.1d;
+        double b = 3d;
+        BigDecimal b1 = new BigDecimal(a);
+        BigDecimal b2 = new BigDecimal(b);
+        Assert.assertEquals(new BigDecimal(4), b1.multiply(b2).setScale(0, RoundingMode.CEILING));
+        Assert.assertEquals(new BigDecimal(3), b1.multiply(b2).setScale(0, RoundingMode.HALF_UP));
+    }
+	
+	@Test
+	public void testGetNWeekDate() {
+		Date date = DateUtils.getNDayFromDate(new Date(), -Calendar.DAY_OF_WEEK);
+		System.out.println(date);
+		date = DateUtils.getNDayFromDate(new Date(), Calendar.DAY_OF_WEEK);
+		System.out.println(date);
+	}
+	
+	@Test
+	public void testGetDayInWeek() {
+		Date date = DateUtils.getString2Date("2014-10-22");
+		Assert.assertEquals(Calendar.WEDNESDAY, DateUtils.getDayInWeek(date));
+	}
+	
+	@Test
+	public void testWeekImpressions() {
+		List<PositionDataSample> samples = new ArrayList<PositionDataSample>();
+		PositionDataSample sample1 = new PositionDataSample();
+		sample1.setDate("2014-10-22");
+		sample1.setImpressions(1000L);
+		
+		PositionDataSample sample2 = new PositionDataSample();
+		sample2.setDate("2014-10-20");
+		sample2.setImpressions(1100L);
+		samples.add(sample1);
+		samples.add(sample2);
+		
+		WeekImpressions impressions = new WeekImpressions();
+		impressions.setImpressions(0);
+		for (PositionDataSample sample : samples) {
+			Date date = DateUtils.getString2Date(sample.getDate());
+			int dayInWeek = DateUtils.getDayInWeek(date);
+			impressions.setImpressionOfDay(dayInWeek, sample.getImpressions());
+		}
+		Assert.assertEquals(0L, impressions.getImpressionOfDay(Calendar.SUNDAY));
+		Assert.assertEquals(1100L, impressions.getImpressionOfDay(Calendar.MONDAY));
+		Assert.assertEquals(1000L, impressions.getImpressionOfDay(Calendar.WEDNESDAY));
+	}
+}

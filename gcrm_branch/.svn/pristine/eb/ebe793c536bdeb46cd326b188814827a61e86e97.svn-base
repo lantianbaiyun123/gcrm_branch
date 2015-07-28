@@ -1,0 +1,11 @@
+<style>
+.body{font-size:14px;}
+.important{font-weight:bold;}
+</style>
+<div class="body">
+	${receiverName}：</br>
+    ${timeRange},${adSolutionOperator}的广告方案（${adSolutionNumber}） 由于投放优先级更高; </br>
+           将会抢占资源位（${positionName}）的全部流量</br>
+           您的方案（${influencedAdSolutionNumber}）可能受此影响，无法正常显示，请知晓！</br>
+           此为系统邮件，请勿直接回复</br>
+</div>

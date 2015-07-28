@@ -1,0 +1,172 @@
+<div class="content-price-info">
+  <h5 class="bdt">
+    {{'AD_CONTENT_QUOTATION' | translate}}
+  </h5>
+  <div class="form-group">
+    <label class="control-label col-md-2">
+      {{'AD_CONTENT_PRICE_TYPE' | translate}}：
+    </label>
+    <div class="col-md-2">
+      <p class="form-control-static" ng-if="ad.advertiseQuotation.billingModelId">
+        {{'AD_CONTENT_UNIT_PRICE' | translate}}
+      </p>
+      <p class="form-control-static" ng-if="!ad.advertiseQuotation.billingModelId">
+        {{'AD_CONTENT_FALL_INTO' | translate}}
+      </p>
+    </div>
+  </div>
+  <!-- 除[2]CPS外 标杆价、客户报价、折扣 -->
+  <div ng-if="ad.advertiseQuotation.billingModelId && ad.advertiseQuotation.billingModelId != 2">
+    <!-- 计费方式 标杆价 -->
+    <div class="form-group">
+      <label class="control-label col-md-2">
+        {{'AD_CONTENT_CHARGING_MODE' | translate}}：
+      </label>
+      <div class="col-md-3">
+        <p class="form-control-static">
+          {{ad.advertiseQuotation.billingModelName}}
+        </p>
+      </div>
+      <label class="control-label col-md-2">
+        {{'AD_CONTENT_PUBLISHED_PRICE' | translate}}：
+      </label>
+      <div class="col-md-3">
+        <p class="form-control-static" ng-if="!!ad.advertiseQuotation.publishPrice">
+          $ {{ad.advertiseQuotation.publishPrice}}
+        </p>
+        <p class="form-control-static" ng-if="!ad.advertiseQuotation.publishPrice">
+          {{'AD_CONTENT_NOT_RECORD' | translate}}
+        </p>
+      </div>
+    </div>
+    <!-- 客户报价、折扣 -->
+    <div class="form-group">
+      <label class="control-label col-md-2">
+        {{'AD_CONTENT_CUSTOMER_QUOTE' | translate}}：
+      </label>
+      <div class="col-md-3">
+        <p class="form-control-static ">
+          $ {{ad.advertiseQuotation.customerQuote}}
+        </p>
+      </div>
+      <label class="control-label col-md-2">
+        {{'AD_CONTENT_DISCOUNT' | translate}}：
+      </label>
+      <div class="col-md-3">
+        <p class="form-control-static ">
+          <span ng-if="ad.advertiseQuotation.discount && basic.advertiseType !== 'zerotest'">{{ad.advertiseQuotation.discount}}</span>
+          <span ng-if="!ad.advertiseQuotation.discount && basic.advertiseType !== 'zerotest'">--</span>
+          <span ng-if="basic.advertiseType === 'zerotest'">0</span>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 客户行业类型、备案分成比例、实际分成比例、是否为预估值、说明 -->
+  <div ng-if="!ad.advertiseQuotation.billingModelId || ad.advertiseQuotation.billingModelId == 2">
+    <div class="form-group" ng-if="ad.advertiseQuotation.billingModelId == 2">
+      <label class="control-label col-md-2">
+        {{'AD_CONTENT_CHARGING_MODE' | translate}}：
+      </label>
+      <div class="col-md-3">
+        <p class="form-control-static">
+          {{ad.advertiseQuotation.billingModelName}}
+        </p>
+      </div>
+    </div>
+    <div class="form-group" ng-if="ad.advertiseQuotation.billingModelId == 2">
+      <label class="control-label col-md-2">
+        {{'AD_CONTENT_CUSTOMER_INDUSTRY' | translate}}：
+      </label>
+      <div class="col-md-3">
+        <p class="form-control-static">{{'INDUSTRY_TYPE_' + ad.advertiseQuotation.industryType | translate}}</p>
+      </div>
+    </div>
+    <div class="form-group" ng-if="!ad.advertiseQuotation.billingModelId || ad.advertiseQuotation.billingModelId == 2">
+      <label class="control-label col-md-2">
+        {{'AD_CONTENT_FILING_PROPORTION' | translate}}：
+      </label>
+      <div class="col-md-7 row" ng-if="!!ad.advertiseQuotation.productRatioMine || !!ad.advertiseQuotation.productRatioCustomer || !!ad.advertiseQuotation.productRatioThird">
+        <div class="col-md-4">
+          <p class="form-control-static">
+            {{'AD_CONTENT_REALITING_MINE' | translate}}：{{ad.advertiseQuotation.productRatioMine}}%
+          </p>
+        </div>
+        <div class="col-md-4" ng-if="ad.advertiseQuotation.productRatioCustomer || ad.advertiseQuotation.productRatioCustomer == 0">
+          <p class="form-control-static">
+            {{'AD_CONTENT_REALITING_CURSTOMER' | translate}}：{{ad.advertiseQuotation.productRatioCustomer}}%
+          </p>
+        </div>
+        <div class="col-md-4" ng-if="ad.advertiseQuotation.productRatioThird || ad.advertiseQuotation.productRatioThird == 0">
+          <p class="form-control-static">
+            {{'AD_CONTENT_REALITING_THIRD' | translate}}：{{ad.advertiseQuotation.productRatioThird}}%
+          </p>
+        </div>
+      </div>
+      <p class="form-control-static" ng-show="!ad.advertiseQuotation.productRatioMine && !ad.advertiseQuotation.productRatioCustomer && !ad.advertiseQuotation.productRatioThird">
+        {{'AD_CONTENT_NOT_RECORD' | translate}}
+      </p>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-md-2">
+        {{'AD_CONTENT_REALITING_PROPORTION' | translate}}：
+      </label>
+      <div class="col-md-7 row">
+        <div class="col-md-4">
+          <p class="form-control-static">
+            {{'AD_CONTENT_REALITING_MINE' | translate}}：{{ad.advertiseQuotation.ratioMine}}%
+          </p>
+        </div>
+        <div class="col-md-4">
+          <p class="form-control-static">
+            <span>
+            {{'AD_CONTENT_REALITING_CURSTOMER' | translate}}：{{ad.advertiseQuotation.ratioCustomer}}%
+            </span>
+          </p>
+        </div>
+        <div class="col-md-4">
+          <p class="form-control-static">
+            {{'AD_CONTENT_REALITING_THIRD' | translate}}：{{ad.advertiseQuotation.ratioThird}}%
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-md-2">
+        {{'AD_CONTENT_WHETHER' | translate}}：
+      </label>
+      <div class="col-md-3">
+        <p class="form-control-static" ng-if="ad.advertiseQuotation.reachEstimate == true">
+          {{'YES' | translate}}
+        </p>
+        <p class="form-control-static" ng-if="ad.advertiseQuotation.reachEstimate == false">
+          {{'NO' | translate}}
+          </p>
+      </div>
+    </div>
+    <!-- <div class="form-group" ng-if="ad.advertiseQuotation.ratioConditionDesc">
+      <label class="control-label col-md-2">
+        {{'AD_CONTENT_FALLINTO_EXPLAIN' | translate}}：
+      </label>
+      <div class="col-md-9">
+        <p class="form-control-static">
+          {{ad.advertiseQuotation.ratioConditionDesc}}
+        </p>
+      </div>
+    </div> -->
+  </div>
+  <div ng-if="ad.advertiseQuotation.billingModelId">
+    <div class="form-group">
+      <label class="control-label col-md-2">
+        <span ng-if="ad.advertiseQuotation.billingModelId==2">{{'AD_CONTENT_FALLINTO_EXPLAIN' | translate}}：</span>
+        <span ng-if="ad.advertiseQuotation.billingModelId!=2">{{'AD_CONTENT_PRICE_EXPLAIN' | translate}}：</span>
+      </label>
+      <div class="col-md-9">
+        <p class="form-control-static">
+          <span>{{ad.advertiseQuotation.ratioConditionDesc}}</span>
+          <span ng-if="!ad.advertiseQuotation.ratioConditionDesc">--</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

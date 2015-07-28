@@ -1,0 +1,7 @@
+${userName}：
+请您登陆国际化CRM及时处理任务，详细如下：</br>
+内容类型：广告方案</br>
+任务名称：${taskName}</br>
+任务到达时间：${taskArrivedTime}</br>
+创建时间：${processStartTime}</br>
+任务处理地址：${clientTaskDealUrl}

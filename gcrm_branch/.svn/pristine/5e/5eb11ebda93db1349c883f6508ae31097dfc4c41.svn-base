@@ -1,0 +1,112 @@
+{
+  "code": 200,
+  "data": {
+    "customerList": [
+      {
+        "amount": 0,
+        "id": 3,
+        "operateType": "Customer",
+        "orderNumber": 1,
+        "reportType": "CREATE"
+      },
+      {
+        "amount": 0,
+        "id": 4,
+        "operateType": "Customer",
+        "orderNumber": 2,
+        "reportType": "UPDATE"
+      },
+      {
+        "amount": 0,
+        "id": 5,
+        "operateType": "Customer",
+        "orderNumber": 3,
+        "reportType": "APPROVING"
+      },
+      {
+        "amount": 0,
+        "id": 6,
+        "operateType": "Customer",
+        "orderNumber": 4,
+        "reportType": "APPROVED"
+      }
+    ],
+    "positionList": [
+      {
+        "amount": 0,
+        "id": 13,
+        "operateType": "Position",
+        "orderNumber": 1,
+        "reportType": "CREATE"
+      },
+      {
+        "amount": 0,
+        "id": 14,
+        "operateType": "Position",
+        "orderNumber": 2,
+        "reportType": "ENABLED"
+      }
+    ],
+    "quotationList": [
+      {
+        "amount": 0,
+        "id": 1,
+        "operateType": "QuotationMain",
+        "orderNumber": 2,
+        "reportType": "APPROVING"
+      },
+      {
+        "amount": 0,
+        "id": 2,
+        "operateType": "QuotationMain",
+        "orderNumber": 3,
+        "reportType": "APPROVED"
+      }
+    ],
+    "solutionList": [
+      {
+        "amount": 0,
+        "id": 7,
+        "operateType": "AdvertiseSolution",
+        "orderNumber": 1,
+        "reportType": "CREATE"
+      },
+      {
+        "amount": 0,
+        "id": 8,
+        "operateType": "AdvertiseSolution",
+        "orderNumber": 2,
+        "reportType": "UPDATE"
+      },
+      {
+        "amount": 0,
+        "id": 9,
+        "operateType": "AdvertiseSolution",
+        "orderNumber": 3,
+        "reportType": "APPROVING"
+      },
+      {
+        "amount": 0,
+        "id": 10,
+        "operateType": "AdvertiseSolution",
+        "orderNumber": 4,
+        "reportType": "APPROVED"
+      },
+      {
+        "amount": 0,
+        "id": 11,
+        "operateType": "AdvertiseSolution",
+        "orderNumber": 5,
+        "reportType": "UNCONFIRMED"
+      },
+      {
+        "amount": 0,
+        "id": 12,
+        "operateType": "AdvertiseSolution",
+        "orderNumber": 6,
+        "reportType": "CONFIRMED"
+      }
+    ]
+  },
+  "message": "OK"
+}

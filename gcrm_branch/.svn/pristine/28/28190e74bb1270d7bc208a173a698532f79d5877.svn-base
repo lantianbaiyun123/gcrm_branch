@@ -1,0 +1,284 @@
+package com.baidu.gcrm.occupation;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.ExpectedException;
+
+import com.alibaba.fastjson.JSON;
+import com.baidu.gcrm.BaseTestContext;
+import com.baidu.gcrm.TestUtils;
+import com.baidu.gcrm.common.DateUtils;
+import com.baidu.gcrm.common.ServiceBeanFactory;
+import com.baidu.gcrm.common.exception.CRMRuntimeException;
+import com.baidu.gcrm.common.json.JsonBeanUtil;
+import com.baidu.gcrm.occupation.dao.IPositionOccupationRepository;
+import com.baidu.gcrm.occupation.helper.DatePeriod;
+import com.baidu.gcrm.occupation.helper.DatePeriodHelper;
+import com.baidu.gcrm.occupation.model.PositionOccupation;
+import com.baidu.gcrm.occupation.service.IPositionOccupationService;
+import com.baidu.gcrm.occupation.service.bean.RotationPositionCountBean;
+import com.baidu.gcrm.occupation.web.vo.DateCheck;
+import com.baidu.gcrm.occupation.web.vo.DateOccupation;
+import com.baidu.gcrm.occupation.web.vo.DateStatus;
+import com.baidu.gcrm.occupation.web.vo.InsertDateOfPeriod;
+import com.baidu.gcrm.occupation.web.vo.OccupationVO;
+import com.baidu.gcrm.resource.position.model.Position;
+import com.baidu.gcrm.resource.position.model.Position.PositionType;
+import com.baidu.gcrm.resource.position.model.Position.RotationType;
+import com.baidu.gcrm.schedule.model.Schedule.ScheduleStatus;
+
+@Ignore
+public class RotationPositionOccupationServiceTest extends BaseTestContext {
+	@Autowired
+	private IPositionOccupationRepository occupationDao;
+	
+	@Before
+	public void init() throws Exception {
+		TestUtils.initDatabase(dataSource, "datas/g_position_occupation.xml");
+	}
+	
+	@Test
+	public void confirmOccupationTest() {
+		PositionOccupation occupation = occupationDao.findOne(3l);
+		List<Long> positionOccIds = new ArrayList<Long>();
+		positionOccIds.add(3l);
+		positionOccIds.add(4l);
+		positionOccIds.add(5l);
+		positionOccIds.add(6l);
+		Position position = getPosition1();
+		ServiceBeanFactory.getOccupationService(position.getRotationType()).confirmOccupation(positionOccIds, "11111111l");
+		
+		PositionOccupation occupation1 = occupationDao.findOne(3l);
+		Assert.assertEquals(1, occupation1.getSoldAmount());
+		Assert.assertEquals(",11111111,", occupation1.getCurScheduleNumber());
+		
+		PositionOccupation occupation2 = occupationDao.findOne(4l);
+		Assert.assertEquals(3, occupation2.getSoldAmount());
+		Assert.assertEquals(",11111111,22222222,66666666,", occupation2.getCurScheduleNumber());
+	}
+	
+	@Test
+	@ExpectedException(CRMRuntimeException.class)
+	public void confirmOccupationTest1() {
+		List<Long> positionOccIds = new ArrayList<Long>();
+		positionOccIds.add(7l);
+		Position position = getPosition1();
+		ServiceBeanFactory.getOccupationService(position.getRotationType()).confirmOccupation(positionOccIds, "11111111l");
+	}
+	
+	@Test
+	public void getInsertDateBetweenTest() {
+		Position position = getPosition1();
+		Date from = DateUtils.getString2Date("2014-01-28");
+		Date to = DateUtils.getString2Date("2014-02-03");
+		DatePeriod period = new DatePeriod(from, to);
+		List<Date> insertDate = ServiceBeanFactory.getOccupationService(position.getRotationType()).getInsertDate(position, period);
+		Assert.assertEquals(1, insertDate.size());
+		Assert.assertEquals(to, insertDate.get(0));
+		
+		from = DateUtils.getString2Date("2014-01-28");
+		to = DateUtils.getString2Date("2014-02-02");
+		period = new DatePeriod(from, to);
+		insertDate = ServiceBeanFactory.getOccupationService(position.getRotationType()).getInsertDate(position, period);
+		Assert.assertEquals(0, insertDate.size());
+	}
+	
+	@Test
+	public void getInsertDateInTest() {
+		Position position = getPosition1();
+		Date from = DateUtils.getString2Date("2014-01-28");
+		Date to = DateUtils.getString2Date("2014-02-01");
+		DatePeriod period1 = new DatePeriod(from, to);
+		from = DateUtils.getString2Date("2014-01-30");
+		to = DateUtils.getString2Date("2014-02-02");
+		DatePeriod period2 = new DatePeriod(from, to);
+		from = DateUtils.getString2Date("2014-02-03");
+		to = DateUtils.getString2Date("2014-02-03");
+		DatePeriod period3 = new DatePeriod(from, to);
+		List<DatePeriod> periods = new ArrayList<DatePeriod>();
+		periods.add(period1);
+		periods.add(period2);
+		periods.add(period3);
+		
+		List<Date> insertDate = ServiceBeanFactory.getOccupationService(position.getRotationType()).getInsertDate(position, periods);
+		Assert.assertEquals(1, insertDate.size());
+		Assert.assertEquals(DateUtils.getString2Date("2014-02-03"), insertDate.get(0));
+		
+	}
+	
+	@Test
+	public void InsertDateOfPeriodTest() {
+		Position position = getPosition1();
+		Date from = DateUtils.getString2Date("2014-01-28");
+		Date to = DateUtils.getString2Date("2014-02-01");
+		DatePeriod period1 = new DatePeriod(from, to);
+		/*from = DateUtils.getString2Date("2014-01-30");
+		to = DateUtils.getString2Date("2014-02-02");
+		DatePeriod period2 = new DatePeriod(from, to);
+		from = DateUtils.getString2Date("2014-02-03");
+		to = DateUtils.getString2Date("2014-02-03");
+		DatePeriod period3 = new DatePeriod(from, to);*/
+		List<DatePeriod> periods = new ArrayList<DatePeriod>();
+		periods.add(period1);
+		//periods.add(period2);
+		//periods.add(period3);
+		
+		List<DatePeriod> combinedPeriods = DatePeriodHelper.combineAndGetDatePeriods(periods);
+		List<Date> insertDate = ServiceBeanFactory.getOccupationService(position.getRotationType()).getInsertDate(position, combinedPeriods);
+		List<DateCheck> dateChecks = new ArrayList<DateCheck>();
+		for (Date date : insertDate) {
+			DateCheck check = new DateCheck();
+			check.setDate(date);
+			check.setChecked(true);
+			dateChecks.add(check);
+		}
+		InsertDateOfPeriod insertDateOfPeriod = new InsertDateOfPeriod();
+		insertDateOfPeriod.setDatePeriod(combinedPeriods);
+		insertDateOfPeriod.setTotalDays(DatePeriodHelper.getTotalDays(combinedPeriods));
+		insertDateOfPeriod.setInsertDate(dateChecks);
+		
+		System.out.println(JSON.toJSONString(JsonBeanUtil.convertBeanToJsonBean(insertDateOfPeriod)));
+	}
+	
+	@Test
+	public void getReserveDateTest() {
+		Position position = getPosition1();
+		Date from = DateUtils.getString2Date("2014-01-28");
+		Date to = DateUtils.getString2Date("2014-02-03");
+		DatePeriod period = new DatePeriod(from, to);
+		List<Date> reserveDate = ServiceBeanFactory.getOccupationService(position.getRotationType()).getReserveDate(position, period);
+		Assert.assertEquals(0, reserveDate.size());
+	}
+	
+	@Test
+	public void getConfirmDateTest() {
+		Position position = getPosition1();
+		Date from = DateUtils.getString2Date("2014-01-28");
+		Date to = DateUtils.getString2Date("2014-02-03");
+		DatePeriod period = new DatePeriod(from, to);
+		List<Date> dates = ServiceBeanFactory.getOccupationService(position.getRotationType()).getConfirmOrLockDate(position, period, ScheduleStatus.confirmed);
+		Assert.assertEquals(0, dates.size());
+	}
+	
+	@Test
+	public void getLockDateTest() {
+		Position position = getPosition1();
+		Date from = DateUtils.getString2Date("2014-01-28");
+		Date to = DateUtils.getString2Date("2014-02-01");
+		DatePeriod period = new DatePeriod(from, to);
+		List<Date> dates = ServiceBeanFactory.getOccupationService(position.getRotationType()).getConfirmOrLockDate(position, period, ScheduleStatus.locked);
+		Assert.assertEquals(0, dates.size());
+	}
+	
+	@Test
+	public void getBiddingCountTest() {
+		Position position = getPosition1();
+		Date from = DateUtils.getString2Date("2014-01-28");
+		Date to = DateUtils.getString2Date("2014-02-03");
+		DatePeriod period = new DatePeriod(from, to);
+		Map<Date, Integer> biddingCount = ServiceBeanFactory.getOccupationService(position.getRotationType()).getBiddingCount(position, period);
+		Assert.assertEquals(6, biddingCount.size());
+		Assert.assertEquals(6, biddingCount.size());
+		Assert.assertNull(biddingCount.get(from));
+		Assert.assertEquals(0, biddingCount.get(to).intValue());
+	}
+	
+	@Test
+	public void getRotationPositionCountByDateTest() {
+		Position position = getPosition1();
+		Date from = DateUtils.getString2Date("2014-01-28");
+		Date to = DateUtils.getString2Date("2014-02-03");
+		DatePeriod period = new DatePeriod(from, to);
+		List<RotationPositionCountBean> counts = ServiceBeanFactory.getOccupationService(position.getRotationType()).getRotationPositionCountByDate(position, period);
+		Assert.assertEquals(7, counts.size());
+		RotationPositionCountBean idle = counts.get(0);
+		Assert.assertEquals(from, idle.getDate());
+		Assert.assertEquals(0, idle.getBusyCount());
+		RotationPositionCountBean bidding = counts.get(1);
+		Assert.assertEquals(0, bidding.getBusyCount());
+		RotationPositionCountBean reserved = counts.get(2);
+		Assert.assertEquals(2, reserved.getBusyCount());
+		Assert.assertEquals(2, reserved.getReservedCount());
+		RotationPositionCountBean confirmed = counts.get(3);
+		Assert.assertEquals(3, confirmed.getBusyCount());
+		Assert.assertEquals(1, confirmed.getReservedCount());
+		Assert.assertEquals(2, confirmed.getOccupiedCount());
+		Assert.assertEquals(3, counts.get(4).getBusyCount());
+		Assert.assertEquals(3, counts.get(5).getBusyCount());
+		Assert.assertEquals(2, counts.get(5).getOccupiedCount());
+		Assert.assertEquals(3, counts.get(6).getBusyCount());
+		Assert.assertEquals(3, counts.get(6).getOccupiedCount());
+	}
+	
+	@Test
+	public void getDateOccupationsTest() {
+		Position position = getPosition1();
+		Date from = DateUtils.getString2Date("2014-01-28");
+		Date to = DateUtils.getString2Date("2014-02-05");
+		DatePeriod period = new DatePeriod(from, to);
+		IPositionOccupationService occupationService = ServiceBeanFactory.getOccupationService(position.getRotationType());
+		occupationService.initPositionOccupation(position);
+		OccupationVO dateOccupation = occupationService.getDateOccupation(position, period);
+		Assert.assertEquals(dateOccupation.getPositionId(), position.getId());
+		Assert.assertEquals(dateOccupation.getFrom(), from);
+		Assert.assertEquals(dateOccupation.getTo(), to);
+		Assert.assertEquals(dateOccupation.getTotalCount(), position.getSalesAmount().intValue());
+		Assert.assertTrue(dateOccupation.isRotation());
+		List<DateOccupation> occupations = dateOccupation.getOccupations();
+		Assert.assertEquals(9, occupations.size());
+		
+		Assert.assertEquals(DateUtils.getString2Date("2014-01-28"), occupations.get(0).getDate());
+		Assert.assertEquals(DateStatus.idle.toString(), occupations.get(0).getStatus());
+		
+		Assert.assertEquals(DateUtils.getString2Date("2014-01-29"), occupations.get(1).getDate());
+		Assert.assertEquals(DateStatus.bidding.toString(), occupations.get(1).getStatus());
+		Assert.assertEquals(2, occupations.get(1).getBiddingCount());
+		
+		Assert.assertEquals(DateUtils.getString2Date("2014-01-30"), occupations.get(2).getDate());
+		Assert.assertEquals(DateStatus.busy.toString(), occupations.get(2).getStatus());
+		Assert.assertEquals(2, occupations.get(2).getBusyCount());
+		Assert.assertEquals(2, occupations.get(2).getBiddingCount());
+		
+		Assert.assertEquals(DateUtils.getString2Date("2014-01-31"), occupations.get(3).getDate());
+		Assert.assertEquals(DateStatus.busy.toString(), occupations.get(3).getStatus());
+		Assert.assertEquals(3, occupations.get(3).getBusyCount());
+		
+		Assert.assertEquals(DateUtils.getString2Date("2014-02-01"), occupations.get(4).getDate());
+		Assert.assertEquals(DateStatus.busy.toString(), occupations.get(4).getStatus());
+		Assert.assertEquals(3, occupations.get(4).getBusyCount());
+		
+		Assert.assertEquals(DateUtils.getString2Date("2014-02-02"), occupations.get(5).getDate());
+		Assert.assertEquals(DateStatus.busy.toString(), occupations.get(5).getStatus());
+		Assert.assertEquals(3, occupations.get(5).getBusyCount());
+		
+		Assert.assertEquals(DateUtils.getString2Date("2014-02-03"), occupations.get(6).getDate());
+		Assert.assertEquals(DateStatus.busy.toString(), occupations.get(6).getStatus());
+		Assert.assertEquals(3, occupations.get(6).getBusyCount());
+		
+		Assert.assertEquals(DateUtils.getString2Date("2014-02-04"), occupations.get(7).getDate());
+		Assert.assertEquals(DateStatus.idle.toString(), occupations.get(7).getStatus());
+		Assert.assertEquals(0, occupations.get(7).getBusyCount());
+		
+		Assert.assertEquals(DateUtils.getString2Date("2014-02-05"), occupations.get(8).getDate());
+		Assert.assertEquals(DateStatus.idle.toString(), occupations.get(8).getStatus());
+	}
+	
+	private Position getPosition1() {
+		Position position = new Position();
+		Long positionId = 1l;
+		position.setId(positionId);
+		position.setType(PositionType.position);
+		position.setRotationType(RotationType.yes);
+		position.setSalesAmount(3);
+		return position;
+	}
+	
+}

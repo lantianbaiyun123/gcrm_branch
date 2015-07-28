@@ -1,0 +1,1 @@
+define(["app"],function(e){e.registerFilter("AdMaterialIfEmbedCodeFilter",function(){var e=["NO","YES"];return function(r){return r||0===r?e[r]:""}})});

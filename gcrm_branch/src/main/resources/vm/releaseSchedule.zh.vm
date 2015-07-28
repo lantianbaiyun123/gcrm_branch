@@ -1,0 +1,8 @@
+<style>
+.body{font-size:16px;}
+.important{font-weight:bold;}
+</style>
+<div class="body">
+	${sendTo}：</br>
+	您在 ${adSubmitTime} 提交的 广告内容（${adContentNumber}）的投放时间，在 ${scheduleUpdateTime}被 释放
+</div>

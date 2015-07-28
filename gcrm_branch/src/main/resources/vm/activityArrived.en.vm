@@ -1,0 +1,9 @@
+<span style="font-weight: bold;">${userName}：</span>
+<p>
+Please login Global CRM to deal with the task in time, details are as follows:
+</p>
+<p>Content Type：Advertise Solution</p>
+<p>Task Name：${taskName}</p>
+<p>Task Arrived Time：${taskArrivedTime}</p>
+<p>Process Start Time：${processStartTime}</p>
+<p>Task Deal URL：${clientTaskDealUrl}</p>

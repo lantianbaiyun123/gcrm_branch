@@ -1,0 +1,18 @@
+<style>
+.body{font-size:14px;}
+.important{font-weight:bold;}
+</style>
+<div class="body">
+	${operator}：</br>
+	#if(${type}=="Expand")
+	Conflicts has been found between the benchmark price  ${oldQuoteCode}  ,which you submitted on ${oldQuoteCreateDate} and the benchmarch price ${newQuoteCode} submitted by  ${submitTer} , </br>
+	the effective time has been changed to ${oldEditValidDate} #end </br>
+	#if(${type}=="Split")  
+	Conflicts has been found between the benchmark price ${oldQuoteCode}  ,which you submitted on  ${oldQuoteCreateDate} and the benchmarch price  ${newQuoteCode}</br>
+	submitted by ${submitTer} </br>
+	, the original benchmark price has been splited to ${oldQuoteCode},${addQuoteCode} </br>
+	${oldQuoteCode}：effective time${oldEditValidDate}</br>
+	${addQuoteCode}：effective time:${addValidDate} #end</br>
+	#if(${type}=="Cancel")you submitted at${oldQuoteCreateDate} Benchmark price ${oldQuoteCode} in ${submitTer}submitted Benchmark price：${newQuoteCode} Effect of time range, so the original benchmark price has been cancelled, according to the new benchmark price of the implementation #end</br>
+	System messages, please do not reply</br>
+</div>

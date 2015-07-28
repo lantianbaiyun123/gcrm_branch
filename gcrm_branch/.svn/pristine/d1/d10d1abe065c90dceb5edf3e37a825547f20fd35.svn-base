@@ -1,0 +1,143 @@
+package com.baidu.gcrm.occupation.web;
+
+import java.util.Date;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.baidu.gcrm.common.ServiceBeanFactory;
+import com.baidu.gcrm.common.json.JsonBean;
+import com.baidu.gcrm.common.json.JsonBeanUtil;
+import com.baidu.gcrm.common.log.LoggerHelper;
+import com.baidu.gcrm.occupation.dao.IPositionOccupationRepositoryCustom;
+import com.baidu.gcrm.occupation.helper.DatePeriod;
+import com.baidu.gcrm.occupation.helper.DatePeriodHelper;
+import com.baidu.gcrm.occupation.web.vo.DateOccupationQueryBean;
+import com.baidu.gcrm.occupation.web.vo.InsertDateOfPeriod;
+import com.baidu.gcrm.occupation.web.vo.InsertDateQueryBean;
+import com.baidu.gcrm.occupation.web.vo.OccupationVO;
+import com.baidu.gcrm.resource.position.model.Position;
+import com.baidu.gcrm.resource.position.service.IPositionService;
+import com.baidu.gcrm.schedule.service.IScheduleService;
+
+@Controller
+@RequestMapping("/occupation1")
+public class OccupationAction {
+	@Autowired
+	private IPositionService positionService;
+	@Autowired
+	private IPositionOccupationRepositoryCustom occupationCustomDao;
+	@Autowired
+	private IScheduleService scheduleService;
+	
+	@RequestMapping("/queryDateOccupation")
+	@ResponseBody
+	public JsonBean<OccupationVO> queryDateOccupation(@RequestBody DateOccupationQueryBean queryBean) {
+		Position position = positionService.findById(queryBean.getPositionId());
+		try {
+			OccupationVO occupation = ServiceBeanFactory.getOccupationService(position.getRotationType()).getDateOccupation(position, queryBean.getPeriod());
+			return JsonBeanUtil.convertBeanToJsonBean(occupation);
+		} catch(Exception e) {
+			return JsonBeanUtil.convertBeanToJsonBean(null, e.getMessage());
+		}
+	}
+	
+	@RequestMapping("/queryInsertDates")
+	@ResponseBody
+	public JsonBean<InsertDateOfPeriod> queryInsertDates(@RequestBody InsertDateQueryBean queryBean) {
+		try {
+			Long positionId = queryBean.getPositionId();
+//			Position position = positionService.findById(positionId);
+			Date maxDate = occupationCustomDao.getFarthestDateByPosition(positionId);
+			if (maxDate == null) {
+				return JsonBeanUtil.convertBeanToJsonBean(null, "occupation.error.100");
+			}
+			
+			InsertDateOfPeriod insertDateOfPeriod = new InsertDateOfPeriod();
+			insertDateOfPeriod.setMaxDate(maxDate);
+			List<DatePeriod> periods = queryBean.getPeriods();
+			if (CollectionUtils.isEmpty(periods)) {
+				return JsonBeanUtil.convertBeanToJsonBean(insertDateOfPeriod);
+			}
+			
+			List<DatePeriod> combinedPeriods = DatePeriodHelper.combineAndGetDatePeriods(periods);
+//			List<Date> newInsertDate = getInsertDates(position, combinedPeriods, queryBean.getOldContentId());
+			
+			insertDateOfPeriod.setDatePeriod(combinedPeriods);
+			insertDateOfPeriod.setTotalDays(DatePeriodHelper.getTotalDays(combinedPeriods));
+//			insertDateOfPeriod.setInsertDate(generateDateCheckList(newInsertDate, queryBean.getInsertDate()));
+			
+			return JsonBeanUtil.convertBeanToJsonBean(insertDateOfPeriod);
+		} catch(Exception e) {
+			LoggerHelper.err(this.getClass(), e.getMessage(), e);
+			return JsonBeanUtil.convertBeanToJsonBean(null, e.getMessage());
+		}
+	}
+
+//	private List<Date> getInsertDates(Position position, List<DatePeriod> newPeriods, Long oldContentId) {
+//		List<Date> insertDates = ServiceBeanFactory.getOccupationService(position.getRotationType()).getInsertDate(position, newPeriods);
+//		if (oldContentId == null) {
+//			return insertDates;
+//		} else {
+//			List<Date> updatedInsertDates = ServiceBeanFactory.getOccupationService(position.getRotationType()).
+//					findUpdateContentInertDates(position.getId(), newPeriods, oldContentId);
+//			if(updatedInsertDates==null){
+//				Schedule schdeule = scheduleService.findCurrentScheduleByAdContentId(oldContentId);
+//				if(schdeule != null &&
+//						ScheduleStatus.reserved.equals(schdeule.getStatus())){
+//					List<Date> insertOldDates = DatePeriodHelper.getDateInserts(
+//							schdeule.getInsertPeriodDescription());
+//					if(!CollectionUtils.isEmpty(insertOldDates)){
+//						Set<Date> occDate = DatePeriodHelper.getAllDates(newPeriods);
+//						for(Date insertOldDate:insertOldDates){
+//							if(occDate.contains(insertOldDate)){
+//								insertDates.add(insertOldDate);
+//							}
+//						}
+//						Collections.sort(insertDates);
+//					}
+//				}
+//				return insertDates;
+//			}
+//			return updatedInsertDates;
+//		}
+//	}
+
+//	private List<DateCheck> generateDateCheckList(List<Date> newInsertDate, List<DateCheck> insertDate) {
+//		List<DateCheck> dates = new ArrayList<DateCheck>();
+//		boolean checkedAll = CollectionUtils.isEmpty(insertDate);
+//		for (Date date : newInsertDate) {
+//			DateCheck dateCheck = new DateCheck();
+//			dateCheck.setDate(date);
+//			if (checkedAll) {
+//				dateCheck.setChecked(true);
+//			} else {
+//				int index = insertDate.indexOf(dateCheck);
+//				if (index == -1) {
+//					dateCheck.setChecked(true);
+//				} else {
+//					dateCheck.setChecked(insertDate.get(index).isChecked());
+//				}
+//			}
+//			dates.add(dateCheck);
+//		}
+//		return dates;
+//	}
+	
+	@RequestMapping("/maxDate/{positionId}")
+	@ResponseBody
+	public JsonBean<Date> maxDate(@PathVariable("positionId") Long positionId) {
+		Date maxDate = occupationCustomDao.getFarthestDateByPosition(positionId);
+		if (maxDate == null) {
+			return JsonBeanUtil.convertBeanToJsonBean(null, "occupation.error.100");
+		}
+		return JsonBeanUtil.convertBeanToJsonBean(maxDate);
+	}
+	
+}

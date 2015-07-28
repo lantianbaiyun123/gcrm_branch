@@ -1,0 +1,51 @@
+{
+    "code": 200,
+    "data": [
+        {
+            "data": {
+                "createOperator": 1000,
+                "createTime": 1390234777000,
+                "customerNumber": 81380680,
+                "id": 2,
+                "name": "anhuantest1",
+                "status": "ENABLE",
+                "type": "AGENT",
+                "ucid": 6256013,
+                "updateOperator": 1000,
+                "updateTime": 1390234777000
+            },
+            "value": "anhuantest1"
+        },
+        {
+            "data": {
+                "createOperator": 1000,
+                "createTime": 1390234869000,
+                "customerNumber": 81380680,
+                "id": 3,
+                "name": "anhuantest2",
+                "status": "ENABLE",
+                "type": "AGENT",
+                "ucid": 6256014,
+                "updateOperator": 1000,
+                "updateTime": 1390234869000
+            },
+            "value": "anhuantest2"
+        },
+        {
+            "data": {
+                "createOperator": 1000,
+                "createTime": 1390235694000,
+                "customerNumber": 81380680,
+                "id": 4,
+                "name": "anhuantest4",
+                "status": "ENABLE",
+                "type": "AGENT",
+                "ucid": 6256016,
+                "updateOperator": 1000,
+                "updateTime": 1390235694000
+            },
+            "value": "anhuantest4"
+        }
+    ],
+    "message": "OK"
+}

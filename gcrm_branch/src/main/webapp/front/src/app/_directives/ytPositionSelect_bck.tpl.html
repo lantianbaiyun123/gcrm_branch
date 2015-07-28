@@ -1,0 +1,57 @@
+<div>
+  <div class="dropdown btn-group pull-left">
+    <button class="dropdown-toggle btn btn-default btn-full-width" style="width:115px" tooltip="{{q.platform.selected.i18nName}}" tooltip-append-to-body="true">
+      <span class="col-md-10 btn-text">{{q.platform.selected.i18nName}}</span>
+      <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu">
+      <li ng-repeat="choice in q.platform.list">
+        <a ng-click="setChoice($index, 'platform')">{{choice.i18nName}}</a>
+      </li>
+    </ul>
+  </div>
+  <div class="dropdown btn-group pull-left ml5">
+    <button class="dropdown-toggle btn btn-default btn-full-width" style="width:115px"  tooltip="{{q.site.selected.i18nName}}" tooltip-append-to-body="true" ng-disabled="!q.site.list.length">
+      <span class="col-md-10 btn-text">{{q.site.selected.i18nName}}</span>
+      <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu">
+      <li ng-repeat="choice in q.site.list">
+        <a ng-click="setChoice($index, 'site')">{{choice.i18nName}}</a>
+      </li>
+    </ul>
+  </div>
+  <div class="dropdown btn-group pull-left ml5">
+    <button class="dropdown-toggle btn btn-default btn-full-width" style="width:115px"  tooltip="{{q.channel.selected.i18nName}}" tooltip-append-to-body="true" ng-disabled="!q.channel.list.length">
+      <span class="col-md-10 btn-text">{{q.channel.selected.i18nName}}</span>
+      <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu">
+      <li ng-repeat="choice in q.channel.list">
+        <a ng-click="setChoice($index, 'channel')">{{choice.i18nName}}</a>
+      </li>
+    </ul>
+  </div>
+  <div class="dropdown btn-group pull-left ml5">
+    <button class="dropdown-toggle btn btn-default btn-full-width" style="width:115px"  tooltip="{{q.area.selected.i18nName}}" tooltip-append-to-body="true" ng-disabled="!q.area.list.length">
+      <span class="col-md-10 btn-text">{{q.area.selected.i18nName}}</span>
+      <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu">
+      <li ng-repeat="choice in q.area.list">
+        <a ng-click="setChoice($index, 'area')">{{choice.i18nName}}</a>
+      </li>
+    </ul>
+  </div>
+  <div class="dropdown btn-group pull-left ml5">
+    <button class="dropdown-toggle btn btn-default btn-full-width" style="width:115px"  tooltip="{{q.position.selected.i18nName}}" tooltip-append-to-body="true" ng-disabled="!q.position.list.length">
+      <span class="col-md-10 btn-text">{{q.position.selected.i18nName}}</span>
+      <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu">
+      <li ng-repeat="choice in q.position.list">
+        <a ng-click="setChoice($index, 'position')">{{choice.i18nName}}</a>
+      </li>
+    </ul>
+  </div>
+</div>

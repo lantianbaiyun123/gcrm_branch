@@ -1,0 +1,51 @@
+package com.baidu.gcrm.occupation.web.vo;
+
+import java.util.Date;
+
+public class DateCheck {
+	private Date date;
+	
+	private boolean checked = false;
+
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
+	}
+
+	public boolean isChecked() {
+		return checked;
+	}
+
+	public void setChecked(boolean checked) {
+		this.checked = checked;
+	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((date == null) ? 0 : date.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		DateCheck other = (DateCheck) obj;
+		if (date == null) {
+			if (other.date != null)
+				return false;
+		} else if (date.getTime() != other.date.getTime())
+			return false;
+		return true;
+	}
+	
+}

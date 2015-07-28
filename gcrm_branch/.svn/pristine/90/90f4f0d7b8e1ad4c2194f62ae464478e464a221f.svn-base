@@ -1,0 +1,40 @@
+<div class="modal-header">
+  <h4>{{'数据权限'}}</h4>
+</div>
+<div class="modal-body pt0 pb0">
+  <div tabset>
+    <div tab ng-repeat="role in roles" select="getAuthority(role)">
+      <div tab-heading>{{role.roleDesc}}</div>
+      <form class="form-horizontal mt10 mb30" name="formAddUser">
+        <div class="form-group">
+          <label class="col-md-3 control-label"><input type="checkbox" yt-checkbox-indeterminate="role.e.siteRights.indeterminate" ng-model="role.e.siteRights.allChecked" ng-change="changeAllCheck(role.e.siteRights)" style="margin-right:5px">{{'站点' | translate}}：</label>
+          <div class="col-md-8">
+            <label class="checkbox checkbox-inline" ng-repeat="one in role.e.siteRights.list">
+              <input type="checkbox" ng-model="one.hasRights" ng-change="updateAllCheck(role.e.siteRights)"> {{ one.rightsName }}
+            </label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-md-3 control-label">{{'业务类型' | translate}}：</label>
+          <div class="col-md-8">
+            <label class="checkbox checkbox-inline" ng-repeat="one in role.e.busiTypeRights">
+              <input type="checkbox" ng-model="one.hasRights"> {{ one.rightsName }}
+            </label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-md-3 control-label"><input type="checkbox" yt-checkbox-indeterminate="role.e.platformRights.indeterminate" ng-model="role.e.platformRights.allChecked" ng-change="changeAllCheck(role.e.platformRights)" style="margin-right:5px">{{'投放平台' | translate}}：</label>
+          <div class="col-md-8">
+            <label class="checkbox checkbox-inline" ng-repeat="one in role.e.platformRights.list">
+              <input type="checkbox" ng-model="one.hasRights" ng-change="updateAllCheck(role.e.platformRights)"> {{ one.rightsName }}
+            </label>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-primary" ng-click="ok()" ng-disabled="formAddUser.$invalid">{{'SAVE' | translate}}</button>
+  <button type="button" class="btn btn-default" ng-click="cancel()">{{'CANCEL' | translate}}</button>
+</div>

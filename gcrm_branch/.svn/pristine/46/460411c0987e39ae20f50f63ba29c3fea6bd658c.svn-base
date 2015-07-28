@@ -1,0 +1,68 @@
+<div class="modal-header">
+    <h4>{{'PLATFORM_LIST_ADD' | translate}}</h4>
+</div>
+<div class="modal-body">
+  <form class="form-horizontal">
+    <div class="form-group">
+      <label class="control-label col-md-3">
+        {{'PLATFORM_LIST_PLATFORM_NAME' | translate}}：
+      </label>
+      <div>
+        <div class="col-md-4">
+          <div class="input-group">
+            <span class="input-group-addon">{{'CHINESE' | translate}}</span>
+            <input type="text" class="form-control" ng-model="input.cnName" ng-change="changeCnName()" yt-placeholder="{{'PLACEHOLDER_CN_NAME' | translate}}" />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="input-group">
+            <span class="input-group-addon">{{'ENGLISH' | translate}}</span>
+            <input type="text" class="form-control" ng-model="input.enName" ng-change="changeEnName()" yt-placeholder="{{'PLACEHOLDER_EN_NAME' | translate}}" />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-md-3">
+        {{'PLATFORM_LIST_BUSSINESS_TYPE' | translate}}：
+      </label>
+      <div class="col-md-6">
+        <label class="radio radio-inline">
+            <input type="radio" ng-model="radio.businessType" ng-change="businessTypeToggle()" value="sales" />{{'BUSINESS_TYPE_SALE' | translate}}
+        </label>
+        <label class="radio radio-inline">
+            <input type="radio" ng-model="radio.businessType" ng-change="businessTypeToggle()" value="liquidate" />{{'BUSINESS_TYPE_CASH' | translate}}
+        </label>
+      </div>
+    </div>
+    <div class="form-group mb0" ng-if="radio.businessType == 'sales'">
+      <label class="control-label col-md-3">
+        {{'PLATFORM_LIST_SITE' | translate}}：
+      </label>
+      <div class="col-md-3">
+        <p class="form-control-static">{{'CHINA' | translate}}</p>
+      </div>
+    </div>
+    <div class="form-group mb0" ng-if="radio.businessType == 'liquidate'">
+      <label class="control-label col-md-3">
+        {{'PLATFORM_LIST_SITE' | translate}}：
+      </label>
+      <div class="col-md-9">
+        <label class="checkbox checkbox-inline">
+            <input type="checkbox" ng-model="check.all" ng-change="toggle()" />{{'CHECK_ALL' | translate}}
+        </label>
+        <div class="col-md-12 row platform-add-sites clearfix">
+          <label class="checkbox checkbox-inline" ng-repeat="site in sites" ng-class="{'checkbox-first': $index == 0}">
+              <input type="checkbox" ng-model="site.checked" ng-click="checkSingle(site)" ng-disabled="!site.allowCanceled"/>{{site.i18nName}}
+          </label>
+        </div>
+        <div class="text-muted platform-add-ps" ng-if="showPS">{{'PLATFORM_LIST_ADD_HINT' | translate}}</div>
+      </div>
+    </div>
+    <div alert ng-repeat="alert in alerts" type="alert.type" class="mt10 mb0 repeat">{{alert.msg}}</div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-primary" ng-click="ok()">{{'SAVE' | translate}}</button>
+  <button type="button" class="btn btn-default" ng-click="cancel()">{{'CANCEL' | translate}}</button>
+</div>

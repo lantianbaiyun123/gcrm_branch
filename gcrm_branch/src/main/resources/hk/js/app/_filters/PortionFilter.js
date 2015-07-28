@@ -1,0 +1,1 @@
+define(["app"],function(n){n.registerFilter("PortionFilter",function(){return function(n){return 1>=n?(100*n).toFixed(2)+"%":n}})});

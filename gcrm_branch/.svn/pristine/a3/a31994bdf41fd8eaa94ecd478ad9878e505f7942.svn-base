@@ -1,0 +1,19 @@
+package com.baidu.gcrm.ws.service.impl;
+
+import javax.jws.WebService;
+
+import org.springframework.stereotype.Service;
+
+import com.baidu.gcrm.ws.service.ICompleteQuoteService;
+
+@WebService(endpointInterface = "com.baidu.gcrm.ws.service.ICompleteQuoteService", targetNamespace = "http://gcrm.baidu.com")
+@Service("CompleteQuoteServiceImpl")
+public class CompleteQuoteServiceImpl implements  ICompleteQuoteService{
+
+	@Override
+	public void completeQuote(String quoteId) {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

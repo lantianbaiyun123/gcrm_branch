@@ -1,0 +1,59 @@
+<div class="modal-header">
+    <h4>{{'APPLICATION_FOR_ADVERTISING_AHEAD' | translate}}</h4>
+</div>
+<div class="modal-body">
+  <div class="alert alert-info" ng-if="apply.adSolutionContentApply.taskInfo">{{apply.adSolutionContentApply.taskInfo}}</div>
+  <form class="form-horizontal" name="formApply">
+    <div class="form-group">
+      <label class="control-label col-md-2">
+        {{'CONTENT_NUMBER' | translate}}：
+      </label>
+      <div class="col-md-9">
+        <p class="form-control-static">{{apply.adSolutionContentApply.adSolutiionContentNumber}}</p>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-md-2" ><span class="required-star">*</span>{{'CONTRACT_NUMBER' | translate}}：</label>
+      <div class="col-md-9">
+        <input class="w100p" type="hidden" ui-select2="apply.customerContract" ng-model="apply.contract" name="customersName" required>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-md-2" ><span class="required-star">*</span>{{'APPLY_DESCRIPTION' | translate}}：</label>
+      <div class="col-md-9">
+        <textarea class="form-control" rows="3" name="applyReason" ng-model="apply.adSolutionContentApply.applyReason" ng-maxlength="5000" required yt-placeholder="{{'PLACEHOLDER_APPLICATION_REASON' | translate}}"></textarea>
+        <div class="mt10" ng-show="formApply.applyReason.$error.maxlength">
+          {{'MAX_LENGTH_NOT_EXCEED' | translate}}5000
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-md-2" >{{'ATTACHMENT' | translate}}：</label>
+      <div class="col-md-7 pt2">
+        <!--[if lt IE 10]>
+        <span class="btn btn-default btn-sm" yt-ajaxupload='{{ { formatErrorText : "AD_CONTENT_UPLOAD_FILE_TYPE_ERROR"} }}' ng-model="apply.attachments" is-splice-to="true" upload-url="adcontent/applyOnline/doUploadFile" upload-type=""  send-begin-cbfn="beginUpload()" uploaded-cbfn="uploaded()" upload-invalidatetype="exe|msi|bat|sh">
+          <span class="glyphicon glyphicon-plus"></span>
+          <span class="upload-text">{{'AJAX_UPLOAD_UPLOAD' | translate}}</span>
+        </span>
+        <![endif]-->
+        <!--[if (!IE)|(IE 10)]><!-->
+        <span class="btn btn-default btn-sm" yt-jquery-file-upload='{{ { formatErrorText : "AD_CONTENT_UPLOAD_FILE_TYPE_ERROR"} }}' ng-model="apply.attachments" is-splice-to="true" upload-url="adcontent/applyOnline/doUploadFile"  send-begin-cbfn="beginUpload()" uploaded-cbfn="uploaded()" upload-invalidatetype="exe|msi|bat|sh">
+          <span class="glyphicon glyphicon-plus"></span>
+          <span class="upload-text">{{'AJAX_UPLOAD_UPLOAD' | translate}}</span>
+        </span>
+        <!--<![endif]-->
+        <div class="attachments-wrap">
+          <p class="attachment" ng-repeat="attachment in apply.attachments">
+            <button type="button" class="btn btn-link btn-remove pr5 pt2" ng-click="removeAttachment($index)" tooltip="{{'MATERIAL_DELETE_CODE_FILE' | translate}}"><span class="glyphicon glyphicon-trash"></span></button>
+            <a target="_blank" ng-href="{{attachment.url}}" ng-if="attachment.id">{{attachment.name}}</a>
+            <span ng-if="!attachment.id">{{attachment.name}}</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-primary" ng-disabled="apply.submitDisabled || formApply.$invalid"  ng-click="ok(formApply)">{{'SUBMIT' | translate}}</button>
+  <button type="button" class="btn btn-default" ng-click="cancel()">{{'CANCEL' | translate}}</button>
+</div>

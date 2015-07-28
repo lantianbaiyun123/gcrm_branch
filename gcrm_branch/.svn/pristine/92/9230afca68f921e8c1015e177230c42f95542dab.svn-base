@@ -1,0 +1,47 @@
+<div class="modal-header">
+    <h4>
+        <span>{{'PUBLICATION_CONFIRM_ONLINE_DONE' | translate}}</span>
+    </h4>
+</div>
+<div class="modal-body">
+  <p><strong>{{'PUBLICATION_FORCE_ONLINE_HAVE_SOME_CERTIFICATION' | translate}}：</strong></p>
+  <div class="cert-input">
+    <label class="radio-inline">
+      <input type="radio" ng-model="certData.certType" value="online_approval">{{'PUBLICATION_CERTIFICATION_ONLINE' | translate}}
+    </label>
+    <label class="radio-inline">
+      <input type="radio" ng-model="certData.certType" value="offline_attachment">{{'PUBLICATION_CERTIFICATION_ATTACHMENT' | translate}}
+    </label>
+    <label class="radio-inline">
+      <input type="radio" ng-model="certData.certType" value="none">{{'PUBLICATION_CERTIFICATION_NONE' | translate}}
+    </label>
+  </div>
+  <input ng-show="certData.certType=='online_approval'" yt-placeholder="{{'INPUT_PROCESS_URL' | translate}}" type="url" ng-pattern="/^(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?$/" class="form-control cert-input" ng-model="certData.processUrl" required ng-class="{'ng-dirty': checkingUrl}"/>
+  <div ng-show="certData.certType=='offline_attachment'" class="cert-input">
+    <div class="mb10">
+      <!--[if lt IE 10]>
+      <span class="btn btn-success btn-xs" yt-ajaxupload="{{attachmentUploadOpts}}" ng-model="certData.attachments" is-splice-to="true" upload-url="publication/uploadProof" upload-invalidatetype="exe|msi|bat|sh" send-begin-cbfn="beginUpload()" uploaded-cbfn="uploaded()">
+        <span class="glyphicon glyphicon-plus"></span>
+        <span class="upload-text">{{'UPLOAD_ATTACHMENT' | translate}}</span>
+      </span>
+      <![endif]-->
+      <!--[if (!IE)|(IE 10)]><!-->
+      <span class="btn btn-success btn-xs" yt-jquery-file-upload="{{attachmentUploadOpts}}" ng-model="certData.attachments" is-splice-to="true" upload-url="material/uploadMaterialFile" upload-invalidatetype="exe|msi|bat|sh" send-begin-cbfn="beginUpload()" uploaded-cbfn="uploaded()">
+        <span class="glyphicon glyphicon-plus"></span>{{'UPLOAD_ATTACHMENT' | translate}}
+      </span>
+      <!--<![endif]-->
+    </div>
+    <div ng-if="certData.attachments.length" ng-repeat="attach in certData.attachments">
+      <button type="button" class="btn btn-link btn-remove" ng-click="removeAttachment($index)" tooltip="{{'DELETE_ATTACHMENT' | translate}}"><span class="glyphicon glyphicon-trash"></span></button>
+      <span class="attachment">
+        <span ng-if="!attach.id">{{attach.downloadFileName}}</span>
+      </span>
+    </div>
+  </div>
+
+</div>
+<div class="modal-footer mt0">
+    <button class="btn btn-primary" ng-click="ok()" ng-disabled="submitDisabled">{{'SUBMIT' | translate}}</button>
+    <span></span>
+    <button class="btn btn-default" ng-click="cancel()">{{'CANCEL' | translate}}</button>
+</div>

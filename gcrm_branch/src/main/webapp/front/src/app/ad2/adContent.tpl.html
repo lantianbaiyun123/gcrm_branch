@@ -1,0 +1,88 @@
+<div class="page-header">
+  <div class="panel-heading">
+    <span class="black-block">&nbsp;</span>
+    <span class="panel-heading-text">{{'AD_CONTENT_TITLE' | translate}}{{ $index + 1 }}</span>
+    <div class="pull-right" ng-hide="state.isGlobleEditing">
+      <!-- 提前上线申请 -->
+      <a class="btn btn-link" ng-click="popPubApply()" ng-if="basic.isOwner && ad.onlineApplyAllowed">
+        <span>{{'START_IN_ADVANCE_APPLY' | translate}}</span>
+        <span ng-if="ad.onlineApplyApprovalStatus">（{{'PUB_APPLY_STATUS_' +  ad.onlineApplyApprovalStatus | translate}}）</span>
+      </a>
+      <!-- 审核记录 -->
+      <a class="btn btn-default" ng-click="btnApprovalRecord()" ng-if="contentState.showBtnApprovalRecord">{{'VIEW_APPROVAL_RECORD' | translate}}</a>
+      <!-- 重新排期 -->
+      <!-- <a class="btn btn-default ml5" yt-popover-confirm="btnReSchedule()"  yt-popover-ok-class="btn-warning" yt-popover-ok-text="{{'RESCHEDULE' | translate}}" yt-popover-title="{{AdConstant.rescheduleWarn}}" append-to-body="true" ng-if="contentState.canReschedule">{{'RESCHEDULE' | translate}}</a> -->
+      <!-- 确定国代的排期信息 -->
+      <!-- <a class="btn btn-default ml5" ng-click="btnConfirmContent()" ng-if="contentState.canConfirm">{{'CONFIRM' | translate}}</a> -->
+      <!-- <a class="btn btn-default ml5" ng-click="btnEditContent()" ng-if="contentState.canModify && ad.review">{{'MODIFY' | translate}}</a> -->
+      <a class="btn btn-default ml5" ng-click="btnChangeContent()" ng-if="contentState.canChange">{{'AD_SOLUTION_DETAIL_CHANGE_CONTENT' | translate}}</a>
+      <a class="btn btn-default ml5" ng-click="btnTerminate()" ng-if="contentState.canTerminate">{{'AD_SOLUTION_DETAIL_TERMINATE_COOP' | translate}}</a>
+      <a class="btn btn-default ml5" yt-popover-confirm="btnCancelContent()"  yt-popover-ok-class="btn-warning" yt-popover-ok-text="{{'WITHDRAW' | translate}}" yt-popover-title="{{AdConstant.warnContentCancel}}" append-to-body="true" ng-if="contentState.canWithdraw">{{'WITHDRAW' | translate}}</a>
+      <a class="btn btn-default ml5" ng-click="btnChangePO()" ng-if="contentState.canChangePo">{{'AD_SOLUTION_DETAIL_CHANGE_PO' | translate}}</a>
+      <a class="btn btn-default ml5"  yt-popover-confirm="adContentRemove()"  yt-popover-ok-class="btn-danger" yt-popover-ok-text="{{'DELETE' | translate}}" yt-popover-title="{{'AD_BASIC_CONFIRM_REMOVE_CONTENT' | translate}}" append-to-body="true" ng-if="contentState.canDelete" ng-hide="adContents.length==1">{{'DELETE' | translate}}</a>
+    </div>
+  </div>
+</div>
+<div class="panel-body pt0" ng-if="state.isDetailView">
+  <div class="gcrm-slots row well" ng-class="{'old-content-number': ad.oldContentNumber}">
+    <span class="col-md-2 ng-binding slot-lg">
+      {{'CONTENT_NUMBER' | translate}}<br>
+      {{ad.adSolutionContent.number}}
+    </span>
+    <span class="col-md-2 ng-binding slot-xs">
+      {{'TYPE' | translate}}<br>
+      {{'AD_SOLUTION_TYPE_' + ad.adSolutionContent.contentType | translate}}
+    </span>
+    <span class="col-md-2 ng-binding slot-md">
+      {{'CONTENT_STATUS' | translate}}<br>
+      {{'AD_SOLUTION_STATUS_' + ad.adSolutionContent.approvalStatus | translate}}
+    </span>
+    <span class="col-md-2 ng-binding slot-lg">
+      <span>{{'AD_SOLUTION_DETAIL_SCHEDULE_NO' | translate}}</span><br>
+      <span>{{ad.schedule.number}}</span><span class="text-danger" ng-if="ad.schedule.status == 'released'">({{'SCHEDULE_RELEASED_ALREADY' | translate}})</span>
+      <span ng-if="!ad.schedule.number">--</span>
+    </span>
+    <span class="col-md-2 ng-binding slot-mdd">
+      {{'AD_SOLUTION_DETAIL_MATERIAL_NO' | translate}}<br>
+      {{ad.adSolutionContent.materialApplyList[0].number || '--'}}
+    </span>
+    <span class="col-md-2 ng-binding slot-xlg">
+      {{'AD_SOLUTION_LIST_PO' | translate}}<br>
+      {{ad.adSolutionContent.poNum || '--'}}
+    </span>
+    <span class="col-md-2 ng-binding slot-lg" ng-if="ad.oldContentNumber">
+      {{'AD_SOLUTION_LIST_PO_ORIGIN' | translate}}<br>
+      {{ad.oldContentNumber}}
+    </span>
+  </div>
+</div>
+<div class="panel-body pt0" ng-show="ad.review">
+  <form class="form-horizontal">
+    <div alert class="mt10" type="info" close="ad.adSolutionContent.taskInfo = null" ng-if="ad.adSolutionContent.taskInfo" ng-show="contentState.showTaskInfo">{{ad.adSolutionContent.taskInfo}}</div>
+    <div ui-view="contentFragmentGeneralView"></div>
+    <div ui-view="contentFragmentPositionView"></div>
+    <div ui-view="contentFragmentPricingView"></div>
+    <div ui-view="contentFragmentAdvertisingView"></div>
+    <div ui-view="contentFragmentMaterialView"></div>
+  </form>
+</div>
+<div class="panel-body pt0" ng-hide="ad.review">
+  <div alert type="info" close="e.showAlert = null" ng-if="e.showAlert">
+    {{'AD_SOLUTION_DETAIL_MODIFY_HINT_1' | translate}}<a href="#/materialDetail?contentId={{ad.adSolutionContent.id}}" target="_blank">{{'AD_SOLUTION_DETAIL_MODIFY_HINT_2' | translate}}</a>{{'AD_SOLUTION_DETAIL_MODIFY_HINT_3' | translate}}
+  </div>
+  <form class="form-horizontal" name="formAd" novalidate>
+    <div ui-view="contentFragmentGeneralEdit"></div>
+    <div ui-view="contentFragmentPositionEdit"></div>
+    <div ui-view="contentFragmentPricingEdit"></div>
+    <div ui-view="contentFragmentAdvertisingEdit"></div>
+    <div ui-view="contentFragmentMaterialEdit"></div>
+  </form>
+</div>
+<div class="panel-footer text-left" ng-hide="ad.review || contentState.autoSave">
+  <a class="btn btn-primary" ng-click="adContentSave(true);" ng-disabled="contentState.isSaveBtnDisabled" ng-if="!state.isDetailView && BtnIndex.btn_adsol_detail_cont_save && !contentState.autoSave">{{'SAVE' | translate}}</a>
+  <!-- <a class="btn btn-primary" ng-click="saveToApproval('change');" ng-if="state.isDetailView && (ad.adSolutionContent.poNum || (basic.adSolution.approvalStatus == 'confirmed' && ad.schedule.status == 'released'))">{{'AD_DETAIL_SUBMIT_CHANGE' | translate}}</a> -->
+  <a class="btn btn-primary" ng-click="saveToApproval('change');" ng-if="state.isDetailView && (ad.adSolutionContent.poNum || contentState.canChange)">{{'AD_DETAIL_SUBMIT_CHANGE' | translate}}</a>
+  <!-- <a class="btn btn-primary" ng-click="saveToApproval('modify');" ng-if="state.isDetailView && !(ad.adSolutionContent.poNum || (basic.adSolution.approvalStatus == 'confirmed' && ad.schedule.status == 'released'))">{{'SUBMIT_TO_APPROVAL' | translate}}</a> -->
+  <a class="btn btn-default" ng-if="ad.isSaved && !contentState.autoSave" yt-popover-confirm="adContentEditCancel()"  yt-popover-ok-class="btn-warning" yt-popover-title="{{'AD_CONTENT_CANCEL_EDIT' | translate}}" append-to-body="true">{{'CANCEL' | translate}}</a>
+  <a class="btn btn-default" ng-if="$index && !ad.isSaved && !contentState.autoSave"  yt-popover-confirm="adContentAddCancel()"  yt-popover-ok-class="btn-warning" yt-popover-title="{{'AD_BASIC_CONFIRM_CANCEL_CONTENT' | translate}}" append-to-body="true">{{'CANCEL' | translate}}</a>
+</div>

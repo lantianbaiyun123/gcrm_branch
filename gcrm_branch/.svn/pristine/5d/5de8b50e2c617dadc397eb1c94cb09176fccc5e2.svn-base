@@ -1,0 +1,18 @@
+<style>
+.body{font-size:14px;}
+.important{font-weight:bold;}
+.red{color:red;}
+</style>
+<div class="body">
+	<p>${sendTo}：</p>
+	<p>
+	Your AD(${number})will not be online at ${date} because of no approved materials. 
+	</p>
+	<p>
+	Please submit the material and get the approval, otherwise the system will release the schedule since the AD is expired.
+	</p>
+	AD content details please click here (${url})
+	</br>
+	</br>
+	This is a system email, please don’t reply.
+</div>

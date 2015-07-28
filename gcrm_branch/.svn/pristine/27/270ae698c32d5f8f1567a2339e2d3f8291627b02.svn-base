@@ -1,0 +1,65 @@
+{
+    "code": 200, 
+    "data": {
+        "advertiseContentNumber": "00016356-02", 
+        "advertiser": "Gamewave HK Holdings Limited.", 
+        "approvalStatus": "confirmed", 
+        "areaRequired": "png/gif/jpg,240*240", 
+        "description": "广告内容2，史吉文测试", 
+        "materialApplyId": "1309", 
+        "materialApplyNumber": "00019339", 
+        "materialFileType": 0, 
+        "materialList": [
+            {
+                "adSolutionContentId": 6578, 
+                "createOperator": 7426946, 
+                "createTime": 1414652702000, 
+                "downloadFileName": "高福春.jpg", 
+                "downloadUrl": "http://localhost:8080/gcrm/material/downloadMaterialFile?materialFileId=633", 
+                "fileSize": 33, 
+                "fileUrl": "http://bcs-sandbox.baidu.com/gcm-storage%2F2faef589-8b4a-4f68-bc79-8e060380022c?sign=MBO%3AcqKYLqQNYOdk%3APIoKGJZJeh8RkDQvtOmvkWiYF%2BY%3D", 
+                "id": 633, 
+                "materialApplyId": 1309, 
+                "materialFileType": "IMAGE", 
+                "picHeight": 598, 
+                "picWidth": 441, 
+                "updateOperator": 7426946, 
+                "updateTime": 1414652702000, 
+                "uploadFileName": "/2faef589-8b4a-4f68-bc79-8e060380022c"
+            }
+        ], 
+        "materialMenuList": [
+            {
+                "adSolutionContentId": 6592, 
+                "createOperator": 7426946, 
+                "createTime": 1414723686000, 
+                "id": 634, 
+                "material": {
+                    "downloadFileName": "高福春.jpg", 
+                    "downloadUrl": "http://localhost:8080/gcrm/material/downloadMaterialFile?materialFileId=634", 
+                    "fileUrl": "http://bcs-sandbox.baidu.com/gcm-storage%2Fa5e45764-be0b-4a16-9b06-6cb353af2c40?sign=MBO%3AcqKYLqQNYOdk%3AD%2BIo7O7sLoGC1EwusWcFgR8ZHhQ%3D", 
+                    "fileSize": 33, 
+                    "picHeight": 598, 
+                    "picWidth": 441, 
+                    "uploadFileName": "/a5e45764-be0b-4a16-9b06-6cb353af2c40"
+                }, 
+                "materialApplyId": 1310, 
+                "materialFileType": "IMAGE", 
+                "updateOperator": 7426946, 
+                "updateTime": 1414723686000
+            }
+        ], 
+        "materialPeriodDescription": "2014-08-28;", 
+        "materialType": 0, 
+        "materialUrl": "http://www.sina.com.cn/", 
+        "operatorName": "周婷", 
+        "periodDescription": "2014-08-28;", 
+        "positionName": "Hao123/台湾地区/图片/Banner区/图片页右侧Banner", 
+        "role": "direct_supervisor", 
+        "size": "30K", 
+        "submitPerson": "刘晓", 
+        "submitTime": 1414652702000, 
+        "taskClose": false
+    }, 
+    "message": "OK"
+}

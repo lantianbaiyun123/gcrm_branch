@@ -1,0 +1,20 @@
+{
+    "code": 200,
+    "data": [
+        {
+            "businessType": 0,
+            "i18nName": "变现",
+            "id": 4,
+            "name": "变现",
+            "status": 1
+        },
+        {
+            "businessType": 0,
+            "i18nName": "变现",
+            "id": 44,
+            "name": "hao123",
+            "status": 1
+        }
+    ],
+    "message": "OK"
+}

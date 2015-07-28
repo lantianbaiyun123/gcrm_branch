@@ -1,0 +1,56 @@
+.platform-add-sites{border-top: 2px solid #e8e8e8;margin-top: 8px;}
+.checkbox-first{margin-right: 10px;}
+.platform-add-sites .checkbox-inline + .checkbox-inline{margin-left: 0;margin-right: 10px;}
+.platform-add-ps{font-size: 12px;float: left;margin-top: 10px;}
+
+.platform-add-ul li{
+  float: left;
+  width: 100px;
+}
+.repeat.ng-enter,
+.repeat.ng-move
+{
+  -webkit-transition: .2s linear all;
+  opacity: 0;
+  /*height: 0;*/
+}
+
+.repeat.ng-enter.ng-enter-active,
+.repeat.ng-move.ng-move-active{
+  opacity: 1;
+  /*height: 32px;*/
+}
+
+.repeat.ng-leave{
+  -webkit-transition: 0.2s linear all;
+  opacity: 1;
+}
+.repeat.ng-leave.ng-leave-active{
+  opacity: 0;
+  /*height: 0;*/
+}
+
+
+.sample-show-hide {
+  padding:10px;
+  border:1px solid black;
+  background:white;
+}
+ 
+.sample-show-hide.ng-hide-add, .sample-show-hide.ng-hide-remove {
+  -webkit-transition:all linear 0.5s;
+  -moz-transition:all linear 0.5s;
+  -o-transition:all linear 0.5s;
+  transition:all linear 0.5s;
+  display:block!important;
+}
+ 
+.sample-show-hide.ng-hide-add.ng-hide-add-active,
+.sample-show-hide.ng-hide-remove {
+  opacity:0;
+}
+ 
+.sample-show-hide.ng-hide-add,
+.sample-show-hide.ng-hide-remove.ng-hide-remove-active {
+  opacity:1;
+}

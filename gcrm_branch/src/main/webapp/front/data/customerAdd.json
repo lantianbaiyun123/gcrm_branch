@@ -1,0 +1,8 @@
+{
+  "code":200,
+  "data": {
+    "userName": "huanfeihong",
+    "password": "it is likes shit"
+  },
+  "message":"duplication"
+}

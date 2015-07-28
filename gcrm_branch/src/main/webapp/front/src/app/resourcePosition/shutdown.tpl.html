@@ -1,0 +1,12 @@
+<div class="modal-header" ng-class="{'modal-header-no-border': !usedCount}">
+  <h4>{{'CONFIRM_SHUTDOWN' | translate}}</h4>
+</div>
+<div class="modal-body" ng-if="usedCount">
+  <p>
+    {{usedCountHint}}
+  </p>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-primary"  ng-click="ok()">{{'CONFIRM_SHUTDOWN' | translate}}</button>
+  <button type="button" class="btn btn-default" ng-click="cancel()">{{'CANCEL' | translate}}</button>
+</div>

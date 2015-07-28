@@ -1,0 +1,299 @@
+package com.baidu.gcrm.stock.service.impl;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.baidu.gcrm.common.DateUtils;
+import com.baidu.gcrm.common.exception.CRMRuntimeException;
+import com.baidu.gcrm.common.log.LoggerHelper;
+import com.baidu.gcrm.data.bean.WeekImpressions;
+import com.baidu.gcrm.data.service.IPositionDataSampleService;
+import com.baidu.gcrm.occupation1.model.PositionDate;
+import com.baidu.gcrm.resource.position.model.Position;
+import com.baidu.gcrm.stock.dao.StockRepository;
+import com.baidu.gcrm.stock.helper.CalculatorHelper;
+import com.baidu.gcrm.stock.model.PositionDateStock;
+import com.baidu.gcrm.stock.model.Stock;
+import com.baidu.gcrm.stock.service.IStockService;
+import com.baidu.gcrm.stock.vo.DateStock;
+import com.baidu.gcrm.valuelistcache.model.BillingModel;
+
+@Service
+public class StockServiceImpl implements IStockService {
+
+    @Autowired
+    StockRepository stockDao;
+
+    @Autowired
+    IPositionDataSampleService posDataService;
+
+    private static final Long PER_THOUSAND = 1000L;
+
+    private static final Double FACTOR = 0.9D;
+    
+    private static final Long DEFAULT_MAX_IMPRESSION = 100000L;
+
+    @Override
+    public void save(Stock stock) {
+        stockDao.save(stock);
+    }
+
+    @Override
+    public void createNewStocks(List<PositionDate> newPosDates, Map<Long, Position> posIdMap) {
+        if (CollectionUtils.isEmpty(newPosDates)) {
+            return;
+        }
+
+        Map<Long, WeekImpressions> weekImpressions = getWeekImpressionsOfPositions(posIdMap.keySet());
+        List<Stock> newStocks = new ArrayList<Stock>();
+        for (PositionDate positionDate : newPosDates) {
+            Position position = posIdMap.get(positionDate.getPositionId());
+            WeekImpressions impressions = getWeekImpressionsOfPosition(weekImpressions, position);
+            newStocks.add(createCPMStock(positionDate, impressions, position));
+            newStocks.add(createCPTStock(positionDate, position.getSalesAmount()));
+        }
+        stockDao.save(newStocks);
+        LoggerHelper.info(getClass(), "create {} new stocks.", newStocks.size());
+    }
+
+    private Map<Long, WeekImpressions> getWeekImpressionsOfPositions(Collection<Long> posIds) {
+        Map<Long, WeekImpressions> weekImpressions = new HashMap<Long, WeekImpressions>();
+        List<PositionDateStock> stocks = getComingWeekCPMStock(posIds);
+        for (PositionDateStock positionDateStock : stocks) {
+            WeekImpressions impressions = weekImpressions.get(positionDateStock.getPositionId());
+            if (impressions == null) {
+                impressions = new WeekImpressions();
+            }
+            impressions.setImpressionOfDay(positionDateStock.getDate(), positionDateStock.getTotalStock());
+
+            weekImpressions.put(positionDateStock.getPositionId(), impressions);
+        }
+        return weekImpressions;
+    }
+
+    private List<PositionDateStock> getComingWeekCPMStock(Collection<Long> posIds) {
+        Date fromDate = new Date();
+        Date toDate = DateUtils.getNDayFromDate(fromDate, Calendar.DAY_OF_WEEK);
+        return stockDao.findPositionDateStocks(posIds, fromDate, toDate, BillingModel.CPM_ID);
+    }
+
+    private WeekImpressions getWeekImpressionsOfPosition(Map<Long, WeekImpressions> impressionMap, Position position) {
+        WeekImpressions impressions = impressionMap.get(position.getId());
+        if (impressions != null) {
+            return impressions;
+        }
+        impressions = new WeekImpressions();
+        if (position.getPv() != null) {
+            impressions.setImpressions(position.getPv() / PER_THOUSAND);
+        } else {
+            impressions.setImpressions(DEFAULT_MAX_IMPRESSION);
+        }
+        // put default impressions to map
+        impressionMap.put(position.getId(), impressions);
+        return impressions;
+    }
+
+    private Stock createCPMStock(PositionDate positionDate, WeekImpressions impressions, Position position) {
+        Stock stock = new Stock();
+        stock.setPositionDateId(positionDate.getId());
+        long impression = impressions.getImpressionOfDay(positionDate.getDate());
+        // if there is no referenced impression, set total stock by initial
+        // click of position
+        stock.setTotalStock((impression < 0 && position.getPv() != null)
+                ? position.getPv() / PER_THOUSAND : impression);
+        if (impression == -1L) {
+            impression = DEFAULT_MAX_IMPRESSION;
+        }
+        stock.setOccupiedStock(0L);
+        stock.setRealOccupiedStock(0L);
+        stock.setBillingModelId(BillingModel.CPM_ID);
+        return stock;
+    }
+
+    private Stock createCPTStock(PositionDate positionDate, Integer salesAmount) {
+        Stock stock = new Stock();
+        stock.setPositionDateId(positionDate.getId());
+        if (salesAmount == null) {
+            salesAmount = 0;
+        }
+        stock.setTotalStock(Long.valueOf(salesAmount.toString()));
+        stock.setOccupiedStock(0L);
+        stock.setRealOccupiedStock(0L);
+        stock.setBillingModelId(BillingModel.CPT_ID);
+        return stock;
+    }
+
+    @Override
+    public void updateStocksTimer() {
+        LoggerHelper.info(getClass(), "Begin to update CPM and CPT stocks of enabled position");
+        List<Stock> updateStocks = new ArrayList<Stock>();
+
+        Map<Long, Long> impressionsMap = posDataService.findImpressionsOfYesterday();
+        if (impressionsMap.size() == 0) {
+            LoggerHelper.info(getClass(), "no impressions of yesterday.");
+            return;
+        }
+        
+        Date fromDate = DateUtils.getCurrentDateOfZero();
+        int weekday = DateUtils.getDayInWeek(DateUtils.getYesterdayDate());
+        LoggerHelper.info(getClass(), "update {} day of week.", weekday);
+        int sqlWeekday = getSqlWeekday(weekday);
+        Set<Long> positionIds = impressionsMap.keySet();
+        List<Object[]> objs = stockDao.findStocksOfWeekday(fromDate, sqlWeekday, BillingModel.CPM_ID, positionIds);
+        List<Object[]> cptobjs = stockDao.findStocksOfWeekday(fromDate, sqlWeekday, BillingModel.CPT_ID, positionIds);
+        Map<Long, Stock> cptStockMap = getStockMap(cptobjs);
+        for (Object[] obj : objs) {
+            PositionDate posDate = (PositionDate) obj[0];
+            Stock cpmStock = (Stock) obj[1];
+            Long impression = impressionsMap.get(posDate.getPositionId());
+            if (impression == null) {
+                continue;
+            }
+            long newCPMStocks = getImpression(impression);
+            if (newCPMStocks == cpmStock.getTotalStock()) {
+                continue;
+            }
+            Stock cptStock = cptStockMap.get(cpmStock.getPositionDateId());
+            if (cptStock == null) {
+                cptStock = createCPTStock(posDate, (Integer) obj[2]);
+            }
+            
+            cpmStock.setTotalStock(newCPMStocks);
+            updateOccupiedStocks(cpmStock, cptStock);
+            updateStocks.add(cpmStock);
+            updateStocks.add(cptStock);
+        }
+
+        if (CollectionUtils.isNotEmpty(updateStocks)) {
+            stockDao.save(updateStocks);
+        }
+
+        LoggerHelper.info(getClass(), "update finished! total update: {}", updateStocks.size());
+    }
+
+    private int getSqlWeekday(int weekday) {
+        switch (weekday) {
+            case 1 :
+                return 6;
+            case 2 :
+                return 0;
+            case 3 :
+                return 1;
+            case 4 :
+                return 2;
+            case 5 :
+                return 3;
+            case 6 :
+                return 4;
+            case 7 :
+                return 5;
+            default :
+                break;
+        }
+        return 0;
+    }
+
+    /**
+     * 获取库存MAP，key是positionDateId，value是Stock
+     */
+    private Map<Long, Stock> getStockMap(List<Object[]> objs) {
+        Map<Long, Stock> cptStockMap = new HashMap<Long, Stock>();
+        for (Object[] obj : objs) {
+            Stock stock = (Stock) obj[1];
+            cptStockMap.put(stock.getPositionDateId(), stock);
+        }
+        return cptStockMap;
+    }
+
+    private long getImpression(long impression) {
+        return (long) (impression * FACTOR / PER_THOUSAND);
+    }
+    
+    private void updateOccupiedStocks(Stock cpmStock, Stock cptStock) {
+        Long realCPMStock = cpmStock.getRealOccupiedStock();
+        Long realCPTStock = cptStock.getRealOccupiedStock();
+        Long totalCPTStock = cptStock.getTotalStock();
+        Long totalCPMStock = cpmStock.getTotalStock();
+        if (totalCPTStock <= 0) {
+            LoggerHelper.info(getClass(), "位置的轮播数是{}，无法更新已占用库存", totalCPTStock);
+            throw new CRMRuntimeException("位置的轮播数必须是正数！");
+        }
+        cpmStock.setOccupiedStock(realCPMStock + CalculatorHelper.cal(realCPTStock, totalCPTStock, totalCPMStock));
+        cptStock.setOccupiedStock(realCPTStock + CalculatorHelper.cal(realCPMStock, totalCPMStock, totalCPTStock));
+    }
+    
+    @Override
+    public void updateTotalStocks(Position position) {
+        Set<Long> posIds = new HashSet<Long>();
+        posIds.add(position.getId());
+        Long newTotalCPTStock = Long.valueOf(position.getSalesAmount().toString());
+        
+        List<Stock> updateStocks = new ArrayList<Stock>();
+        Date fromDate = DateUtils.getCurrentDateOfZero();
+        List<Object[]> cptobjs = stockDao.findStocks(fromDate, BillingModel.CPM_ID, posIds);
+        Map<Long, Stock> cpmStockMap = getStockMap(cptobjs);
+        List<Object[]> objs = stockDao.findStocks(fromDate, BillingModel.CPT_ID, posIds);
+        for (Object[] obj : objs) {
+            Stock cptStock = (Stock) obj[1];
+            Stock cpmStock = cpmStockMap.get(cptStock.getPositionDateId());
+            cptStock.setTotalStock(newTotalCPTStock);
+            updateOccupiedStocks(cpmStock, cptStock);
+            updateStocks.add(cptStock);
+            updateStocks.add(cpmStock);
+        }
+        
+        if (CollectionUtils.isNotEmpty(updateStocks)) {
+            stockDao.save(updateStocks);
+        }
+
+        LoggerHelper.info(getClass(), "update {} stocks after position sales amount changed!", updateStocks.size());
+    }
+    
+    @Override
+    public List<DateStock> queryDateStocks(Long billingModelId, List<Long> positionDateIds) {
+        if (CollectionUtils.isEmpty(positionDateIds)) {
+            return new ArrayList<DateStock>();
+        }
+        return stockDao.findDateStockByBillingModelIdAndPositionDateIdIn(billingModelId, positionDateIds);
+    }
+    
+    @Override
+    public List<Stock> findAll() {
+        return stockDao.findAll();
+    }
+    
+    @Override
+    public Map<String, DateStock> getDateStockMap(Long billingModelId, Long positionId, Collection<Date> dates) {
+        Map<String, DateStock> dateStockMap = new HashMap<String, DateStock>();
+        List<DateStock> stocks = stockDao.findDateStockByBillingModelIdAndPositionIdAndDateIn(billingModelId,
+                positionId, dates);
+        if (CollectionUtils.isEmpty(stocks)) {
+            return dateStockMap;
+        }
+        for (DateStock stock : stocks) {
+            dateStockMap.put(DateUtils.getDate2ShortString(stock.getDate()), stock);
+        }
+        return dateStockMap;
+    }
+    
+    @Override
+    public List<Stock> findByPositionDateIdInAndBillingModelId(Long billingModelId, List<Long> positionDateIds) {
+        return stockDao.findByPositionDateIdInAndBillingModelId(positionDateIds, billingModelId);
+    }
+
+    @Override
+    public Long findMaxOccupiedCPTStock(Long positionId) {
+        return stockDao.findMaxOccupiedCPTStock(new Date(), positionId, BillingModel.CPT_ID);
+    }
+}

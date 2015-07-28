@@ -1,0 +1,1 @@
+define(["app","../_filters/PositionFilter"],function(o){o.registerFactory("PositionPropDetailModal",["$modal","STATIC_DIR",function(o,t){return{show:function(i){{var n={};o.open({templateUrl:t+"app/resourcePosition/positionPropDetailModal.tpl.html",controller:"CtrlModal",windowClass:"position-prop-modal",resolve:{opts:function(){return angular.extend(n,i)}}})}}}}])});

@@ -1,0 +1,32 @@
+<div class="content-base-info">
+  <h5>
+    {{'AD_CONTENT_BASIC_INFO' | translate}}
+  </h5>
+  <div class="form-group">
+    <label class="control-label col-md-2">
+      {{'AD_CONTENT_ADVERTISER_NAME' | translate}}：
+    </label>
+    <div ng-class="{'has-error': e.contentSave && formAd.customersName.$error.required}">
+      <div class="col-md-4">
+        <input type="text" ng-model="e.advertiser.value" class="form-control" required ng-disabled="true" ng-show="basic.customerDirect" name="customersName">
+        <input type="hidden" ui-select2="optionCustomerForAdOwner" ng-model="e.advertiser" style="width:310px" required ng-if="!basic.customerDirect">
+      </div>
+      <div class="col-md-3 help-block" ng-show="e.contentSave && formAd.customersName.$error.required">
+        {{'AD_CONTENT_NO_CUSTOMERSNAME' | translate}}
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-md-2">
+      {{'AD_CONTENT_DESCRIBE' | translate}}：
+    </label>
+    <div ng-class="{'has-error':e.contentSave && formAd.companyDescribe.$error.required}">
+      <div class="col-md-3">
+        <input placeholder="" type="text" class="form-control" name="companyDescribe" ng-model="e.adSolutionContent.description" required>
+      </div>
+      <div class="col-md-3 help-block" ng-show="e.contentSave && formAd.companyDescribe.$error.required">
+        {{'AD_CONTENT_NO_ADCONTENT' | translate}}
+      </div>
+    </div>
+  </div>
+</div>

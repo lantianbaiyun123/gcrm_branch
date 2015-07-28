@@ -1,0 +1,24 @@
+{
+    "code": 200,
+    "data": {
+        "businessTypes": "销售",
+        "platforms": "hao123变现,中文广告销售",
+        "posParent": "国代Leader,销售主管",
+        "posSub": "测试岗位1",
+        "roleName": "销售,国代",
+        "position": "position丰富的健康",
+        "sites": "测试站点1,测试站点2",
+        "userVO": {
+            "dept": "流程信息管理部",
+            "email": "zhanglei35@baidu.com",
+            "realName": "张磊",
+            "supervisor": "Jason",
+            "ucid": 6257286,
+            "username": "zhanglei35",
+            "phoneNumber": "12381247918"
+        },
+        "dataAuthority": true,
+        "newRightsURL": "http://www.baidu.com"
+    },
+    "message": "OK"
+}

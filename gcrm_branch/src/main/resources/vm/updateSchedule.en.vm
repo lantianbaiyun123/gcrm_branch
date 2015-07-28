@@ -1,0 +1,16 @@
+<style>
+.body{font-size:15px;}
+.important{font-weight:bold;}
+</style>
+<div class="body">
+	${sendTo}:</br> </br> 
+	The advertisement you submitted on ${adSubmitTime}, AD code(${adContentNumber}) at <span class="important">${scheduleUpdateTime}</span>,
+	the domestic agent ${countryAgent} has changed the original advertising periods </br>
+	from ${oldOccupationPeriods}</br>
+	to ${occupationPeriods}</br>
+	
+	#if(${needConfrim})
+	<span class="important">Please confirm within 72 hours</span>, or the reserved periods will be released</br>
+	#end
+	If you have any problems, please contact domestic agent(${countryAgent})</br>
+</div>

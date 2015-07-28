@@ -1,0 +1,74 @@
+<div class="container">
+  <div class="panel gcrm-panel panel-default">
+    <div class="panel-top-heading">
+      <h1>
+        <span>{{'用户详情' | translate}}</span>
+      </h1>
+    </div>
+    <div class="panel-sub-heading">
+      <h2>
+        <span><span class="black-block">&nbsp;</span> 人员基础信息</span>
+        <span class="pull-right">
+          <a class="btn btn-default" ng-click="btnEditUser()">
+            修改
+          </a>
+        </span>
+      </h2>
+    </div>
+    <div class="panel-body">
+      <div class="row basic-info">
+        <dl class="dl-horizontal">
+          <dt>姓名：</dt><dd>{{userVO.realName}}</dd>
+          <dt>部门：</dt><dd>{{userVO.dept}}</dd>
+          <dt>公司邮箱：</dt><dd>{{userVO.email}}</dd>
+          <dt>电话：</dt><dd>{{userVO.phoneNumber}}</dd>
+          <dt>直属上级：</dt><dd>{{userVO.supervisor}}</dd>
+        </dl>
+      </div>
+    </div>
+    <div class="panel-sub-heading">
+      <h2>
+        <span><span class="black-block">&nbsp;</span> UC账号及角色信息</span>
+        <span class="pull-right">
+          <a class="btn btn-link" ng-click="changeRole()">
+            修改角色
+          </a>
+        </span>
+      </h2>
+    </div>
+    <div class="panel-body">
+      <div class="row basic-info">
+        <dl class="dl-horizontal">
+          <dt>UC账号：</dt><dd>{{uc.username}}</dd>
+          <dt>UCid：</dt><dd>{{userVO.ucid}}</dd>
+          <dt>角色：</dt><dd>{{uc.roleName}}</dd>
+          <dt>岗位：</dt><dd>{{uc.position}}</dd>
+          <dt>上级岗位：</dt><dd>{{uc.posParent}}</dd>
+          <dt>下级岗位：</dt><dd>{{uc.posSub}}</dd>
+        </dl>
+      </div>
+    </div>
+    <div class="panel-sub-heading">
+      <h2>
+        <span><span class="black-block">&nbsp;</span> 数据权限</span>
+        <span class="pull-right">
+          <a class="btn btn-default" ng-click="btnEditDataAuthority()" ng-if="dataAuthority.hasDataRights">
+            修改
+          </a>
+          <a class="btn btn-success" ng-click="btnEditDataAuthority()" ng-if="!dataAuthority.hasDataRights">
+            添加
+          </a>
+        </span>
+      </h2>
+    </div>
+    <div class="panel-body">
+      <div class="row basic-info">
+        <dl class="dl-horizontal">
+          <dt>站点：</dt><dd>{{dataAuthority.sites}}</dd>
+          <dt>业务类型：</dt><dd>{{dataAuthority.businessTypes}}</dd>
+          <dt>投放平台：</dt><dd>{{dataAuthority.platforms}}</dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+</div>

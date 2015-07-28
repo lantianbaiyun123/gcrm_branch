@@ -1,0 +1,67 @@
+<!--  <input yt-calendar ng-model="kk" ng-change="alert(kk)" min="ddd"></input>
+ {{ddd}}
+<input datepicker-popup="" ng-model="dd">
+{{kk | date}}  -->
+<!-- <div yt-popover yt-popover-ok="okk(a);">
+ddd
+</div>  -->
+
+ <!-- <form novalidate class="css-form">
+ <input type="text" ng-pattern="/^0.[0-9]*[1-9]|1$/" required ng-model="user.name" />
+    Name:
+      <input type="text" ng-model="user.name" required /><br />
+    E-mail: <input type="email" ng-model="user.email" required /><br />
+    Gender: <input type="radio" ng-model="user.gender" value="male" />male
+    <input type="radio" ng-model="user.gender" value="female" />female<br />
+    <button ng-click="reset()">RESET</button>
+    <button ng-click="update(user)">SAVE</button>
+  </form> -->
+<div class="scope-ad">
+    <div id="shortcuts">
+        <div class="shortcut">
+            <a class="btn btn-default" ng-click="anchorTo(-1);">
+                {{'AD_ANCHOR_SCROLL_BASIC_INFO' | translate}}
+                <span style="visibility:hidden;">
+                    0
+                </span>
+            </a>
+        </div>
+        <div class="shortcut" ng-repeat="ad in ads">
+            <a class="btn btn-default" ng-click="anchorTo($index)">
+                <span class="panel-heading-text">
+                    {{'AD_ANCHOR_SCROLL_AD_CONTENT' | translate}}{{$index + 1}}
+                </span>
+            </a>
+        </div>
+    </div>
+    <div class="container" id="anchorBasic">
+        <div alert ng-repeat="alert in alerts" type="alert.type">{{alert.msg}}</div>
+        <div ui-view="basicEdit">
+        </div>
+        <div ui-view="basicReview">
+        </div>
+        <div ui-view="adContent">
+        </div>
+    </div>
+    <div class="container">
+        <div class="text-center" data-original-title="" title="" ng-hide="stateEditing || ads.length >= 20 || adSolutionTypeUpdate || !BtnIndex.btn_adsol_detail_submit">
+            <a class="J_addAdContentBtn btn btn-default-dashed btn-block" ng-click="addAd();">
+                <span class="glyphicon glyphicon-plus">
+                </span>
+                {{'AD_BASIC_ADD_CONTENT' | translate}}
+            </a>
+        </div>
+        <form class="text-center mt10">
+            <a ng-disabled="disableToApproval" class="btn btn-primary" ng-click="adProgramSubmit();" ng-hide="stateEditing || !ads.length || !BtnIndex.btn_adsol_detail_submit">
+                {{'AD_BASIC_SUBMIT' | translate}}
+            </a>
+            <a ng-disabled="disableToApproval" class="btn btn-primary" ng-show="stateEditing && ads.length && BtnIndex.btn_adsol_detail_submit" popover="{{'AD_BASIC_SUBMIT_HINT' | translate}}"
+            popover-trigger="mouseenter" style="opacity: 0.65;filter: alpha(opacity=65);">
+                {{'AD_BASIC_SUBMIT' | translate}}
+            </a>
+            <a class="btn btn-default" ng-click="cancelChangeAd();" ng-show="adSolutionTypeUpdate">
+                {{'CANCEL' | translate}}
+            </a>
+        </form>
+    </div>
+</div>

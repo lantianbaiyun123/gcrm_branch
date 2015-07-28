@@ -1,0 +1,27 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">&times;</button>
+    <h4>{{'APPROVAL_UPDATE_RECORD' | translate}}</h4>
+</div>
+<div class="modal-body">
+    <div class="insertion-wrap">
+        <table class="table approval-record-table">
+            <thead>
+                <tr>
+                    <th>{{'APPROVAL_OPERATIONAL_CONTEXT' | translate}}</th>
+                    <th style="min-width: 80px">{{'APPROVAL_OPERATIONAL_PEOPLE' | translate}}</th>
+                    <th style="width: 160px">{{'APPROVAL_TIME' | translate}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="record in modalDatas">
+                    <td>{{record.fieldName}}&nbsp;&nbsp;&nbsp;&nbsp;{{record.operateType | RecordOperateTypeFilter | translate}}&nbsp;&nbsp;&nbsp;&nbsp;{{record.oldValue}}&nbsp;&nbsp;&rarr;&nbsp;&nbsp;{{record.newValue}}</td>
+                    <td>{{record.createOperator}}</td>
+                    <td>{{record.createTime | date: 'yyyy-MM-dd HH:mm:ss'}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="ok()">{{'CLOSE' | translate}}</button>
+</div>

@@ -1,0 +1,116 @@
+package com.baidu.gcrm.publish.service;
+
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+
+import com.baidu.gcrm.ad.content.model.AdSolutionContent;
+import com.baidu.gcrm.common.exception.CRMBaseException;
+import com.baidu.gcrm.publish.model.Publish;
+import com.baidu.gcrm.publish.model.Publish.PublishStatus;
+import com.baidu.gcrm.publish.model.Publish.PublishType;
+import com.baidu.gcrm.schedule.model.Schedule;
+
+public interface IPublishService {
+
+    /**
+     * 终止投放，放弃后释放所有排期资源
+     * 
+     * @param number 上线单编号
+     */
+    void terminateAll(String number, Long operatorId);
+
+    void updateMaterial(String number, Long operatorId);
+
+    Publish save(Publish publish);
+
+    String generateNumber() throws CRMBaseException;
+
+    Publish findByAdContentId(Long adContentId);
+
+    Publish findByNumber(String number);
+
+    Publish findByScheduleNumber(String scheduleNumber);
+
+    void updatePublishTypeByScheduleNumber(String scheduleNumber, PublishType type);
+
+    void updatePublishBySchedule(String scheduleNumber, List<Date> dates);
+
+    /**
+     * 释放排期单后，全部下线
+     * 
+     * @param scheduleNumber
+     */
+    void terminateAllAfterRelease(String scheduleNumber);
+
+    void triggerMaterialPublish(Long adContentId, String materialNumber, Long operatorId);
+
+    List<Publish> findByStatus(PublishStatus status);
+
+    Publish saveAndFlush(Publish publish);
+
+    void triggerMaterialPublish(Publish publish, String materialNumber, Long operatorId);
+
+    /**
+     * 排期单被插单后，某一天将从上线单中去掉，此方法更新上线单
+     * 
+     * @param scheduleNumber
+     * @param removedDate
+     */
+    void updatePublishAfterScheduleInserted(String scheduleNumber, Date removedDate);
+
+    /**
+     * 更新上线单类型为“正常上线” <li>如果当前类型是“强制上线”，则更新为“正常上线”</li> <li>如果当前类型是“物料上线”，则保持不变，当物料上线成功后会把类型修改为“正常上线”</li>
+     * 
+     * @param adContentId 广告内容id
+     */
+    void updateToNormalStatus(Long adContentId);
+
+    /**
+     * 变更PO后，判断是否需要自动上线，如需要则自动上线，并标记上线人为“系统”
+     * 
+     * @param content 广告内容
+     */
+    void autoPublishAfterChangePO(AdSolutionContent content);
+
+    /**
+     * 排期单满足以下条件时调用该方法创建上线单 <li>排期单关联已审核通过的物料单，关联已生效的合同</li> <li>排期单关联已审核通过的物料单，关联已生效的PO</li> <li>
+     * 排期单关联已审核通过的物料单，提交提前上线申请并通过</li>
+     * 
+     * @param content 广告内容
+     * @return 上线单
+     */
+    Publish createPublish(AdSolutionContent content, Schedule schedule, String materialNumber);
+
+    /**
+     * <p>
+     * 尝试锁定排期单并生成上线单，如果合同或PO有效并且有审批中的提前上线流程，则终止审批中的提前上线流程
+     * </p>
+     * 
+     * @see com.baidu.gcrm.publish.service.IPublishService#createPublish(AdSolutionContent, Schedule, String)
+     * @param content 广告内容
+     * @return true,锁定排期单；false,不满足条件，没有锁定排期单
+     */
+    boolean tryLockScheduleAndCreatePublish(AdSolutionContent content);
+
+    List<Publish> findByStatusIn(Collection<PublishStatus> statuses);
+
+    /**
+     * <p>
+     * 判断上线单在当前时间是否处于投放间歇期，即上线单状态是投放中但不处于某个投放时间段中
+     * </p>
+     * eg. 投放时间段是10.1-10.5;10.10-10.15;间歇期就是10.6-10.9
+     * 
+     * @param publishNumber 状态是publishing的上线单number，其他状态的上线单返回true
+     * @return true
+     */
+    boolean isPublishInterval(String publishNumber);
+
+    Publish findByAdContentIdandStatus(Long adContentId, PublishStatus status);
+    
+    void releasePublish(Publish publish);
+
+    void unpublishBeforeDeadline(Long adContentId);
+    
+    void updateAdSolutionNumberByAdContentIdIn(List<Long> adContentIds, String newAdSolutionNumber);
+}

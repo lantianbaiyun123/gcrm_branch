@@ -1,0 +1,356 @@
+<div class="container home">
+  <div>
+    <div class="alert alert-info mb5" ng-repeat="notice in noticeList" ng-if="!$index">
+      <a ng-click="noticeRead($index)">{{'ANNOUNCEMENT' | translate}}：{{notice.title}}</a>
+    </div>
+    <div collapse="!state.noticeShowMore">
+      <div class="alert alert-info mb5" ng-repeat="notice in noticeList" ng-if="$index">
+        <a ng-click="noticeRead($index)">{{'ANNOUNCEMENT' | translate}}：{{notice.title}}</a>
+      </div>
+    </div>
+    <a class="btn btn-link" ng-click="toggleNoticeMore()" ng-if="noticeList.length>1">
+      <span ng-if="!state.noticeShowMore">{{'MORE_ANNOUNCEMENT' | translate}}&nbsp;({{noticeList.length - 1}})...</span>
+      <span ng-if="state.noticeShowMore">{{'SIMPLIFY' | translate}}</span>
+    </a>
+  </div>
+  <div ng-if="display.unprocess && BtnIndex.menu_idx_todo" class="panel panel-default gcrm-panel">
+    <div class="panel-heading">
+        <span class="black-block">&nbsp;</span>
+        <span class="panel-heading-text">{{'HOME_MY_TODO_TASK' | translate}}</span>
+    </div>
+    <div class="panel-body">
+      <div tabset>
+        <div tab ng-repeat="(type, data) in taskTypes">
+          <div tab-heading>{{data.name}}({{data.count}})</div>
+          <div ng-if="!data.count" class="alert alert-info">{{'HOME_NO' | translate}}{{data.name}}{{'HOME_TASK' | translate}}</div>
+          <table ng-if="data.count" class="table table-striped mb0">
+            <thead>
+              <tr>
+                <th class="col-md-2">{{'HOME_TYPE' | translate}}</th>
+                <th class="col-md-2">{{'HOME_TASK_NAME' | translate}}</th>
+                <th class="col-md-2">{{'SUBMITTER' | translate}}</th>
+                <th class="col-md-4">{{'SUBMIT_TIME' | translate}}</th>
+                <th class="col-md-2"><a class="pull-right" ng-click="goFirstTask(type)"><span class="glyphicon glyphicon-th-list"></span>&nbsp;{{'MORE' | translate}}</a></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="task in data.tasks">
+                <td>{{task.processName}}</td>
+                <td>{{task.activityName}}</td>
+                <td>{{task.startUser}}</td>
+                <td>{{task.startTime | date: 'yyyy-MM-dd HH:mm'}}</td>
+                <td><a class="btn btn-link btn-xs" ng-click="goTask(task)" ng-if="BtnIndex.btn_idx_todo_handle">{{'HOME_HANDLE' | translate}}</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div ng-if="display.submit && BtnIndex.menu_idx_recent_submit" class="panel panel-default gcrm-panel">
+    <div class="panel-heading">
+        <span class="black-block">&nbsp;</span>
+        <span class="panel-heading-text">{{'HOME_MY_SUBMIT_LAST_MONTH' | translate}}</span>
+    </div>
+    <div class="panel-body">
+      <div tabset>
+        <div tab heading="{{'CUSTOMER' | translate}}" select="selectMySubmit('customer')" ng-if="BtnIndex.btn_idx_recent_submit_cust" active="mySubmit.customer.active">
+          <div class="alert alert-info" ng-if="!mySubmit.customer.list.length">{{'NO_DATA_TEMP' | translate}}</div>
+          <table class="table table-striped" ng-if="mySubmit.customer.list.length">
+            <thead>
+              <tr>
+                <th>{{'CUSTOMER_ANGENT_NUMBER' | translate}}</th>
+                <th>{{'COMPANY_NAME' | translate}}</th>
+                <th>{{'CUSTOMER_TYPE' | translate}}</th>
+                <th>{{'CUSTOMER_APPROVAL_STATUS' | translate}}</th>
+                <th>{{'CURRENT_HANDLER' | translate}}</th>
+                <th>{{'CUSTOMER_STATUS' | translate}}</th>
+                <th><a class="pull-right" ng-href="#/customer/list"><span class="glyphicon glyphicon-th-list"></span>&nbsp;{{'MORE' | translate}}</a></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="one in mySubmit.customer.list">
+                <td>
+                  <a ng-href="#/customer/detail?customerId={{one.id}}" target="_blank">{{one.customerNumber}}</a>
+                  <span ng-if="!one.customerNumber">--</span>
+                </td>
+                <td class="td-max mw150" title="{{one.companyName}}">{{one.companyName}}</td>
+                <td>{{'CUSTOMER_' + one.customerTypeName | translate }}</td>
+                <td>{{'APPROVAL_STATUS_' + one.approvalStatusName | translate}}</td>
+                <td class="td-max mw250" title="{{one.taskInfor}}">
+                  <span ng-if="one.taskInfor">{{one.taskInfor}}</span>
+                  <span ng-if="!one.taskInfor">--</span>
+                </td>
+                <td>{{'CUSTOMER_STATUS_' + one.customerState | translate}}</td>
+                <td>
+                  <a ng-href="#/customer/detail?customerId={{one.id}}" target="_blank">{{'VIEW_DETAIL' | translate}}</a>
+                  <span ng-if="one.buttonRole.reminders">&nbsp;|&nbsp;</span>
+                  <span ng-if="one.buttonRole.reminders"><a ng-click="sendReminderCustomer(one.id)">{{'REMIND' | translate}}</a></span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div tab heading="{{'AD_SOLUTION' | translate}}" select="selectMySubmit('adSolution')" ng-if="BtnIndex.btn_idx_recent_submit_cust_adsol" active="mySubmit.adSolution.active">
+          <div class="alert alert-info" ng-if="!mySubmit.adSolution.list.length">{{'NO_DATA_TEMP' | translate}}</div>
+          <table class="table table-striped" ng-if="mySubmit.adSolution.list.length">
+            <thead>
+              <tr>
+                <th>{{'AD_NUMBER' | translate}}</th>
+                <th>{{'AD_CONTRACT' | translate}}</th>
+                <th>{{'CUSTOMER_CONTRACT_COMPANY' | translate}}</th>
+                <th>{{'AD_STATUS' | translate}}</th>
+                <th>{{'CURRENT_HANDLER' | translate}}</th>
+                <th>{{'AD_CONTRACT_STATUS' | translate}}</th>
+                <th><a class="pull-right" ng-href="#/adSolutionList"><span class="glyphicon glyphicon-th-list"></span>&nbsp;{{'MORE' | translate}}</a></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="one in mySubmit.adSolution.list">
+                <td>
+                  <a ng-href="#/ad2?id={{one.id}}" target="_blank">{{one.number}}</a>
+                </td>
+                <td>
+                  <span ng-if="!one.contract_number">--</span>
+                  <a ng-if="one.contract_number" ng-href="{{one.cmsUrl}}" target="_blank">{{one.contract_number}}</a>
+                </td>
+                <td class="td-max mw150" title="{{one.companyName}}">{{one.companyName}}</td>
+                <td>{{'AD_SOLUTION_STATUS_' + one.approval_status | translate }}</td>
+                <td class="td-max mw350" title="{{one.taskInfoMessage}}">
+                  <span ng-if="one.taskInfoMessage">{{one.taskInfoMessage}}</span>
+                  <span ng-if="!one.taskInfoMessage">--</span>
+                </td>
+                <td>
+                  <span ng-if="!one.contract_state">--</span>
+                  <span ng-if="one.contract_state">{{'CONTRACT_STATUS_' + one.contract_state | translate }}</span>
+                </td>
+                <td>
+                  <a ng-href="#/ad2?id={{one.id}}" target="_blank">{{'VIEW_DETAIL' | translate}}</a>
+                  <span ng-if="one.approval_status=='approving' || one.approval_status=='approved'">&nbsp;|&nbsp;</span>
+                  <span ng-if="one.approval_status=='approving' || one.approval_status=='approved'"><a ng-click="sendReminderAdSolution(one.id)">{{'REMIND' | translate}}</a></span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div tab heading="{{'QUOTATION_BENCHMARK_PRICE' | translate}}" select="selectMySubmit('quotation')" ng-if="BtnIndex.btn_idx_recent_submit_cust_quotprice" active="mySubmit.quotation.active">
+          <div class="alert alert-info" ng-if="!mySubmit.quotation.list.length">{{'NO_DATA_TEMP' | translate}}</div>
+          <table class="table table-striped" ng-if="mySubmit.quotation.list.length">
+            <thead>
+              <tr>
+                <th>{{'QUOTATION_SERIAL' | translate}}</th>
+                <th>{{'QUOTATION_BUSINESS_TYPE' | translate}}</th>
+                <th>{{'PLATFORM' | translate}}</th>
+                <th>{{'QUOTATION_PRICE_TYPE' | translate}}</th>
+                <th>{{'QUOTATION_SITE_AREA' | translate}}</th>
+                <th>{{'QUOTATION_EFFECTIVE_TIME' | translate}}</th>
+                <th>{{'QUOTATION_STATUS' | translate}}</th>
+                <th>{{'QUOTATION_APPROVAL_STATUS' | translate}}</th>
+                <th>{{'CURRENT_HANDLER' | translate}}</th>
+                <th><a class="pull-right" ng-href="#/benchmarkPriceManagement/list"><span class="glyphicon glyphicon-th-list"></span>&nbsp;{{'MORE' | translate}}</a></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="one in mySubmit.quotation.list">
+                <td>
+                  <a ng-href="#/benchmarkPriceManagement/detail?id={{one.quotationMain.id}}" target="_blank">{{one.quotationMain.quoteCode}}</a>
+                </td>
+                <td>{{'BUSINESS_TYPE_' + one.quotationMain.businessType | translate }}</td>
+                <td class="td-max" title="{{one.platformName}}">{{one.platformName}}</td>
+                <td>{{'PRICE_TYPE_' + one.quotationMain.priceType | translate }}</td>
+                <td class="td-max" title="{{one.siteName}}">{{one.siteName}}</td>
+                <td>{{one.quotationMain.startTime | date: 'yyyy-MM-dd'}}<br>{{one.quotationMain.endTime | date: 'yyyy-MM-dd'}}</td>
+                <td>{{'QUOTATION_STATUS_' + one.quotationMain.status | translate}}</td>
+                <td>{{'QUOTATION_APPROVAL_STATUS_' + one.quotationMain.approveStatus | translate}}</td>
+                <td class="td-max mw150" title="{{one.taskInfoMessage}}">
+                  <span ng-if="one.taskInfoMessage">{{one.taskInfoMessage}}</span>
+                  <span ng-if="!one.taskInfoMessage">--</span>
+                </td>
+                <td>
+                  <a ng-href="#/benchmarkPriceManagement/detail?id={{one.quotationMain.id}}" target="_blank">{{'VIEW_DETAIL' | translate}}</a>
+                  <span ng-if="one.quotationMain.approveStatus=='APPROVING'">&nbsp;|&nbsp;
+                  <span ng-if="one.quotationMain.approveStatus=='APPROVING'"><a ng-click="sendReminderQuotation(one.quotationMain.id)">{{'REMIND' | translate}}</a></span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div tab heading="{{'MATERIAL' | translate}}" select="selectMySubmit('material')" ng-if="BtnIndex.btn_idx_recent_submit_cust_mater" active="mySubmit.material.active">
+          <div class="alert alert-info" ng-if="!mySubmit.material.list.length">{{'NO_DATA_TEMP' | translate}}</div>
+          <table class="table table-striped" ng-if="mySubmit.material.list.length">
+            <thead>
+              <tr>
+                <th>{{'MATERIAL_NUMBER' | translate}}</th>
+                <th>{{'MATERIAL_AD_CONTENT_NUMBER' | translate}}</th>
+                <th>{{'ADVERTISER' | translate}}</th>
+                <th>{{'AD_CONTENT_DESCRIBE' | translate}}</th>
+                <th>{{'APPROVAL_STATUS' | translate}}</th>
+                <th>{{'CURRENT_HANDLER' | translate}}</th>
+                <th><a class="pull-right" ng-href="#/materialList"><span class="glyphicon glyphicon-th-list"></span>&nbsp;{{'MORE' | translate}}</a></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="one in mySubmit.material.list">
+                <td>
+                  <a ng-href="#/materialDetail?contentId={{one.adContentId}}" target="_blank">{{one.number}}</a>
+                </td>
+                <td>
+                  <a ng-href="#/adContentDetail?id={{one.adContentId}}" target="_blank">{{one.contentNumber}}</a>
+                </td>
+                <td class="td-max mw150" title="{{one.advertiser}}">{{one.advertiser}}</td>
+                <td class="td-max mw150" title="{{one.description}}">{{one.description}}</td>
+                <td>{{'MATERIAL_APPROVEL_STATUS_' + one.applyState | translate }}</td>
+                <td class="td-max mw150" title="{{one.taskInfor}}">
+                  <span ng-if="one.taskInfor">{{one.taskInfor}}</span>
+                  <span ng-if="!one.taskInfor">--</span>
+                </td>
+                <td>
+                  <a ng-href="#/materialDetail?contentId={{one.adContentId}}" target="_blank">{{'VIEW_DETAIL' | translate}}</a>
+                  <span ng-if="one.applyState=='submit'">&nbsp;|&nbsp;</span>
+                  <span ng-if="one.applyState=='submit'"><a ng-click="sendReminderMaterial(one.applyId)">{{'REMIND' | translate}}</a></span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div ng-if="display.operation && BtnIndex.menu_idx_opera" class="panel panel-default gcrm-panel">
+    <div class="panel-heading">
+        <span class="black-block">&nbsp;</span>
+        <span class="panel-heading-text">{{'HOME_OPERATION_SUMMARY' | translate}}</span>
+    </div>
+    <div class="panel-body">
+      <div tabset>
+        <div tab heading="{{'CUSTOMER' | translate}}" select="selectOperation('customer')" ng-if="BtnIndex.btn_idx_opera_cust">
+          <div class="alert alert-info" ng-if="!operation.customer.operationList.length">{{'NO_DATA_TEMP' | translate}}</div>
+          <div class="row" ng-if="operation.customer.operationList.length">
+            <div class="col-md-5">
+              <table class="table mt15">
+                <thead>
+                  <tr>
+                    <th class="col-md-4"></th>
+                    <th class="col-md-2">{{'LAST_WEEK' | translate}}</th>
+                    <th class="col-md-2">{{'CUR_WEEK' | translate}}</th>
+                    <th class="col-md-4">{{'HOME_OPERATION_COMPARE' | translate}}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="one in operation.customer.operationList">
+                    <td ng-class="{'fwb': one.type=='total'}">{{'HOME_OPERATION_TYPE_' + one.type | translate}}</td>
+                    <td>{{one.lastWeek}}</td>
+                    <td>{{one.thisWeek}}</td>
+                    <td>
+                      <span ng-if="one.ratio>=0">{{one.ratio}}%</span>
+                      <span ng-if="!one.ratio && one.ratio!=0">--</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="col-md-7 pl30">
+              <div highchart id="chart1" config="operation.customer.lineConfig"></div>
+            </div>
+          </div>
+        </div>
+        <div tab heading="{{'HOME_SOLUTION_AND_CONTRACT' | translate}}" select="selectOperation('ad')" ng-if="BtnIndex.btn_idx_opera_adsol_contract">
+          <div class="alert alert-info" ng-if="!operation.ad.operationList.length">{{'NO_DATA_TEMP' | translate}}</div>
+          <div class="row" ng-if="operation.ad.operationList.length">
+            <div class="col-md-5">
+              <table class="table mt15">
+                <thead>
+                  <tr>
+                    <th class="col-md-4"></th>
+                    <th class="col-md-2">{{'LAST_WEEK' | translate}}</th>
+                    <th class="col-md-2">{{'CUR_WEEK' | translate}}</th>
+                    <th class="col-md-4">{{'HOME_OPERATION_COMPARE' | translate}}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="one in operation.ad.operationList">
+                    <td ng-class="{'fwb': one.type=='total'}">{{'HOME_OPERATION_TYPE_' + one.type | translate}}</td>
+                    <td>{{one.lastWeek}}</td>
+                    <td>{{one.thisWeek}}</td>
+                    <td>
+                      <span ng-if="one.ratio>=0">{{one.ratio}}%</span>
+                      <span ng-if="!one.ratio && one.ratio!=0">--</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="col-md-7">
+              <div highchart id="chart1" config="operation.ad.lineConfig"></div>
+            </div>
+          </div>
+        </div>
+        <div tab heading="{{'HOME_RESOURCE_OCCUPY' | translate}}" select="selectOperation('platform')" ng-if="BtnIndex.btn_idx_opera_pos_occupy">
+          <ul class="nav nav-pills mt5 mb15">
+            <li ng-class="{'active': one.active}" ng-repeat="one in operation.platform"><a ng-click="selectPlatform($index)">{{one.i18nName}}</a></li>
+          </ul>
+          <div ng-if="!operation.platformDetail.length" class="alert alert-info">{{'HOME_NO_RESOURCE_OCCUPY_INFO' | translate}}</div>
+          <table ng-if="operation.platformDetail.length" class="table platform-detail">
+            <thead>
+              <tr>
+                <th class="col-md-3">{{'SITE' | translate}}</th>
+                <th class="col-md-3">{{'CHANNEL' | translate}}</th>
+                <th class="col-md-2">{{'SALES_AMOUNT' | translate}}</th>
+                <th class="col-md-2">{{'ALREADY_SALES_AMOUNT' | translate}}</th>
+                <th class="col-md-2">{{'CAPACITY_RATE' | translate}}</th>
+              </tr>
+            </thead>
+            <tbody ng-repeat="site in operation.platformDetail">
+              <tr ng-repeat="channel in site.channelList" ng-class="{'active': $parent.$index%2 }">
+                <td class="va-m" ng-if="!$index" rowspan="{{site.channelList.length}}">{{site.siteName}}</td>
+                <td>{{channel.channelName}}</td>
+                <td>{{channel.salesAmount}}</td>
+                <td>{{channel.soldAmount}}</td>
+                <td>{{channel.ratio}}%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div ng-if="display.moduleCount && BtnIndex.menu_idx_module_data" class="panel panel-default gcrm-panel">
+    <div class="panel-heading">
+        <span class="black-block">&nbsp;</span>
+        <span class="panel-heading-text">{{'HOME_CUR_WEEK_SUMMARY' | translate}}</span>
+    </div>
+    <div class="panel-body">
+      <table class="table table-module-count">
+        <tbody>
+          <tr class="tr-first">
+            <th>{{'QUOTATION_BENCHMARK_PRICE' | translate}}：</th>
+            <td>
+              <span ng-repeat="one in moduleCount.quotationList">{{'HOME_MODULE_COUNT_QUOTATION_' + one.reportType | translate}} ({{one.amount}})</span>
+            </td>
+          </tr>
+          <tr>
+            <th>{{'HOME_MODULE_COUNT_CUSTOMER' | translate}}：</th>
+            <td>
+              <span ng-repeat="one in moduleCount.customerList">{{'HOME_MODULE_COUNT_CUSTOMER_' + one.reportType | translate}} ({{one.amount}})</span>
+            </td>
+          </tr>
+          <tr>
+            <th>{{'AD_SOLUTION' | translate}}：</th>
+            <td>
+              <span ng-repeat="one in moduleCount.solutionList">{{'HOME_MODULE_COUNT_SOLUTION_' + one.reportType | translate}} ({{one.amount}})</span>
+            </td>
+          </tr>
+          <tr>
+            <th>{{'HOME_MODULE_COUNT_RESOURCE' | translate}}：</th>
+            <td>
+              <span ng-repeat="one in moduleCount.positionList">{{'HOME_MODULE_COUNT_RESOURCE_' + one.reportType | translate}} ({{one.amount}})</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<dataset>
+
+	<g_adcontent_data_sample id="1" ad_content_id="6288" date="2014-06-25" impressions="1" clicks="2" uv="3" click_uv="4"/>
+	<g_adcontent_data_sample id="2" ad_content_id="6287" date="2014-06-26" impressions="2" clicks="3" uv="4" click_uv="5"/>
+	<g_adcontent_data_sample id="3" ad_content_id="6287" date="2014-06-27" impressions="2" clicks="3" uv="4" click_uv="5"/>
+	<g_adcontent_data_sample id="4" ad_content_id="6286" date="2014-06-28" impressions="3" clicks="4" uv="5" click_uv="6"/>
+	<g_adcontent_data_sample id="5" ad_content_id="6286" date="2014-06-29" impressions="3" clicks="4" uv="5" click_uv="6"/>
+	<g_adcontent_data_sample id="6" ad_content_id="6286" date="2014-06-30" impressions="3" clicks="4" uv="5" click_uv="6"/>
+	<g_adcontent_data_sample id="7" ad_content_id="6298" date="2014-07-01" impressions="11" clicks="22" uv="33" click_uv="44"/>
+	<g_adcontent_data_sample id="8" ad_content_id="6380" date="2014-07-02" impressions="1" clicks="2" uv="3" click_uv="4"/>
+	
+	<g_adcontent_data_statistics id="1" ad_content_id="6288" platform_id="17" site_id="12" channel_id="1451" area_id="1452" 
+		position_id="1454" rotation_type="1" position_number="019693" advertisers="jiangshanit" number="00010237-01" description="刊登新产品广告" 
+		industry="12" customer_quote="2" ratio_mine="0" billing_model_id="1" total_days="0" accumulated_amount="0" 
+		accumulated_days="0" impressions="0" clicks="0" uv="0" click_uv="0"/>
+	<g_adcontent_data_statistics id="2" ad_content_id="6298" platform_id="17" site_id="12" channel_id="1451" area_id="1452" 
+		position_id="1454" rotation_type="1" position_number="019693" advertisers="jiangshanit" number="00010237-01" description="刊登新产品广告" 
+		industry="12" customer_quote="2" ratio_mine="0" billing_model_id="4" total_days="0" accumulated_amount="0" 
+		accumulated_days="0" impressions="0" clicks="0" uv="0" click_uv="0"/>
+	<g_adcontent_data_statistics id="3" ad_content_id="6380" platform_id="17" site_id="12" channel_id="1451" area_id="1452" 
+		position_id="1454" rotation_type="1" position_number="019693" advertisers="jiangshanit" number="00010237-01" description="刊登新产品广告" 
+		industry="12" customer_quote="2" ratio_mine="0" billing_model_id="5" total_days="0" accumulated_amount="0" 
+		accumulated_days="0" impressions="0" clicks="0" uv="0" click_uv="0"/>
+	
+	<g_advertise_solution_content id="6288" advertise_solution_id="6585" advertisers="GYNO3" description="223456" approval_status="saving" site_id="10" 
+		product_id="17" channel_id="1330" area_id="1331" position_id="1332" position_guide_url="" period_description="2014-08-13,2014-08-16;" 
+		 total_days="4"  material_embed_code="0" material_embed_code_content="" material_title="" 
+		material_url="" task_info="" create_time="2014-08-07 20:13:36" create_operator="7426946" last_update_time="2014-08-07 22:51:58" 
+		last_update_operator="7426946"  schedule_id="0" content_type="create" 
+		old_content_id="6287" number="00018948-01" submit_time="2014-08-07 22:51:58" po_num="" modify_status="1" approval_date="2014-08-07 22:51:58" advertiser_id="7101920198" />
+	<g_advertise_solution_content id="6287" advertise_solution_id="6585" advertisers="GYNO3" description="223456" approval_status="saving" site_id="10" 
+		product_id="17" channel_id="1330" area_id="1331" position_id="1332" position_guide_url="" period_description="2014-08-13,2014-08-16;" 
+		 total_days="4"  material_embed_code="0" material_embed_code_content="" material_title="" 
+		material_url="" task_info="" create_time="2014-08-07 20:13:36" create_operator="7426946" last_update_time="2014-08-07 22:51:58" 
+		last_update_operator="7426946"  schedule_id="0" content_type="create" 
+		old_content_id="6286" number="00018948-01" submit_time="2014-08-07 22:51:58" po_num="" modify_status="1" approval_date="2014-08-07 22:51:58" advertiser_id="7101920198" />
+	<g_advertise_solution_content id="6286" advertise_solution_id="6585" advertisers="GYNO3" description="223456" approval_status="saving" site_id="10" 
+		product_id="17" channel_id="1330" area_id="1331" position_id="1332" position_guide_url="" period_description="2014-08-13,2014-08-16;" 
+		 total_days="4"  material_embed_code="0" material_embed_code_content="" material_title="" 
+		material_url="" task_info="" create_time="2014-08-07 20:13:36" create_operator="7426946" last_update_time="2014-08-07 22:51:58" 
+		last_update_operator="7426946"  schedule_id="0" content_type="create" 
+		old_content_id="0" number="00018948-01" submit_time="2014-08-07 22:51:58" po_num="" modify_status="1" approval_date="2014-08-07 22:51:58" advertiser_id="7101920198" />
+	<g_advertise_solution_content id="6298" advertise_solution_id="6585" advertisers="GYNO3" description="223456" approval_status="saving" site_id="10" 
+		product_id="17" channel_id="1330" area_id="1331" position_id="1332" position_guide_url="" period_description="2014-08-13,2014-08-16;" 
+		 total_days="4"  material_embed_code="0" material_embed_code_content="" material_title="" 
+		material_url="" task_info="" create_time="2014-08-07 20:13:36" create_operator="7426946" last_update_time="2014-08-07 22:51:58" 
+		last_update_operator="7426946"  schedule_id="0" content_type="create" 
+		old_content_id="0" number="00018948-01" submit_time="2014-08-07 22:51:58" po_num="" modify_status="1" approval_date="2014-08-07 22:51:58" advertiser_id="7101920198" />
+	<g_advertise_solution_content id="6380" advertise_solution_id="6585" advertisers="GYNO3" description="223456" approval_status="saving" site_id="10" 
+		product_id="17" channel_id="1330" area_id="1331" position_id="1332" position_guide_url="" period_description="2014-08-13,2014-08-16;" 
+		 total_days="4"  material_embed_code="0" material_embed_code_content="" material_title="" 
+		material_url="" task_info="" create_time="2014-08-07 20:13:36" create_operator="7426946" last_update_time="2014-08-07 22:51:58" 
+		last_update_operator="7426946"  schedule_id="0" content_type="create" 
+		old_content_id="0" number="00018948-01" submit_time="2014-08-07 22:51:58" po_num="" modify_status="1" approval_date="2014-08-07 22:51:58" advertiser_id="7101920198" />
+	
+</dataset>

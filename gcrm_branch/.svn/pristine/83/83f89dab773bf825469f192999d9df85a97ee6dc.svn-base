@@ -1,0 +1,125 @@
+{
+    "code": 200, 
+    "data": {
+        "content": [ ], 
+        "offset": 0, 
+        "pageNo": 1, 
+        "pageNumber": 1, 
+        "pageSize": 20, 
+        "result": [
+            {
+                "approval_status": "saving", 
+                "companyName": "代理-1", 
+                "contract_number": "123456ABCDE", 
+                "contract_state": "VALID", 
+                "id": 638, 
+                "number": "27272780", 
+                "type": "create"
+            }, 
+            {
+                "approval_status": "refused", 
+                "companyName": "代理-1", 
+                "contract_number": "123456ABCDE", 
+                "contract_state": "VALID", 
+                "id": 637, 
+                "number": "13933084", 
+                "type": "create"
+            }, 
+            {
+                "approval_status": "approving", 
+                "companyName": "代理-1", 
+                "contract_number": "123456ABCDE", 
+                "contract_state": "VALID", 
+                "id": 636, 
+                "number": "45077461", 
+                "type": "create"
+            }, 
+            {
+                "approval_status": "approved", 
+                "companyName": "代理-1", 
+                "contract_number": "123456ABCDE", 
+                "contract_state": "VALID", 
+                "id": 635, 
+                "number": "90870516", 
+                "type": "create"
+            }, 
+            {
+                "approval_status": "unconfirmed", 
+                "companyName": "代理-1", 
+                "contract_number": "123456ABCDE", 
+                "contract_state": "VALID", 
+                "id": 634, 
+                "number": "78119277", 
+                "type": "create"
+            }, 
+            {
+                "approval_status": "confirmed", 
+                "companyName": "代理-1", 
+                "contract_number": "123456ABCDE", 
+                "contract_state": "VALID", 
+                "id": 633, 
+                "number": "77735089", 
+                "type": "create"
+            }, 
+            {
+                "approval_status": "canceled", 
+                "companyName": "代理-1", 
+                "contract_number": "123456ABCDE", 
+                "contract_state": "VALID", 
+                "id": 632, 
+                "number": "73095826", 
+                "type": "create"
+            }, 
+            {
+                "approval_status": "saving", 
+                "companyName": "代理-1", 
+                "contract_number": "123456ABCDE", 
+                "contract_state": "VALID", 
+                "id": 631, 
+                "number": "79522392", 
+                "type": "create"
+            }, 
+            {
+                "approval_status": "saving", 
+                "companyName": "代理-1", 
+                "contract_number": "123456ABCDE", 
+                "contract_state": "VALID", 
+                "id": 630, 
+                "number": "66253522", 
+                "type": "create"
+            }, 
+            {
+                "approval_status": "saving", 
+                "companyName": "代理-1", 
+                "id": 606, 
+                "number": "29818387", 
+                "type": "create"
+            }, 
+            {
+                "approval_status": "saving", 
+                "companyName": "ttt", 
+                "id": 589, 
+                "number": "59803195", 
+                "type": "create"
+            }, 
+            {
+                "approval_status": "saving", 
+                "companyName": "ttt", 
+                "id": 569, 
+                "number": "82396821", 
+                "type": "create"
+            }, 
+            {
+                "approval_status": "saving", 
+                "companyName": "ttt", 
+                "id": 564, 
+                "number": "79027528", 
+                "type": "create"
+            }
+        ], 
+        "total": 0, 
+        "totalCount": 13, 
+        "totalPages": 1
+    }, 
+    "message": "OK"
+}

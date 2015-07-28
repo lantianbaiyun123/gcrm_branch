@@ -1,0 +1,1 @@
+define(["app"],function(t){t.registerFactory("ChannelBySite",["$http","APP_CONTEXT",function(t,n){return{get:function(e,i){t({method:"get",url:n+"adsolution/content/queryPositionBySiteId",params:e}).success(function(t){i(t)})}}}])});

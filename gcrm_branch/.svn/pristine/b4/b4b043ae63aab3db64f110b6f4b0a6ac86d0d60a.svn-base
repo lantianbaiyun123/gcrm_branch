@@ -1,0 +1,17 @@
+package com.baidu.gcrm.schedule1.dao;
+
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.baidu.gcrm.schedule1.model.Schedules;
+import com.baidu.gcrm.schedule1.model.Schedules.ScheduleStatus;
+
+public interface ScheduleRepository extends JpaRepository<Schedules, Long> {
+
+    List<Schedules> findByAdContentIdAndStatus(Long adContentId, ScheduleStatus status);
+    
+    List<Schedules> findByAdContentIdAndStatusNot(Long adContentId, ScheduleStatus status);
+    
+    Schedules findByNumber(String number);
+}

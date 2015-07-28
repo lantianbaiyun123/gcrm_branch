@@ -1,0 +1,87 @@
+<div class="yt-calendar dropdown-menu" ng-style="{display: (isOpen && 'block') || 'none', top: position.top+'px', left: position.left+'px'}">
+  <div ng-hide="modePickMonth">
+    <div class="clearfix">
+      <button type="button" class="btn btn-default btn-sm pull-left" ng-click="move(-1)">
+        <i class="glyphicon glyphicon-chevron-left"></i>
+      </button>
+      <button type="button" class="month-picker btn btn-default btn-sm pull-left" ng-click="toggleMode()">
+        <strong class="ng-binding">{{title}}</strong>
+      </button>
+      <button type="button" class="btn btn-default btn-sm pull-left" ng-click="move(1)">
+        <i class="glyphicon glyphicon-chevron-right"></i>
+      </button>
+      <div class="btn-group btn-group-sm pull-right">
+        <a type="button" class="btn btn-default" ng-click="refresh()" title="{{'REFRESH' | translate}}"><span class="glyphicon glyphicon-repeat"></span></a>
+        <a type="button" class="btn btn-default" ng-mouseover="legendShow=true" ng-mouseleave="legendShow=false" title="{{'LEGEND' | translate}}"><span class="glyphicon glyphicon-th-large"></span></a>
+      </div>
+      <div class="yt-calendar-legend-wrap" ng-mouseover="legendShow=true" ng-mouseleave="legendShow=false" ng-show="legendShow">
+        <ul class="yt-calendar-legend list-group">
+          <li class="list-group-item">
+            <span class="color-box legend-is-full"></span>
+            <span class="legend-text" ng-if="!(billingModelId==1 || billingModelId==2 || billingModelId==3)">{{'无剩余库存' | translate}}</span>
+            <span class="legend-text" ng-if="billingModelId==1 || billingModelId==2 || billingModelId==3">{{'无剩余流量' | translate}}</span>
+          </li>
+          <li class="list-group-item" ng-if="billingModelId==5">
+            <span class="color-box color-box-bidding">
+              <span class="calendar-legend-busy"></span>
+            </span>
+            <span class="legend-text">{{'已占用/总库存' | translate}}</span>
+          </li>
+          <li class="list-group-item" ng-if="billingModelId==4">
+            <span class="color-box color-box-bidding">
+              <span class="glyphicon glyphicon-star-empty"></span>
+            </span>
+            <span class="legend-text">{{'剩余库存' | translate}}</span>
+          </li>
+          <li class="list-group-item" ng-if="billingModelId==1 || billingModelId==2 || billingModelId==3">
+            <span class="color-box color-box-bidding">
+              <span class="glyphicon glyphicon-user"></span>
+            </span>
+            <span class="legend-text">{{'竞争流量人数' | translate}}</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <table>
+      <thead>
+        <tr ng-show="labels.length > 0" class="day-label">
+          <th ng-repeat="label in labels" class="text-center">{{label | translate}}</th>
+        </tr>
+      </thead>
+      <tbody class="tbody-days">
+        <tr ng-repeat="row in rows">
+            <td ng-repeat="date in row" ng-class="{'is-full': date.isFull, 'blank-day': !date.label}" title="{{date | CalendarTdTitleFilter:billingModelId:totalCount}}">
+                <div class="yt-button btn" ng-click="select(date.date)" ng-disabled="date.disabled" >
+                    <div class="day-number">{{date.label}}</div>
+                    <!-- CPT -->
+                    <div class="day-content" ng-if="billingModelId==5 && totalCount>1 && date.occupied">
+                      <span>
+                        <span class="calendar-legend-busy"></span>
+                        {{date.occupied + '/' + totalCount}}
+                      </span>
+                    </div>
+                    <!-- CPM -->
+                    <div class="day-content" ng-if="billingModelId==4 && date.remained">
+                      <span class="glyphicon glyphicon-star-empty"></span>{{date.remained}}
+                    </div>
+                    <!-- CPC/CPA/CPS -->
+                    <div class="day-content" ng-if="(billingModelId==1 || billingModelId==2 || billingModelId==3) && date.biddingCount">
+                      <span class="glyphicon glyphicon-user"></span>{{date.biddingCount}}
+                    </div>
+                </div>
+            </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div ng-show="modePickMonth">
+    <div>
+      <a href="" ng-click="toggleMode()" class="btn"><span class="glyphicon glyphicon-arrow-left"></span></a>
+    </div>
+    <ul class="nav nav-pills">
+      <li ng-repeat="item in availableMonths" ng-class="{'active': item.active}">
+        <a href="" ng-click="pickMonth(item)">{{item.year}}/{{item.month}}</a>
+      </li>
+    </ul>
+  </div>
+</div>

@@ -1,0 +1,1 @@
+define(["app"],function(o){o.registerController("CtrlCustomerAdSolutionList",["$scope",function(){}])});

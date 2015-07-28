@@ -1,0 +1,310 @@
+define([
+  'app',
+  // '_directives/ytScheduleTable',
+  '_directives/ytBusySpin',
+  '_filters/MonthShortFilter',
+  '_filters/MonthMiniFilter',
+  '_filters/RotationTypeFilter',
+  '_filters/DatePeriodFilter'
+], function (app) {
+app.registerFactory('ModalSchedule', [
+  '$modal',
+  '$filter',
+  'STATIC_DIR',
+function ($modal, $filter, STATIC_DIR) {
+  return {
+    show: function (opts) {
+      var optsDefault = {
+        title: $filter('translate')('SCHEDULE_MODAL')
+      };
+
+      $modal.open({
+        templateUrl: STATIC_DIR + 'app/resourcePosition/modalSchedule.tpl.html',
+        controller: 'CtrlModalSchedule',
+        windowClass: 'modal-schedule',
+        resolve: {
+          opts: function () {
+            return angular.extend(optsDefault, opts);
+          }
+        }
+      });
+    }
+  };
+}]);
+
+app.registerController('CtrlModalSchedule', [
+  '$scope',
+  '$http',
+  '$q',
+  '$timeout',
+  '$filter',
+  '$window',
+  '$modalInstance',
+  'opts',
+  'APP_CONTEXT',
+function ($scope, $http, $q, $timeout, $filter, $window, $modalInstance, opts, APP_CONTEXT) {
+
+  var colors = {
+    reserved: 'info',
+    confirmed: 'success'
+  };
+
+  $scope.s = {
+    onceNumber: 0
+  };
+
+  $scope.today = new Date();
+  $scope.activeYear = $scope.today.getFullYear();
+  $scope.monthList = [];
+  $scope.activeMonthPosition = 0;
+  $scope.thDays = [];
+  $scope.thDaysMap = {};
+  $scope.scheduleList = [];
+  $scope.positionInfo = opts.positionInfo;
+  $scope.legendShow = false;
+
+  $scope.cancel = function () {
+    $modalInstance.dismiss('cancel');
+  };
+
+  $scope.scrollSetMonth = function (scrollPosition) {
+    var length = $scope.monthList.length;
+    for (var i = 0; i < length; i++) {
+      if ( scrollPosition >= $scope.monthList[i].startPosition &&
+           scrollPosition < $scope.monthList[i].endPosition
+      ) {
+        activeMonthLi(i);
+        break;
+      }
+    }
+  };
+
+  $scope.selectMonth = function (month, monthIndex) {
+    activeMonthLi(monthIndex);
+    $scope.activeMonthPosition = $scope.monthList[monthIndex].startPosition;
+    $timeout(function () {
+      $scope.activeMonthPosition = -1;
+    });
+  };
+
+  $scope.reloadSchedule = function () {
+    // var loadNumber = $scope.thDays.length;
+    $scope.scheduleList.length = 0;
+    $scope.busySpinShow = true;
+    var promise = loadSchedule(true);
+    promise.then(function () {});
+    promise['finally'](function () {
+      $scope.busySpinShow = false;
+    });
+  };
+
+  $scope.ownerClicked = function (adContentKey) {
+    var adSolutionId = $scope.scheduleList[adContentKey].adSolutionId;
+    $window.open('#/ad2?id=' + adSolutionId, '_blank');
+  };
+
+  doInit();
+
+  function doInit () {
+    $scope.s.onceNumber = getOnceNumber();
+    setMonthList();
+    $scope.busySpinShow = true;
+    var promise = loadSchedule();
+
+    promise.then(function () {});
+    promise['finally'](function () {
+      $scope.busySpinShow = false;
+    });
+    // loadSchedule();
+  }
+
+  function getOnceNumber() {
+    var lastDayNextYear = angular.copy($scope.today);
+    lastDayNextYear.setMonth(lastDayNextYear.getMonth() + 13);
+    lastDayNextYear.setDate(0);
+    var days = (lastDayNextYear - $scope.today) / (60 * 60 * 24 * 1000) + 1;
+    return days;
+  }
+
+  function activeMonthLi (monthIndex) {
+    for ( var i = $scope.monthList.length - 1; i >= 0; i-- ) {
+      $scope.monthList[i].active = false;
+    }
+    $scope.monthList[monthIndex].active = true;
+    $scope.activeYear = $scope.monthList[monthIndex].year;
+    if(!$scope.$$phase) {
+      $scope.$apply();
+    }
+  }
+
+  function setMonthList() {
+    var endPosition = 0;
+    var endIndex = -1;
+    var current = angular.copy($scope.today);
+    for ( var i = 0 ; i < 13; i++ ) {
+      var startPosition = endPosition;
+      var startIndex = endIndex + 1;
+      var dateStrings = current.toJSON().substr(0, 10).split('-');
+      var nextMonthFirstDay = current.setMonth(current.getMonth() + 1, 1);
+      var dateSpan = Math.ceil((nextMonthFirstDay - $scope.today)/1000/60/60/24);
+      endPosition = dateSpan * 42;
+      endIndex = dateSpan - 1;
+
+      $scope.monthList.push({
+        year : dateStrings[0],
+        num: ~~dateStrings[1],
+        startIndex: startIndex,
+        endIndex: endIndex,
+        startPosition : startPosition,
+        endPosition : endPosition
+      });
+    }
+
+    $scope.monthList[0].active = true;
+  }
+
+  function loadSchedule (reload) {
+    var deferred = $q.defer();
+    if(!reload) {
+      getDays();
+    }
+    // $http.get('/data/findContentByPosition.json')
+    $http.get(APP_CONTEXT + 'occupation/' + $scope.positionInfo.positionId)
+    .success(function (response) {
+      if (response.code === 200 && response.data) {
+        if (response.data.schedules && response.data.schedules.length) {
+          for (var i = 0, length = response.data.schedules.length; i < length; i++) {
+            var schedule = response.data.schedules[i];
+            var scheduleDays = getScheduleDays();
+            scheduleDays = resolveTds(scheduleDays, schedule);
+            schedule.days = scheduleDays;
+            $scope.scheduleList.push(schedule);
+          }
+        } else {
+          //如果无排期,不显示排期单
+          $scope.noSchedule = true;
+        }
+
+        $timeout(function (argument) {
+          deferred.resolve();
+        });
+      }
+    });
+    return deferred.promise;
+  }
+
+  //从今天开始取，取n天
+  function getDays () {
+    var number = $scope.s.onceNumber;
+    var length = $scope.thDays.length;
+    var date = new Date();
+    if( length ) {
+      date = new Date($scope.thDays[length-1].dateString);
+      date.setHours(date.getHours()+24);
+    }
+    for (var i = 0; i < number; i++) {
+      var fullDateString = getFullDateString(date);
+      $scope.thDays.push(fullDateString);
+      date.setHours(date.getHours()+24);
+      $scope.thDaysMap[fullDateString.dateString] = length + i;
+    }
+    if (!$scope.$$phase) {
+      $scope.$apply();
+    }
+  }
+
+  function getFullDateString (dateObj) {
+    var date = dateObj || new Date();
+    var result = {};
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1;
+    var day = date.getDate();
+
+    result.dayYear = year;
+    result.dayMonth = month;
+    result.dayNo = day;
+    result.monthText = month;
+    if( result.dayNo === 1 ) {
+        result.dayNo = $filter('translate')($filter('MonthMiniFilter')(month));
+    }
+
+    month = month < 10 ? '0' + month : month;
+    day = day < 10 ? '0' + day : day;
+    result.dateString = year + '-' + month + '-' + day;
+    result.timestamp = date.getTime();
+    return result;
+  }
+
+  function getScheduleDays() {
+    var number = $scope.s.onceNumber;
+    var scheduleDays = [];
+    for (var i = 0; i < number; i++) {
+      var day = {};
+      day.dateString = $scope.thDays[i].dateString;
+      scheduleDays.push(day);
+    }
+    return scheduleDays;
+  }
+
+  function resolveTds(scheduleDays, adContentSchedule) {
+    for (var i = 0, length = adContentSchedule.dates.length; i < length; i++) {
+      var date = adContentSchedule.dates[i];
+      var tdIndex = $scope.thDaysMap[date];
+      var day = scheduleDays[tdIndex];
+      if (day) {
+       day.ngClass = colors[adContentSchedule.status];
+      }
+    }
+    return scheduleDays;
+  }
+
+}]);
+
+app.registerDirective('scheduleTable', ['$log', function ($log) {
+  return {
+    restrict: 'A',
+    scope: {
+      scrollEnd: '&',
+      scrollToMonth: '&',
+      scrollPosition: '=',
+      colIndex: '=',
+      shiftKey: '=',
+      adContentKey: '=',
+      inputClicked: '&',
+      rowIndex: '=',
+      ownerClicked: '&',
+      readOnly: '='
+    },
+    link: function (scope, element, attrs) {
+      var el = element[0];
+
+      attrs.$observe('activeMonthPosition', function (value) {
+        if (value >- 1) {
+          el.scrollLeft = value;
+        }
+      });
+
+      element.bind('scroll', function () {
+        // + 1 catches off by one errors in chrome
+        // return el.scrollTop + el.clientHeight + 1 >= el.scrollHeight;
+        // $log.info(el.scrollLeft + el.clientWidth + 1 >= el.scrollWidth);
+        //fire when it reaches the right pose
+        if ( el.scrollLeft + el.clientWidth + 1 >= el.scrollWidth ) {
+          scope.scrollEnd();
+        }
+        scope.scrollToMonth({
+          scrollPosition: el.scrollLeft
+        });
+      });
+
+      element.bind('click', function (e) {
+        if ( !scope.readOnly && $(e.target).closest('td').hasClass('headcol')) {
+          scope.ownerClicked({
+            adContentKey: $(e.target).closest('tr').attr('ad-content-key')
+          });
+        }
+      });
+    }
+  };
+}]);
+});

@@ -1,0 +1,20 @@
+<div class="modal-header" ng-class="{'modal-header-no-border': !e.fileUploaded && !originImage}">
+  <h4>{{title}}</h4>
+</div>
+<div class="modal-body" ng-if="e.fileUploaded">
+  <a ng-click="removePic()">
+    <span class="glyphicon glyphicon-trash"></span>
+  </a>
+  <span class="pl5">{{e.fileUploaded.guideFileDownloadName}}</span>
+</div>
+<div class="modal-body" ng-if="!e.fileUploaded && originImage">
+  <img ng-src="{{originImage}}" width="500">
+</div>
+<div class="modal-footer">
+  <button class="btn btn-success pull-left" yt-ajaxupload='{{ { uploadingText : "" , uploadedText : "" , formatErrorText : "AD_CONTENT_UPLOAD_FILE_TYPE_FORBIDDEN" , uploadFalseText : "" , beginUpload : "btnDisabled" , uploadDone : "btnEnabled" } }}' ng-model="e.fileUploaded" upload-url="position/uploadGuideFile" upload-type="" upload-invalidatetype="exe|msi|bat|sh" uploaded-cbfn="uploadedCbfn()" upload-file-name="file">
+    <span class="glyphicon glyphicon-plus"></span>
+    <span class="upload-text">{{'UPLOAD_IMAGE' | translate}}</span>
+  </button>
+  <button type="button" class="btn btn-primary" ng-click="ok()" ng-disabled="!e.fileUploaded">{{'SAVE' | translate}}</button>
+  <button type="button" class="btn btn-default" ng-click="cancel()">{{'CANCEL' | translate}}</button>
+</div>

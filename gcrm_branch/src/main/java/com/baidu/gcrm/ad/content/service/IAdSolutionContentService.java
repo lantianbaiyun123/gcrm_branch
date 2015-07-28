@@ -1,0 +1,206 @@
+package com.baidu.gcrm.ad.content.service;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import com.baidu.gcrm.ad.content.model.AdContentCancelRecord.CancelReason;
+import com.baidu.gcrm.ad.content.model.AdSolutionContent;
+import com.baidu.gcrm.ad.content.model.AdSolutionContent.ApprovalStatus;
+import com.baidu.gcrm.ad.content.model.AdSolutionContent.ContentType;
+import com.baidu.gcrm.ad.content.web.vo.AdSolutionContentListBean;
+import com.baidu.gcrm.ad.content.web.vo.AdSolutionContentView;
+import com.baidu.gcrm.ad.content.web.vo.DatePeriodState;
+import com.baidu.gcrm.ad.material.vo.MaterialApplyContentVO;
+import com.baidu.gcrm.ad.model.AdvertiseMaterial;
+import com.baidu.gcrm.ad.model.AdvertiseMaterialMenu;
+import com.baidu.gcrm.ad.model.AdvertiseType;
+import com.baidu.gcrm.ad.model.Contract;
+import com.baidu.gcrm.ad.web.utils.AdvertiseSolutionCondition;
+import com.baidu.gcrm.common.LocaleConstants;
+import com.baidu.gcrm.customer.model.Customer;
+import com.baidu.gcrm.data.bean.ADContent;
+import com.baidu.gcrm.stock.vo.AdContentBriefDTO;
+import com.baidu.gcrm.user.model.User;
+
+public interface IAdSolutionContentService {
+
+    void saveContent(AdSolutionContentView contentView);
+
+    boolean delContent(Long id);
+
+    List<AdSolutionContentView> findByAdSolutionId(Long adSolutionId, LocaleConstants locale, String contextPath);
+
+    AdSolutionContentView findByAdSolutionContentId(Long contentId, LocaleConstants locale, String contextPath);
+
+    AdSolutionContentView findById(Long id);
+
+    AdSolutionContent findOne(Long id);
+
+    Set<String> findNumberByAdSolutionId(Long adSolutionId);
+
+    List<AdSolutionContentView> findAdSolutionContentView4Approval(Long adSolutionId, String username, String actDefId,
+            LocaleConstants locale, String contextPath);
+
+    List<AdSolutionContent> findByAdSolutionId(Long adSolutionId);
+
+    List<AdSolutionContent> findByAdContentIds(Collection<Long> adContentIds);
+
+    List<Object[]> findOperatorByIdIn(Collection<Long> adContentIds);
+
+    void save(List<AdSolutionContent> contents);
+    
+    void save(AdSolutionContent content);
+
+    /**
+     * 功能描述： 根据方案ID查询广告内容 创建人：yudajun 创建时间：2014-3-19 下午3:57:16 修改人：yudajun 修改时间：2014-3-19 下午3:57:16 修改备注： 参数： @param
+     * adSolutionId 参数： @param locale 参数： @return
+     * 
+     * @version
+     */
+    List<AdSolutionContentListBean> findListByAdSolutionId(Long adSolutionId, LocaleConstants locale);
+
+    void saveContentNew(AdSolutionContentView contentView, Long id, String username);
+
+    List<AdSolutionContent> findByAdSolutionIdAndApprovalStatus(Long adSolutionId, ApprovalStatus status);
+
+    void cancelContents(List<AdSolutionContent> contents);
+
+    Long countByContentId(Long id, Long adSolutionId);
+
+    void saveAndUpdateAdContentStatus(AdSolutionContent content);
+
+    List<AdSolutionContentView> findAdSolutionContentView(Long adSolutionId, LocaleConstants locale, String contextPath);
+
+    Contract findContractByContentId(Long adContentId);
+
+    Long findAdContentAmountByAdPlatformId(Long adPlatformId);
+
+    boolean checkContentPostionState(Long positionId);
+
+    List<AdSolutionContent> findByPositionIdIn(Collection<Long> positionIds);
+
+    void cancelContents(List<AdSolutionContent> contents, CancelReason reason);
+
+    /**
+     * 与ecom投放对接后，此方法返回该广告内容是否是自动上线
+     * 
+     * @param adContentId
+     * @return true:自动上线，else:手工上线
+     */
+    boolean findAutoPublishStatus(Long adContentId);
+
+    /**
+     * 功能描述： 首页查询物料申请记录 创建人：yudajun 创建时间：2014-5-16 下午8:18:26 修改人：yudajun 修改时间：2014-5-16 下午8:18:26 修改备注： 参数： @param
+     * adSolutionCondition 参数： @return
+     * 
+     * @version
+     */
+    public List<MaterialApplyContentVO> findMaterialApplyContent(AdvertiseSolutionCondition adSolutionCondition);
+
+    public void getChangeContent(Long adContentId);
+
+    public void updateContentCustomer(Long adSolutionId, Customer customer);
+
+    Map<Long, AdSolutionContent> findAdContentMap(List<Long> adContentIds);
+
+    /**
+     * @param adContentIds
+     * @return key, adContentId; value, operator user
+     */
+    Map<Long, User> findOperatorsByAdContentIdIn(Collection<Long> adContentIds);
+
+    /**
+     * 
+     * moveToHistory:将广告内容移入到历史表（包括广告内容的物料，报价信息）. <br/>
+     * 
+     * @param adSolutionId
+     * @since JDK 1.6
+     */
+    void moveToHistory(Long adSolutionId);
+
+    boolean hasValidAdContent(Long adSolutionId);
+
+    /**
+     * 获取广告内容对应广告方案的回写合同
+     * 
+     * @param adContentId
+     * @return
+     */
+    Contract findWriteBackContractByContentId(Long adContentId);
+
+    public List<ADContent> findPublishValidADContents();
+
+    public AdvertiseType findContentAdvertiseType(AdSolutionContent content);
+
+    /**
+     * 获取广告内容每个投放时间段是否可以修改的状态
+     * 
+     * @param content
+     * @return
+     */
+    public List<DatePeriodState> getDatePeriodStates(AdSolutionContent content);
+
+	/**
+	 * 获取占用指定位置的审批中的和审批通过但未完成上线的内容列表
+	 * @param positionId 指定位置的id
+	 * @return 符合条件的精简内容列表
+	 */
+	List<AdContentBriefDTO> findContentsHoldingPosition(Long positionId);
+	
+	/**
+	 * 获得广告内容的所有物料单的所有主物料附件信息
+	 * @param content
+	 * @return
+	 */
+	public List<AdvertiseMaterial> getAdvertiseMaterial4Content(AdSolutionContent content);
+	
+	/**
+     * 获得广告内容的物料的下拉菜单附件信息
+     * @param content
+     * @return
+     */
+	public List<AdvertiseMaterialMenu> getAdvertiseMaterialMenu4Content(AdSolutionContent content);
+	
+	/**
+	 * 当内容的物料单信息为空时，从db中load出其物料信息更新到内容中
+	 * @param content
+	 */
+	public void updateMaterialApplyToContent(AdSolutionContent content);
+	
+	/**
+	 * 查找某内容是否有变更后的广告内容
+	 * @param oldContentId
+	 * @param type
+	 * @return
+	 */
+	public List<AdSolutionContent> findByOldContentIdAndContentType(Long oldContentId, ContentType type);
+	
+	/**
+	 * 判断一个内容是否有完整物料
+	 * @param content
+	 * @return
+	 */
+	public boolean isContentMaterialFull(AdSolutionContent content);
+	
+	/**
+	 * 初始化线上数据功能使用
+	 * @return
+	 */
+	public List<AdSolutionContent> findAllWithoutMaterialApply();
+	
+	/**
+	 * 合作中止
+	 * @param content
+	 */
+	void stopAdSolutionContent(AdSolutionContent content);
+	
+    public void initOnlineAdAndSolutionStatus();
+	
+	void deleteContents(List<AdSolutionContent> contents);
+	
+	boolean isNewContent(AdSolutionContent content);
+	
+	boolean isModifiedContent(AdSolutionContent content);
+}

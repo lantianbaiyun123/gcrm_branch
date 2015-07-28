@@ -1,0 +1,49 @@
+{
+    "code": 200,
+    "data": {
+        "positionId": 1338,
+        "from": "2014-10-31",
+    	"to": "2014-11-04",
+        "rotation": false,
+        "billingModelId": 4,
+        "occupations": [
+            {
+                "date": 1415462400000,
+                "isFull": true,
+                "occupied": 1,
+                "remained": 12,
+                "biddingCount": 133
+            },
+            {
+                "date": 1415548800000,
+                "isFull": true,
+                "occupied": 1,
+                "remained": 2134,
+                "biddingCount": 1
+            },
+            {
+                "date": 1415635200000,
+                "isFull": true,
+                "occupied": 1,
+                "remained": 0,
+                "biddingCount": 1
+            },
+            {
+                "date": 1415721600000,
+                "isFull": true,
+                "occupied": 1,
+                "remained": 444,
+                "biddingCount": 1
+            },
+            {
+                "date": 1415808000000,
+                "isFull": false,
+                "occupied": 3,
+                "remained": 1,
+                "biddingCount": 0
+            }
+        ],
+        "totalCount": 5
+    },
+    "message": "OK"
+}

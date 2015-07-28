@@ -1,0 +1,37 @@
+<div class="container" >
+  <div class="panel gcrm-panel panel-attached">
+    <div class="panel-top-heading">
+      <h1>
+        <span>{{'CUSTOMER_ADD' | translate}}</span>
+        <form class="pull-right">
+          <a class="btn btn-success" ng-click="saveToApproval()" ng-disabled="disableToApproval" ng-if="(!OwnerOpers.btn_cust_detail_submit || isOwner) && BtnIndex.btn_cust_detail_submit">
+            {{'SUBMIT_TO_APPROVAL' | translate}}
+          </a>
+          <a class="btn btn-primary" ng-click="save()" ng-disabled="disableToApproval" ng-if="(!OwnerOpers.btn_cust_detail_submit || isOwner) && BtnIndex.btn_cust_detail_submit">
+            {{'TEMP_SAVE' | translate}}
+          </a>
+          <a class="btn btn-default" ng-click="back()">
+            {{'RETURN' | translate}}
+          </a>
+        </form>
+      </h1>
+    </div>
+  </div>
+
+  <div ui-view="customerBasic" class="panel-attaching"></div>
+  <div ui-view="customerContacts"></div>
+  <div ui-view="customerOpportunity" ng-if="basic.customerType && basic.customerType != 'offline'"></div>
+  <div ui-view="customerQualification" ng-if="basic.customerType == 'offline'"></div>
+  <div ui-view="customerAttachment"></div>
+  <div class="align-center">
+    <a class="btn btn-success" ng-click="saveToApproval()" ng-disabled="disableToApproval" ng-if="(!OwnerOpers.btn_cust_detail_submit || isOwner) && BtnIndex.btn_cust_detail_submit">
+      {{'SUBMIT_TO_APPROVAL' | translate}}
+    </a>
+    <a class="btn btn-primary" ng-click="save()" ng-disabled="disableToApproval" ng-if="(!OwnerOpers.btn_cust_detail_submit || isOwner) && BtnIndex.btn_cust_detail_submit">
+      {{'TEMP_SAVE' | translate}}
+    </a>
+    <a class="btn btn-default" ng-click="back()">
+      {{'RETURN' | translate}}
+    </a>
+  </div>
+</div>

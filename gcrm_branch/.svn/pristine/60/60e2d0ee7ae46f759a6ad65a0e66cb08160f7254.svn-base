@@ -1,0 +1,73 @@
+<div class="modal-header">
+    <h4>
+        <span>{{'SCHEDULE_AD_RESOURCE_TITLE' | translate}}</span>
+        <span>【{{positionInfo.positionName}}】</span>
+        <span>
+            【{{positionInfo.rotationType | RotationTypeFilter | translate}}<span ng-if="positionInfo.rotationType == 1">&nbsp;/&nbsp;{{positionInfo.salesAmount}}</span>】
+        </span>
+    </h4>
+</div>
+<div ng-show="!noSchedule" class="modal-body container" yt-busy-spin yt-busy-spin-show="busySpinShow">
+    <div class="row">
+        <div class="col-md-1 col-md-year">
+            <span class="pull-right">{{activeYear}}&nbsp;{{'SCHEDULE_YEARS' | translate}}</span>
+        </div>
+        <div class="col-md-10 col-md-month">
+            <ul class="nav nav-pills nav-justified">
+              <li ng-class="{'active': month.active}" ng-repeat="month in monthList" ng-click="selectMonth(month, $index)">
+                <span class="nav-pills-inner">
+                    <span class="month-select">{{month.num | MonthShortFilter | translate}}</span>
+                </span>
+              </li>
+        </div>
+        <div class="col-md-1 col-md-btn">
+            <div class="btn-group btn-group-xs pull-right">
+              <a type="button" class="btn btn-default" ng-click="reloadSchedule()" title="{{'RESET' | translate}}"><span class="glyphicon glyphicon-repeat"></span></a>
+              <a type="button" class="btn btn-default" ng-mouseover="legendShow=true" ng-mouseleave="legendShow=false" title="{{'LEGEND' | translate}}"><span class="glyphicon glyphicon-th-large"></span></a>
+            </div>
+            <div class="schedule-legend-wrap" ng-mouseover="legendShow=true" ng-mouseleave="legendShow=false" ng-show="legendShow">
+                <ul class="schedule-legend list-group">
+                    <li class="list-group-item">
+                        <span class="color-box legend-reserved"></span>
+                        <span class="legend-text">{{'RESERVE_INVENTORY' | translate}}</span>
+                    </li>
+                    <li class="list-group-item">
+                        <span class="color-box legend-confirmed"></span>
+                        <span class="legend-text">{{'CONFIRMED_INVENTORY' | translate}}</span>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+    <div class="wrapper-block">
+        <div class="schedule-table-wrapper" schedule-table scroll-end="loadMore();" active-month-position="{{activeMonthPosition}}" input-clicked="dayClicked(colIndex, adContentKey, shiftKey);" owner-clicked="ownerClicked(adContentKey);" scroll-to-month="scrollSetMonth(scrollPosition)" read-only="readOnly">
+            <table class="schedule-table table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th class="headcol">{{'SCHEDULE_CUSTOMER_CONTENT' | translate}}</th>
+                        <th class="day-th" ng-repeat="day in thDays">{{day.dayNo}}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="adContent in scheduleList" class="{{adContent.ngClass}}" ad-content-key="{{adContent.adContentId}}">
+                        <td class="headcol row" title="{{adContent.advertiser}}  {{adContent.operator}}  {{ 'SCHEDULE_AD_CONTENT_NUMBER' | translate}}{{adContent.number}}" ad-content-key="{{adContent.adSolutionId}}">
+                            <span class="headcol-advertiser col-md-8" >{{adContent.advertiser}}</span>
+                            <span class="headcol-operator col-md-2">{{adContent.operator}}</span>
+                            <span class="headcol-billingModel col-md-2">{{adContent.billingModel}}</span>
+                        </td>
+                        <td ng-repeat="day in adContent.days" title="{{day.dateString}}" class="{{day.ngClass}} check-td {{day.changed}}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div ng-show="noSchedule" class="pl10 pr10">
+    <div class="alert alert-info mt15">
+        {{'SCHEDULE_NO_SCHEDULE' | translate}}
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-default" ng-click="cancel()">{{'CLOSE' | translate}}</button>
+</div>

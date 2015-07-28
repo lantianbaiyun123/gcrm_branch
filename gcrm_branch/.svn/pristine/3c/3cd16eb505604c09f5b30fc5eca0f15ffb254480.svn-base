@@ -1,0 +1,57 @@
+package com.baidu.gcrm.occupation1.service;
+
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+
+import com.baidu.gcrm.occupation1.model.PositionDate;
+import com.baidu.gcrm.occupation1.web.vo.DateOccupation;
+import com.baidu.gcrm.occupation1.web.vo.DateOccupationQueryCondition;
+import com.baidu.gcrm.resource.position.model.Position;
+
+public interface IPositionDateService {
+    /**
+     * 每天定时初始化所有position的投放时间，保证投放时间最大范围是当前日期开始一年后
+     */
+    void initPositionDateTimer();
+
+    /**
+     * 根据位置初始化该位置的投放时间，时间从已初始化的最新投放时间到当前日期开始的一年后
+     * <p>
+     * eg.当前日期是2014-01-01，某个职位已经初始化到2014-05-31，则执行该方法后投放时间从2014-06-01初始化到2014-12-31
+     * </p>
+     * 
+     * @param position 位置
+     */
+    List<PositionDate> initPositionDate(Position position);
+    
+    /**
+     * 查询position date
+     * @param positionId
+     * @param dates
+     * @return
+     */
+    List<PositionDate> findByPositionIdAndDateIn(Long positionId, Collection<Date> dates);
+
+    /**
+     * 启用某个位置后，更新投放时间的状态，启用已有的投放时间，并初始化投放时间到当前日期的一年后
+     * 
+     * @param position
+     */
+    void enablePositionDate(Position position);
+    
+    Date getFarthestDateByPosition(Long positionId);
+    
+    /**
+     * 根据条件查询每天的投放情况
+     * @param queryCondition 查询条件，包括位置、计费方式、时间范围等
+     * @return 每天的投放情况列表
+     */
+    List<DateOccupation> queryDateOccupations(DateOccupationQueryCondition queryCondition);
+    
+    List<PositionDate> findAll();
+    
+    List<Long> findByDateFromTo(Date from, Date to);
+    
+    List<Date> findDateById(Collection<Long> ids);
+}

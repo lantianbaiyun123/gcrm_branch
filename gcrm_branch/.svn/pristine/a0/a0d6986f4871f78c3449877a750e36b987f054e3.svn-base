@@ -1,0 +1,342 @@
+package com.baidu.gcrm.data.bean;
+
+import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Transient;
+
+/**
+ * 提供给ecom的广告内容
+ *
+ */
+@Entity
+public class ADContent {
+	
+	public static final int ENABLE = 0;
+	
+	public static final int DISABLE = 1;
+	
+	@Id
+	private Long id;
+	
+	@Column(name = "advertise_solution_id")
+	private Long compaignId;
+	
+	@Column(name = "advertiser_id")
+	private Long advertiserId;
+	
+	@Column(name = "site_id")
+	private Long siteId;
+	
+	@Column(name = "product_id")
+	private Long productId;
+	
+	@Column(name = "position_id")
+	private Long positionId;
+	
+	@Column(name = "position_number")
+	private String positionNumber;
+	
+	@Column(name = "billing_model_id")
+	private Long billingModeId;
+	
+	@Column(name = "period_description")
+	private String period;
+	
+	/**
+	 * 广告内容状态。0，有效；1，无效
+	 */
+	@Transient
+	private Integer status;
+	
+	@Column(name = "publish_price")
+	private Double benchmarkPrice;
+	
+	@Column(name = "customer_quote")
+	private Double customerQuote;
+	
+	private Double discount;
+	
+	@Column(name = "product_ratio_mine")
+	private Double ourShare;
+	
+	@Column(name = "product_ratio_customer")
+	private Double customerShare;
+	
+	@Column(name = "product_ratio_third")
+	private Double thirdPartyShare;
+	
+	/**
+	 * 日预估投放量
+	 */
+	@Column(name = "daily_amount")
+	private Long dailyAmount;
+	
+	/**
+	 * 总投放量=日预估投放量*投放天数
+	 */
+	@Column(name = "total_amount")
+	private Long totalAmount;
+	
+	/**
+	 * 累积投放量=日预估投放量*已投放天数
+	 */
+	@Transient
+	private Long accumulatedAmount;
+	
+	/**
+	 * 广告预算
+	 */
+	private Double budget;
+	
+	@Column(name = "material_title")
+	private String materialTitle;
+	
+	@Column(name = "material_url")
+	private String materialUrl;
+	
+	@Column(name = "occupy_period")
+	private String occupyPeriod;
+	
+	@Column(name = "material_embed_code_content")
+	private String materialCodeContent;
+	
+	@Column(name = "material_file_type")
+    private String materialType;          //0:图片,1:flash;2:代码,null:纯文本链
+	
+	@Column(name = "monitor_url")
+    private String monitorUrl;
+	
+	@Transient
+	private List<MaterialAttachment> materialAttachments;
+	
+	@Transient
+	private String timeZoneOffset;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public Long getCompaignId() {
+		return compaignId;
+	}
+
+	public void setCompaignId(Long compaignId) {
+		this.compaignId = compaignId;
+	}
+
+	public Long getAdvertiserId() {
+		return advertiserId;
+	}
+
+	public void setAdvertiserId(Long advertiserId) {
+		this.advertiserId = advertiserId;
+	}
+
+	public Long getSiteId() {
+		return siteId;
+	}
+
+	public void setSiteId(Long siteId) {
+		this.siteId = siteId;
+	}
+
+	public Long getProductId() {
+		return productId;
+	}
+
+	public void setProductId(Long productId) {
+		this.productId = productId;
+	}
+
+	public Long getPositionId() {
+		return positionId;
+	}
+
+	public void setPositionId(Long positionId) {
+		this.positionId = positionId;
+	}
+
+	public String getPositionNumber() {
+		return positionNumber;
+	}
+
+	public void setPositionNumber(String positionNumber) {
+		this.positionNumber = positionNumber;
+	}
+
+	public Long getBillingModeId() {
+		return billingModeId;
+	}
+
+	public void setBillingModeId(Long billingModeId) {
+		this.billingModeId = billingModeId;
+	}
+
+	public String getPeriod() {
+		return period;
+	}
+
+	public void setPeriod(String period) {
+		this.period = period;
+	}
+
+	public Double getBenchmarkPrice() {
+		return benchmarkPrice;
+	}
+
+	public void setBenchmarkPrice(Double benchmarkPrice) {
+		this.benchmarkPrice = benchmarkPrice;
+	}
+
+	public Double getCustomerQuote() {
+		return customerQuote;
+	}
+
+	public void setCustomerQuote(Double customerQuote) {
+		this.customerQuote = customerQuote;
+	}
+
+	public Double getDiscount() {
+		return discount;
+	}
+
+	public void setDiscount(Double discount) {
+		this.discount = discount;
+	}
+
+	public Double getOurShare() {
+		return ourShare;
+	}
+
+	public void setOurShare(Double ourShare) {
+		this.ourShare = ourShare;
+	}
+
+	public Double getCustomerShare() {
+		return customerShare;
+	}
+
+	public void setCustomerShare(Double customerShare) {
+		this.customerShare = customerShare;
+	}
+
+	public Double getThirdPartyShare() {
+		return thirdPartyShare;
+	}
+
+	public void setThirdPartyShare(Double thirdPartyShare) {
+		this.thirdPartyShare = thirdPartyShare;
+	}
+
+	public Long getDailyAmount() {
+		return dailyAmount;
+	}
+
+	public void setDailyAmount(Long dailyAmount) {
+		this.dailyAmount = dailyAmount;
+	}
+
+	public Long getTotalAmount() {
+		return totalAmount;
+	}
+
+	public void setTotalAmount(Long totalAmount) {
+		this.totalAmount = totalAmount;
+	}
+
+	public Long getAccumulatedAmount() {
+		return accumulatedAmount;
+	}
+
+	public void setAccumulatedAmount(Long accumulatedAmount) {
+		this.accumulatedAmount = accumulatedAmount;
+	}
+
+	public Double getBudget() {
+		return budget;
+	}
+
+	public void setBudget(Double budget) {
+		this.budget = budget;
+	}
+
+	public String getMaterialTitle() {
+		return materialTitle;
+	}
+
+	public void setMaterialTitle(String materialTitle) {
+		this.materialTitle = materialTitle;
+	}
+
+	public String getMaterialUrl() {
+		return materialUrl;
+	}
+
+	public void setMaterialUrl(String materialUrl) {
+		this.materialUrl = materialUrl;
+	}
+
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+	
+	public String getOccupyPeriod() {
+		return occupyPeriod;
+	}
+
+	public void setOccupyPeriod(String occupyPeriod) {
+		this.occupyPeriod = occupyPeriod;
+	}
+
+	public List<MaterialAttachment> getMaterialAttachments() {
+		return materialAttachments;
+	}
+
+	public void setMaterialAttachments(List<MaterialAttachment> materialAttachments) {
+		this.materialAttachments = materialAttachments;
+	}
+
+	public String getTimeZoneOffset() {
+		return timeZoneOffset;
+	}
+
+	public void setTimeZoneOffset(String timeZoneOffset) {
+		this.timeZoneOffset = timeZoneOffset;
+	}
+
+    public String getMaterialCodeContent() {
+        return materialCodeContent;
+    }
+
+    public String getMaterialType() {
+        return materialType;
+    }
+
+    public String getMonitorUrl() {
+        return monitorUrl;
+    }
+
+    public void setMaterialCodeContent(String materialCodeContent) {
+        this.materialCodeContent = materialCodeContent;
+    }
+
+    public void setMaterialType(String materialType) {
+        this.materialType = materialType;
+    }
+
+    public void setMonitorUrl(String monitorUrl) {
+        this.monitorUrl = monitorUrl;
+    }
+
+}

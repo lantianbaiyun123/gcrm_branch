@@ -1,0 +1,11 @@
+<p>
+尊敬的客户：
+</p>
+<p>
+&nbsp;&nbsp;&nbsp;&nbsp;您好！
+</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;
+${operator}正在使用此邮箱为您创建百度广告投放数据平台账号，您的邮箱验证码为：${verifyCode}
+</p>
+<p> &nbsp;&nbsp;&nbsp;&nbsp;请及时将验证码转达给${operator}（或与您联系的百度工作人员），以便顺利完成账号的创建。感谢您的支持与配合！</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp; 此为系统消息，请勿回复。</p>

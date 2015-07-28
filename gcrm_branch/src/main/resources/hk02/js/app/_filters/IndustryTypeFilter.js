@@ -1,0 +1,1 @@
+define(["app"],function(e){e.registerFilter("IndustryTypeFilter",function(){var e=["INDUSTRY_TYPE_ECOMMERCE","INDUSTRY_TYPE_GAME","INDUSTRY_TYPE_OTHER"],r=["Ecommerce-electronic","","Ecommerce-other"];return function(n,t){return"eName"===t&&n>-1&&3>n?r[n]:e[n]?e[n]:"--"}})});

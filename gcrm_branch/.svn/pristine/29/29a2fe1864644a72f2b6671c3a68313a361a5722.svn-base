@@ -1,0 +1,49 @@
+{
+    "code": 200,
+    "data": {
+        "content": [ ],
+        "offset": 0,
+        "pageNo": 1,
+        "pageNumber": 1,
+        "pageSize": 20,
+        "result": [
+            {
+                "advertisers": "ZX",
+                "description": "ZX",
+                "id": 23,
+                "insertPeriodDescription": "2014-05-06;2014-05-10;2014-05-23;",
+                "periodDescription": "2014-05-02",
+                "status": "reserved"
+            },
+            {
+                "advertisers": "直客-1",
+                "description": "test",
+                "id": 18,
+                "insertPeriodDescription": "2014-05-06;2014-05-10;2014-05-13;",
+                "periodDescription": "2014-05-02",
+                "status": "reserved"
+            },
+            {
+                "advertisers": "直客-1",
+                "description": "test",
+                "id": 2,
+                "insertPeriodDescription": "2014-05-04",
+                "periodDescription": "2014-05-02",
+                "status": "locked"
+            },
+            {
+                "advertisers": "anhuantestdate",
+                "description": "test",
+                "id": 1,
+                "insertPeriodDescription": "2014-05-03",
+                "periodDescription": "2014-05-02,2014-05-05;2014-05-07",
+                "status": "confirmed"
+            }
+        ],
+        "resultClass": "com.baidu.gcrm.schedule.vo.ScheduleListBean",
+        "total": 0,
+        "totalCount": 4,
+        "totalPages": 1
+    },
+    "message": "OK"
+}

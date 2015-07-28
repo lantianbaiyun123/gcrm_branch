@@ -1,0 +1,15 @@
+{
+    "code": 200,
+    "message": "OK",
+    "data": {
+        "state": "suspend",
+        "currentAdvertiser": "百度",
+        "validateMsg": [
+            {
+                "type": "overdue",
+                "conflictPeriod": "2012-12-12 ~ 2013-12-11",
+                "contractPeriod": "2012-12-12 ~ 2013-12-11"
+            }
+        ]
+    }
+}

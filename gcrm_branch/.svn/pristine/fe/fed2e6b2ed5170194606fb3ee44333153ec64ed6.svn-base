@@ -1,0 +1,1 @@
+define(["app"],function(t){t.registerFactory("PublishPrice",["$http","APP_CONTEXT",function(t,n){return{post:function(o){return t({method:"post",url:n+"adsolution/content/queryQuotationPattern/",data:angular.toJson(o)})}}}])});

@@ -1,0 +1,99 @@
+<div class="container scope-resource-position-add">
+  <div class="panel gcrm-panel panel-default">
+    <div class="panel-top-heading">
+      <h1>
+        <span>{{'ADD_POSITION_HEADER' | translate}}</span>
+      </h1>
+    </div>
+    <div class="panel-heading">
+      <form class="clearfix form-horizontal">
+        <div class="form-group">
+          <label class="control-label col-md-2">
+            {{'AD_CONTENT_PRODUCT_PLATFORMS' | translate}}：
+          </label>
+          <div class="col-md-10">
+            <label class="radio radio-inline" ng-repeat="platform in q.adPlatformList">
+              <input type="radio" ng-model="q.platformId" ng-change="changePlatform()" name="platform" value="{{platform.id}}" />
+              {{platform.i18nName}}
+            </label>
+          </div>
+        </div>
+        <div class="form-group" ng-if="q.adPlatformList.length && q.platformId">
+          <label class="control-label col-md-2">
+            {{'AD_CONTENT_PRODUCT_SITE' | translate}}：
+          </label>
+          <div>
+            <div class="col-md-10">
+              <label class="radio radio-inline" ng-repeat="site in q.adSiteList">
+                <input type="radio" ng-model="q.siteId" ng-change="changeSite()" name="site" value="{{site.id}}" />
+                {{site.i18nName}}
+              </label>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="panel-body" ng-show="q.positionTree && q.positionTree.length">
+      <div class="row">
+        <div class="col-md-12">
+          <!-- Nested list template -->
+          <script type="text/ng-template" id="items_renderer.html">
+            <div ui-tree-handle class="tree-handle">
+              <a class="btn btn-link" data-nodrag ng-click="toggle(this)" ng-style="{visibility: item.children.length && 'visible' || 'hidden'}"><span class="glyphicon" ng-class="{'glyphicon-chevron-right': collapsed, 'glyphicon-chevron-down': !collapsed}"></span></a>
+              <span ng-if="this.$nodeScope.depth() == 1">{{'CHANNEL'| translate}}：</span>
+              <span ng-if="this.$nodeScope.depth() == 2">{{'AREA'| translate}}：</span>
+              <span ng-if="this.$nodeScope.depth() == 3">{{'POSITION'| translate}}：</span>
+              <input type="text" ng-model="item.i18nData.cnName" class="form-control" yt-placeholder="{{'CNNAME' | translate}}" ng-keyup="inputKeyup()" />
+              <input type="text" ng-model="item.i18nData.enName" class="form-control mr10" yt-placeholder="{{'ENNAME' | translate}}" ng-keyup="inputKeyup()" ng-pattern="noChinese" />
+              <span ng-if="stateValidating" class="help-text">
+                <span class='text-danger' ng-if="item.i18nData.cnName && !item.i18nData.enName">{{'ENNAME_HINT' | translate}}</span>
+                <span class='text-danger' ng-if="!item.i18nData.cnName && !item.i18nData.enName">{{'NAME_HINT' | translate}}</span>
+                <span class='text-danger' ng-if="!item.i18nData.cnName && item.i18nData.enName">{{'CNNAME_HINT' | translate}}</span>
+                <span class='text-danger' ng-if="this.$nodeScope.depth() == 1 && this.$nodeScope.$modelValue.isDuplicate">{{'CHANNEL_DUPLICATE' | translate}}</span>
+                <span class='text-danger' ng-if="this.$nodeScope.depth() == 2 && this.$nodeScope.$modelValue.isDuplicate">{{'AREA_DUPLICATE' | translate}}</span>
+                <span class='text-danger' ng-if="this.$nodeScope.depth() == 3 && this.$nodeScope.$modelValue.isDuplicate">{{'POSITION_DUPLICATE' | translate}}</span>
+              </span>
+              <a class="pull-right btn btn-danger btn-xs" data-nodrag ng-click="removeNodeCustom(this)" ng-if="item.isNew"><span class="glyphicon glyphicon-remove"></span>{{'REMOVE' | translate}}</a>
+              <a class="pull-right btn btn-success btn-xs" data-nodrag ng-click="addArea(this)" ng-if="this.$nodeScope.depth() == 1" ng-class="{'tree-btn-fix': !item.isNew}"><span class="glyphicon glyphicon-plus"></span>{{'AREA'| translate}}</a>
+              <a class="pull-right btn btn-success btn-xs" data-nodrag ng-click="addPosition(this)" ng-if="this.$nodeScope.depth() == 2" ng-class="{'tree-btn-fix': !item.isNew}"><span class="glyphicon glyphicon-plus"></span>{{'POSITION'| translate}}</a>
+            </div>
+            <ol ui-tree-nodes="treeOptions" ng-model="item.children" ng-class="{hidden: collapsed}">
+              <li ng-repeat="item in item.children" ui-tree-node ng-include="'items_renderer.html'" class="node-add">
+              </li>
+            </ol>
+          </script>
+          <div ui-tree="treeOptions" data-max-depth="3" data-drag-enabled="true" class="tree">
+            <ol class="angular-ui-tree-nodes" data-nodrag>
+              <li class="angular-ui-tree-node">
+                <div class="category-title angular-ui-tree-handle">
+                  <form class="form-inline" role="form">
+                    <div class="form-group">
+                      <div class="col-md-4">
+                        <a class="btn btn-success btn-sm" ng-click="addChannel(q.positionTree)"><span class="glyphicon glyphicon-plus"></span>{{'ADD_CHANNEL' | translate}}</a>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </li>
+            </ol>
+            <ol ui-tree-nodes ng-model="q.positionTree">
+              <li ng-repeat="item in q.positionTree" ui-tree-node ng-include="'items_renderer.html'" class="node-add"></li>
+            </ol>
+          </div>
+        </div>
+
+        <!-- <div class="col-md-2">
+          <h3>Full tree</h3>
+          <pre class="code">{{ q.positionTree | json }}</pre>
+        </div> -->
+      </div>
+    </div>
+    <div class="panel-footer">
+      <div class="row">
+        <div class="col-md-12">
+          <a ng-click="btnSavePosition()" class="btn btn-primary" ng-show="q.positionTree && q.positionTree.length">{{'SAVE' | translate}}</a>
+          <a ui-sref="resourcePositionList" class="btn btn-default">{{'RETURN_TO_LIST' | translate}}</a>
+        </div>
+      </div>
+    </div>
+</div>

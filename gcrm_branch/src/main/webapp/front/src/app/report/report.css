@@ -1,0 +1,7 @@
+.report .panel-query .nav > li > a { padding: 5px 10px; }
+.report .panel-query .nav-pills > li.active > a { background-color: #5bc0de; }
+.report .time-dash { line-height: 30px; text-align: center; }
+.report .main-row .col-md-2 {width: 15.666666666666664%}
+.report .main-row .col-md-4 {width: 36.33333333333333%}
+.report .table-list th { background-color: #eee; }
+.report .gcrm-list .page-row { margin-left: 0; margin-right: 0;}

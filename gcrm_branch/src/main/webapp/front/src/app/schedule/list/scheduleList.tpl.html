@@ -1,0 +1,106 @@
+<div class="container scheduleListContainer">
+  <div class="panel panel-default gcrm-panel">
+    <div class="panel-top-heading">
+      <h1>
+        <span>{{ 'PAGE_AD_SCHEDULELIST' | translate }}</span>
+      </h1>
+    </div>
+    <div class="panel-heading">
+      <form class="gcrm-query-panel">
+        <div class="row">
+          <div class="col-md-3 dropinput-grp">
+            <div class="col-md-5 input-container btn-group">
+              <div yt-input-dropdown="queryTypes" dropdown-selected="q.queryType" dropdown-type="i18n" please-text="false" />
+            </div>
+            <div class="col-md-7 div-input">
+              <input type="text" class="form-control input-sm input-code-type" ng-model="q.queryString">
+            </div>
+          </div>
+          <div class="col-md-2 query-status">
+            <div class="form-group">
+              <label class="col-md-4">{{'STATUS' | translate}}：</label>
+              <div class="col-md-7">
+                <div yt-input-dropdown="queryStatusMap" dropdown-selected="q.queryStatus" dropdown-type="i18n" please-text="{{'SELECT_ALL' | translate}}" />
+              </div>
+            </div>
+          </div>
+          <div class="col-md-5 query-date">
+            <label class="pull-left panel-label">{{'AD_SOLUTION_LIST_START_TIME' | translate}}：</label>
+            <input type="text" class="form-control datepicker" ng-model="q.startDate" datepicker-popup="yyyy-MM-dd" max="q.endDate" readonly="readonly" max="q.endDate" />
+            <div class="pull-left">
+              <span style="line-height: 30px; padding:0 1px 0 4px;">-</span>
+            </div>
+            <input type="text" class="form-control datepicker" ng-model="q.endDate" datepicker-popup="yyyy-MM-dd" min="q.startDate" readonly="readonly" min="q.startDate" />
+          </div>
+          <div class="col-md-2">
+            <div>
+              <button class="btn btn-primary btn-sm" ng-click="btnQuery()">{{'BTN_QUERY' | translate}}</button>
+              <button class="btn btn-link btn-sm" ng-if="!queryMoreShow" ng-click="toggleQueryMore()">{{'BTN_MORE' | translate}}</button>
+              <button class="btn btn-link btn-sm btn-link-short" ng-if="queryMoreShow" ng-click="toggleQueryMore()">{{'BTN_SIMPLIFY' | translate}}</button>
+            </div>
+          </div>
+        </div>
+        <div class="row" collapse="!queryMoreShow">
+          <label class="pull-left mt5" style="padding-left: 39px">{{'POSITION_SELECT' | translate}}：</label>
+          <div class="mt5" yt-position-select position-selected="q.positionSelected"></div>
+        </div>
+      </form>
+    </div>
+    <div class="panel-body" ng-show="scheduleList.length">
+      <table class="table tableBorderBottom">
+        <thead>
+          <tr>
+            <th class="col10">{{ 'SCHEDULE_NUMBER' | translate }}</th>
+            <th class="col11">{{ 'SCHEDULE_AD_CONTENT' | translate }}</th>
+            <th class="col9">{{ 'SCHEDULE_ADVERTISER_NAME' | translate }}</th>
+            <th class="col28">{{ 'SCHEDULE_PRODUCT_TIME' | translate }}</th>
+            <th class="col28">{{ 'SCHEDULE_INSERT_TIME' | translate }}</th>
+            <th class="col9">{{ 'SCHEDULE_INSERT_STATUS' | translate }}</th>
+            <th class="col5"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="item in scheduleList">
+            <td title="{{ item.number }}">{{ item.number || '--' }}</td>
+            <td title="{{ item.description }}">
+              <a ng-click="navToContent(item)" ng-if="!!item.description">{{ item.description}}</a>
+              <span ng-if="!item.description">--</span>
+            </td>
+            <td title="{{ item.advertisers }}">{{ item.advertisers || '--'}}</td>
+            <td title="{{ item.periodDescription }}">{{ item.periodDescription || '--' }}</td>
+            <td title="{{ item.insertPeriodDescription }}">{{ item.insertPeriodDescription || '--'}}</td>
+            <td>{{ item.status | ScheduleListStatusFilter | translate}}</td>
+            <td><a ng-href="#/scheduleDetail?scheduleId={{item.id}}">{{ 'SCHEDULE_LOOK' | translate }}<a></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="row page-row" style="margin: 15px 5px 10px;">
+        <div class="pull-left">
+          <div class="btn-group dropup">
+            <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
+                {{pager.pageSize || 10}}&nbsp;&nbsp;<span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+              <li ng-repeat="item in pager.pageSizeSlots">
+                <a  ng-click="setPageSize(item)">{{item}}</a>
+              </li>
+            </ul>
+          </div>
+          <span class="page-row-text" ng-if="pager.totalCount">
+            {{ 'PAGINATION_TOTAL' | translate }}
+            {{ pager.totalPages+" " || 0 }}
+            {{ 'PAGINATION_PAGES' | translate }},
+            {{ pager.totalCount+" " || 0 }}
+            {{ 'PAGINATION_ROWS' | translate }}
+          </span>
+        </div>
+        <div class="pull-right">
+            <pagination total-items="pager.totalCount" page="pager.pageNumber" class="pagination-sm mt0 mb0" items-per-page="pager.pageSize" previous-text="&laquo;" next-text="&raquo;" rotate="false" max-size="10"></pagination>
+        </div>
+      </div>
+    </div>
+    <div class="panel-body" ng-hide="scheduleList.length">
+      <div class="alert alert-info">{{'SCHEDULE_LIST_NO_ITEM' | translate}}</div>
+    </div>
+</div>
+

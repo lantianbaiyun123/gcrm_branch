@@ -1,0 +1,42 @@
+{
+    "code": 200,
+    "data": [
+        {
+            "adPlatformId": 2,
+            "createOperator": 1000,
+            "createTime": 1389773698000,
+            "i18nName": "中文",
+            "id": 6,
+            "updateOperator": 1000,
+            "updateTime": 1389773698000
+        },
+        {
+            "adPlatformId": 2,
+            "createOperator": 1000,
+            "createTime": 1389778462000,
+            "i18nName": "泰国站",
+            "id": 9,
+            "updateOperator": 1000,
+            "updateTime": 1389778462000
+        },
+        {
+            "adPlatformId": 2,
+            "createOperator": 1000,
+            "createTime": 1391843306000,
+            "i18nName": "测试1",
+            "id": 26,
+            "updateOperator": 1000,
+            "updateTime": 1391843665000
+        },
+        {
+            "adPlatformId": 2,
+            "createOperator": 1000,
+            "createTime": 1391844158000,
+            "i18nName": "测试站点1",
+            "id": 28,
+            "updateOperator": 1000,
+            "updateTime": 1391844198000
+        }
+    ],
+    "message": "OK"
+}

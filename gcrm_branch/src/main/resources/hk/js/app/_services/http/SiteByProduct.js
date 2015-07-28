@@ -1,0 +1,1 @@
+define(["app"],function(t){t.registerFactory("SiteByProduct",["$http","APP_CONTEXT",function(t,e){return{get:function(n,u){t({method:"get",url:e+"adsolution/content/querySiteByProductId/",params:n}).success(function(t){u(t)})},getSiteArea:function(n){return t({method:"get",url:e+"quote/siteSuggest",params:n})}}}])});

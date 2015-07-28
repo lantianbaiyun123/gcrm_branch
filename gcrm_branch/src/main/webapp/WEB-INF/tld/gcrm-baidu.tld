@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE taglib PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
+                        "http://java.sun.com/dtd/web-jsptaglibrary_1_2.dtd">
+<taglib>
+	<tlib-version>1.1</tlib-version>
+	<jsp-version>1.2</jsp-version>
+	<short-name>gcrm</short-name>
+	<uri>http://www.baidu.com</uri>
+	<display-name>common tag Library</display-name>
+	<description>gcrm common talibs</description>
+	<tag>
+		<name>message</name>
+		<tag-class>com.baidu.gcrm.common.i18n.MessageTag</tag-class>
+		<body-content>JSP</body-content>
+		<description>message tag</description>
+	</tag>
+	<tag>
+		<name>page</name>
+		<tag-class>com.baidu.gcrm.common.page.PageTag</tag-class>
+		<body-content>JSP</body-content>
+		<attribute>
+			<name>currPage</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.Integer</type>
+		</attribute>
+		<attribute>
+			<name>pageSize</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.Integer</type>
+		</attribute>
+		<attribute>
+			<name>totalCount</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.Integer</type>
+		</attribute>
+		<attribute>
+			<name>formId</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.String</type>
+		</attribute>
+	</tag>
+	<tag>
+		<name>rights</name>
+		<tag-class>com.baidu.gcrm.account.rights.web.RightsTag</tag-class>
+		<body-content>JSP</body-content>
+		<description>rights url tag</description>
+	</tag>
+	<tag>
+		<name>ownerOperFuncs</name>
+		<tag-class>com.baidu.gcrm.account.rights.web.OwnerOperFuncTag</tag-class>
+		<body-content>JSP</body-content>
+		<description>owner operate functions tag</description>
+	</tag>
+	
+	<tag>
+		<name>scripts</name>
+		<tag-class>com.baidu.gcrm.common.fis.JsHolderTag</tag-class>
+		<body-content>JSP</body-content>
+		<description>fis script tag</description>
+	</tag>
+	
+	<tag>
+		<name>styles</name>
+		<tag-class>com.baidu.gcrm.common.fis.CssHolderTag</tag-class>
+		<body-content>JSP</body-content>
+		<description>fis style tag</description>
+	</tag>
+	
+	<tag>
+		<name>require</name>
+		<tag-class>com.baidu.gcrm.common.fis.RequireHolderTag</tag-class>
+		<body-content>JSP</body-content>
+		<description>fis style tag</description>
+		<attribute>
+			<name>name</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.String</type>
+		</attribute>
+	</tag>
+	
+	<tag>
+		<name>html</name>
+		<tag-class>com.baidu.gcrm.common.fis.FisHtmlTag</tag-class>
+		<body-content>JSP</body-content>
+		<description>fis style tag</description>
+	</tag>
+	
+	<tag>
+		<name>div</name>
+		<tag-class>com.baidu.gcrm.common.fis.FisDivTag</tag-class>
+		<body-content>JSP</body-content>
+		<description>fis style tag</description>
+	</tag>
+	
+	<tag>
+		<name>script</name>
+		<tag-class>com.baidu.gcrm.common.fis.ScriptTag</tag-class>
+		<body-content>JSP</body-content>
+		<description>fis style tag</description>
+		
+		<attribute>
+			<name>type</name>
+			<required>false</required>
+			<type>java.lang.String</type>
+		</attribute>
+	</tag>
+	
+	
+</taglib>

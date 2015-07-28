@@ -1,0 +1,712 @@
+package com.baidu.gcrm.publish.dao.impl;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import com.baidu.gcrm.common.DateUtils;
+import com.baidu.gcrm.common.page.HqlPageQuery;
+import com.baidu.gcrm.common.page.IPageQuery;
+import com.baidu.gcrm.common.page.Page;
+import com.baidu.gcrm.publish.dao.IPublishRepositoryCustom;
+import com.baidu.gcrm.publish.model.Publish;
+import com.baidu.gcrm.publish.model.Publish.PublishStatus;
+import com.baidu.gcrm.publish.model.Publish.PublishType;
+import com.baidu.gcrm.publish.model.PublishDate;
+import com.baidu.gcrm.publish.model.PublishDate.PublishPeriodStatus;
+import com.baidu.gcrm.publish.model.PublishMailType;
+import com.baidu.gcrm.publish.web.utils.PublishCondition;
+import com.baidu.gcrm.publish.web.utils.PublishCondition.OperateType;
+import com.baidu.gcrm.publish.web.utils.PublishDoneCondition;
+import com.baidu.gcrm.publish.web.utils.QueryType;
+import com.baidu.gcrm.publish.web.vo.MaterialVo;
+import com.baidu.gcrm.publish.web.vo.PublishDoneListVO;
+import com.baidu.gcrm.publish.web.vo.PublishListVO;
+
+@Repository
+public class PublishRepositoryCustomImpl implements IPublishRepositoryCustom {
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    @SuppressWarnings("rawtypes")
+    @Autowired
+    private HqlPageQuery hqlPageQuery;
+
+    @Autowired
+    private IPageQuery mysqlPageQuery;
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<Publish> findPublishByCondition(PublishCondition condition) {
+        StringBuilder sqlStr = new StringBuilder();
+        sqlStr.append("select a from Publish a where 1=1");
+        // 加条件
+        Query query = entityManager.createQuery(sqlStr.toString());
+        // 加条件
+        return (List<Publish>) query.getResultList();
+    }
+
+    private void setParameter(PublishCondition condition, Map<String, Object> params) {
+        if (StringUtils.isNotBlank(condition.getQueryStr())) {
+            String queryStr = "%" + condition.getQueryStr() + "%";
+            if (QueryType.adSolutionNumber.equals(condition.getQueryType())) {
+                params.put("adSolutionNumber", queryStr);
+            }
+            if (QueryType.adContentNumber.equals(condition.getQueryType())) {
+                params.put("adContentNumber", queryStr);
+            }
+            if (QueryType.scheduleNumber.equals(condition.getQueryType())) {
+                params.put("scheduleNumber", queryStr);
+            }
+            if (QueryType.materialNumber.equals(condition.getQueryType())) {
+                params.put("materialNumber", queryStr);
+            }
+            if (QueryType.resorucePostionNumber.equals(condition.getQueryType())) {
+                params.put("positionNumber", queryStr);
+            }
+            if (QueryType.number.equals(condition.getQueryType())) {
+                params.put("number", queryStr);
+            }
+        }
+
+        if (StringUtils.isNotBlank(condition.getNumber())) {
+            params.put("number", condition.getNumber());
+        }
+
+        if (condition.getProductId() != null && condition.getProductId().intValue() != 0) {
+            params.put("productId", condition.getProductId());
+        }
+
+        if (StringUtils.isNotBlank(condition.getChannelId())) {
+            String[] array = condition.getChannelId().split(",");
+            List<Long> channelList = new ArrayList<Long>();
+            for (int i = 0; i < array.length; i++) {
+                channelList.add(Long.valueOf(array[i]));
+            }
+            params.put("channelId", channelList);
+        }
+
+        if (condition.getAreaId() != null && condition.getAreaId().intValue() != 0) {
+            params.put("areaId", condition.getAreaId());
+        }
+
+        if (condition.getPositionId() != null && condition.getPositionId().intValue() != 0) {
+            params.put("positionId", condition.getPositionId());
+        }
+
+        if (condition.getSiteId() != null && condition.getSiteId().intValue() != 0) {
+            params.put("siteId", condition.getSiteId());
+        }
+
+        if (CollectionUtils.isNotEmpty(condition.getCurrentOperChannelIds())
+                && CollectionUtils.isEmpty(condition.getCurrentOperPlatIds())) {
+            params.put("currentOperChannelIds", condition.getCurrentOperChannelIds());
+        }
+
+        if (CollectionUtils.isEmpty(condition.getCurrentOperChannelIds())
+                && CollectionUtils.isNotEmpty(condition.getCurrentOperPlatIds())) {
+            params.put("currentOperPlatIds", condition.getCurrentOperPlatIds());
+        }
+
+        if (CollectionUtils.isNotEmpty(condition.getCurrentOperChannelIds())
+                && CollectionUtils.isNotEmpty(condition.getCurrentOperPlatIds())) {
+            params.put("currentOperChannelIds", condition.getCurrentOperChannelIds());
+            params.put("currentOperPlatIds", condition.getCurrentOperPlatIds());
+        }
+
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public Page<PublishListVO> findPublishListVOByCondition(PublishCondition condition) {
+        Page<PublishListVO> page = new Page<PublishListVO>();
+
+        StringBuilder columnStr = new StringBuilder();
+        columnStr
+                .append("select a.id,a.number,a.adContentNumber,a.scheduleNumber,b.advertiser,b.description,b.productId,")
+                .append("b.channelId,b.areaId,b.positionId,b.siteId,a.status,a.type,d.id AS scheduleId,a.onlineNumber,a.property,max(c.planEnd) as maxplanEnd ");
+
+        StringBuilder sqlStr = new StringBuilder();
+        sqlStr.append("from Publish a,AdSolutionContent b,PublishDate c,Schedule d");
+
+        sqlStr.append(" where a.adContentId=b.id AND a.number = c.publishNumber").append(
+                " AND d.number = a.scheduleNumber");
+
+        sqlStr.append(" AND a.status != :releasestatus");
+
+        if (CollectionUtils.isNotEmpty(condition.getOperatorIdList())) {
+            sqlStr.append(" AND a.createOperator in (:operatorIdList)");
+        }
+
+        sqlStr.append(getSqlByCondition(condition));
+
+        if (condition.getOperateType() != null && OperateType.materialChange.equals(condition.getOperateType())) {
+            sqlStr.append(" AND a.type = :publishType");
+        }
+
+        if (condition.getOperateType() != null && OperateType.online.equals(condition.getOperateType())) {
+            sqlStr.append(" AND (c.status = :status");
+            sqlStr.append(" and a.type != :publishType)");
+        }
+
+        StringBuilder orderStr = new StringBuilder();
+
+        if (StringUtils.isNotBlank(condition.getOperateDate())) {
+            sqlStr.append(" AND (a.status = :unpublishstatus OR a.status = :publishingstatus)");
+
+            if (condition.getOperateType() != null && OperateType.offline.equals(condition.getOperateType())) {
+                sqlStr.append(" AND c.status = :status");
+            }
+            if (DateUtils.getCurrentFormatDate(DateUtils.YYYY_MM_DD).equals(condition.getOperateDate())) {// 今天
+                sqlStr.append(" AND ((c.planStart <= :operateDate AND c.status = :statusNot_start AND c.planEnd >= :operateDate)");// 今天该上线的
+                sqlStr.append(" OR (c.planEnd <= :operateDate AND c.status = :statusOngoing)");// 今天该下线的
+                sqlStr.append(" OR (a.type = :materialPublishType AND c.planStart <= :operateDate AND c.status = :statusOngoing AND c.planEnd >= :operateDate))");// 上线中物料变更的全部算当天
+                orderStr.append(" order by a.createTime ");
+            } else {
+                if (condition.getOperateType() != null && OperateType.materialChange.equals(condition.getOperateType())) {
+                    return page;
+                }
+            }
+
+            if (DateUtils.getDate2String(DateUtils.YYYY_MM_DD, DateUtils.getTomorrowDate()).equals(
+                    condition.getOperateDate())) {// 明天
+                sqlStr.append(" AND ((c.planStart = :operateDate AND c.status = :statusNot_start)");// 明天该上线的
+                sqlStr.append(" OR (c.planEnd = :operateDate  AND c.status = :statusOngoing))");// 明天该下线的
+                orderStr.append(" order by a.createTime");
+            }
+
+            if (DateUtils.getDate2String(DateUtils.YYYY_MM_DD, DateUtils.getAfterTomorrowDate()).equals(
+                    condition.getOperateDate())) {// 明天之后
+                sqlStr.append(" AND ((c.planStart >= :operateDate AND c.status = :statusNot_start)");// 明天之后该上线的
+                sqlStr.append(" OR (c.planEnd >= :operateDate AND c.status = :statusOngoing))");// 明天之后该下线的
+                orderStr.append(" order by c.planStart");
+            }
+        } else {
+            orderStr.append(" order by a.createTime");
+        }
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("releasestatus", PublishStatus.release);
+
+        if (CollectionUtils.isNotEmpty(condition.getOperatorIdList())) {
+            params.put("operatorIdList", condition.getOperatorIdList());
+        }
+        // 查询total
+        StringBuilder countStr = new StringBuilder();
+        countStr.append("select count(distinct a.id) as count ").append(sqlStr);
+        sqlStr.append(" group by a.id ");
+        sqlStr.append(orderStr);
+        sqlStr = columnStr.append(sqlStr);
+        setParameter(condition, params);
+
+        if (StringUtils.isNotBlank(condition.getOperateDate())) {
+            params.put("statusNot_start", PublishPeriodStatus.not_start);
+            params.put("statusOngoing", PublishPeriodStatus.ongoing);
+            params.put("operateDate", DateUtils.getString2Date(DateUtils.YYYY_MM_DD, condition.getOperateDate()));
+            if (DateUtils.getCurrentFormatDate(DateUtils.YYYY_MM_DD).equals(condition.getOperateDate())) {// 今天
+                params.put("materialPublishType", PublishType.material);
+            }
+            if (condition.getOperateType() != null && OperateType.offline.equals(condition.getOperateType())) {
+                params.put("status", PublishPeriodStatus.ongoing);
+            }
+            params.put("publishingstatus", PublishStatus.publishing);
+            params.put("unpublishstatus", PublishStatus.unpublish);
+        }
+
+        if (condition.getOperateType() != null && OperateType.materialChange.equals(condition.getOperateType())) {
+            params.put("publishType", PublishType.material);
+        }
+
+        if (condition.getOperateType() != null && OperateType.online.equals(condition.getOperateType())) {
+            params.put("status", PublishPeriodStatus.not_start);
+            params.put("publishType", PublishType.material);
+        }
+
+        hqlPageQuery.executePageQuery(entityManager, sqlStr, countStr, params, condition);
+
+        List<Object[]> ls = condition.getContent();
+
+        List<PublishListVO> res = new ArrayList<PublishListVO>();
+
+        if (CollectionUtils.isNotEmpty(ls)) {
+            for (Object[] values : ls) {
+                PublishListVO vo = new PublishListVO();
+                if (values[0] != null) {
+                    vo.setId(Long.valueOf(values[0].toString()));
+                }
+                if (values[1] != null) {
+                    vo.setNumber(values[1].toString());
+                }
+                if (values[2] != null) {
+                    vo.setAdContentNumber(values[2].toString());
+                }
+                if (values[3] != null) {
+                    vo.setScheduleNumber(values[3].toString());
+                }
+                if (values[4] != null) {
+                    vo.setAdvertisers(values[4].toString());
+                }
+                if (values[5] != null) {
+                    vo.setAdContentDesc(values[5].toString());
+                }
+                if (values[6] != null) {
+                    vo.setProductId(Long.valueOf(values[6].toString()));
+                }
+                if (values[7] != null) {
+                    vo.setChannelId(Long.valueOf(values[7].toString()));
+                }
+                if (values[8] != null) {
+                    vo.setAreaId(Long.valueOf(values[8].toString()));
+                }
+                if (values[9] != null) {
+                    vo.setPositionId(Long.valueOf(values[9].toString()));
+                }
+                if (values[10] != null) {
+                    vo.setSiteId(Long.valueOf(values[10].toString()));
+                }
+                if (values[11] != null) {
+                    PublishStatus currStatus = PublishStatus.valueOf(values[11].toString());
+                    vo.setStatus(currStatus);
+                    if (currStatus.ordinal() < 2) {
+                        if (StringUtils.isNotBlank(condition.getOperateDate())) {
+                            vo.setShowGiveUpAll(true);
+                        } else {
+                            if (values[16] != null
+                                    && DateUtils.compareDate(
+                                            DateUtils.getString2Date(DateUtils.YYYY_MM_DD, values[16].toString()),
+                                            new Date(), DateUtils.YYYY_MM_DD) >= 0) {
+                                vo.setShowGiveUpAll(true);
+                            }
+                        }
+                    }
+                }
+                if (values[12] != null) {
+                    vo.setType(PublishType.valueOf(values[12].toString()));
+                    if (PublishType.valueOf(values[12].toString()).ordinal() == 1) {
+                        if (DateUtils.getCurrentFormatDate(DateUtils.YYYY_MM_DD).equals(condition.getOperateDate())) {// 今天
+                            vo.setShowMaterialOnline(true);
+                        }
+                    }
+                }
+                if (values[13] != null) {
+                    vo.setScheduleId(Long.valueOf(values[13].toString()));
+                }
+                if (values[14] != null) {
+                    vo.setOnlineNumber(values[14].toString());
+                }
+                if (values[15] != null) {
+                    vo.setProperty(Integer.valueOf(values[15].toString()));
+                }
+                res.add(vo);
+            }
+        }
+
+        page.setContent(res);
+        page.setPageSize(condition.getPageSize());
+        page.setTotalCount(condition.getTotal());
+        page.setTotal(condition.getTotal());
+        return page;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<PublishDate> findPublishDateByPublishNumber(String publishNumber) {
+        StringBuilder sqlStr = new StringBuilder();
+        sqlStr.append("select a from PublishDate a where a.publishNumber =:publishNumber");
+        // 加条件
+        sqlStr.append(" order by planStart");
+
+        Query query = entityManager.createQuery(sqlStr.toString());
+        // 加条件
+        query.setParameter("publishNumber", publishNumber);
+        return (List<PublishDate>) query.getResultList();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public Page<PublishDoneListVO> findPublishDoneList(PublishDoneCondition condition) {
+        Map<String, Object> queryParams = new HashMap<String, Object>();
+        String conditionStr = getSqlByDoneCondition(condition, queryParams);
+        StringBuilder sqlStr = new StringBuilder();
+        sqlStr.append(
+                "select a.id, a.number,a.status,a.ac_number,b.id as ac_id,b.advertisers,b.description,b.product_id,")
+                .append("b.channel_id,b.area_id,b.position_id,b.site_id,a.s_number,d.id AS scheduleId,d.number AS scheduleNumber,a.online_number ")
+                .append(" from  g_publish a, g_advertise_solution_content b,g_schedules d")
+                .append(" where a.ad_content_id=b.id  AND d.number = a.s_number")
+                .append(" and EXISTS(select id from g_publish_record c where c.p_number = a.number) ");
+        sqlStr.append(conditionStr);
+        sqlStr.append(" order by a.last_update_time desc");
+        // StringBuilder countStr = new StringBuilder();
+        // countStr.append("select count(*) ")
+        // .append(" from  Publish a, AdSolutionContent b,Schedule d")
+        // .append(" where  a.adContentId=b.id  AND d.number = a.scheduleNumber")
+        // .append(" and EXISTS(select id from PublishRecord c where c.publishNumber = a.number) ")
+        // .append(conditionStr);
+        mysqlPageQuery.executePageQuery(entityManager, sqlStr, queryParams, condition);
+
+        return condition;
+    }
+
+    private String getSqlByDoneCondition(PublishDoneCondition condition, Map<String, Object> params) {
+        StringBuilder sqlStr = new StringBuilder();
+
+        if (StringUtils.isNotBlank(condition.getQueryStr())) {
+            boolean blankQueryType = false;
+            if (QueryType.adSolutionNumber.equals(condition.getQueryType())) {
+                sqlStr.append(" AND a.as_number like :queryStr ");
+            } else if (QueryType.adContentNumber.equals(condition.getQueryType())) {
+                sqlStr.append(" AND a.ac_number like :queryStr ");
+            } else if (QueryType.scheduleNumber.equals(condition.getQueryType())) {
+                sqlStr.append(" AND a.s_number like :queryStr ");
+            } else if (QueryType.materialNumber.equals(condition.getQueryType())) {
+                sqlStr.append(" AND a.m_number like :queryStr ");
+            } else if (QueryType.resorucePostionNumber.equals(condition.getQueryType())) {
+                sqlStr.append(" AND a.pos_number like :queryStr ");
+            } else if (QueryType.number.equals(condition.getQueryType())) {
+                sqlStr.append(" And a.number like :queryStr ");
+            } else {
+                blankQueryType = true;
+            }
+            if (!blankQueryType)
+                params.put("queryStr", "%" + condition.getQueryStr() + "%");
+        }
+
+        if (condition.getProductId() != null && condition.getProductId().intValue() != 0) {
+            sqlStr.append(" AND b.product_id= :productId");
+            params.put("productId", condition.getProductId());
+        }
+
+        if (StringUtils.isNotBlank(condition.getChannelId())) {
+            sqlStr.append(" AND b.channel_id =:channelId");
+            params.put("channelId", condition.getChannelId());
+        }
+
+        if (condition.getAreaId() != null && condition.getAreaId().intValue() != 0) {
+            sqlStr.append(" AND b.area_id= :areaId");
+            params.put("areaId", condition.getAreaId());
+        }
+
+        if (condition.getPositionId() != null && condition.getPositionId().intValue() != 0) {
+            sqlStr.append(" AND b.position_id= :positionId");
+            params.put("positionId", condition.getPositionId());
+        }
+
+        if (condition.getSiteId() != null && condition.getSiteId().intValue() != 0) {
+            sqlStr.append(" AND b.site_id= :siteId");
+            params.put("siteId", condition.getSiteId());
+        }
+
+        if (CollectionUtils.isNotEmpty(condition.getCurrentOperChannelIds())
+                && CollectionUtils.isNotEmpty(condition.getCurrentOperPlatIds())) {
+            sqlStr.append(" AND (b.channel_id in (:currentOperChannelIds) OR b.product_id in (:currentOperPlatIds))");
+            params.put("currentOperChannelIds", condition.getCurrentOperChannelIds());
+            params.put("currentOperPlatIds", condition.getCurrentOperPlatIds());
+
+        } else {
+            if (CollectionUtils.isNotEmpty(condition.getCurrentOperChannelIds())
+                    && CollectionUtils.isEmpty(condition.getCurrentOperPlatIds())) {
+                sqlStr.append(" AND b.channel_id in :currentOperChannelIds");
+                params.put("currentOperChannelIds", condition.getCurrentOperChannelIds());
+
+            }
+
+            if (CollectionUtils.isEmpty(condition.getCurrentOperChannelIds())
+                    && CollectionUtils.isNotEmpty(condition.getCurrentOperPlatIds())) {
+                sqlStr.append(" AND b.product_id in :currentOperPlatIds");
+                params.put("currentOperPlatIds", condition.getCurrentOperPlatIds());
+            }
+        }
+
+        return sqlStr.toString();
+    }
+
+    private String getSqlByCondition(PublishCondition condition) {
+        StringBuilder sqlStr = new StringBuilder();
+        // 加条件
+        if (StringUtils.isNotBlank(condition.getQueryStr())) {
+            if (QueryType.adSolutionNumber.equals(condition.getQueryType())) {
+                sqlStr.append(" AND a.adSolutionNumber like :adSolutionNumber");
+            }
+            if (QueryType.adContentNumber.equals(condition.getQueryType())) {
+                sqlStr.append(" AND a.adContentNumber like :adContentNumber");
+            }
+            if (QueryType.scheduleNumber.equals(condition.getQueryType())) {
+                sqlStr.append(" AND a.scheduleNumber like :scheduleNumber");
+            }
+            if (QueryType.materialNumber.equals(condition.getQueryType())) {
+                sqlStr.append(" AND a.materialNumber like :materialNumber");
+            }
+            if (QueryType.resorucePostionNumber.equals(condition.getQueryType())) {
+                sqlStr.append(" AND a.positionNumber like :positionNumber");
+            }
+            if (QueryType.number.equals(condition.getQueryType())) {
+                sqlStr.append(" And a.number like :number");
+            }
+        }
+
+        if (StringUtils.isNotBlank(condition.getNumber())) {
+            sqlStr.append(" AND a.number= :number");
+        }
+
+        if (condition.getProductId() != null && condition.getProductId().intValue() != 0) {
+            sqlStr.append(" AND b.productId= :productId");
+        }
+
+        if (StringUtils.isNotBlank(condition.getChannelId())) {
+            sqlStr.append(" AND b.channelId in :channelId");
+        }
+
+        if (condition.getAreaId() != null && condition.getAreaId().intValue() != 0) {
+            sqlStr.append(" AND b.areaId= :areaId");
+        }
+
+        if (condition.getPositionId() != null && condition.getPositionId().intValue() != 0) {
+            sqlStr.append(" AND b.positionId= :positionId");
+        }
+
+        if (condition.getSiteId() != null && condition.getSiteId().intValue() != 0) {
+            sqlStr.append(" AND b.siteId= :siteId");
+        }
+
+        if (CollectionUtils.isNotEmpty(condition.getCurrentOperChannelIds())
+                && CollectionUtils.isEmpty(condition.getCurrentOperPlatIds())) {
+            sqlStr.append(" AND b.channelId in :currentOperChannelIds");
+        }
+
+        if (CollectionUtils.isEmpty(condition.getCurrentOperChannelIds())
+                && CollectionUtils.isNotEmpty(condition.getCurrentOperPlatIds())) {
+            sqlStr.append(" AND b.productId in :currentOperPlatIds");
+        }
+
+        if (CollectionUtils.isNotEmpty(condition.getCurrentOperChannelIds())
+                && CollectionUtils.isNotEmpty(condition.getCurrentOperPlatIds())) {
+            sqlStr.append(" AND (b.channelId in (:currentOperChannelIds) OR b.productId in (:currentOperPlatIds))");
+        }
+
+        return sqlStr.toString();
+    }
+
+    private void setQueryParameter(PublishCondition condition, Query query) {
+        if (StringUtils.isNotBlank(condition.getQueryStr())) {
+            String queryStr = "%" + condition.getQueryStr() + "%";
+            if (QueryType.adSolutionNumber.equals(condition.getQueryType())) {
+                query.setParameter("adSolutionNumber", queryStr);
+            }
+            if (QueryType.adContentNumber.equals(condition.getQueryType())) {
+                query.setParameter("adContentNumber", queryStr);
+            }
+            if (QueryType.scheduleNumber.equals(condition.getQueryType())) {
+                query.setParameter("scheduleNumber", queryStr);
+            }
+            if (QueryType.materialNumber.equals(condition.getQueryType())) {
+                query.setParameter("materialNumber", queryStr);
+            }
+            if (QueryType.resorucePostionNumber.equals(condition.getQueryType())) {
+                query.setParameter("positionNumber", queryStr);
+            }
+            if (QueryType.number.equals(condition.getQueryType())) {
+                query.setParameter("number", queryStr);
+            }
+        }
+
+        if (StringUtils.isNotBlank(condition.getNumber())) {
+            query.setParameter("number", condition.getNumber());
+        }
+
+        if (condition.getProductId() != null && condition.getProductId().intValue() != 0) {
+            query.setParameter("productId", condition.getProductId());
+        }
+
+        if (StringUtils.isNotBlank(condition.getChannelId())) {
+            String[] array = condition.getChannelId().split(",");
+            List<Long> channelList = new ArrayList<Long>();
+            for (int i = 0; i < array.length; i++) {
+                channelList.add(Long.valueOf(array[i]));
+            }
+            query.setParameter("channelId", channelList);
+        }
+
+        if (condition.getAreaId() != null && condition.getAreaId().intValue() != 0) {
+            query.setParameter("areaId", condition.getAreaId());
+        }
+
+        if (condition.getPositionId() != null && condition.getPositionId().intValue() != 0) {
+            query.setParameter("positionId", condition.getPositionId());
+        }
+
+        if (condition.getSiteId() != null && condition.getSiteId().intValue() != 0) {
+            query.setParameter("siteId", condition.getSiteId());
+        }
+
+        if (CollectionUtils.isNotEmpty(condition.getCurrentOperChannelIds())
+                && CollectionUtils.isEmpty(condition.getCurrentOperPlatIds())) {
+            query.setParameter("currentOperChannelIds", condition.getCurrentOperChannelIds());
+        }
+
+        if (CollectionUtils.isEmpty(condition.getCurrentOperChannelIds())
+                && CollectionUtils.isNotEmpty(condition.getCurrentOperPlatIds())) {
+            query.setParameter("currentOperPlatIds", condition.getCurrentOperPlatIds());
+        }
+
+        if (CollectionUtils.isNotEmpty(condition.getCurrentOperChannelIds())
+                && CollectionUtils.isNotEmpty(condition.getCurrentOperPlatIds())) {
+            query.setParameter("currentOperChannelIds", condition.getCurrentOperChannelIds());
+            query.setParameter("currentOperPlatIds", condition.getCurrentOperPlatIds());
+        }
+    }
+
+    @Override
+    public HashMap<String, Object> findExecutor(Long id) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("select a.realname,a.email from AdvertiseSolution ad, User a where ad.operator=a.ucid and ad.id=?1");
+        Query query = entityManager.createQuery(String.valueOf(sql));
+        query.setParameter(1, id);
+        Object[] values = (Object[]) query.getSingleResult();
+        Map<String, Object> account = new HashMap<String, Object>();
+        if (values[0] != null) {
+            account.put("name", values[0]);
+        } else {
+            account.put("name", "");
+        }
+        if (values[1] != null) {
+            account.put("email", values[1]);
+        } else {
+            account.put("email", "");
+        }
+        return (HashMap<String, Object>) account;
+
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<PublishListVO> findOnlinePublishByPlanStart(PublishMailType type) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("SELECT d.publishNumber,p.id,c.number,c.channelId,c.areaId,c.positionId,DATE_FORMAT(d.planStart, '%Y-%m-%d'),DATE_FORMAT(d.planEnd, '%Y-%m-%d'),c.advertiser,c.siteId,c.productId,c.id,p.onlineNumber");
+        sql.append(" FROM PublishDate d, Publish p,	AdSolutionContent c,AdvertiseMaterialApply m");
+        sql.append(" WHERE	d.publishNumber = p.number AND p.adContentId = c.id");
+        sql.append(" AND c.id=m.adSolutionContentId");
+        sql.append(" AND m.applyState='confirm' AND c.approvalStatus='effective'");
+        if (type != null && type.equals(PublishMailType.materCollection)) {
+            sql.append(" AND p.type='material'");
+            sql.append(" AND d.status='ongoing'");
+            sql.append(" AND (p.status=?1 )");
+            sql.append(" AND (SELECT COUNT(am.id)  from AdvertiseMaterialApply am  where am.adSolutionContentId=c.id  and am.applyState='cancel')>0");
+            sql.append(" AND (DATE_FORMAT(m.updateTime, '%Y-%m-%d %H-%i') < DATE_FORMAT(now(), '%Y-%m-%d %H-%i') ) order by c.channelId");
+        } else {
+            sql.append(" AND d.status='not_start'");
+            sql.append(" AND p.type='normal'");
+            sql.append(" AND (p.status=?2 or p.status=?3 )");
+            sql.append(" AND (d.planStart = DATE_FORMAT(now(), '%Y-%m-%d') or (d.planStart <= DATE_FORMAT(now(), '%Y-%m-%d') and d.planEnd >= DATE_FORMAT(now(), '%y-%m-%d') )) order by c.channelId");
+        }
+
+        Query query = entityManager.createQuery(String.valueOf(sql));
+        if (type != null && type.equals(PublishMailType.materCollection)) {
+            query.setParameter(1, PublishStatus.publishing);
+        } else {
+            query.setParameter(2, PublishStatus.unpublish);
+            query.setParameter(3, PublishStatus.publishing);
+        }
+
+        List<Object[]> valueList = query.getResultList();
+        List<PublishListVO> voList = new ArrayList<PublishListVO>();
+        if (CollectionUtils.isNotEmpty(valueList)) {
+            for (Object[] values : valueList) {
+                PublishListVO vo = new PublishListVO();
+                if (values[0] != null) {
+                    vo.setNumber(values[0].toString());
+                }
+                if (values[1] != null) {
+                    vo.setId(Long.valueOf(values[1].toString()));
+                }
+                if (values[2] != null) {
+                    vo.setAdContentNumber(values[2].toString());
+                }
+                if (values[3] != null) {
+                    vo.setChannelId(Long.valueOf(values[3].toString()));
+                }
+                if (values[4] != null) {
+                    vo.setAreaId(Long.valueOf(values[4].toString()));
+                }
+                if (values[5] != null) {
+                    vo.setPositionId(Long.valueOf(values[5].toString()));
+                }
+                if (values[6] != null) {
+                    vo.setPlanStart(values[6].toString());
+                }
+                if (values[7] != null) {
+                    vo.setPlanEnd(values[7].toString());
+                }
+
+                if (values[8] != null) {
+                    vo.setAdvertisers(values[8].toString());
+                }
+                if (values[9] != null) {
+                    vo.setSiteId(Long.valueOf(values[9].toString()));
+                }
+                if (values[10] != null) {
+                    vo.setProductId(Long.valueOf(values[10].toString()));
+                }
+
+                if (values[11] != null) {
+                    vo.setAdContentId(Long.valueOf(values[11].toString()));
+                }
+                if (values[12] != null) {
+                    vo.setOnlineNumber(values[12].toString());
+                }
+                voList.add(vo);
+            }
+        }
+        return voList;
+
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<MaterialVo> findMaterialByAdcontentId(String number) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("SELECT m.id,m.downloadFileName");
+        sql.append(" from AdvertiseMaterialApply  p,AdvertiseMaterial m,AdSolutionContent c");
+        sql.append(" where p.id=m.materialApplyId and p.adSolutionContentId=c.id");
+        sql.append(" and p.applyState='confirm' and c.number=?1");
+        Query query = entityManager.createQuery(String.valueOf(sql));
+        query.setParameter(1, number);
+        List<Object[]> valueList = query.getResultList();
+        List<MaterialVo> voList = new ArrayList<MaterialVo>();
+        if (CollectionUtils.isNotEmpty(valueList)) {
+            for (Object[] values : valueList) {
+                MaterialVo vo = new MaterialVo();
+                if (values[0] != null) {
+                    vo.setId(Long.valueOf(values[0].toString()));
+
+                }
+                if (values[1] != null) {
+                    vo.setFilename(values[1].toString());
+
+                }
+                voList.add(vo);
+            }
+
+        }
+        return voList;
+    }
+
+    @Override
+    public List<PublishDate> findPublishNoStartDateByPublishNumber(String publishNumber) {
+        StringBuilder sqlStr = new StringBuilder();
+        sqlStr.append("select a from PublishDate a where a.publishNumber =?1");
+        sqlStr.append(" AND a.status='not_start'  order by a.planStart");
+        Query query = entityManager.createQuery(sqlStr.toString());
+        query.setParameter(1, publishNumber);
+        return (List<PublishDate>) query.getResultList();
+    }
+}

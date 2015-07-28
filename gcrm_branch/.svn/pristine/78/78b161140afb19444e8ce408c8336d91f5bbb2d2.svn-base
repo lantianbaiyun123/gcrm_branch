@@ -1,0 +1,348 @@
+{
+    "code": 200,
+    "data": {
+                "cancelRecord":[
+                    {
+                        "adNumber":"89658604-03",
+                        "adSolutionContentId":531,
+                        "adSolutionId":933,
+                        "advertiser":"三国杀",
+                        "cancelReason":"modify",
+                        "cancelTime":1395892051716,
+                        "createOperator":23456789,
+                        "createTime":1395892051716,
+                        "id":19,
+                        "operator":"余彦德",
+                        "submitTime":1395457296000,
+                        "updateOperator":23456789,
+                        "updateTime":1395892051716
+                    }
+                ],
+        "account": {
+            "customerNumber": 12345678,
+            "id": 1,
+            "name": "测试",
+            "status": "ENABLE",
+            "type": "INNER",
+            "ucid": 12345678
+        },
+        "adSolution": {
+            "approvalStatus": "confirmed",
+            "contractNumber": "123456ABCDE",
+            "createOperator": 1000,
+            "createTime": 1392803492000,
+            "customerNumber": 12345678,
+            "id": 4,
+            "number": "21352984",
+            "operator": 1,
+            "type": "create",
+            "taskInfo": "北京时间2013.11.01 13:13广告方案被 aa 驳回，驳回原因：bbbb",
+            "updateOperator": 1000,
+            "updateTime": 1392803492000,
+            "contractType": "single",
+            "contractStatus": "display"
+        },
+        "approvalContentViews": [
+            {
+                "adSolutionContent": {
+                    "adSolutionId": 4,
+                    "advertiser": "测试人员",
+                    "allowInsert": 1,
+                    "approvalStatus": "approved",
+                    "areaId": 2,
+                    "areaName": "测试区域1",
+                    "channelId": 1,
+                    "channelName": "测试频道1",
+                    "description": "1010",
+                    "guideUrl": "http://www.baidu.com",
+                    "id": 549,
+                    "insertPeriodDescription": "2014-02-24",
+                    "materialEmbedCode": 0,
+                    "materialEmbedCodeContent": "aaaaaaaaa",
+                    "materialTitle": "物料title",
+                    "materialUrl": "http://www.baidu.com",
+                    "periodDescription": "2014-02-24",
+                    "positionId": 9,
+                    "positionName": "测试位置adssadsadd",
+                    "productId": 2,
+                    "productName": "中文hao123",
+                    "siteId": 3,
+                    "siteName": "测试站点1",
+                    "totalDays": 1,
+                    "number": "21352984-01",
+                    "contentType":"update",
+                    "taskInfo": "方案审核通过，任务北京时间 2013.11.01 13:13已到达国代 cccc",
+                    "number": "127381273-01",
+                    "poNumber": "1999"
+                },
+                "advertiseMaterials": [
+                    {
+                        "adSolutionContentId": 4,
+                        "createOperator": 1000,
+                        "createTime": 1393397365000,
+                        "downloadFileName": "0116度学堂首页机构icon.png",
+                        "fileUrl": "http://bcs-sandbox.baidu.com/gcm-storage%2F8f98a1f3-7cdf-45fb-b8d9-459485c4ddf1?sign=MBO%3AcNDCkbD8viASpw7OhpzgGkexgrTvMO0PQk%3AyOAK4tyDkqRsN6cmcQhQi%2FRROmU%3D",
+                        "id": 3,
+                        "uploadFileName": "/8f98a1f3-7cdf-45fb-b8d9-459485c4ddf1"
+                    },
+                    {
+                        "adSolutionContentId": 4,
+                        "createOperator": 1000,
+                        "createTime": 1393397365000,
+                        "downloadFileName": "0116度学堂首页机构icon.png",
+                        "fileUrl": "http://bcs-sandbox.baidu.com/gcm-storage%2F8f98a1f3-7cdf-45fb-b8d9-459485c4ddf1?sign=MBO%3AcNDCkbD8viASpw7OhpzgGkexgrTvMO0PQk%3AyOAK4tyDkqRsN6cmcQhQi%2FRROmU%3D",
+                        "id": 5,
+                        "uploadFileName": "/8f98a1f3-7cdf-45fb-b8d9-459485c4ddf1"
+                    }
+                ],
+                "advertiseQuotation": {
+                    "adSolutionContentId": 4,
+                    "billingModelId": 1,
+                    "billingModelName": "CPC",
+                    "budget": 10,
+                    "clickAmount": 1000,
+                    "customerQuote": 10,
+                    "discount": 1,
+                    "id": 3,
+                    "priceType": "unit",
+                    "publishPrice": 10,
+                    "totalPrice": 240000,
+                    "trafficAmount": 1000
+                },
+                "schedule": {
+                  "adContentId": 477,
+                  "billingModelId": 1,
+                  "createTime": 1389196800000,
+                  "id": 8,
+                  "insertPeriodDescription": "2013-01-19",
+                  "number": 15555555,
+                  "occupyPeriod": "1530",
+                  "periodDescription": "2013-01-01,2013-01-10;2013-01-20",
+                  "positionId": 13,
+                  "status1": "reserved",
+                  "status": "released"
+                },
+                "scheduleTotalDays": 11,
+                "materialApply": {
+                    "number": "19888"
+                }
+            },
+            {
+                "adSolutionContent": {
+                    "number": "21352984-02",
+                    "contentType":"update",
+                    "adSolutionId": 4,
+                    "advertiser": "测试人员",
+                    "allowInsert": 1,
+                    "approvalStatus": "approved",
+                    "areaId": 2,
+                    "areaName": "测试区域1",
+                    "channelId": 1,
+                    "channelName": "测试频道1",
+                    "description": "1010",
+                    "guideUrl": "http://www.baidu.com",
+                    "id": 4,
+                    "insertPeriodDescription": "2014-02-24",
+                    "materialEmbedCode": 0,
+                    "materialEmbedCodeContent": "aaaaaaaaa",
+                    "materialTitle": "物料title",
+                    "materialUrl": "http://www.baidu.com",
+                    "periodDescription": "2014-02-24",
+                    "positionId": 9,
+                    "positionName": "测试位置adssadsadd",
+                    "productId": 2,
+                    "productName": "中文hao123",
+                    "siteId": 3,
+                    "siteName": "测试站点1",
+                    "totalDays": 1,
+                     "taskInfo": "方案审核通过，任务北京时间 2013.11.01 13:13已到达国代 cccc"
+                },
+                "advertiseMaterials": [
+                    {
+                        "adSolutionContentId": 4,
+                        "createOperator": 1000,
+                        "createTime": 1393397365000,
+                        "downloadFileName": "0116度学堂首页机构icon.png",
+                        "fileUrl": "http://bcs-sandbox.baidu.com/gcm-storage%2F8f98a1f3-7cdf-45fb-b8d9-459485c4ddf1?sign=MBO%3AcNDCkbD8viASpw7OhpzgGkexgrTvMO0PQk%3AyOAK4tyDkqRsN6cmcQhQi%2FRROmU%3D",
+                        "id": 3,
+                        "uploadFileName": "/8f98a1f3-7cdf-45fb-b8d9-459485c4ddf1"
+                    },
+                    {
+                        "adSolutionContentId": 4,
+                        "createOperator": 1000,
+                        "createTime": 1393397365000,
+                        "downloadFileName": "0116度学堂首页机构icon.png",
+                        "fileUrl": "http://bcs-sandbox.baidu.com/gcm-storage%2F8f98a1f3-7cdf-45fb-b8d9-459485c4ddf1?sign=MBO%3AcNDCkbD8viASpw7OhpzgGkexgrTvMO0PQk%3AyOAK4tyDkqRsN6cmcQhQi%2FRROmU%3D",
+                        "id": 5,
+                        "uploadFileName": "/8f98a1f3-7cdf-45fb-b8d9-459485c4ddf1"
+                    }
+                ],
+                "advertiseQuotation": {
+                    "adSolutionContentId": 4,
+                    "billingModelId": 2,
+                    "billingModelName": "CPS",
+                    "budget": 10,
+                    "clickAmount": 1000,
+                    "customerQuote": 10,
+                    "discount": 1,
+                    "id": 3,
+                    "priceType": "unit",
+                    "publishPrice": 10,
+                    "totalPrice": 240000,
+                    "trafficAmount": 1000
+                },
+                "schedule": {
+                  "adContentId": 477,
+                  "billingModelId": 1,
+                  "createTime": 1389196800000,
+                  "id": 8,
+                  "insertPeriodDescription": "2013-01-19",
+                  "number": 15555555,
+                  "occupyPeriod": "1530",
+                  "periodDescription": "2013-01-01,2013-01-10;2013-01-20",
+                  "positionId": 13,
+                  "status": "reserved"
+                },
+                "scheduleTotalDays": 11
+            }
+        ],
+        "contract": {
+            "advertiseSolutionId": 1,
+            "beginDate": 1388592000000,
+            "category": "代理协议",
+            "customerNumber": 12345678,
+            "endDate": 1388592000000,
+            "number1": "123456ABCDE",
+            "state": "VALID",
+            "summary": "这是合同摘要这是合同摘要这是合同摘要这是合同摘要"
+        },
+        "customerI18nView": {
+            "agentCountry": [
+                {
+                    "code": "LK",
+                    "i18nName": "斯里兰卡",
+                    "id": 5,
+                    "name": "斯里兰卡"
+                }
+            ],
+            "agentRegional": {
+                "agentCountries": [
+                    {
+                        "code": "LA",
+                        "i18nName": "老挝",
+                        "id": 8,
+                        "name": "老挝"
+                    },
+                    {
+                        "code": "IN",
+                        "i18nName": "印度",
+                        "id": 6,
+                        "name": "印度"
+                    },
+                    {
+                        "code": "PK",
+                        "i18nName": "巴基斯坦",
+                        "id": 11,
+                        "name": "巴基斯坦"
+                    },
+                    {
+                        "code": "TH",
+                        "i18nName": "泰国",
+                        "id": 1,
+                        "name": "泰国"
+                    },
+                    {
+                        "code": "KH",
+                        "i18nName": "柬埔寨",
+                        "id": 9,
+                        "name": "柬埔寨"
+                    },
+                    {
+                        "code": "LK",
+                        "i18nName": "斯里兰卡",
+                        "id": 5,
+                        "name": "斯里兰卡"
+                    },
+                    {
+                        "code": "TW",
+                        "i18nName": "台湾",
+                        "id": 4,
+                        "name": "台湾"
+                    },
+                    {
+                        "code": "PH",
+                        "i18nName": "菲律宾",
+                        "id": 2,
+                        "name": "菲律宾"
+                    },
+                    {
+                        "code": "MM",
+                        "i18nName": "缅甸",
+                        "id": 7,
+                        "name": "缅甸"
+                    },
+                    {
+                        "code": "BD",
+                        "i18nName": "孟加拉",
+                        "id": 10,
+                        "name": "孟加拉"
+                    },
+                    {
+                        "code": "VN",
+                        "i18nName": "越南",
+                        "id": 3,
+                        "name": "越南"
+                    }
+                ],
+                "i18nName": "泰语区",
+                "id": 1,
+                "name": "泰语区"
+            },
+            "agentType": "独家代理",
+            "approvalStatus": "审核通过",
+            "belongsSales": "测试5",
+            "companySize": "50~100人",
+            "country": {
+                "code": "JO",
+                "i18nName": "约旦",
+                "id": 29,
+                "name": "约旦"
+            },
+            "currencyType": {
+                "i18nName": "美元",
+                "id": 1,
+                "name": "USD",
+                "radio": 0.1647
+            },
+            "customer": {
+                "address": "ss",
+                "agentCountry": "5",
+                "agentRegional": 1,
+                "agentType": 0,
+                "approvalStatus": 3,
+                "belongSales": 5,
+                "businessLicense": "111",
+                "businessScope": "",
+                "businessType": 0,
+                "companyName": "测试-1",
+                "companySize": "less_100",
+                "companyStatus": 1,
+                "country": 29,
+                "createOperator": 1000,
+                "createTime": 1392785570000,
+                "currencyType": 1,
+                "customerNumber": 12345678,
+                "description": "",
+                "id": 1,
+                "registerCapital": 23,
+                "registerTime": 1391356800000,
+                "type": "0",
+                "updateOperator": 1000,
+                "updateTime": 1393779096000,
+                "url": "http://sssss"
+            },
+            "customerType": "广告代理（线下）"
+        }
+    },
+    "message": "OK"
+}

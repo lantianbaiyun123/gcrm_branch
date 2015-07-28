@@ -1,0 +1,26 @@
+<div class="modal-header">
+    <h4>{{title}}</h4>
+</div>
+<div class="modal-body">
+  <form class="form-horizontal" role="form">
+    <div class="form-group">
+      <label class="col-md-3 control-label">{{'AD_SOLUTION_LIST_ORIGIN_OPERATOR' | translate}}：</label>
+      <div class="col-md-5">
+        <p class="form-control-static">{{originOperator}}</p>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="toTransfer" class="col-md-3 control-label">{{'AD_SOLUTION_LIST_TRANSFER_TO' | translate}}：</label>
+      <div class="col-md-5">
+        <input type="text" id="toTransfer" ng-model="modalCustomer" ui-select2="modalOptionCustomer" style="width:170px;">
+      </div>
+      <div class="col-md-3 help-block" ng-show="!modalCustomer && stateValidating" style="color: #a94442;">
+        {{'AD_SOLUTION_LIST_OPERATOR_NULL' | translate}}
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer mt0">
+  <button type="button" class="btn btn-primary" ng-click="ok()">{{'CONFIRM' | translate}}</button>
+  <button type="button" class="btn btn-default" ng-click="cancel()">{{'CANCEL' | translate}}</button>
+</div>

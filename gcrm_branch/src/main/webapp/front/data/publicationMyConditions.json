@@ -1,0 +1,725 @@
+{
+  "code": 200,
+  "data": {
+    "afterTomorrow": {
+      "operate": [
+        {
+          "name": "all",
+          "total": 11
+        },
+        {
+          "name": "online",
+          "total": 5
+        },
+        {
+          "name": "offline",
+          "total": 4
+        },
+        {
+          "name": "materialChange",
+          "total": 3
+        }
+      ],
+      "platformList": {
+        "1": {
+          "name": "hao123变现",
+          "site": {
+            "1": {
+              "channel": {
+                "351": {
+                  "name": "测试频道1",
+                  "total": 0,
+                  "selected": true
+                },
+                "369": {
+                  "name": "test",
+                  "total": 0,
+                  "selected": true
+                }
+              },
+              "name": "测试站点1",
+              "total": 0
+            },
+            "8": {
+              "channel": {
+                "360": {
+                  "name": "test001_CN01",
+                  "total": 0,
+                  "selected": true
+                }
+              },
+              "name": "test001_CN",
+              "total": 0
+            },
+            "9": {
+              "channel": {},
+              "name": "zh_CN",
+              "total": 0
+            },
+            "10": {
+              "channel": {},
+              "name": "zh_CN",
+              "total": 0
+            },
+            "11": {
+              "channel": {},
+              "name": "zh_CN",
+              "total": 0
+            },
+            "12": {
+              "channel": {},
+              "name": "zh_CN",
+              "total": 0
+            },
+            "15": {
+              "channel": {},
+              "name": "zh_CN",
+              "total": 0
+            },
+            "16": {
+              "channel": {},
+              "name": "zh_CN",
+              "total": 0
+            },
+            "18": {
+              "channel": {
+                "373": {
+                  "name": "印度1",
+                  "total": 0,
+                  "selected": true
+                },
+                "396": {
+                  "name": "印度2",
+                  "total": 0,
+                  "selected": true
+                }
+              },
+              "name": "印度",
+              "total": 0
+            },
+            "19": {
+              "channel": {
+                "376": {
+                  "name": "印度2",
+                  "total": 0,
+                  "selected": true
+                }
+              },
+              "name": "印度2",
+              "total": 0
+            },
+            "20": {
+              "channel": {},
+              "name": "zh_CN",
+              "total": 0
+            },
+            "21": {
+              "channel": {},
+              "name": "zh_CN",
+              "total": 0
+            },
+            "22": {
+              "channel": {
+                "420": {
+                  "name": "1",
+                  "total": 0,
+                  "selected": true
+                },
+                "421": {
+                  "name": "1",
+                  "total": 0,
+                  "selected": true
+                }
+              },
+              "name": "zh_CN",
+              "total": 0
+            }
+          },
+          "total": 0
+        },
+        "3": {
+          "name": "中文广告销售",
+          "site": {
+            "2": {
+              "channel": {
+                "403": {
+                  "name": "卖场",
+                  "total": 0,
+                  "selected": true
+                },
+                "408": {
+                  "name": "销售1",
+                  "total": 0,
+                  "selected": true
+                },
+                "411": {
+                  "name": "销售",
+                  "total": 0,
+                  "selected": true
+                }
+              },
+              "name": "测试站点2",
+              "total": 0
+            },
+            "3": {
+              "channel": {
+                "1": {
+                  "name": "测试频道1",
+                  "total": 0,
+                  "selected": true
+                }
+              },
+              "name": "测试站点1",
+              "total": 0
+            },
+            "4": {
+              "channel": {},
+              "name": "zh_CN1",
+              "total": 0
+            },
+            "6": {
+              "channel": {},
+              "name": "zh_CN",
+              "total": 0
+            }
+          },
+          "total": 0
+        },
+        "6": {
+          "name": "网游变现",
+          "site": {
+            "5": {
+              "channel": {},
+              "name": "zh_CN",
+              "total": 0
+            },
+            "13": {
+              "channel": {},
+              "name": "zh_CN",
+              "total": 0
+            },
+            "14": {
+              "channel": {},
+              "name": "zh_CN",
+              "total": 0
+            }
+          },
+          "total": 0
+        },
+        "7": {
+          "name": "PCF变现",
+          "site": {
+            "1": {
+              "channel": {},
+              "name": "测试站点1",
+              "total": 0
+            }
+          },
+          "total": 0
+        },
+        "8": {
+          "name": "手游变现",
+          "site": {
+            "7": {
+              "channel": {
+                "355": {
+                  "name": "zh_CN001",
+                  "total": 0,
+                  "selected": true
+                },
+                "418": {
+                  "name": "zh_CN002",
+                  "total": 0,
+                  "selected": true
+                }
+              },
+              "name": "zh_CN01",
+              "total": 0
+            }
+          },
+          "total": 0
+        }
+      },
+      "total": 0
+    },
+    "today": {
+      "operate": [
+        {
+          "name": "all",
+          "total": 11
+        },
+        {
+          "name": "online",
+          "total": 5
+        },
+        {
+          "name": "offline",
+          "total": 4
+        },
+        {
+          "name": "materialChange",
+          "total": 3
+        }
+      ],
+      "platformList": {
+        "1": {
+          "name": "hao123变现",
+          "site": {
+            "1": {
+              "channel": {
+                "351": {
+                  "name": "测试频道1",
+                  "total": 0,
+                  "selected": true
+                },
+                "369": {
+                  "name": "test",
+                  "total": 0,
+                  "selected": true
+                }
+              },
+              "name": "测试站点1",
+              "total": 0
+            },
+            "8": {
+              "channel": {
+                "360": {
+                  "name": "test001_CN01",
+                  "total": 0,
+                  "selected": true
+                }
+              },
+              "name": "test001_CN",
+              "total": 0
+            },
+            "9": {
+              "channel": {},
+              "name": "zh_CN",
+              "total": 0
+            },
+            "10": {
+              "channel": {},
+              "name": "zh_CN",
+              "total": 0
+            },
+            "11": {
+              "channel": {},
+              "name": "zh_CN",
+              "total": 0
+            },
+            "12": {
+              "channel": {},
+              "name": "zh_CN",
+              "total": 0
+            },
+            "15": {
+              "channel": {},
+              "name": "zh_CN",
+              "total": 0
+            },
+            "16": {
+              "channel": {},
+              "name": "zh_CN",
+              "total": 0
+            },
+            "18": {
+              "channel": {
+                "373": {
+                  "name": "印度1",
+                  "total": 1,
+                  "selected": true
+                },
+                "396": {
+                  "name": "印度2",
+                  "total": 0,
+                  "selected": true
+                }
+              },
+              "name": "印度",
+              "total": 1
+            },
+            "19": {
+              "channel": {
+                "376": {
+                  "name": "印度2",
+                  "total": 0,
+                  "selected": true
+                }
+              },
+              "name": "印度2",
+              "total": 0
+            },
+            "20": {
+              "channel": {},
+              "name": "zh_CN",
+              "total": 0
+            },
+            "21": {
+              "channel": {},
+              "name": "zh_CN",
+              "total": 0
+            },
+            "22": {
+              "channel": {
+                "420": {
+                  "name": "1",
+                  "total": 0,
+                  "selected": true
+                },
+                "421": {
+                  "name": "1",
+                  "total": 0,
+                  "selected": true
+                }
+              },
+              "name": "zh_CN",
+              "total": 0
+            }
+          },
+          "total": 1
+        },
+        "3": {
+          "name": "中文广告销售",
+          "site": {
+            "2": {
+              "channel": {
+                "403": {
+                  "name": "卖场",
+                  "total": 0,
+                  "selected": true
+                },
+                "408": {
+                  "name": "销售1",
+                  "total": 0,
+                  "selected": true
+                },
+                "411": {
+                  "name": "销售",
+                  "total": 0,
+                  "selected": true
+                }
+              },
+              "name": "测试站点2",
+              "total": 0
+            },
+            "3": {
+              "channel": {
+                "1": {
+                  "name": "测试频道1",
+                  "total": 0,
+                  "selected": true
+                }
+              },
+              "name": "测试站点1",
+              "total": 0
+            },
+            "4": {
+              "channel": {},
+              "name": "zh_CN1",
+              "total": 0
+            },
+            "6": {
+              "channel": {},
+              "name": "zh_CN",
+              "total": 0
+            }
+          },
+          "total": 0
+        },
+        "6": {
+          "name": "网游变现",
+          "site": {
+            "5": {
+              "channel": {},
+              "name": "zh_CN",
+              "total": 0
+            },
+            "13": {
+              "channel": {},
+              "name": "zh_CN",
+              "total": 0
+            },
+            "14": {
+              "channel": {},
+              "name": "zh_CN",
+              "total": 0
+            }
+          },
+          "total": 0
+        },
+        "7": {
+          "name": "PCF变现",
+          "site": {
+            "1": {
+              "channel": {},
+              "name": "测试站点1",
+              "total": 0
+            }
+          },
+          "total": 0
+        },
+        "8": {
+          "name": "手游变现",
+          "site": {
+            "7": {
+              "channel": {
+                "355": {
+                  "name": "zh_CN001",
+                  "total": 0,
+                  "selected": true
+                },
+                "418": {
+                  "name": "zh_CN002",
+                  "total": 0,
+                  "selected": true
+                }
+              },
+              "name": "zh_CN01",
+              "total": 0
+            }
+          },
+          "total": 0
+        }
+      },
+      "total": 1
+    },
+    "tomorrow": {
+      "operate": [
+        {
+          "name": "all",
+          "total": 11
+        },
+        {
+          "name": "online",
+          "total": 5
+        },
+        {
+          "name": "offline",
+          "total": 4
+        },
+        {
+          "name": "materialChange",
+          "total": 3
+        }
+      ],
+      "platformList": {
+        "1": {
+          "name": "hao123变现",
+          "site": {
+            "1": {
+              "channel": {
+                "351": {
+                  "name": "测试频道1",
+                  "total": 0,
+                  "selected": true
+                },
+                "369": {
+                  "name": "test",
+                  "total": 0,
+                  "selected": true
+                }
+              },
+              "name": "测试站点1",
+              "total": 0
+            },
+            "8": {
+              "channel": {
+                "360": {
+                  "name": "test001_CN01",
+                  "total": 0,
+                  "selected": true
+                }
+              },
+              "name": "test001_CN",
+              "total": 0
+            },
+            "9": {
+              "channel": {},
+              "name": "zh_CN",
+              "total": 0
+            },
+            "10": {
+              "channel": {},
+              "name": "zh_CN",
+              "total": 0
+            },
+            "11": {
+              "channel": {},
+              "name": "zh_CN",
+              "total": 0
+            },
+            "12": {
+              "channel": {},
+              "name": "zh_CN",
+              "total": 0
+            },
+            "15": {
+              "channel": {},
+              "name": "zh_CN",
+              "total": 0
+            },
+            "16": {
+              "channel": {},
+              "name": "zh_CN",
+              "total": 0
+            },
+            "18": {
+              "channel": {
+                "373": {
+                  "name": "印度1",
+                  "total": 0
+                },
+                "396": {
+                  "name": "印度2",
+                  "total": 0
+                }
+              },
+              "name": "印度",
+              "total": 0
+            },
+            "19": {
+              "channel": {
+                "376": {
+                  "name": "印度2",
+                  "total": 0,
+                  "selected": true
+                }
+              },
+              "name": "印度2",
+              "total": 0
+            },
+            "20": {
+              "channel": {},
+              "name": "zh_CN",
+              "total": 0
+            },
+            "21": {
+              "channel": {},
+              "name": "zh_CN",
+              "total": 0
+            },
+            "22": {
+              "channel": {
+                "420": {
+                  "name": "1",
+                  "total": 0
+                },
+                "421": {
+                  "name": "1",
+                  "total": 0
+                }
+              },
+              "name": "zh_CN",
+              "total": 0
+            }
+          },
+          "total": 0
+        },
+        "3": {
+          "name": "中文广告销售",
+          "site": {
+            "2": {
+              "channel": {
+                "403": {
+                  "name": "卖场",
+                  "total": 0,
+                  "selected": true
+                },
+                "408": {
+                  "name": "销售1",
+                  "total": 0,
+                  "selected": true
+                },
+                "411": {
+                  "name": "销售",
+                  "total": 0,
+                  "selected": true
+                }
+              },
+              "name": "测试站点2",
+              "total": 0
+            },
+            "3": {
+              "channel": {
+                "1": {
+                  "name": "测试频道1",
+                  "total": 0,
+                  "selected": true
+                }
+              },
+              "name": "测试站点1",
+              "total": 0
+            },
+            "4": {
+              "channel": {},
+              "name": "zh_CN1",
+              "total": 0
+            },
+            "6": {
+              "channel": {},
+              "name": "zh_CN",
+              "total": 0
+            }
+          },
+          "total": 0
+        },
+        "6": {
+          "name": "网游变现",
+          "site": {
+            "5": {
+              "channel": {},
+              "name": "zh_CN",
+              "total": 0
+            },
+            "13": {
+              "channel": {},
+              "name": "zh_CN",
+              "total": 0
+            },
+            "14": {
+              "channel": {},
+              "name": "zh_CN",
+              "total": 0
+            }
+          },
+          "total": 0
+        },
+        "7": {
+          "name": "PCF变现",
+          "site": {
+            "1": {
+              "channel": {},
+              "name": "测试站点1",
+              "total": 0
+            }
+          },
+          "total": 0
+        },
+        "8": {
+          "name": "手游变现",
+          "site": {
+            "7": {
+              "channel": {
+                "355": {
+                  "name": "zh_CN001",
+                  "total": 0,
+                  "selected": true
+                },
+                "418": {
+                  "name": "zh_CN002",
+                  "total": 0,
+                  "selected": true
+                }
+              },
+              "name": "zh_CN01",
+              "total": 0
+            }
+          },
+          "total": 0
+        }
+      },
+      "total": 0
+    }
+  },
+  "message": "OK"
+}

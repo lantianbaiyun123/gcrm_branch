@@ -1,0 +1,38 @@
+{
+    "code": 200,
+    "data": {
+        "result": [
+            {
+                "i18nName": "CPC",
+                "id": 1,
+                "name": "CPC",
+                "type": 0
+            },
+            {
+                "i18nName": "CPA",
+                "id": 3,
+                "name": "CPA",
+                "type": 0
+            },
+            {
+                "i18nName": "CPT",
+                "id": 5,
+                "name": "CPT",
+                "type": 0
+            },
+            {
+                "i18nName": "CPS",
+                "id": 2,
+                "name": "CPS",
+                "type": 1
+            },
+            {
+                "i18nName": "CPM",
+                "id": 4,
+                "name": "CPM",
+                "type": 0
+            }
+        ]
+    },
+    "message": "OK"
+}

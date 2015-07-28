@@ -1,0 +1,60 @@
+{
+    "code": 200,
+    "data": {
+      "showUnit": true,
+      "showRatio": true,
+      "showRebate": true,
+      "quotationList": [
+        {
+            "cpa": {
+                "value": "2000.12"
+            },
+            "cpc": {
+                "value": "2000.12"
+            },
+            "cpt": {
+                "value": "2000.12"
+            },
+            "cpm": {
+                "value": "2000.12"
+            },
+            "cps": [
+               {
+                "value": "20.12"
+               }
+             ],
+            "siteIi8nName": "泰语区"
+        },
+        {
+            "cps": [
+               {
+                "value": "11",
+                "industryId": 1,
+                "industryName":"game"
+               },
+               {
+                "value": "21",
+                "industryId": 0,
+                "industryName":"ecommerce"
+               },
+               {
+                "value": "33",
+                "industryId": 2,
+                "industryName":"other"
+               }
+             ],
+            "siteIi8nName": "葡萄语区"
+        },
+        {
+            "siteIi8nName": "印尼语区",
+            "ratioMine" : "34",
+            "ratioCustomer":"33",
+            "ratioThird":"33"
+        },
+        {
+            "siteIi8nName": "阿语区",
+            "rebateRatio": 50
+        }
+    ]},
+    "message": "OK"
+}

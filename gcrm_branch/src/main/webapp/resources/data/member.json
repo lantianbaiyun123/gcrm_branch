@@ -1,0 +1,38 @@
+{ 
+    "code": 200, 
+    "data": [ 
+        { 
+            "channelId": 351, 
+            "channelName": "测试频道1", 
+            "id": 1, 
+            "siteName": "测试站点1", 
+            "user": [ 
+                { 
+                    "ucid": 1000, 
+                    "username": "current"
+                }
+            ]
+        }, 
+        { 
+            "channelId": 369, 
+            "channelName": "test", 
+            "siteName": "测试站点1"
+        }, 
+        { 
+            "channelId": 373, 
+            "channelName": "印度1", 
+            "siteName": "印度"
+        }, 
+        { 
+            "channelId": 396, 
+            "channelName": "印度2", 
+            "siteName": "印度"
+        }, 
+        { 
+            "channelId": 376, 
+            "channelName": "印度2", 
+            "siteName": "印度2"
+        }
+    ], 
+    "message": "OK"
+}

@@ -1,0 +1,85 @@
+<?xml version="1.0"	encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xmlns:cxf="http://cxf.apache.org/core"
+	
+	xsi:schemaLocation="http://www.springframework.org/schema/beans	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
+		http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd">
+	
+	<cxf:bus>
+		<cxf:features>
+			<cxf:logging/>
+		</cxf:features>
+	</cxf:bus>
+   
+    <!-- Load CXF modules from cxf.jar -->
+	<import resource="classpath:META-INF/cxf/cxf.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-extension-soap.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
+	
+    
+    <!-- BPM WebService  -->
+    <jaxws:client id="bpmExtWebService"
+		serviceClass="com.baidu.gwfp.ws.BPMClientExtendWebService" address="${ws.bpm.wsdl}">
+		<jaxws:outInterceptors> 
+		    <bean class="com.baidu.gcrm.bpm.security.GwfpAuthorizationOutHandler">
+		    	<property name="username" value="${gwfp.login.name}"></property>
+		    	<property name="password" value="${gwfp.login.password}"></property>
+		    </bean>
+		 </jaxws:outInterceptors>
+	     <jaxws:features>  
+	        <bean class="org.apache.cxf.feature.LoggingFeature"/>  
+	    </jaxws:features>
+	</jaxws:client>
+	
+	<jaxws:client id="workClientService"
+		serviceClass="com.baidu.gwfp.ws.WorkClientService" address="${ws.work.wsdl}">
+		<jaxws:outInterceptors> 
+		    <bean class="com.baidu.gcrm.bpm.security.GwfpAuthorizationOutHandler">
+		    	<property name="username" value="${gwfp.login.name}"></property>
+		    	<property name="password" value="${gwfp.login.password}"></property>
+		    </bean>
+		 </jaxws:outInterceptors>
+	     <jaxws:features>  
+	        <bean class="org.apache.cxf.feature.LoggingFeature"/>  
+	    </jaxws:features>
+	</jaxws:client>
+	
+	<jaxws:client id="cmsClientBpmExtWebService"
+		serviceClass="com.baidu.gwfp.ws.BPMClientExtendWebService" address="${ws.bpm.wsdl}">
+		<jaxws:outInterceptors> 
+		    <bean class="com.baidu.gcrm.bpm.security.GwfpAuthorizationOutHandler">
+		    	<property name="username" value="${cms.login.name}"></property>
+		    	<property name="password" value="${cms.login.password}"></property>
+		    </bean>
+		 </jaxws:outInterceptors>
+	     <jaxws:features>  
+	        <bean class="org.apache.cxf.feature.LoggingFeature"/>  
+	    </jaxws:features>
+	</jaxws:client>
+	
+	<jaxws:endpoint id="CompleteADProcessServiceEndpoint" implementor="#CompleteADProcessServiceImpl" address="/CompleteADProcessService">
+		<jaxws:inInterceptors>
+			<ref bean="gcrmInInterceptor"/>
+		</jaxws:inInterceptors> 
+	</jaxws:endpoint>
+	<jaxws:endpoint id="ScheduleReleaseServiceEndpoint" implementor="#ScheduleReleaseServiceImpl" address="/ScheduleReleaseService">
+		<jaxws:inInterceptors>
+			<ref bean="gcrmInInterceptor"/>
+		</jaxws:inInterceptors> 
+	</jaxws:endpoint>
+	<jaxws:endpoint id="CompleteQuoteProcessServiceEndpoint" implementor="#CompleteQuoteServiceImpl" address="/CompleteQuoteService">
+		<jaxws:inInterceptors>
+			<ref bean="gcrmInInterceptor"/>
+		</jaxws:inInterceptors> 
+	</jaxws:endpoint>
+	<!-- Web 安全Client配置 -->
+	<bean id="gcrmInInterceptor" class="com.baidu.gcrm.ws.security.WSAuthorizationInInterceptor" />
+	
+	<!-- GCRM CMS webservice -->
+	<jaxws:endpoint id="gcrmServiceEndpoint" implementor="#gcrmServiceFacade" address="/gcrmWebService" />
+	<jaxws:client id="cmsWebServiceClient" serviceClass="com.baidu.ebs.cms.ws.GCRMWebService" address="${cms.webservice.url}/GCRMWebService" />
+	
+</beans>

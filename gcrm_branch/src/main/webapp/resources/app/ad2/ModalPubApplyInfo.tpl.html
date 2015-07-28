@@ -1,0 +1,63 @@
+<div class="modal-header">
+    <h4>{{'提前上线申请' | translate}}</h4>
+</div>
+<div class="modal-body">
+  <form class="form-horizontal po-modal-form">
+    <div class="form-group">
+      <label class="control-label col-md-2">
+        {{'内容编号' | translate}}：
+      </label>
+      <div class="col-md-9">
+        <p class="form-control-static">{{apply.contentNum}}</p>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-md-2" >{{'所属合同编号' | translate}}：</label>
+      <div class="col-md-9">
+        <p class="form-control-static">{{apply.contentNum}}</p>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-md-2" >{{'申请说明' | translate}}：</label>
+      <div class="col-md-9">
+        <p class="form-control-static">{{apply.contentNum}}</p>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-md-2" >{{'附件' | translate}}：</label>
+      <div class="col-md-9" ng-show="apply.attachment.downloadFileName">
+        <div class="form-control-static">
+          <span class="material">
+            <a target="_blank" ng-href="{{attachment.fileUrl}}" ng-if="apply.attachment.id">{{attachment.downloadFileName}}</a>
+            <span ng-if="!apply.attachment.id">{{apply.attachment.downloadFileName}}</span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </form>
+  <h4>{{'审批记录' | translate}}</h4>
+  <table>
+    <thead>
+      <tr>
+        <td>审批任务</td>
+        <td>审批结论</td>
+        <td>审批意见</td>
+        <td>操作人</td>
+        <td>操作时间</td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>提交申请</td>
+        <td>通过</td>
+        <td>--</td>
+        <td>徐智</td>
+        <td>2014-07-11 16:12:42</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-primary"  ng-click="ok()">{{'CONFIRM' | translate}}</button>
+  <button type="button" class="btn btn-default" ng-click="cancel()">{{'CANCEL' | translate}}</button>
+</div>

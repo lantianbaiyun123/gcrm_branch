@@ -1,0 +1,630 @@
+define([
+  'app',
+  'anuglar-ui-select2',
+  '../_services/Select2Suggest',
+  '../_directives/ytPopoverConfirm',
+  './ServiceAdHttp',
+  './ServiceAdBasic',
+  './ServiceAdContent'
+], function (app) {
+  /**
+   * 广告方案
+   * @param  {[type]} AdHttp          [description]
+   * @param  {[type]} AdBasic         [description]
+   * @param  {[type]} AdContent       [description]
+   * @param  {[type]} PageSet         [description]
+   * @param  {[type]} Select2Suggest) {               return {            init: function(scope, adSolutionId [description]
+   * @return {[type]}                 [description]
+   */
+  app.registerService('AdSolution', [
+    '$q',
+    '$timeout',
+    '$state',
+    'AdState',
+    'AdPrivate',
+    'AdHttp',
+    'AdBasic',
+    'AdContent',
+    'AdContentUtil',
+    'AdConstant',
+    'PageSet',
+    'Select2Suggest',
+    'GCRMUtil',
+  function ($q, $timeout, $state, AdState, AdPrivate, AdHttp, AdBasic, AdContent, AdContentUtil, AdConstant, PageSet, Select2Suggest, GCRMUtil) {
+    return {
+      /**
+       * Ad初始化
+       * 1、变量
+       * 2、主导航状态、面包屑状态
+       * 3、无方案ID为添加页，初始化基础信息BasicF
+       * 4、有方案ID为详情页，初始化广告内容AdContents
+       *
+       * @param  {[type]} scope        [description]
+       * @param  {[type]} adSolutionId [description]
+       * @return {[type]}              [description]
+       */
+      init: function(scope, adSolutionId) {
+        //初始化scope变量
+        var AdSolution = this;
+        this.initScope(scope, adSolutionId).then(function () {
+          //有solutionId为“方案详情”
+          if (scope.solutionId) {
+            PageSet.set({
+              siteName: 'adSolutionDetail',
+              activeIndex: 1
+            });
+
+            AdHttp.getDetail({
+              id: scope.solutionId
+            }).success(function (response) {
+              if (response.code === 200) {
+                AdBasic.initView(scope, response.data);
+                scope.state.canAddContent = AdState.canAddContent(scope);
+                AdSolution.initContents(scope, response.data);
+                scope.cancelRecord = response.data.cancelRecord;
+                $timeout(function () {
+                  AdBasic.updateAdContents(scope);
+                });
+                AdSolution.updateState(scope);
+                if (!scope.state.isDetailView && !scope.basic.oldSolutionNumber) {
+                  scope.autoTempSaveStart();
+                }
+              } else {
+                $state.go('adSolutionList');
+              }
+            });
+
+          //无solutonId为"方案添加"
+          } else {
+            PageSet.set({
+              siteName: 'adSolutionAdd',
+              activeIndex: 1
+            });
+
+            AdBasic.initAdd(scope);
+            scope.state.isGlobleEditing = true;
+          }
+        });
+      },
+      initScope: function (scope, adSolutionId) {
+        var
+          defered = $q.defer(),
+          promises = [];
+        scope.solutionId = adSolutionId;
+        scope.constant = {
+          advertiseTypes: [
+            {
+              value: 'formal',
+              i18nName: AdConstant.advertiseTypeFormal
+            },
+            {
+              value: 'zerotest',
+              i18nName: AdConstant.advertiseTypeZerotest
+            },
+            {
+              value: 'nozerotest',
+              i18nName: AdConstant.advertiseTypeNozerotest
+            }
+          ]
+        };
+        scope.basic = {
+          advertiseType: 'formal'
+        };
+        scope.adContents = [];
+        scope.auto = {};
+
+        //投放平台
+        promises.push(AdPrivate.getPlatformList(scope));
+        //行业类型
+        promises.push(AdPrivate.getIndustryTypes(scope));
+        //价格种类
+        promises.push(AdPrivate.getBillingModel(scope));
+
+        $q.all(promises).then(function() {
+          defered.resolve();
+        });
+
+        //执行人下拉suggest
+        scope.basic.optionOperator = Select2Suggest.getOperatorOption();
+        //公司名称下拉suggest
+        scope.basic.optionCustomer = Select2Suggest.getCustomerOption();
+        //广告主公司名称下拉suggest for ad owner,只有直客、非直客
+        scope.optionCustomerForAdOwner = Select2Suggest.getCustomerOptionForAdOwner({allowInput: true});
+        //合同名称下拉suggest
+        scope.basic.optionContract = Select2Suggest.getContractOption(scope);
+
+
+        //各控制状态
+        scope.state = {
+          isGlobleEditing: false,  //基础信息或者有任1广告内容处于编辑状态，当前只允许最多1个模块处于编辑状态
+          basicReview: false,  //基础信息浏览状态
+          showBasicCancel: false, //是否显示基础信息取消编辑按钮
+          disableToApproval: false,  //不允许提交审核
+          //方案类型是否为变更（update)，如果是变更：
+          //1.隐藏修改基本信息按钮
+          //2.显示变更的按钮
+          //3.隐藏删除
+          //4.隐藏继续添加内容按钮
+          isSolutionTypeUpdate: false,
+          isDetailView: false, //是否为详情视图（反之为添加视图），是否显示广告内容的状态信息（编号、类型、状态、排期单号、物料单号、PO编号）
+          isAllContentsRefused: false,  //是否所有广告内容都是“审核驳回”
+          isAllContentsSavingRefused: false, //是否所有广告内容都是“待提交 || 审核驳回”
+          isAnyContentCancel: false,  //是否有广告内容是作废的
+          canAddContent: true
+        };
+
+        return defered.promise;
+      },
+      /**
+       * 初始化已有的广告内容
+       * @param  {[type]} scope  [description]
+       * @param  {[type]} adData [description]
+       * @return {[type]}        [description]
+       */
+      initContents: function(scope, adData) {
+        scope.newDetailContents = angular.copy(adData.approvalContentViews);
+        if ( !scope.newDetailContents.length ) {
+          if (scope.state.canAddContent) {
+            this.addContent(scope);
+          }
+        } else {
+          scope.adContents = AdPrivate.resolveAdData(scope.newDetailContents);
+        }
+      },
+      /**
+       * 更新各个控制状态
+       * @param  {[type]} scope [description]
+       * @return {[type]}       [description]
+       */
+      updateState: function (scope) {
+        scope.state.isSolutionTypeUpdate = AdState.isSolutionTypeUpdate(scope);
+        scope.state.isAllContentsRefused = AdState.isAllContentsRefused(scope);
+        scope.state.isAllContentsSavingRefused = AdState.isAllContentsSavingRefused(scope);
+        scope.state.isAnyContentCancel = AdState.isAnyContentCancel(scope);
+        //是否显示广告内容的状态信息（编号、类型、状态、排期单号、物料单号、PO编号）
+        //是否为详情视图
+        scope.state.isDetailView = AdState.isDetailView(scope);
+        scope.state.showSolutionAlert = AdState.showSolutionAlert(scope);
+        scope.state.canAddContent = AdState.canAddContent(scope);
+        scope.state.canSolutionEdit = AdState.canSolutionEdit(scope);
+        scope.state.canSolutionChange = AdState.canSolutionChange(scope);
+        scope.state.isAutoSave = AdState.isAutoSave(scope);
+        scope.state.isSolutionChanged = AdState.isSolutionChanged(scope);
+        scope.state.canCreatePo = AdState.canCreatePo(scope);
+        scope.state.canCreateSingle = AdState.canCreateSingle(scope);
+        scope.state.canBusinessChange = AdState.canBusinessChange(scope);
+        scope.state.canCancelSingle = AdState.canCancelSingle(scope);
+      },
+      /**
+       * 添加一个广告内容
+       * @param {[type]} scope [description]
+       */
+      addContent: function (scope) {
+        scope.adContents.push({
+          adSolutionContent: {
+            approvalStatus: 'saving'
+          },
+          canUpdate: true
+        });
+        // scope.state.isGlobleEditing = true;
+      },
+      tempSaveContents: function (scope, isManual) {
+        var promises = [];
+        for (var i = 0, length = scope.adContents.length; i < length; i++) {
+          promises.push(scope.adContents[i].innerScope.adContentSave(isManual));
+        }
+        return $q.all(promises);
+      },
+      saveContents: function (scope, contents) {
+        var defered = $q.defer();
+        AdHttp.saveContents({
+          adContentViewList: contents
+        }).success(function (response) {
+          if (response.code === 200) {
+            defered.resolve({
+              success: true
+            });
+          } else if (response.code === 209) {
+            var result = response.data;
+            var firstErrorIndex = -1;
+            var errorList = [];
+            for (var j = 0, length = result.length; j < length; j++) {
+              if (result[j].code === 200) {
+                continue;
+              } else {
+                firstErrorIndex = j;
+                if (result[j].code === 202) {
+                  errorList.push( GCRMUtil.decodeGCRMError( result[j].errors ) );
+                } else if (result[j].code === 204) {
+                  var errorList204 = AdContentUtil.resolveErrorList(scope, result[j].errorList);
+                  errorList = errorList.concat(errorList204);
+                  // for (var i = result[j].errorList.length -1 ; i >= 0; i--) {
+                  //   errorList.push(GCRMUtil.translate(result[j].errorList[i].key, AdContentUtil.resolveErrorArgsForAdContent($scope, result[j].errorList[i].args)));
+                  // }
+                }
+              }
+            }
+            defered.resolve({
+              success: false,
+              errorList: errorList,
+              firstErrorIndex: firstErrorIndex
+            });
+          }
+        });
+
+        return defered.promise;
+      },
+      submitAdSolution: function (adSolutionId) {
+        var defered = $q.defer();
+        AdHttp.submit({
+          id: adSolutionId
+        }).success(function (response) {
+          if ( response.code === 200 ) {
+            defered.resolve({
+              success: true
+            });
+          } else if ( response.code === 204 ) {
+            var errorText = [];
+            for (var i = 0; i < response.errorList.length; i++) {
+              errorText.push(GCRMUtil.translate(response.errorList[i].key, AdContentUtil.resolveErrorArgsForAdContent(scope, response.errorList[i].args)));
+            }
+            defered.resolve({
+              success: false,
+              errorText: errorText
+            });
+          }
+        });
+
+        return defered.promise;
+      },
+      disableToApproval: function (scope) {
+        scope.state.disableToApproval = true;
+      },
+      enableToApproval: function (scope) {
+        scope.state.disableToApproval = false;
+      }
+    };
+
+  }]);
+
+  app.registerService('AdPrivate', [
+    '$q',
+    'AdHttp',
+    'Position',
+    'Industry',
+  function ($q, AdHttp, Position, Industry) {
+    return {
+      /**
+       * 取行业类型枚举
+       * @param  {[type]} scope [description]
+       * @return {[type]}       [description]
+       */
+      getIndustryTypes: function (scope) {
+        var defered = $q.defer();
+        Industry.getIndustryTypes().success(function (response) {
+          if (response.code === 200) {
+            var industryTypes = {};
+            var length = response.data.length;
+            for (var i = 0; i < length; i++) {
+              var mainTypeName = response.data[i].industryTypeName;
+              industryTypes[mainTypeName] = [];
+              if ('subIndustryType' in response.data[i]) {
+                var subLength = response.data[i].subIndustryType.length;
+                for (var j = 0; j < subLength; j++) {
+                  industryTypes[mainTypeName].push(response.data[i].subIndustryType[j]);
+                }
+              } else {
+                industryTypes[mainTypeName].push(response.data[i]);
+              }
+            }
+            scope.industry = {
+              industryTypes: industryTypes
+            };
+            defered.resolve();
+          } else {
+            $log.error( 'fatal error' );
+          }
+        });
+        return defered.promise;
+      },
+
+      /**
+       * 取投放平台列表
+       * @param  {[type]} scope [description]
+       * @return {[type]}       [description]
+       */
+      getPlatformList: function (scope) {
+        var defered = $q.defer();
+        Position.getPlatformList4Radio().success(function (response) {
+          if (response.code === 200) {
+            scope.adPlatformList = response.data;
+            defered.resolve();
+          }
+        });
+        return defered.promise;
+      },
+      /**
+       * 取计费方式枚举
+       * @param  {[type]} scope [description]
+       * @return {[type]}       [description]
+       */
+      getBillingModel: function (scope) {
+        var defered = $q.defer();
+        AdHttp.getBillingModel().success(function (response) {
+          if (response.code === 200) {
+            scope.billingModels = response.data.result;
+            defered.resolve();
+          }
+        });
+        return defered.promise;
+      },
+      /**
+       * 广告内容数据预处理
+       * @param  {[type]} newDetailContents [description]
+       * @return {[type]}                   [description]
+       */
+      resolveAdData: function (newDetailContents) {
+        var
+          arr = [],
+          adData = newDetailContents;
+        for (var i = 0; i < adData.length; i++) {
+          var item = adData[i];
+          item.review = true;
+          item.materialType = ~~this.findById(adData[i].positionVOList, adData[i].adSolutionContent.positionId, 'materialType');
+          item.positionByAreaSelection = adData[i].position;
+          item.advertiser = {
+            value: adData[i].adSolutionContent.advertiser,
+            data: adData[i].adSolutionContent.advertiserId
+          };
+          arr.push(item);
+        }
+        return arr;
+      },
+      /**
+       * 根据在数组data数组中找到id字段为idValue值的元素，如果给定keyName，返回keyName字段的值，否则返回该元素
+       * @param  {[type]} data [description]
+       * @param  {[type]} id   [description]
+       * @param  {[type]} name [description]
+       * @return {[type]}      [description]
+       */
+      findById: function (data, idValue, keyName) {
+        var i = 0;
+        data = data || [];
+        if (arguments.length == 3) {
+          for (; i < data.length; i++) {
+            if (data[i].idValue == idValue) {
+              if (data[i][keyName]) {
+                return data[i][keyName];
+              } else {
+                return '';
+              }
+            }
+          }
+        } else {
+          for (; i < data.length; i++) {
+            if (data[i].id == id) {
+              return data[i];
+            }
+          }
+        }
+      }
+      // resolveSaveContentsError: function (result) {
+      //   var firstErrorIndex = -1;
+      //   var errorText = [];
+      //   for (var j = 0, length = result.length; j < length; j++) {
+      //     if (result[j].code === 200) {
+      //       continue;
+      //     } else {
+      //       firstErrorIndex = j;
+      //       if (result[j].code === 202) {
+      //         errorText.push( GCRMUtil.decodeGCRMError( result[j].data.errors ) );
+      //       } else if (result[j].code === 204) {
+      //         for (var i = result[j].errorList.length -1 ; i >= 0; i--) {
+      //           errorText.push(GCRMUtil.translate(result[j].errorList[i].key, AdContentUtil.resolveErrorArgsForAdContent($scope, result[j].errorList[i].args)));
+      //         }
+      //       }
+      //     }
+      //   }
+      //   Modal.alert({contentList: errorText});
+      // }
+    };
+  }]);
+
+  app.registerService('AdState', [function () {
+    return {
+      isSolutionTypeUpdate: function (scope) {
+        return (scope.basic.adSolution && scope.basic.adSolution.type === 'update');
+      },
+      isAllContentsRefused: function (scope) {
+        var flag = true;
+        if (!scope.adContents.length) {
+          return false;
+        }
+        for (i = 0; i < scope.adContents.length; i++) {
+          var contentStatus = scope.adContents[i].adSolutionContent && scope.adContents[i].adSolutionContent.approvalStatus;
+          if ( contentStatus !== 'refused' ) {
+            flag = false;
+            return false;
+          }
+        }
+        return flag;
+      },
+      isAllContentsSavingRefused: function (scope) {
+        var flag = true;
+        for (i = 0; i < scope.adContents.length; i++) {
+          var contentStatus = scope.adContents[i].adSolutionContent && scope.adContents[i].adSolutionContent.approvalStatus;
+          if ( contentStatus !== 'saving' && contentStatus !== 'refused') {
+            flag = false;
+            return false;
+          }
+        }
+        return flag;
+      },
+      isAnyContentCancel: function (scope) {
+        return (scope.cancelRecord && scope.cancelRecord.length);
+      },
+      //是否显示广告内容的状态信息（编号、类型、状态、排期单号、物料单号、PO编号）
+      //是否为详情视图
+      isDetailView: function (scope) {
+        var solutionStatus = scope.basic.solutionStatus || 'saving',
+            state = scope.state || {};
+        return (
+          (state.isAnyContentCancel) ||
+          (solutionStatus !== 'saving' && solutionStatus !== 'refused') ||
+          (solutionStatus === 'saving' && !state.isAllContentsSavingRefused) ||
+          (solutionStatus === 'refused' && !state.isAllContentsRefused)
+        );
+      },
+      showSolutionAlert: function (scope) {
+        var ifContract = (scope.basic.adSolution.contractType &&
+                          scope.basic.adSolution.contractStatus !== 'Revoked' &&
+                          !(scope.basic.contract && scope.basic.contract.data));
+
+        return (
+          !scope.state.isDetailView ||
+          (
+            scope.state.isDetailView &&
+            (
+              (scope.basic.adSolution.approvalStatus === 'approving') ||
+              (scope.basic.adSolution.approvalStatus === 'refused') ||
+              (scope.basic.adSolution.approvalStatus === 'confirmed' && ifContract)
+            )
+          )
+        );
+      },
+      canAddContent: function (scope) {
+        return (
+          (!scope.OwnerOpers.btn_adsol_detail_cont_save || scope.basic.isOwner) &&
+          scope.BtnIndex.btn_adsol_detail_cont_save &&
+          // scope.BtnIndex.btn_adsol_detail_submit &&
+          (scope.basic.solutionStatus === 'saving' || scope.basic.solutionStatus === 'refused')
+        );
+      },
+      canSolutionEdit: function (scope) {
+        return !(
+          !(!scope.OwnerOpers.btn_adsol_detail_submit || scope.basic.isOwner)  ||
+          !scope.BtnIndex.btn_adsol_detail_submit ||
+          scope.state.isGlobleEditing ||
+          scope.state.isSolutionTypeUpdate
+        );
+      },
+      canSolutionChange: function (scope) {
+        return (
+          (!scope.OwnerOpers.btn_adsol_detail_adsol_change || scope.basic.isOwner) &&
+          scope.BtnIndex.btn_adsol_detail_adsol_change &&
+          scope.basic.contract.data && scope.basic.contract.data.state == 'VALID' &&
+          scope.basic.solutionStatus == 'confirmed' &&
+          scope.basic.contract.data.number &&
+          scope.basic.adSolution.contractType &&
+          scope.basic.canUpdate
+        );
+      },
+      isAutoSave: function (scope) {
+        return (
+          (!scope.OwnerOpers.btn_adsol_detail_cont_save || scope.basic.isOwner) &&
+          scope.BtnIndex.btn_adsol_detail_cont_save &&
+          !scope.state.isDetailView &&
+          !scope.basic.oldSolutionNumber
+        );
+      },
+      isSolutionChanged: function (scope) {
+        var changed = false;
+        for (var i = scope.adContents.length - 1; i >= 0; i--) {
+          if (scope.adContents[i].adSolutionContent.modifyStatus==='MODIFYED') {
+            changed = true;
+            break;
+          }
+        }
+        return changed;
+      },
+      canCreatePo: function (scope) {
+        var basic = scope.basic;
+        return (
+          (!scope.OwnerOpers.btn_adsol_detail_po_create || basic.isOwner) && // isOwner权限控制
+          scope.BtnIndex.btn_adsol_detail_po_create &&  // 用户功能权限控制
+          basic.canCreatePO &&  // ??
+          basic.solutionStatus == 'approved' && // 方案状态 === '审核通过‘
+          !scope.adContents[0].adSolutionContent.poNum && // 无PO，通过方案下第1个内容有无PO判断
+          !basic.adSolution.contractType && // 方案无合同类型
+          ( ( !basic.adSolution.contractStatus ) || (  basic.adSolution.contractStatus === 'Revoked' && !basic.contract) ) && // 无方案合同状态 或 方案合同状态为“已撤销”且合同对象为空
+          (!basic.contract || (basic.contract.data && basic.contract.data.state === 'VALID') ) &&  // 合同对象为空 或 合同状态为已生效
+          !basic.oldSolutionNumber  // 无原方案编号
+        );
+      },
+      canCreateSingle: function (scope) {
+        var basic = scope.basic;
+        return (
+          (!scope.OwnerOpers.btn_adsol_detail_submit_to_busi || basic.isOwner) && // isOwner权限控制
+          scope.BtnIndex.btn_adsol_detail_submit_to_busi && // 用户功能权限控制
+          basic.solutionStatus == 'approved' && // 方案状态 === '审核通过‘
+          !basic.adSolution.contractType && // 无合同类型
+          (!basic.adSolution.contractStatus || basic.adSolution.contractStatus=='Revoked') && // 无方案合同状态 或 方案合同状态为“已撤销”
+          !basic.contract && //合同对象为空
+          !basic.oldSolutionNumber && // 无原方案编号
+          basic.advertiseType !== 'zerotest'  //不是 0圆测试单
+        );
+      },
+      canBusinessChange: function (scope) {
+        var basic = scope.basic;
+        return (
+          (!scope.OwnerOpers.btn_adsol_detail_submit_to_busi || basic.isOwner) &&  // isOwner权限控制
+          scope.BtnIndex.btn_adsol_detail_submit_to_busi && // 用户功能权限控制
+          basic.solutionStatus == 'approved' && // 方案状态 === '审核通过‘
+          basic.oldSolutionNumber &&  // 无原方案编号
+          !basic.adSolution.contractType && // 无合同类型
+          (!basic.contract || !basic.contract.data.number) // 无合同编号
+        );
+      },
+      canCancelSingle: function (scope) {
+        var basic = scope.basic;
+        return (
+          (!scope.OwnerOpers.btn_adsol_detail_submit_to_busi || basic.isOwner) &&  // isOwner权限控制
+          scope.BtnIndex.btn_adsol_detail_submit_to_busi && // 用户功能权限控制
+          basic.solutionStatus == 'approved' && // 方案状态 === '审核通过‘
+          basic.adSolution.contractType &&  // 合同类型非空
+          ( !basic.contract || basic.contract.data.state == 'VALID' ) && // 合同对象为空 或 合同状态为已生效
+          basic.adSolution.contractStatus == 'display' && // 方案合同状态为“display”
+          !adContents[0].adSolutionContent.poNum  // 无PO，通过方案下第1个内容有无PO判断
+        );
+      }
+    };
+  }]);
+
+  app.registerService('AdConstant', ['$filter',
+    function($filter) {
+      var translateFilter = $filter('translate');
+      return {
+        terminateWarn: translateFilter('AD_SOLUTION_DETAIL_WARN_TERMINATE'),
+        terminatePS: translateFilter('AD_SOLUTION_DETAIL_WARN_TERMINATE_PS'),
+        confirmWarn: translateFilter('AD_SOLUTION_DETAIL_WARN_CONFIRM'),
+        confirmWarnPS: translateFilter('AD_SOLUTION_DETAIL_WARN_CONFIRM_PS'),
+        rescheduleWarn: translateFilter('AD_SOLUTION_DETAIL_WARN_RESCHEDULE'),
+        frame: translateFilter('AD_SOLUTION_DETAIL_FRAME'),
+        protocol: translateFilter('AD_SOLUTION_DETAIL_PROTOCOL'),
+        btnContractTypeSuccess: translateFilter('AD_SOLUTION_DETAIL_SUCCESS_SUBMITTED_TO_BUSSINESS'),
+        btnCreatePOSuccess: translateFilter('AD_SOLUTION_DETAIL_SUCCESS_CREATED_PO'),
+        rescheduleSuccess: translateFilter('AD_SOLUTION_DETAIL_SUCCESS_RESCHEDULE_SEND'),
+        singleContract: translateFilter('SINGLE_CONTRACT'),
+        warnAdCancel: translateFilter('AD_SOLUTION_DETAIL_WARN_CANCEL_AD'),
+        warnAdRemove: translateFilter('AD_SOLUTION_DETAIL_WARN_REMOVE_AD'),
+        warnContentCancel: translateFilter('AD_SOLUTION_DETAIL_WARN_CANCEL_CONTENT'),
+        successAdCancel: translateFilter('AD_SOLUTION_DETAIL_SUCCESS_CANCELED'),
+        successAdRemove: translateFilter('AD_SOLUTION_DETAIL_SUCCESS_REMOVED'),
+        pubApplySubmitSuccess: translateFilter('AD_SOLUTION_DETAIL_SUCCESS_ONLINE_APPLY_SUBMIT'),
+        pubApplyWithdrawSuccess: translateFilter('AD_SOLUTION_DETAIL_SUCCESS_ONLINE_APPLY_WITHDRAW'),
+        successSingleCancel: translateFilter('AD_SOLUTION_DETAIL_SUCCESS_CANCELED_SINGLE'),
+        successAdChange: translateFilter('AD_SOLUTION_DETAIL_SUCCESS_AD_CHANGE'),
+        POSuccess: translateFilter('AD_SOLUTION_DETAIL_PO_SUCCESS'),
+        successChangePO: translateFilter('AD_SOLUTION_DETAIL_CHANGE_PO_SUCCESS'),
+        advertiseTypeFormal: translateFilter('ADVERTISETYPE_formal'),
+        advertiseTypeZerotest: translateFilter('ADVERTISETYPE_zerotest'),
+        advertiseTypeNozerotest: translateFilter('ADVERTISETYPE_nozerotest'),
+        materialFileTypeImage: translateFilter('MATERIALFILETYPE_0'),
+        materialFileTypeFlash: translateFilter('MATERIALFILETYPE_1'),
+        materialFileTypeCode: translateFilter('MATERIALFILETYPE_2')
+      };
+    }
+  ]);
+
+
+});

@@ -1,0 +1,33 @@
+{
+    "code": 200,
+    "data": {
+    	"positionId": 2,
+    	"from": "2014-2-1",
+    	"to": "2014-2-4",
+    	"rotation": true,
+    	"totalCount": 6,
+        "occupations": [
+            {
+                "date": "1394121600000",
+                "status": "idle"
+            },
+            {
+                "date": "1394208000000",
+                "status": "bidding",
+                "biddingCount": 3
+            },
+            {
+                "date": "1394294400000",
+                "status": "busy",
+                "busyCount": 2,
+                "biddingCount": 3
+            },
+            {
+                "date": "1394380800000",
+                "status": "busy",
+                "busyCount": 3
+            }
+        ]
+    },
+    "message": "OK"
+}

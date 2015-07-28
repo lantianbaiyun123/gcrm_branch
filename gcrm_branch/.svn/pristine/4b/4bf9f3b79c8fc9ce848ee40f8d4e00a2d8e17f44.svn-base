@@ -1,0 +1,34 @@
+{
+    "code": 200,
+    "data": {
+    	"positionId": 1,
+    	"from": "2014-2-1",
+    	"to": "2014-2-5",
+    	"rotation": false,
+        "occupations": [
+            {
+                "date": "1394121600000",
+                "status": "idle"
+            },
+            {
+                "date": "1394208000000",
+                "status": "bidding",
+                "biddingCount": 5
+            },
+            {
+                "date": "1394294400000",
+                "status": "reserved",
+                "biddingCount": 3
+            },
+            {
+                "date": "1394380800000",
+                "status": "confirmed"
+            },
+            {
+                "date": "1394467200000",
+                "status": "locked"
+            }
+        ]
+    },
+    "message": "OK"
+}

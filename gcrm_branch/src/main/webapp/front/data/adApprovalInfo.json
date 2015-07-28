@@ -1,0 +1,219 @@
+{
+  "code": 200,
+  "data": {
+    "account": {
+      "email": "conrad.jiwandono@baidu.com",
+      "name": "Conrad Agung Jiwandono",
+      "status": "ENABLE",
+      "ucid": 7427290
+    },
+    "adSolution": {
+      "approvalStatus": "approving",
+      "createOperator": 7426306,
+      "createTime": 1404388372000,
+      "customerNumber": 1000000104,
+      "id": 6429,
+      "number": "00014418",
+      "operator": 7427290,
+      "taskInfo": "{\"mainKey\":\"advertise.solution.approval.task\",\"valueMap\":{\"0\":\"2014-07-03 19:54\",\"1\":\"act3:卢婷婷\"}}",
+      "type": "create",
+      "updateOperator": 7426306,
+      "updateTime": 1404388478000
+    },
+    "adSolutionType": "新增",
+    "approvalContentViews": [
+      {
+        "adSolutionContent": {
+          "adSolutionId": 6429,
+          "advertiser": "Jumia",
+          "advertiserId": 1000000118,
+          "approvalStatus": "approving",
+          "areaId": 1643,
+          "areaName": "Banner区",
+          "changedPosition": false,
+          "channelId": 1642,
+          "channelName": "图片",
+          "contentType": "create",
+          "createOperator": 7426306,
+          "createTime": 1404388475000,
+          "description": "chachahca",
+          "id": 6323,
+          "insertPeriodDescription": "2014-07-03;2014-07-04",
+          "materialEmbedCode": 0,
+          "materialUrl": "",
+          "modifyStatus": "MODIFYED",
+          "number": "00014418-01",
+          "periodDescription": "2014-07-03,2014-07-08;",
+          "positionId": 1646,
+          "positionName": "图片页右侧Banner",
+          "productId": 17,
+          "productName": "Hao123",
+          "siteId": 16,
+          "siteName": "泰国",
+          "submitTime": 1404388478000,
+          "totalDays": 6,
+          "updateOperator": 7426306,
+          "updateTime": 1404388475000
+        },
+        "advertiseQuotation": {
+          "adSolutionContentId": 6323,
+          "createOperator": 7426306,
+          "createTime": 1404388475000,
+          "id": 6290,
+          "priceType": "ratio",
+          "ratioConditionDesc": "123",
+          "ratioCustomer": 88,
+          "ratioMine": 12,
+          "ratioThird": 0,
+          "reachEstimate": false,
+          "updateOperator": 7426306,
+          "updateTime": 1404388475000
+        },
+        "canCreatePO": false,
+        "canUpdate": true,
+        "canWithdraw": false,
+        "emptyMaterial": true,
+        "infoViews": [
+          {
+            "date": "2014-07-03,2014-07-04;",
+            "insertInfos": [
+              {
+                "adContentId": 6310,
+                "adSolutionId": 6419,
+                "billingModelId": 1,
+                "billingModelName": "CPC",
+                "customerName": "GYNO3",
+                "customerQuote": "2",
+                "description": "gytest",
+                "insert": [
+                  1404316800000,
+                  1404403200000
+                ]
+              }
+            ]
+          },
+          {
+            "date": "2014-07-02;",
+            "insertInfos": [
+              {
+                "adContentId": 6311,
+                "adSolutionId": 6421,
+                "billingModelId": 1,
+                "billingModelName": "CPC",
+                "customerName": "GYNO4",
+                "customerQuote": "2",
+                "description": "gytest111",
+                "insert": [
+                  1404316800000
+                ]
+              }
+            ]
+          },
+          {
+            "date": "2014-07-04;",
+            "insertInfos": [
+              {
+                "adContentId": 6312,
+                "adSolutionId": 6420,
+                "billingModelId": 1,
+                "billingModelName": "CPC",
+                "customerName": "GYNO5",
+                "customerQuote": "2",
+                "description": "gytest222",
+                "insert": [
+                  1404403200000
+                ]
+              }
+            ]
+          }
+        ],
+        "overdue": false,
+        "position": {
+          "areaRequired": "png/gif/jpg,240*240",
+          "click": 30,
+          "hasGuideFile": false,
+          "id": 1646,
+          "materialType": 0,
+          "pv": 15000,
+          "rotationType": 0,
+          "salesAmount": 1,
+          "size": "30K"
+        }
+      }
+    ],
+    "canCreatePO": true,
+    "canUpdate": true,
+    "canWithdraw": true,
+    "customerI18nView": {
+      "agentCountry": [
+        {
+          "code": "ID",
+          "i18nName": "印度尼西亚",
+          "id": 101,
+          "name": "印度尼西亚"
+        }
+      ],
+      "agentRegional": {
+        "agentCountries": [
+          {
+            "code": "MY",
+            "i18nName": "马来西亚",
+            "id": 158,
+            "name": "马来西亚"
+          },
+          {
+            "code": "ID",
+            "i18nName": "印度尼西亚",
+            "id": 101,
+            "name": "印度尼西亚"
+          }
+        ],
+        "i18nName": "印尼语区",
+        "id": 2,
+        "name": "印尼语区"
+      },
+      "agentType": "普通代理",
+      "approvalStatus": "审核通过",
+      "belongsSales": "陶铸峰",
+      "companySize": "50人以下",
+      "country": {
+        "code": "ID",
+        "i18nName": "印度尼西亚",
+        "id": 101,
+        "name": "印度尼西亚"
+      },
+      "customer": {
+        "address": "Menara Jamsostek, South Tower 15th floor, Jl.. Jend.Gatot Subroto No.38 Jakarta",
+        "agentCountry": "101",
+        "agentRegional": 2,
+        "agentType": "normal",
+        "approvalStatus": 3,
+        "belongSales": 7426393,
+        "businessType": "SALE",
+        "companyName": "PT Star Reachers Indonesia",
+        "companySize": "less_50",
+        "companyStatus": 1,
+        "country": 101,
+        "createOperator": 7426946,
+        "createOperatorName": "刘晓",
+        "createTime": 1402740000000,
+        "currencyType": 1,
+        "customerNumber": 1000000104,
+        "customerType": "offline",
+        "dataStatus": "create",
+        "id": 135,
+        "registerTime": 858873600000,
+        "updateOperator": 7426946,
+        "updateTime": 1402725112000,
+        "url": "http://default"
+      },
+      "customerType": "广告代理（线下）",
+      "hasContract": false
+    },
+    "role": "cash_leader",
+    "state": "approving",
+    "taskClose": false,
+    "type": "create"
+  },
+  "message": "OK"
+}

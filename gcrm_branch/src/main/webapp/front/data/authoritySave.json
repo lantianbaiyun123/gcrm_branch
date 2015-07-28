@@ -1,0 +1,215 @@
+{
+  "code": 200,
+  "dataRightsVOList": [
+    {
+      "busiTypeRights": [
+        {
+          "hasRights": true,
+          "rightsId": 0,
+          "rightsName": "变现"
+        },
+        {
+          "hasRights": false,
+          "rightsId": 1,
+          "rightsName": "销售"
+        }
+      ],
+      "platformRights": [
+        {
+          "hasRights": false,
+          "rightsId": 17,
+          "rightsName": "Hao123"
+        },
+        {
+          "hasRights": false,
+          "rightsId": 20,
+          "rightsName": "凤巢-网盟"
+        },
+        {
+          "hasRights": false,
+          "rightsId": 21,
+          "rightsName": "品专"
+        },
+        {
+          "hasRights": false,
+          "rightsId": 16,
+          "rightsName": "PC App Store"
+        },
+        {
+          "hasRights": true,
+          "rightsId": 18,
+          "rightsName": "中文Hao123"
+        },
+        {
+          "hasRights": false,
+          "rightsId": 19,
+          "rightsName": "凤巢-关键字"
+        }
+      ],
+      "siteRights": [
+        {
+          "hasRights": false,
+          "rightsId": 0,
+          "rightsName": "中国"
+        },
+        {
+          "hasRights": false,
+          "rightsId": 10,
+          "rightsName": "阿联酋"
+        },
+        {
+          "hasRights": false,
+          "rightsId": 11,
+          "rightsName": "埃及"
+        },
+        {
+          "hasRights": false,
+          "rightsId": 12,
+          "rightsName": "巴西"
+        },
+        {
+          "hasRights": false,
+          "rightsId": 13,
+          "rightsName": "摩洛哥"
+        },
+        {
+          "hasRights": true,
+          "rightsId": 14,
+          "rightsName": "日本"
+        },
+        {
+          "hasRights": false,
+          "rightsId": 15,
+          "rightsName": "沙特"
+        },
+        {
+          "hasRights": false,
+          "rightsId": 16,
+          "rightsName": "泰国"
+        },
+        {
+          "hasRights": false,
+          "rightsId": 17,
+          "rightsName": "台湾地区"
+        },
+        {
+          "hasRights": false,
+          "rightsId": 18,
+          "rightsName": "越南"
+        },
+        {
+          "hasRights": false,
+          "rightsId": 19,
+          "rightsName": "印尼"
+        }
+      ],
+      "username": "yandi001",
+      "roleTag": "countryAgent"
+    },
+    {
+      "busiTypeRights": [
+        {
+          "hasRights": false,
+          "rightsId": 0,
+          "rightsName": "变现"
+        },
+        {
+          "hasRights": true,
+          "rightsId": 1,
+          "rightsName": "销售"
+        }
+      ],
+      "platformRights": [
+        {
+          "hasRights": true,
+          "rightsId": 17,
+          "rightsName": "Hao123"
+        },
+        {
+          "hasRights": false,
+          "rightsId": 20,
+          "rightsName": "凤巢-网盟"
+        },
+        {
+          "hasRights": false,
+          "rightsId": 21,
+          "rightsName": "品专"
+        },
+        {
+          "hasRights": true,
+          "rightsId": 16,
+          "rightsName": "PC App Store"
+        },
+        {
+          "hasRights": false,
+          "rightsId": 18,
+          "rightsName": "中文Hao123"
+        },
+        {
+          "hasRights": false,
+          "rightsId": 19,
+          "rightsName": "凤巢-关键字"
+        }
+      ],
+      "siteRights": [
+        {
+          "hasRights": true,
+          "rightsId": 0,
+          "rightsName": "中国"
+        },
+        {
+          "hasRights": false,
+          "rightsId": 10,
+          "rightsName": "阿联酋"
+        },
+        {
+          "hasRights": false,
+          "rightsId": 11,
+          "rightsName": "埃及"
+        },
+        {
+          "hasRights": true,
+          "rightsId": 12,
+          "rightsName": "巴西"
+        },
+        {
+          "hasRights": false,
+          "rightsId": 13,
+          "rightsName": "摩洛哥"
+        },
+        {
+          "hasRights": false,
+          "rightsId": 14,
+          "rightsName": "日本"
+        },
+        {
+          "hasRights": false,
+          "rightsId": 15,
+          "rightsName": "沙特"
+        },
+        {
+          "hasRights": false,
+          "rightsId": 16,
+          "rightsName": "泰国"
+        },
+        {
+          "hasRights": false,
+          "rightsId": 17,
+          "rightsName": "台湾地区"
+        },
+        {
+          "hasRights": false,
+          "rightsId": 18,
+          "rightsName": "越南"
+        },
+        {
+          "hasRights": false,
+          "rightsId": 19,
+          "rightsName": "印尼"
+        }
+      ],
+      "username": "yandi001",
+      "roleTag": "cash_leader"
+    }
+  ]
+}

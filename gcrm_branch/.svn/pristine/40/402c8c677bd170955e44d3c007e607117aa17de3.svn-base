@@ -1,0 +1,245 @@
+<div class="container material-detail">
+  <div class="panel panel-default gcrm-panel">
+    <div class="panel-top-heading">
+      <h1>
+        <span>{{'PAGE_MATERIAL_DETAIL' | translate}}</span>
+        <span class="pull-right" ng-if="BtnIndex.btn_mater_detail_change_add">
+            <a class="btn" ng-class="{'btn-success': saveType=='0', 'btn-primary': saveType!='0' }" ng-click="addMaterial()" ng-disabled="!addEnable">
+              <span ng-if="saveType=='0'">{{'MATERIAL_ADD' | translate}}</span>
+              <span ng-if="saveType!='0'">{{'MATERIAL_MODIFY' | translate}}</span>
+            </a>
+        </span>
+      </h1>
+    </div>
+
+    <div class="panel-body">
+      <h5 class="mt0 pb10">{{'MATERIAL_CONTENT_INFO' | translate}}</h5>
+      <dl class="dl-horizontal">
+        <dt>{{'ADVERTISER' | translate}}：</dt><dd>{{adContentInfo.advertiser}}</dd>
+        <dt>{{'MATERIAL_AD_CONTENT_NUMBER' | translate}}：</dt><dd>{{adContentInfo.number}}</dd>
+        <dt>{{'MATERIAL_SOLUTION_EXECUTOR' | translate}}：</dt><dd>{{adContentInfo.operatorName}}</dd>
+        <dt>{{'AD_CONTENT_DESCRIBE' | translate}}：</dt><dd>{{adContentInfo.description}}</dd>
+        <dt>{{'MATERIAL_CONTENT_STATUS' | translate}}：</dt><dd>{{'AD_SOLUTION_STATUS_' + adContentInfo.approvalStatus | translate}}</dd>
+        <dt>{{'MATERIAL_LAUNCH_TIME' | translate}}：</dt>
+        <dd>
+          <div ng-model="adContentInfo.periodDescription" period-label></div>
+        </dd>
+      </dl>
+      <h5 class="bdt pt15 pb10 pl10">{{'MATERIAL_POSITION_AND_MATERIAL' | translate}}</h5>
+      <dl class="dl-horizontal">
+        <dt>{{'MATERIAL_LAUNCH_POSITION' | translate}}：</dt><dd>{{adContentInfo.positionName}}</dd>
+        <dt>{{'MATERIAL_PROPERTY_REQUEST' | translate}}：</dt>
+        <dd>
+          <table class="table table-bordered sub-table">
+            <tbody>
+              <tr>
+                <th class="active">{{'POSITION_TYPE' | translate}}</th>
+                <td>{{adContentInfo.materialType | PositionFilter: 'materialType' | translate}}</td>
+              </tr>
+              <tr ng-if="adContentInfo.areaRequired">
+                <th class="active">{{'IMAGE_AREA_REQUIRED' | translate}}</th>
+                <td>{{adContentInfo.areaRequired}}</td>
+              </tr>
+              <tr ng-if="adContentInfo.size">
+                <th class="active">{{'IMAGE_SIZE' | translate}}</th>
+                <td>{{adContentInfo.size}}</td>
+              </tr>
+              <tr ng-if="adContentInfo.textlinkLength">
+                <th class="active">{{'TEXT_LINK_LENGTH' | translate }}</th>
+                <td>{{adContentInfo.textlinkLength}}&nbsp;{{'CHARACTER' | translate}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </dd>
+        <dt>{{'MATERIAL_CURRENT' | translate}}：</dt>
+        <dd>
+          <span ng-if="adContentInfo.materialEmpty">{{'NOTHING_YET' | translate}}</span>
+          <table ng-if="!adContentInfo.materialEmpty" class="table table-bordered sub-table">
+            <tbody>
+              <!-- 物料类型为“文字”或“文字+图片”，有title -->
+              <tr ng-if="adContentInfo.materialType==1 || adContentInfo.materialType==2">
+                <th class="active">Title</th>
+                <td>
+                  <span ng-if="adContentInfo.materialTitle">{{adContentInfo.materialTitle}}</span>
+                  <span ng-if="!adContentInfo.materialTitle">{{'NOTHING_YET' | translate}}</span>
+                </td>
+              </tr>
+              <tr>
+                <th class="active">URL</th>
+                <td>
+                  <span class="limit-long-text">
+                    <a ng-if="adContentInfo.materialUrl" ng-href="{{adContentInfo.materialUrl}}" target="_blank">{{adContentInfo.materialUrl}}</a>
+                  </span>
+                  <span ng-if="!adContentInfo.materialUrl">{{'NOTHING_YET' | translate}}</span>
+                </td>
+              </tr>
+              <tr ng-if="adContentInfo.materialType==0 || adContentInfo.materialType==2">
+                <th class="active">{{'MATERIAL_TYPE' | translate}}</th>
+                <td>
+                    <span class="limit-long-text">
+                      {{'MATERIALFILETYPE_' + adContentInfo.materialFileType | translate}}
+                    </span>
+                </td>
+              </tr>
+              <!-- 物料类型为“图片”或“文字+图片”，有详细物料 -->
+              <tr ng-if="adContentInfo.materialFileType==0 || adContentInfo.materialFileType==1">
+                <th class="active">{{'MATERIAL_DETAIL_INFO' | translate}}</th>
+                <td>
+                  <span ng-if="adContentInfo.materialList.length" ng-repeat="material in adContentInfo.materialList">
+                    <span ng-if="$index">、&nbsp;</span><a ng-href="{{material.downloadUrl}}" target="_blank">{{material.downloadFileName}}</a>
+                  </span>
+                  <span ng-if="!adContentInfo.materialList.length">{{'NOTHING_YET' | translate}}</span>
+                </td>
+              </tr>
+              <tr ng-if="adContentInfo.materialFileType==2">
+                <th class="active">{{'APPROVAL_MATERIAL_EMBED_CODE_CONTENT' | translate}}</th>
+                <td>
+                  <span class="limit-long-text">{{adContentInfo.materialEmbedCodeContent}}</span>
+                  <span ng-if="!adContentInfo.materialEmbedCodeContent">{{'NOTHING_YET' | translate}}</span>
+                </td>
+              </tr>
+              <tr>
+                <th class="active">{{'THIRDPARTY_MONITOR' | translate}}</th>
+                <td>
+                  <span class="limit-long-text"  ng-if="adContentInfo.monitorUrl">
+                      <a ng-href="{{adContentInfo.monitorUrl}}" target="_blank">{{adContentInfo.monitorUrl}}</a>
+                  </span>
+                  <span  ng-if="!adContentInfo.monitorUrl">{{'NOT_SET_YET' | translate}}</span>
+                </td>
+              </tr>
+            </tbody>
+            <tbody ng-repeat="mm in adContentInfo.materialMenuList">
+              <tr>
+                <th class="active va-m" rowspan="3">{{'下拉菜单' | translate}}{{$index + 1}}</th>
+                <td>
+                  <span class="limit-long-text">{{mm.materialTitle}}</a></span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <span class="limit-long-text">
+                    <a ng-href="{{mm.materialUrl}}" target="_blank">{{mm.materialUrl}}</a>
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <span class="limit-long-text">
+                    <a ng-href="{{mm.material.downloadUrl}}" target="_blank">{{mm.material.downloadFileName}}</a>
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </dd>
+      </dl>
+      <h5 ng-if="materialList && materialList.length" class="bdt pt15 pb10 pl10">{{'MATERIAL_BILL' | translate}}</h5>
+      <div  ng-if="materialList && materialList.length" class="table-wrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th class="th-btn"></th>
+              <th>{{'MATERIAL_NUMBER' | translate}}</th>
+              <th>{{'SUBMIT_TIME' | translate}}</th>
+              <th>{{'SUBMITTER' | translate}}</th>
+              <th>{{'STATUS' | translate}}</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody class="table-material-list" ng-repeat="material in materialList">
+            <tr class="tr-vertical-middle active">
+              <td>
+                <button class="btn btn-success btn-xs" ng-click="toggleDetail($index)">
+                  <span class="glyphicon" ng-class="{'glyphicon-plus': !material.showDetail, 'glyphicon-minus': material.showDetail}"></span>
+                </button>
+              </td>
+              <td>{{material.number}}</td>
+              <td>{{material.createTime | date: 'yyyy-MM-dd HH:mm'}}</td>
+              <td>{{material.createOperatorName}}</td>
+              <td>{{'MATERIAL_APPROVEL_STATUS_' + material.applyState | translate}}</td>
+              <td>
+                <div class="btn-group">
+                  <button class="btn btn-default btn-xs" ng-if="BtnIndex.btn_mater_detail_mod && (material.applyState=='0' || material.applyState=='4')" ng-click="editMaterial(material)">{{'MODIFY' | translate}}</button>
+                  <button class="btn btn-default btn-xs" ng-if="BtnIndex.btn_mater_detail_withdraw && material.applyState=='1'" yt-popover-confirm="withdrawMaterial(material.applyId)"  yt-popover-ok-class="btn-warning" yt-popover-ok-text="{{'WITHDRAW' | translate}}" append-to-body="true">{{'WITHDRAW' | translate}}</button>
+                  <!-- <span ng-if="BtnIndex.btn_mater_detail_cancel_recover && (material.applyState=='0' || material.applyState=='4' || material.applyState=='1')">|</span> -->
+                  <button class="btn btn-default btn-xs" ng-if="BtnIndex.btn_mater_detail_cancel_recover && material.applyState!='3'" yt-popover-confirm="nullifyMaterial(material.applyId)" yt-popover-title="{{'CONFIRM_NULLITY' | translate}}" yt-popover-ok-class="btn-danger" yt-popover-ok-text="{{'NULLITY' | translate}}" append-to-body="true">{{'NULLITY' | translate}}</button>
+                  <button class="btn btn-default btn-xs" ng-if="BtnIndex.btn_mater_detail_cancel_recover && material.applyState=='3'" ng-click="recoverMaterial(material)">{{'RECOVER' | translate}}</button>
+                  <!-- <span ng-if="material.hasRecords">|</span> -->
+                  <button class="btn btn-default btn-xs" ng-if="material.hasRecords" ng-click="modalApprovalRecord(material.applyId)">{{'VIEW_APPROVAL_RECORD' | translate}}</button>
+                  <!-- <span ng-if="material.applyState=='1'">|</span> -->
+                  <button class="btn btn-default btn-xs" ng-if="BtnIndex.btn_mater_detail_withdraw && material.applyState=='1'" ng-click="sendReminder(material.applyId)">{{'REMINDER' | translate}}</button>
+                </div>
+              </td>
+            </tr>
+            <tr class="tr-material-detail" ng-if="material.showDetail">
+              <td colspan="6">
+                <div class="alert" ng-class="{'alert-info': material.detail.applyState!='4','alert-danger': material.detail.applyState=='4'}" ng-if="material.detail.materialApply.taskInfo" ng-bind-html="material.detail.materialApply.taskInfo">
+                </div>
+                <div class="pl50 pr10">
+                  <table class="table table-vm">
+                    <thead>
+                      <tr>
+                        <th>{{'MATERIAL_FILE_TYPE' | translate}}</th>
+                        <th>Title</th>
+                        <th>URL</th>
+                        <th>{{'MATERIAL_DETAIL_INFO' | translate}}</th>
+                        <th>{{'THIRDPARTY_MONITOR' | translate}}</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <span ng-if="material.detail.materialApply.materialFileType >= 0">{{'MATERIALFILETYPE_' + material.detail.materialApply.materialFileType | translate}}</span>
+                          <span ng-if="!(material.detail.materialApply.materialFileType >= 0)">{{'POSTIION_MATERIAL_TYPE_TEXT' | translate}}</span>
+                        </td>
+                        <td class="td-max" title="{{material.detail.materialApply.materialTitle}}">
+                          <span>{{material.detail.materialApply.materialTitle}}</span>
+                          <span ng-if="!material.detail.materialApply.materialTitle">--</span>
+                        </td>
+                        <td class="td-max mw160" title="{{material.detail.materialApply.materialUrl}}">
+                          <a href="{{material.detail.materialApply.materialUrl}}" target="_blank">{{material.detail.materialApply.materialUrl}}</a>
+                          <span ng-if="!material.detail.materialApply.materialUrl">--</span>
+                        </td>
+                        <td class="td-max mw200" ng-if="material.detail.materialApply.materialFileType==0 || material.detail.materialApply.materialFileType==1" title="{{material.detail.materialApply.materialList[0].downloadFileName}}">
+                          <span>
+                            <span ng-repeat="item in material.detail.materialApply.materialList">
+                              <span ng-if="$index">、</span>
+                              <a href="{{item.downloadUrl}}" target="_blank">{{item.downloadFileName}}</a>
+                            </span>
+                          </span>
+                        </td>
+                        <td class="td-max mw200" title="{{material.detail.materialApply.materialEmbedCodeContent}}" ng-if="material.detail.materialApply.materialFileType==2">
+                          <span>{{material.detail.materialApply.materialEmbedCodeContent}}</span>
+                        </td>
+                        <td ng-if="!(material.detail.materialApply.materialFileType>=0)">--</td>
+                        <td class="td-max mw160" title="{{material.detail.materialApply.monitorUrl}}">
+                          <a href="{{material.detail.materialApply.monitorUrl}}" target="_blank">{{material.detail.materialApply.monitorUrl}}</a>
+                          <span ng-if="!material.detail.materialApply.monitorUrl">--</span>
+                        </td>
+                      </tr>
+                      <tr ng-if="material.detail.materialApply.materialMenuList.length" ng-repeat="mm in material.detail.materialApply.materialMenuList">
+                        <!-- <td class="align-right">&gt;&gt;</td> -->
+                        <td>{{'DROPDOWN_MENU' | translate}}{{$index + 1}}</td>
+                        <td class="td-max" title="{{mm.materialTitle}}">{{mm.materialTitle}}</td>
+                        <td class="td-max mw160" title="{{mm.materialUrl}}">
+                          <a href="{{mm.materialUrl}}">{{mm.materialUrl}}</a>
+                        </td>
+                        <td class="td-max mw200" title="{{mm.material.downloadFileName}}">
+                          <a href="{{mm.material.downloadUrl}}" target="_blank">{{mm.material.downloadFileName}}</a>
+                        </td>
+                        <td></td>
+                        <td></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>

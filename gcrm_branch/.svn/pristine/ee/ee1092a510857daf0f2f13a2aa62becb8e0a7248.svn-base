@@ -1,0 +1,48 @@
+package com.baidu.gcrm.occupation.web.vo;
+
+import java.util.List;
+
+import com.baidu.gcrm.occupation.helper.DatePeriod;
+
+public class InsertDateQueryBean {
+	private List<DatePeriod> periods;
+	
+	private List<DateCheck> insertDate;
+	
+	private Long positionId;
+	
+	private Long oldContentId;
+
+	public List<DatePeriod> getPeriods() {
+		return periods;
+	}
+
+	public void setPeriods(List<DatePeriod> periods) {
+		this.periods = periods;
+	}
+
+	public List<DateCheck> getInsertDate() {
+		return insertDate;
+	}
+
+	public void setInsertDate(List<DateCheck> insertDate) {
+		this.insertDate = insertDate;
+	}
+
+	public Long getPositionId() {
+		return positionId;
+	}
+
+	public void setPositionId(Long positionId) {
+		this.positionId = positionId;
+	}
+
+	public Long getOldContentId() {
+		return oldContentId;
+	}
+
+	public void setOldContentId(Long oldContentId) {
+		this.oldContentId = oldContentId;
+	}
+	
+}

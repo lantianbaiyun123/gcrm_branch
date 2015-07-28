@@ -1,0 +1,170 @@
+{
+    "code": 200,
+    "data": {
+        "quotationMainVO": {
+            "platformName": "中文广告销售",
+            "quotationMain": {
+                "advertisingPlatformId": 3,
+                "approveStatus": "APPROVED",
+                "businessType": "SALE",
+                "createOperator": 23456789,
+                "createTime": 1397110857000,
+                "descreption": "wo le ge qu qu qu!!!",
+                "endTime": 1397974857000,
+                "id": 6,
+                "priceType": "rebate",
+                "quoteCode": "PP-20140410-720",
+                "siteId": 2,
+                "startTime": 1397215878000,
+                "status": "VALID"
+            },
+            "siteName": "印尼语区"
+        },
+        "quotationViewList": [
+            {
+                "quotationList": [
+                    {
+                        "advertisingPlatformId": 3,
+                        "industryId":2,
+                        "billingModelId": 1,
+                        "businessType": "SALE",
+                        "endTime": 1397110857000,
+                        "id": 16,
+                        "priceType": "unit",
+                        "publishPrice": 2000.12,
+                        "quotationMainId": 6,
+                        "ratioMine" : 33,
+                        "ratioCustomer" : 33,
+                        "ratioThird" : 33,
+                        "rebateRatio" : 33,
+                        "siteId": 2,
+                        "startTime": 1397118774000
+                    },
+                    {
+                        "advertisingPlatformId": 3,
+                        "industryId":2,
+                        "billingModelId": 2,
+                        "businessType": "SALE",
+                        "endTime": 1397110857000,
+                        "id": 16,
+                        "priceType": "unit",
+                        "publishPrice": 2000.12,
+                        "quotationMainId": 6,
+                        "ratioMine" : 33,
+                        "ratioCustomer" : 33,
+                        "ratioThird" : 33,
+                        "rebateRatio" : 33,
+                        "siteId": 2,
+                        "startTime": 1397118774000
+                    },
+                    {
+                        "advertisingPlatformId": 3,
+                        "industryId":1,
+                        "billingModelId": 2,
+                        "businessType": "SALE",
+                        "endTime": 1397110857000,
+                        "id": 16,
+                        "priceType": "unit",
+                        "publishPrice": 2000.12,
+                        "quotationMainId": 6,
+                        "ratioMine" : 33,
+                        "ratioCustomer" : 33,
+                        "ratioThird" : 33,
+                        "rebateRatio" : 33,
+                        "siteId": 2,
+                        "startTime": 1397118774000
+                    },
+                    {
+                        "advertisingPlatformId": 3,
+                        "industryId":0,
+                        "billingModelId": 2,
+                        "businessType": "SALE",
+                        "endTime": 1397110857000,
+                        "id": 16,
+                        "priceType": "unit",
+                        "publishPrice": 2200.12,
+                        "quotationMainId": 6,
+                        "ratioMine" : 33,
+                        "ratioCustomer" : 33,
+                        "ratioThird" : 33,
+                        "rebateRatio" : 33,
+                        "siteId": 2,
+                        "startTime": 1397118774000
+                    },
+                    {
+                        "advertisingPlatformId": 3,
+                        "billingModelId": 3,
+                        "businessType": "SALE",
+                        "endTime": 1397110857000,
+                        "id": 16,
+                        "priceType": "unit",
+                        "publishPrice": 200.12,
+                        "quotationMainId": 6,
+                        "siteId": 2,
+                        "startTime": 1397118774000
+                    },
+                    {
+                        "advertisingPlatformId": 3,
+                        "billingModelId": 4,
+                        "businessType": "SALE",
+                        "endTime": 1397110857000,
+                        "id": 16,
+                        "priceType": "unit",
+                        "publishPrice": 2011.12,
+                        "quotationMainId": 6,
+                        "siteId": 2,
+                        "startTime": 1397118774000
+                    },
+                    {
+                        "advertisingPlatformId": 3,
+                        "billingModelId": 5,
+                        "businessType": "SALE",
+                        "endTime": 1397110857000,
+                        "id": 16,
+                        "priceType": "unit",
+                        "publishPrice": 2000.12,
+                        "quotationMainId": 6,
+                        "siteId": 2,
+                        "startTime": 1397118774000
+                    }
+                ],
+                "quotationMaterialList": [
+                    {
+                        "createOperator": 23456789,
+                        "createTime": 1397110857000,
+                        "downloadFileName": "wo ca ca",
+                        "fileUrl": "www.baidu.com yeh",
+                        "id": 5,
+                        "quotationMainId": 6,
+                        "updateOperator": 23456789,
+                        "updateTime": 1397110857000,
+                        "uploadFileName": "ca wo wo"
+                    },
+                    {
+                        "createOperator": 23456789,
+                        "createTime": 1397110857000,
+                        "downloadFileName": "wo ca ca",
+                        "fileUrl": "www.baidu.com yeh",
+                        "id": 5,
+                        "quotationMainId": 6,
+                        "updateOperator": 23456789,
+                        "updateTime": 1397110857000,
+                        "uploadFileName": "ca wo wo"
+                    },
+                    {
+                        "createOperator": 23456789,
+                        "createTime": 1397110857000,
+                        "downloadFileName": "wo ca ca",
+                        "fileUrl": "www.baidu.com yeh",
+                        "id": 5,
+                        "quotationMainId": 6,
+                        "updateOperator": 23456789,
+                        "updateTime": 1397110857000,
+                        "uploadFileName": "ca wo wo"
+                    }
+                ]
+            }
+        ]
+    },
+    "message": "OK"
+}

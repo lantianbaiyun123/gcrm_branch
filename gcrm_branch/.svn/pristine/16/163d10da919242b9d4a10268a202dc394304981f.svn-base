@@ -1,0 +1,310 @@
+package com.baidu.gcrm.occupation;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.ExpectedException;
+
+import com.alibaba.fastjson.JSON;
+import com.baidu.gcrm.BaseTestContext;
+import com.baidu.gcrm.TestUtils;
+import com.baidu.gcrm.common.DateUtils;
+import com.baidu.gcrm.common.ServiceBeanFactory;
+import com.baidu.gcrm.common.exception.CRMRuntimeException;
+import com.baidu.gcrm.common.json.JsonBeanUtil;
+import com.baidu.gcrm.occupation.dao.IADPositionDateRelationRepository;
+import com.baidu.gcrm.occupation.dao.IPositionOccupationRepository;
+import com.baidu.gcrm.occupation.helper.DatePeriod;
+import com.baidu.gcrm.occupation.model.PositionOccupation;
+import com.baidu.gcrm.occupation.service.IPositionOccupationService;
+import com.baidu.gcrm.occupation.web.vo.DateOccupation;
+import com.baidu.gcrm.occupation.web.vo.DateStatus;
+import com.baidu.gcrm.occupation.web.vo.OccupationVO;
+import com.baidu.gcrm.resource.position.model.Position;
+import com.baidu.gcrm.resource.position.model.Position.PositionType;
+import com.baidu.gcrm.resource.position.model.Position.RotationType;
+import com.baidu.gcrm.schedule.model.Schedule.ScheduleStatus;
+
+@Ignore
+public class FixedPositionOccupationServiceTest extends BaseTestContext {
+	@Autowired
+	private IPositionOccupationRepository occupationDao;
+	@Autowired
+	private IADPositionDateRelationRepository relationDao;
+	
+	@Before
+	public void init() throws Exception {
+		TestUtils.initDatabase(dataSource, "datas/g_position_occupation.xml");
+	}
+
+	@Test
+	public void initPositionOccupationTest() {
+		Position position = new Position();
+		Long positionId = 10l;
+		position.setId(positionId);
+		position.setType(PositionType.position);
+		position.setRotationType(RotationType.no);
+		
+		List<PositionOccupation> occupations = occupationDao.findByPositionId(positionId);
+		Assert.assertNotNull(occupations);
+		Assert.assertEquals(0, occupations.size());
+		
+		IPositionOccupationService occupationService = ServiceBeanFactory.getOccupationService(position.getRotationType());
+		occupationService.initPositionOccupation(position);
+		occupations = occupationDao.findByPositionId(positionId);
+		Assert.assertNotNull(occupations);
+		Assert.assertEquals(365, occupations.size());
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd"); 
+		Assert.assertEquals(df.format(new Date()), df.format(occupations.get(0).getDate()));
+	}
+	
+	@Test
+	public void initPositionOccupationTest1() {
+		Position position = new Position();
+		Long positionId = 1l;
+		position.setId(positionId);
+		position.setType(PositionType.position);
+		position.setRotationType(RotationType.no);
+		
+		List<PositionOccupation> occupations = occupationDao.findByPositionId(positionId);
+		Assert.assertNotNull(occupations);
+		Assert.assertEquals(7, occupations.size());
+		
+		IPositionOccupationService occupationService = ServiceBeanFactory.getOccupationService(position.getRotationType());
+		occupationService.initPositionOccupation(position);
+		occupations = occupationDao.findByPositionId(positionId);
+		Assert.assertNotNull(occupations);
+		//Assert.assertEquals(372, occupations.size());
+		Assert.assertEquals(DateUtils.getString2Date("2014-02-04"), occupations.get(7).getDate());
+	}
+	
+	@Test
+	public void checkAndCompleteInitializationTest() {
+		Position position = getPosition2();
+		Long positionId = position.getId();
+		List<PositionOccupation> occupations = occupationDao.findByPositionId(positionId);
+		Assert.assertEquals(5, occupations.size());
+		
+		
+		IPositionOccupationService occupationService = ServiceBeanFactory.getOccupationService(position.getRotationType());
+		Date to = DateUtils.getString2Date("2014-02-05");
+		occupationService.initPositionOccupation(position);
+		occupationService.checkInitialization(position, to);
+		occupations = occupationDao.findByPositionId(positionId);
+		//Assert.assertEquals(370, occupations.size());
+		Assert.assertEquals(DateUtils.getString2Date("2014-02-02"), occupations.get(5).getDate());
+		Assert.assertEquals(0, occupations.get(9).getSoldAmount());
+		Assert.assertEquals(1, occupations.get(8).getTotalAmount());
+	}
+	
+	@Test
+	public void confirmOccupationTest() {
+		List<Long> positionOccIds = new ArrayList<Long>();
+		positionOccIds.add(10l);
+		Position position = getPosition2();
+		String scheduleNumber = "88888888";
+		ServiceBeanFactory.getOccupationService(position.getRotationType()).confirmOccupation(positionOccIds, scheduleNumber);
+		
+		PositionOccupation occupation1 = occupationDao.findOne(10l);
+		Assert.assertEquals(1, occupation1.getSoldAmount());
+		Assert.assertEquals(",88888888,", occupation1.getCurScheduleNumber());
+	}
+	
+	@Test
+	@ExpectedException(CRMRuntimeException.class)
+	public void confirmOccupationTest1() {
+		List<Long> positionOccIds = new ArrayList<Long>();
+		positionOccIds.add(11l);
+		Position position = getPosition2();
+		ServiceBeanFactory.getOccupationService(position.getRotationType()).confirmOccupation(positionOccIds, "11111111l");
+	}
+	
+	@Test
+	@Ignore
+	@ExpectedException(CRMRuntimeException.class)
+	public void confirmOccupationTest2() {
+		List<Long> positionOccIds = new ArrayList<Long>();
+		positionOccIds.add(3l);
+		positionOccIds.add(4l);
+		positionOccIds.add(5l);
+		positionOccIds.add(6l);
+		ServiceBeanFactory.getOccupationService(RotationType.yes).confirmOccupation(positionOccIds, "1111111l");
+	}
+	
+	@Test
+	public void getInsertDateBetweenTest() {
+		Position position = getPosition2();
+		Date from = DateUtils.getString2Date("2014-01-28");
+		Date to = DateUtils.getString2Date("2014-02-01");
+		DatePeriod period = new DatePeriod(from, to);
+		List<Date> insertDate = ServiceBeanFactory.getOccupationService(position.getRotationType()).getInsertDate(position, period);
+		Assert.assertEquals(2, insertDate.size());
+		Assert.assertEquals(to, insertDate.get(1));
+	}
+	
+	@Test
+	public void getInsertDateInTest() {
+		Position position = getPosition2();
+		Date from = DateUtils.getString2Date("2014-01-28");
+		Date to = DateUtils.getString2Date("2014-02-01");
+		DatePeriod period1 = new DatePeriod(from, to);
+		from = DateUtils.getString2Date("2014-01-30");
+		to = DateUtils.getString2Date("2014-02-03");
+		DatePeriod period2 = new DatePeriod(from, to);
+		List<DatePeriod> periods = new ArrayList<DatePeriod>();
+		periods.add(period1);
+		periods.add(period2);
+		IPositionOccupationService occupationService = ServiceBeanFactory.getOccupationService(position.getRotationType());
+		occupationService.initPositionOccupation(position);
+		List<Date> insertDate = occupationService.getInsertDate(position, periods);
+		Assert.assertEquals(2, insertDate.size());
+		Assert.assertEquals(DateUtils.getString2Date("2014-02-01"), insertDate.get(1));
+		
+		//Assert.assertEquals(370, occupationDao.findByPositionId(position.getId()).size());
+	}
+	
+	@Test
+	public void getReserveDateTest() {
+		Position position = getPosition2();
+		Date from = DateUtils.getString2Date("2014-01-28");
+		Date to = DateUtils.getString2Date("2014-02-03");
+		DatePeriod period = new DatePeriod(from, to);
+		IPositionOccupationService occupationService = ServiceBeanFactory.getOccupationService(position.getRotationType());
+		occupationService.initPositionOccupation(position);
+		List<Date> insertDate = occupationService.getReserveDate(position, period);
+		Assert.assertEquals(1, insertDate.size());
+		Assert.assertEquals(DateUtils.getString2Date("2014-01-30"), insertDate.get(0));
+	}
+	
+	@Test
+	public void getConfirmDateTest() {
+		Position position = getPosition2();
+		Date from = DateUtils.getString2Date("2014-01-28");
+		Date to = DateUtils.getString2Date("2014-02-01");
+		DatePeriod period = new DatePeriod(from, to);
+		List<Date> dates = ServiceBeanFactory.getOccupationService(position.getRotationType()).getConfirmOrLockDate(position, period, ScheduleStatus.confirmed);
+		Assert.assertEquals(1, dates.size());
+		Assert.assertEquals(DateUtils.getString2Date("2014-01-31"), dates.get(0));
+		
+		to = DateUtils.getString2Date("2014-01-30");
+		period = new DatePeriod(from, to);
+		dates = ServiceBeanFactory.getOccupationService(position.getRotationType()).getConfirmOrLockDate(position, period, ScheduleStatus.confirmed);
+		Assert.assertEquals(0, dates.size());
+	}
+	
+	@Test
+	public void getLockDateTest() {
+		Position position = getPosition2();
+		Date from = DateUtils.getString2Date("2014-01-28");
+		Date to = DateUtils.getString2Date("2014-02-01");
+		DatePeriod period = new DatePeriod(from, to);
+		List<Date> dates = ServiceBeanFactory.getOccupationService(position.getRotationType()).getConfirmOrLockDate(position, period, ScheduleStatus.locked);
+		Assert.assertEquals(1, dates.size());
+		Assert.assertEquals(DateUtils.getString2Date("2014-02-01"), dates.get(0));
+	}
+	
+	@Test
+	public void getBiddingCountTest() {
+		Position position = getPosition2();
+		Date from = DateUtils.getString2Date("2014-01-28");
+		Date to = DateUtils.getString2Date("2014-02-03");
+		DatePeriod period = new DatePeriod(from, to);
+		IPositionOccupationService occupationService = ServiceBeanFactory.getOccupationService(position.getRotationType());
+		occupationService.initPositionOccupation(position);
+		Map<Date, Integer> biddingCount = occupationService.getBiddingCount(position, period);
+		Assert.assertEquals(4, biddingCount.size());
+		Integer count = biddingCount.get(DateUtils.getString2Date("2014-01-29"));
+		Assert.assertNotNull(count);
+		Assert.assertEquals(2, count.intValue());
+		
+		count = biddingCount.get(DateUtils.getString2Date("2014-01-30"));
+		Assert.assertNotNull(count);
+		Assert.assertEquals(2, count.intValue());
+		
+		count = biddingCount.get(DateUtils.getString2Date("2014-01-31"));
+		Assert.assertNotNull(count);
+		Assert.assertEquals(0, count.intValue());
+	}
+	
+	@Test
+	public void getDateOccupationsTest() {
+		Position position = getPosition2();
+		Date from = DateUtils.getString2Date("2014-01-28");
+		Date to = DateUtils.getString2Date("2014-02-03");
+		DatePeriod period = new DatePeriod(from, to);
+		IPositionOccupationService occupationService = ServiceBeanFactory.getOccupationService(position.getRotationType());
+		occupationService.initPositionOccupation(position);
+		OccupationVO dateOccupation = occupationService.getDateOccupation(position, period);
+		Assert.assertEquals(dateOccupation.getPositionId(), position.getId());
+		Assert.assertEquals(dateOccupation.getFrom(), from);
+		Assert.assertEquals(dateOccupation.getTo(), to);
+		Assert.assertEquals(dateOccupation.getTotalCount(), 0);
+		Assert.assertFalse(dateOccupation.isRotation());
+		List<DateOccupation> occupations = dateOccupation.getOccupations();
+		Assert.assertEquals(7, occupations.size());
+		
+		Assert.assertEquals(DateUtils.getString2Date("2014-01-28"), occupations.get(0).getDate());
+		Assert.assertEquals(DateStatus.idle.toString(), occupations.get(0).getStatus());
+		
+		Assert.assertEquals(DateUtils.getString2Date("2014-01-29"), occupations.get(1).getDate());
+		Assert.assertEquals(DateStatus.bidding.toString(), occupations.get(1).getStatus());
+		Assert.assertEquals(2, occupations.get(1).getBiddingCount());
+		
+		Assert.assertEquals(DateUtils.getString2Date("2014-01-30"), occupations.get(2).getDate());
+		Assert.assertEquals(DateStatus.reserved.toString(), occupations.get(2).getStatus());
+		Assert.assertEquals(2, occupations.get(2).getBiddingCount());
+		
+		Assert.assertEquals(DateUtils.getString2Date("2014-01-31"), occupations.get(3).getDate());
+		Assert.assertEquals(DateStatus.confirmed.toString(), occupations.get(3).getStatus());
+		Assert.assertEquals(0, occupations.get(3).getBiddingCount());
+		
+		Assert.assertEquals(DateUtils.getString2Date("2014-02-01"), occupations.get(4).getDate());
+		Assert.assertEquals(DateStatus.locked.toString(), occupations.get(4).getStatus());
+		
+		Assert.assertEquals(DateUtils.getString2Date("2014-02-02"), occupations.get(5).getDate());
+		Assert.assertEquals(DateStatus.idle.toString(), occupations.get(5).getStatus());
+		
+		Assert.assertEquals(DateUtils.getString2Date("2014-02-03"), occupations.get(6).getDate());
+		Assert.assertEquals(DateStatus.idle.toString(), occupations.get(6).getStatus());
+	}
+	
+	@Test
+	public void getDateOccupationsTest1() {
+		Position position = getPosition2();
+		Date from = DateUtils.getString2Date("2014-01-28");
+		Date to = DateUtils.getString2Date("2014-02-03");
+		DatePeriod period = new DatePeriod(from, to);
+		OccupationVO dateOccupation = ServiceBeanFactory.getOccupationService(position.getRotationType()).getDateOccupation(position, period);
+		System.out.println(JSON.toJSONString(JsonBeanUtil.convertBeanToJsonBean(dateOccupation)));
+	}
+	
+	@Test
+	public void disablePositionOccupationTest() {
+		Position position = getPosition2();
+		try {
+			ServiceBeanFactory.getOccupationService(position.getRotationType()).disablePositionOccupation(position);
+		} catch (Exception e) {
+			return;
+		}
+		Assert.fail();
+	}
+	
+	
+	private Position getPosition2() {
+		Position position = new Position();
+		Long positionId = 2l;
+		position.setId(positionId);
+		position.setType(PositionType.position);
+		position.setRotationType(RotationType.no);
+		return position;
+	}
+}

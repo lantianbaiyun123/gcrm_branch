@@ -1,0 +1,12 @@
+<div class="container notice">
+  <div class="panel panel-default gcrm-panel">
+    <div class="panel-top-heading">
+      <h1>
+        <span ng-if="!notice.id">{{'NOTICE_NEW' | translate}}</span>
+        <span ng-if="notice.id">{{'NOTICE_DETAIL' | translate}}</span>
+      </h1>
+    </div>
+    <div ui-view="edit" ng-if="state.isEdit"></div>
+    <div ui-view="detail" ng-if="!state.isEdit"></div>
+  </div>
+</div>

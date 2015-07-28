@@ -1,0 +1,1 @@
+define(["app"],function(n){n.registerFilter("CalendarTdTitleFilter",["$filter",function(n){return function(t,i){var e=[];return t.biddingCount&&e.push(n("translate")("CALENDAR_TD_BIDDING",{biddingCount:t.biddingCount})),t.busyCount&&i&&e.push(n("translate")("CALENDAR_TD_BUSY",{ed:t.busyCount,total:i})),e.join("；")}}])});

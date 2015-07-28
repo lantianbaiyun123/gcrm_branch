@@ -1,0 +1,12 @@
+<style>
+.body{font-size:14px;}
+.important{font-weight:bold;}
+</style>
+<div class="body">
+	$operator:</br>
+  </br>
+   您在发起提前上线申请时，所关联的框架合同($contractNumber)已生效备案。<br/>
+   请尽快为广告方案($adSolutionNumber)绑定已生效的合同,并创建PO。<br/>
+   点击查看广告方案详情(<a href="$adSolutionURL">$adSolutionURL</a>)。<br/>
+   系统邮件，请勿回复！
+</div>

@@ -1,0 +1,39 @@
+<div class="modal-header">
+  <h4>{{'RESOURCE_POSITION_MODAL_IMPORT_HEADER' | translate}}</h4>
+</div>
+<div class="modal-body">
+  <form class="clearfix form-horizontal form-label-ajust">
+    <div class="form-group">
+      <label class="control-label col-md-2">
+        {{'PLATFORM' | translate}}：
+      </label>
+      <div class="col-md-10">
+        <label class="radio radio-inline" ng-repeat="platform in q.adPlatformList" ng-class="{'label-first': !$index}">
+          <input type="radio" ng-model="q.platformId" ng-change="changePlatform()" name="platform" value="{{platform.id}}" />
+          {{platform.i18nName}}
+        </label>
+      </div>
+    </div>
+    <div class="form-group" ng-if="q.adPlatformList.length && q.platformId">
+      <label class="control-label col-md-2">
+        {{'SITE' | translate}}：
+      </label>
+      <div>
+        <div class="col-md-10">
+          <label class="radio radio-inline" ng-repeat="site in q.adSiteList" ng-class="{'label-first': !$index}">
+            <input type="radio" ng-model="q.siteId" ng-change="changeSite()" name="site" value="{{site.id}}" />
+            {{site.i18nName}}
+          </label>
+        </div>
+      </div>
+    </div>
+  </form>
+  <!-- <div progressbar class="progress-striped active" value="dynamic" type="success">{{type}} <i ng-show="showWarning">!!! Watch out !!!</i></div> -->
+</div>
+<div class="modal-footer">
+  <span class="btn btn-primary pull-left" yt-ajaxupload='{{ { uploadingText : "" , uploadedText : "" , formatErrorText : "AD_CONTENT_UPLOAD_FILE_TYPE_FORBIDDEN" , uploadFalseText : "" , beginUpload : "btnDisabled" , uploadDone : "btnEnabled"} }}' ng-model="e.fileUploaded" upload-url="position/importPosition" upload-type="" upload-invalidatetype="exe|msi|bat|sh" uploaded-cbfn="uploadedCbfn()" upload-file-name="file" ng-if="q.siteId" upload-triggersource="{{done}}">
+    <i class="glyphicon glyphicon-plus"></i>
+    <span class="upload-text">{{'IMPORT' | translate}}</span>
+  </span>
+  <button type="button" class="btn btn-default" ng-click="cancel()">{{'CANCEL' | translate}}</button>
+</div>

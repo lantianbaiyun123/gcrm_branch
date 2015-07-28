@@ -1,0 +1,11 @@
+<style>
+.body{font-size:14px;}
+.important{font-weight:bold;}
+</style>
+<div class="body">
+    ${operator}：</br>
+    Because of the position[<span class="important">${positionName}</span>] is disabled, the schedule of the advertisement(${adContentNumber}) you submitted at ${adContentSubmitTime} has bean <span class="red">released</span>.</br>
+    Advertisement content: <a href='${adContentURL}'>${adContentURL}</a> </br>
+    If you have any problems, please contact the related PM</br>
+    This is a system notification, please do not reply</br>
+</div>

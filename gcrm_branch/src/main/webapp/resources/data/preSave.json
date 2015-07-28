@@ -1,0 +1,169 @@
+需要传入的参数：
+advertiseSolution.budget
+advertiseSolution.startTime
+advertiseSolution.endTime
+advertiseSolution.id：没有则传入空（初次提交）
+advertiseSolution.number：没有则传入空（初次提交）
+contract.number
+hasContract
+customerView.customer.customerNumber
+operatorId
+operatorName
+返回结果：
+{
+    "code": 200,
+    "data": {
+        "advertiseSolutionView": {
+            "advertiseSolution": {
+                "approvalStatus": "saving",
+                "budget": 1,
+                "contractNumber": "151315HAO0029",
+                "createOperator": 1000,
+                "createTime": 1390895542000,
+                "customerNumber": 917145191,
+                "endTime": -2211696000000,
+                "id": 1,
+                "number": "85805810",
+                "startTime": -2211609600000,
+                "type": "create",
+                "updateOperator": 1000,
+                "updateTime": 1390895542000
+            },
+            "advertiseSolutionApproveState": "saving",
+            "advertiseSolutionType": "create"
+        },
+        "contract": {
+            "applier": "Anonymous",
+            "beginDate": 1389684542000,
+            "category": "代理协议",
+            "customerId": 245,
+            "endDate": 1389684544000,
+            "number": "151315HAO0029",
+            "sales": "Anonymous",
+            "state": "生效",
+            "summary": "这是一个合同摘要"
+        },
+        "customerView": {
+            "agentCountry": [
+                {
+                    "code": "LK",
+                    "i18nName": "斯里兰卡",
+                    "id": 5,
+                    "name": "斯里兰卡"
+                }
+            ],
+            "agentRegional": {
+                "agentCountries": [
+                    {
+                        "code": "BD",
+                        "i18nName": "孟加拉",
+                        "id": 10,
+                        "name": "孟加拉"
+                    },
+                    {
+                        "code": "VN",
+                        "i18nName": "越南",
+                        "id": 3,
+                        "name": "越南"
+                    },
+                    {
+                        "code": "LK",
+                        "i18nName": "斯里兰卡",
+                        "id": 5,
+                        "name": "斯里兰卡"
+                    },
+                    {
+                        "code": "KH",
+                        "i18nName": "柬埔寨",
+                        "id": 9,
+                        "name": "柬埔寨"
+                    },
+                    {
+                        "code": "LA",
+                        "i18nName": "老挝",
+                        "id": 8,
+                        "name": "老挝"
+                    },
+                    {
+                        "code": "IN",
+                        "i18nName": "印度",
+                        "id": 6,
+                        "name": "印度"
+                    },
+                    {
+                        "code": "PK",
+                        "i18nName": "巴基斯坦",
+                        "id": 11,
+                        "name": "巴基斯坦"
+                    },
+                    {
+                        "code": "PH",
+                        "i18nName": "菲律宾",
+                        "id": 2,
+                        "name": "菲律宾"
+                    },
+                    {
+                        "code": "TW",
+                        "i18nName": "台湾",
+                        "id": 4,
+                        "name": "台湾"
+                    },
+                    {
+                        "code": "TH",
+                        "i18nName": "泰国",
+                        "id": 1,
+                        "name": "泰国test"
+                    },
+                    {
+                        "code": "MM",
+                        "i18nName": "缅甸",
+                        "id": 7,
+                        "name": "缅甸"
+                    }
+                ],
+                "i18nName": "泰语区",
+                "id": 1,
+                "name": "泰语区"
+            },
+            "agentType": "exclusive",
+            "approvalStatus": "approved",
+            "companySize": "less_50",
+            "country": {
+                "code": "SY",
+                "i18nName": "叙利亚",
+                "id": 25,
+                "name": "叙利亚"
+            },
+            "customer": {
+                "address": "www",
+                "agentCountry": "5",
+                "agentRegional": 1,
+                "agentType": 0,
+                "approvalStatus": 3,
+                "belongSales": 11,
+                "businessScope": "www",
+                "businessType": 0,
+                "companyName": "www1",
+                "companySize": "less_50",
+                "companyStatus": 0,
+                "country": 25,
+                "createOperator": 1000,
+                "createTime": 1387987200000,
+                "currencyType": 3,
+                "customerNumber": 917145191,
+                "description": "www",
+                "id": 97,
+                "registerTime": -27079776000000,
+                "type": "0",
+                "updateOperator": 1000,
+                "updateTime": 1387987200000,
+                "url": "http://www"
+            },
+            "customerType": "offline"
+        },
+        "hasContract": true,
+        "operatorId": 1000,
+        "operatorName": "liyazhou"
+    },
+    "message": "OK"
+}

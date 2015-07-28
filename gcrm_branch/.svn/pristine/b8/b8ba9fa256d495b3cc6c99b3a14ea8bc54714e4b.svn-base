@@ -1,0 +1,688 @@
+package com.baidu.gcrm.ad.web;
+
+import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ValidationUtils;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.baidu.gcrm.account.model.Account;
+import com.baidu.gcrm.account.service.IAccountService;
+import com.baidu.gcrm.ad.content.service.IAdSolutionContentService;
+import com.baidu.gcrm.ad.model.AdvertiseSolution;
+import com.baidu.gcrm.ad.model.AdvertiseSolutionApproveState;
+import com.baidu.gcrm.ad.model.AdvertiseSolutionType;
+import com.baidu.gcrm.ad.model.Contract;
+import com.baidu.gcrm.ad.service.IAdvertiseSolutionService;
+import com.baidu.gcrm.ad.service.IContractService;
+import com.baidu.gcrm.ad.web.utils.AdvertiseSolutionCondition;
+import com.baidu.gcrm.ad.web.utils.AutoSuggestBean;
+import com.baidu.gcrm.ad.web.validator.AdSolutionApprovalValidator;
+import com.baidu.gcrm.ad.web.validator.BaseInfoViewValidator;
+import com.baidu.gcrm.ad.web.vo.AdSolutionBaseInfoView;
+import com.baidu.gcrm.ad.web.vo.AdvertiseSolutionListView;
+import com.baidu.gcrm.common.ControllerHelper;
+import com.baidu.gcrm.common.datarole.IGCrmDataRoleService;
+import com.baidu.gcrm.common.exception.CRMBaseException;
+import com.baidu.gcrm.common.json.JsonBean;
+import com.baidu.gcrm.common.json.JsonBeanUtil;
+import com.baidu.gcrm.common.log.LoggerHelper;
+import com.baidu.gcrm.common.page.Page;
+import com.baidu.gcrm.common.random.IRandomCheckCallback;
+import com.baidu.gcrm.common.random.IRandomStringService;
+import com.baidu.gcrm.common.random.RandomType;
+import com.baidu.gcrm.customer.model.Customer;
+import com.baidu.gcrm.customer.service.ICustomerService;
+import com.baidu.gcrm.customer.web.helper.CustomerApproveState;
+import com.baidu.gcrm.customer.web.helper.CustomerType;
+import com.baidu.gcrm.customer.web.helper.CustomerView;
+import com.baidu.gcrm.customer.web.vo.CustomerI18nView;
+import com.baidu.gcrm.quote.dao.QuotationMainRepository;
+import com.baidu.gcrm.quote.service.QuotationMainService;
+import com.baidu.gcrm.user.model.User;
+import com.baidu.gcrm.user.service.IUserService;
+import com.baidu.gcrm.ws.cms.ICMSRequestFacade;
+
+@Controller
+@RequestMapping("/adbaseinfo")
+public class AdSolutionBaseInfoAction extends ControllerHelper{
+
+	@Autowired
+	private ICustomerService customerService;
+	
+	@Autowired
+	private IContractService contractServie;
+	
+	@Autowired
+	private IAdvertiseSolutionService adService;
+	
+	@Autowired
+    IAdSolutionContentService adContentService;
+	
+	@Autowired
+	private IAccountService accountService;
+	
+	@Autowired
+	private IUserService userService;
+	
+	@Autowired
+	ICMSRequestFacade cMSRequestFacade;
+	
+	@Autowired
+    IRandomStringService randomService;
+	
+	@Autowired
+	QuotationMainRepository quotationMainRepository;
+	
+	@Autowired
+	QuotationMainService quotationMainService;
+	    
+	@Autowired
+	private IGCrmDataRoleService gcrmDataRoleService;
+	
+	@RequestMapping("/customersSuggest")
+	@ResponseBody
+	public JsonBean<List<AutoSuggestBean<Long>>> customersSuggest(@RequestParam("query")String tag){
+		List<AutoSuggestBean<Long>> suggests = new ArrayList<AutoSuggestBean<Long>>();
+		if(StringUtils.isBlank(tag)){
+			return JsonBeanUtil.convertBeanToJsonBean(suggests);
+		}
+		
+		List<Customer> customers   = customerService.findByCompanyNameLikeAndBusinessTypeNotTop5(tag,CustomerType.nondirect.getValue());
+		for (Customer customer : customers) {
+			String companyName = customer.getCompanyName();
+			suggests.add(new AutoSuggestBean<Long>(companyName, customer.getCustomerNumber()));
+		}
+		
+		return JsonBeanUtil.convertBeanToJsonBean(suggests);
+	}
+	
+	@RequestMapping("/contractSuggest")
+	@ResponseBody
+	public JsonBean<List<AutoSuggestBean<Contract>>> contractSuggest(@RequestParam("query")String tag,@RequestParam("customerNumber") Long customerNumber){
+	
+		List<AutoSuggestBean<Contract>> suggests = new ArrayList<AutoSuggestBean<Contract>>();
+		
+		if(customerNumber == null){
+			return JsonBeanUtil.convertBeanToJsonBean(null, "advertise.solution.baseinfo.customer.number.null");
+		}
+		
+		if(StringUtils.isBlank(tag)){
+			tag = "";
+		}
+		Customer customer = customerService.findByCustomerNumber(customerNumber);
+		List<Contract> contracts = contractServie.findByNumberLikeAndCustomerIdTop5(tag,customer.getId());
+		for(Contract contract : contracts){
+			suggests.add(new AutoSuggestBean<Contract>(contract.getNumber(),contract));
+		}
+		
+		return JsonBeanUtil.convertBeanToJsonBean(suggests);
+	}
+	
+	@RequestMapping("/accountSuggest")
+	@ResponseBody
+	public JsonBean<List<AutoSuggestBean<Account>>> accountSuggest(@RequestParam("query")String tag){
+		List<AutoSuggestBean<Account>> suggests = new ArrayList<AutoSuggestBean<Account>>();
+		if(StringUtils.isBlank(tag)){
+			return JsonBeanUtil.convertBeanToJsonBean(suggests);
+		}
+			
+		List<User> users = userService.findByName(tag);
+        for (User user : users) {
+        	Account account = new Account();
+        	convertUserToAccount(user,account);
+        	suggests.add(new AutoSuggestBean<Account>(account.getName(),account));
+        }
+		
+		return JsonBeanUtil.convertBeanToJsonBean(suggests);
+	}
+	
+	private void convertUserToAccount(User user,Account account){
+		if(user == null || account == null){
+			return;
+		}
+		account.setUcid(user.getUcid());
+		account.setName(user.getRealname());
+	}
+	
+	@RequestMapping("/queryCustomer")
+	@ResponseBody
+	public JsonBean<CustomerI18nView> queryCustomer(@RequestParam("customerNumber") Long customerNumber, @RequestParam("companyName") String companyName){
+
+		Map<String, String> errors = new HashMap<String, String>();
+		CustomerView customerView = null;
+		Customer customer = null;
+		try{
+			if(customerNumber != null){
+				customer = customerService.findByCustomerNumber(customerNumber);
+				if(customer == null){
+					errors.put("ad.baseinfo.load.customer.error", "ad.baseinfo.load.customer.error");
+				}
+			}else if(companyName != null){
+				companyName = URLDecoder.decode(companyName,"UTF-8");
+				List<Customer> customers = customerService.findByCompanyName(companyName);
+				if(customers == null || customers.size() != 1){
+					customer = customers.get(0);
+				}else{
+					errors.put("ad.baseinfo.load.customer.error", "ad.baseinfo.load.customer.error");
+				}
+			}else{
+				errors.put("ad.baseinfo.customer.search.conditon.empty", "ad.baseinfo.customer.search.conditon.empty");
+			}
+		}catch(Exception e){
+			errors.put("ad.baseinfo.load.customer.error", "ad.baseinfo.load.customer.error");
+		}
+		
+		if(customer != null && customer.getCustomerType() == CustomerType.nondirect){
+			//customer = customerService.findByCustomerNumber();
+			customer = customerService.findById(customer.getAgentCompany());
+		}
+		
+		customerView = customerService.customerToView(customer, currentLocale);
+		CustomerI18nView i18nView = customerService.customerViewToI18nView(
+				customerView,currentLocale);
+		
+		return JsonBeanUtil.convertBeanToJsonBean(i18nView,errors);
+	}
+	
+	@RequestMapping("/queryContract")
+	@ResponseBody
+	public JsonBean<Contract> queryContract(@RequestParam("number") String number){
+
+		Map<String, String> errors = new HashMap<String, String>();
+		Contract contract = null;
+		
+		try{
+			contract = contractServie.findByNumber(number);	
+		}catch(Exception e){
+			errors.put("ad.baseinfo.load.contract.error", "ad.baseinfo.load.contract.error");
+		}
+		
+		return JsonBeanUtil.convertBeanToJsonBean(contract,errors);
+	}
+	
+	@RequestMapping("/preSave")
+	@ResponseBody
+	public JsonBean<AdSolutionBaseInfoView> preSave(@RequestParam(value = "id") Long id){
+		
+		AdvertiseSolution adSolution = new AdvertiseSolution();
+		if(id != null){
+			adSolution = adService.findById(id);
+		}
+		adSolution.setType(AdvertiseSolutionType.create);
+		adSolution.setApprovalStatus(AdvertiseSolutionApproveState.saving);
+		AdSolutionBaseInfoView baseInfo = adSolutionBaseInfoViewWapper(adSolution);
+		
+		return JsonBeanUtil.convertBeanToJsonBean(baseInfo);
+	}
+	
+	@RequestMapping("/save")
+	@ResponseBody
+	public JsonBean<AdSolutionBaseInfoView> save(@RequestBody AdSolutionBaseInfoView baseInfo){
+		Map<String,String> errors = new HashMap<String, String>();	
+		
+		try{
+			AdvertiseSolution adSolution = advertiseSolutionWapper(baseInfo);
+			if(StringUtils.isNotEmpty(adSolution.getContractNumber())){
+				Contract contract = contractServie.findByNumber(adSolution.getContractNumber());
+				if(contract == null){
+					errors.put("advertise.solution.baseinfo.contract.not.exist", "advertise.solution.baseinfo.contract.not.exist");
+					return JsonBeanUtil.convertBeanToJsonBean(baseInfo, errors);
+				}
+			}
+
+			Long customerNumber = adSolution.getCustomerNumber();
+			Customer dbCustoemr = customerService.findByCustomerNumber(customerNumber);
+				
+			if(dbCustoemr == null){
+				errors.put("advertise.solution.baseinfo.customer.not.exist", "advertise.solution.baseinfo.customer.not.exist");
+				return JsonBeanUtil.convertBeanToJsonBean(baseInfo, errors);
+			}
+			adService.save(adSolution);
+			if(CustomerType.direct.equals(dbCustoemr.getCustomerType())){
+				this.adContentService.updateContentCustomer(adSolution.getId(), dbCustoemr);
+			}
+		}catch(Exception ex){
+			errors.put("advertise.solution.baseinfo.save.faild", "advertise.solution.baseinfo.save.faild"+ex.getMessage());
+		}
+		
+		return JsonBeanUtil.convertBeanToJsonBean(baseInfo, errors);
+	}
+	
+	@RequestMapping("/delete/{adSolutionId}")
+	@ResponseBody
+	public JsonBean<AdSolutionBaseInfoView> delete(@PathVariable("adSolutionId")Long adSolutionId){
+		try {
+			AdvertiseSolution adSolution = adService.findById(adSolutionId);
+			boolean canDelete = adService.canDelete(adSolution);
+			if (!canDelete) {
+				return JsonBeanUtil.convertBeanToJsonBean(null);
+			}
+			adService.moveToHistory(adSolutionId);
+		} catch (Exception e) {
+			return JsonBeanUtil.convertBeanToJsonBean(null,"advertise.solution.baseinfo.delete.faild");
+			
+		}
+		return JsonBeanUtil.convertBeanToJsonBean(null);
+	}
+	
+	@RequestMapping("/submit")
+	@ResponseBody
+	public JsonBean<AdSolutionBaseInfoView> submit( @RequestBody AdSolutionBaseInfoView baseInfo, BindingResult bindingResult){
+
+		ValidationUtils.invokeValidator(new BaseInfoViewValidator(), baseInfo, bindingResult);
+		if(bindingResult.hasErrors()){
+			return JsonBeanUtil.convertBeanToJsonBean(baseInfo, super.collectErrors(bindingResult));
+		}
+		
+		return save(baseInfo);
+	}
+	
+	@RequestMapping("/submitToApproval/{id}")
+    @ResponseBody
+    public JsonBean<AdvertiseSolution> submitToApproval( @ModelAttribute AdvertiseSolution advertiseSolution,
+            BindingResult bindingResult){
+	    Map<String,String> errors = new HashMap<String, String>(); 
+	    if (advertiseSolution.getId() == null) {
+	        return JsonBeanUtil.convertBeanToJsonBean(null);
+	    }
+	    AdvertiseSolution existsAdvertiseSolution = adService.findById(advertiseSolution.getId());
+        Customer custoemr = customerService.findByCustomerNumber(existsAdvertiseSolution.getCustomerNumber());
+        if(custoemr == null || custoemr.getApprovalStatus() == null
+                || CustomerApproveState.approved.ordinal() != custoemr.getApprovalStatus().intValue()){
+            errors.put("advertise.solution.approval.customer.notapproved","advertise.solution.approval.customer.notapproved");
+        }
+        if(errors.size() > 0){
+            return JsonBeanUtil.convertBeanToJsonBean(existsAdvertiseSolution, errors);
+        }else {
+            ValidationUtils.invokeValidator(new AdSolutionApprovalValidator(), existsAdvertiseSolution, bindingResult);
+            if(bindingResult.hasErrors()){
+                return JsonBeanUtil.convertBeanToJsonBean(existsAdvertiseSolution,
+                        super.collectErrorList(bindingResult),
+                        JsonBeanUtil.CODE_ERROR_DISPLAY_DIRECTLY);
+            }
+        }
+        
+        generatePropertyForUpdate(existsAdvertiseSolution);
+        try {
+			adService.saveAndSubmitAdvertise(existsAdvertiseSolution, getUserName());
+		} catch(Exception e) {
+			LoggerHelper.err(this.getClass(), e.getMessage(),e);
+			return JsonBeanUtil.convertBeanToJsonBean(null, "advertise.solution.submit.error");
+		}
+        
+        return JsonBeanUtil.convertBeanToJsonBean(existsAdvertiseSolution);
+    }
+	
+	@RequestMapping("/view/{id}")
+	@ResponseBody
+	public JsonBean<AdSolutionBaseInfoView> view(@PathVariable("id") Long id){
+		AdvertiseSolution adSolution = adService.findById(id);
+		AdSolutionBaseInfoView baseInfo = adSolutionBaseInfoViewWapper(adSolution);
+				
+		return JsonBeanUtil.convertBeanToJsonBean(baseInfo);
+	}
+	
+	private AdvertiseSolution advertiseSolutionWapper(AdSolutionBaseInfoView baseInfo) throws CRMBaseException{
+		AdvertiseSolution adSolution = null;
+		if(baseInfo.getAdvertiseSolutionView() != null){
+			adSolution = baseInfo.getAdvertiseSolutionView().getAdvertiseSolution();
+		}
+		if(adSolution == null){
+			return null;
+		}
+		
+		AdvertiseSolution dbAdSolution = null;
+	
+		if(baseInfo.getHasContract() == null || baseInfo.getHasContract() == false){
+			adSolution.setContractNumber(null);
+		}
+		
+		if(adSolution.getId() != null){
+			dbAdSolution = adService.findById(adSolution.getId());
+		}
+		
+		if(dbAdSolution != null){
+			generatePropertyForUpdate(adSolution);
+			adSolution.setType(dbAdSolution.getType());
+			adSolution.setCreateOperator(dbAdSolution.getCreateOperator());
+			adSolution.setCreateTime(dbAdSolution.getCreateTime());
+			adSolution.setApprovalStatus(dbAdSolution.getApprovalStatus());
+			adSolution.setNumber(dbAdSolution.getNumber());
+		}else{
+			generatePropertyForCreate(adSolution);
+			adSolution.setType(AdvertiseSolutionType.create);
+			adSolution.setApprovalStatus(AdvertiseSolutionApproveState.saving);
+			
+			String number = randomService.random(8, RandomType.random_ad_solution, new IRandomCheckCallback(){
+	            @Override
+	            public boolean exists(String randomStr) {
+	                AdvertiseSolution dbNumberCheck = adService.findByNumber(randomStr);
+	                if (dbNumberCheck != null) {
+	                    return true;
+	                } else {
+	                    return false;
+	                }
+	            }
+	        });
+			
+			adSolution.setNumber(number);
+		}
+		
+		return adSolution;
+	}
+	
+	private AdSolutionBaseInfoView adSolutionBaseInfoViewWapper(AdvertiseSolution adSolution) {
+		AdSolutionBaseInfoView baseInfo = new AdSolutionBaseInfoView();
+		
+		baseInfo.setAdvertiseSolutionView(adService.advrtiseSolutionToView(adSolution, currentLocale));
+		if(adSolution != null){
+			
+			baseInfo.setOperatorId(adSolution.getOperator());
+			
+			Account operator = userService.getAccountByUcId(adSolution.getOperator());
+			if(operator != null){
+				baseInfo.setOperatorName(operator.getName());
+			}
+			
+			Contract contract = contractServie.findByNumber(adSolution.getContractNumber());
+			if(contract != null){
+				baseInfo.setHasContract(true);
+				baseInfo.setContract(contract);
+			}else{
+				baseInfo.setHasContract(false);
+			}
+			
+			Customer customer = customerService.findByCustomerNumber(adSolution.getCustomerNumber());
+			if(customer != null)
+			{
+				CustomerView customerView = null;
+				CustomerI18nView customerI18nView = null;
+				if(customer != null){
+					customerView = customerService.customerToView(customer, currentLocale);
+					customerI18nView = customerService.customerViewToI18nView(customerView, currentLocale);
+					baseInfo.setCustomerI18nView(customerI18nView);
+				}
+			}
+
+		}
+		
+		return baseInfo;
+	}
+	/**
+	* 功能描述：   广告方案列表查询
+	* 创建人：yudajun    
+	* 创建时间：2014-3-19 下午3:48:17   
+	* 修改人：yudajun
+	* 修改时间：2014-3-19 下午3:48:17   
+	* 修改备注：   
+	* 参数： @param adSolutionCondition
+	* 参数： @return
+	* @version
+	 */
+	@RequestMapping("/querySolution")
+	@ResponseBody
+	public JsonBean<Page<AdvertiseSolutionListView>> querySolution(@RequestBody AdvertiseSolutionCondition adSolutionCondition){
+        if(StringUtils.isNotBlank(adSolutionCondition.getCusid())){
+			Customer cus = customerService.findById(Long.valueOf(adSolutionCondition.getCusid()));
+			
+			if(CustomerType.nondirect.ordinal() == cus.getCustomerType().ordinal()){
+				adSolutionCondition.setCusid(null);
+				adSolutionCondition.setCustomerName(cus.getCompanyName());
+			}
+		}
+		
+        //加数据权限控制
+        List<Long> ucidList = gcrmDataRoleService.findFeasiblityUserIdList(getUserId());
+        adSolutionCondition.setOperatorIdList(ucidList);
+        
+		Page<AdvertiseSolutionListView> page = adService.findAdSolutionPage(adSolutionCondition);
+		return JsonBeanUtil.convertBeanToJsonBean(page);
+	}
+	
+	
+	/**
+	 * 功能描述：   查询当前方案列表选中方案的执行人
+	 * 创建人：luge
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping("/findOperator/{id}")
+	@ResponseBody
+	public JsonBean<String> findOperator(@PathVariable("id")Long id){	       
+		String accountName=adService.findOperator(id);
+		return JsonBeanUtil.convertBeanToJsonBean(accountName);
+		}
+	
+	
+	/**
+	 * 功能描述：   广告方案执行人转移
+	 * 创建人：luge
+	 * @param number
+	 * @return
+	 */
+	@RequestMapping("/updateOperator/{adsolutionid}/{ucid}/{operator}")
+	@ResponseBody
+	public JsonBean<String> updateOperator(@PathVariable("adsolutionid")Long adsolutionid,@PathVariable("ucid")Long ucid,@PathVariable("operator")String operator){
+
+		String accountName=adService.updateOperator(adsolutionid, ucid, operator);
+		if(accountName==null)
+		{
+			return JsonBeanUtil.convertBeanToJsonBean(null, "advertise.solution.baseinfo.opertaor.name.null");
+		}
+		 return JsonBeanUtil.convertBeanToJsonBean(accountName);
+	}
+	
+	
+	/**
+	 * 功能描述：   广告方案创建po/查询当前方案是否有所属合同
+	 * 创建人：luge
+	 * @param adsolutionid
+	 * @return
+	 */
+	@RequestMapping("/findContractPo/{adsolutionid}")
+	@ResponseBody
+	public JsonBean<String> findContractPo(@PathVariable("adsolutionid")Long adsolutionid){
+
+		String contractNumber=adService.findContractNumber(adsolutionid);
+		Map<String,String> errors = new HashMap<String, String>();
+		if(contractNumber!=null&&contractNumber.length()>0)
+		{
+			//调用cms接口传递合同编号
+			try
+			{
+				adService.createPo(contractNumber, adsolutionid, getUserId());				
+			}
+			catch (Exception e) {
+				 LoggerHelper.err(this.getClass(), e.getMessage(),e);
+				 errors.put("advertise.solution.po.error","advertise.solution.po.error");
+				 return  JsonBeanUtil.convertBeanToJsonBean(null,errors);
+				 
+			}
+			return  JsonBeanUtil.convertBeanToJsonBean("success");
+		}
+		else
+		{
+			return JsonBeanUtil.convertBeanToJsonBean(null);
+		}
+	}
+		/**
+		 * 功能描述：   广告方案创建po/合同有效期和投放时间段对比是否超出范围
+		 * 创建人：luge
+		 * @param adsolutionid contractNumber
+		 * @return
+		 */
+		@RequestMapping("/findContractNumberPo/{adsolutionid}/{contractNumber}")
+		@ResponseBody
+		public JsonBean<String> findContractNumberPo(
+				@PathVariable("adsolutionid")Long adsolutionid,
+				@PathVariable("contractNumber")String contractNumber){
+			
+			Map<String,String> errors = new HashMap<String, String>();
+			Contract  contract=contractServie.findByNumber(contractNumber);
+			boolean	result=adService.checkContractTime(contract.getBeginDate(), contract.getEndDate(),adsolutionid);	
+			if(result==false)
+			{  
+				errors.put("advertise.solution.baseinfo.contractDate.error", "advertise.solution.baseinfo.contractDate.error");
+				return JsonBeanUtil.convertBeanToJsonBean(null,errors);
+			}
+			else
+			{	try
+				{
+				adService.createPo(contractNumber, adsolutionid, getUserId());
+				}
+				catch (Exception e) {
+					LoggerHelper.err(this.getClass(), e.getMessage(),e);
+					errors.put("advertise.solution.po.error", "advertise.solution.po.error");
+					return  JsonBeanUtil.convertBeanToJsonBean(null,errors);
+				}
+				//回写合同编号
+				adService.updateAdSolutionContractNum(adsolutionid, contractNumber);
+				return  JsonBeanUtil.convertBeanToJsonBean("success");
+			}				
+	}
+		
+		/**
+		 * 功能描述：   创建单笔合同/将方案id传递CMS单笔合同接口/为商务人员创建待办
+		 * 创建人：luge
+		 * @param adsolutionid
+		 * @return
+		 */
+		
+		@RequestMapping("/createSingleContract/{adsolutionid}")
+		@ResponseBody
+		public JsonBean<String> createSingleContract(@PathVariable("adsolutionid")Long adsolutionid){              						
+			String contract=adService.getOldcontractNumber(adsolutionid);
+			try{
+				cMSRequestFacade.createContract(adsolutionid,contract);		
+			}
+			catch (Exception e) {LoggerHelper.err(this.getClass(), e.getMessage(),e);
+		   	return JsonBeanUtil.convertBeanToJsonBean(null,"advertise.solution.cms.singleContract.error");	   	
+			}
+			//更新方案中合同类型的枚举
+			adService.updateAdSolutionEnum(adsolutionid);
+			return JsonBeanUtil.convertBeanToJsonBean("success");		
+		}	
+		
+		/**
+		 * 功能描述：   创建协议/框架单笔合同/将方案id传递CMS单笔合同接口/为商务人员创建待办
+		 * 创建人：luge
+		 * @param adsolutionid
+		 * @return
+		 */
+		
+		@RequestMapping("/createOtherContract/{adsolutionid}/{contractNumber}/{contractType}")
+		@ResponseBody
+		public JsonBean<String> createOtherContract(
+				@PathVariable("adsolutionid")Long adsolutionid,
+				@PathVariable("contractNumber")String contractNumber,
+				@PathVariable("contractType")String contractType){
+			Map<String,String> errors = new HashMap<String, String>();
+			Contract  contract=contractServie.findByNumber(contractNumber);
+			boolean	result=adService.checkContractTime(contract.getBeginDate(), contract.getEndDate(),adsolutionid);	
+			if(!result)
+			{  	errors.put("advertise.solution.baseinfo.contractDate.error", "advertise.solution.baseinfo.contractDate.error");		
+				return JsonBeanUtil.convertBeanToJsonBean(null,errors);
+			} 
+			else
+			{
+			try{
+				cMSRequestFacade.createSingleContract(contractNumber,adsolutionid);				
+			}
+			catch (Exception e) {
+			LoggerHelper.err(this.getClass(), e.getMessage(),e);
+			return JsonBeanUtil.convertBeanToJsonBean(null,"advertise.solution.cms.OtherContract.error");		
+			}
+			}
+			//更新方案中合同类型的枚举
+			adService.updateAdSolutionContract(adsolutionid,contractType);
+			return JsonBeanUtil.convertBeanToJsonBean("success");		
+		}
+		/**
+		 * 功能描述：   撤销待办
+		 * 创建人：luge
+		 * @param adsolutionid
+		 * @return
+		 */		
+		@RequestMapping("/revokeContract/{adsolutionid}")
+		@ResponseBody
+		public JsonBean<String> revokeContract(@PathVariable("adsolutionid")Long adsolutionid){             
+			Map<String,String> errors = new HashMap<String, String>();
+			//调用Cms接口将是否能撤销回写至+status
+			if(cMSRequestFacade.cancelAdSolution(adsolutionid))
+			{
+				adService.updateAdSolutionContentContract(adsolutionid);
+			}
+			else 
+			{   errors.put("advertise.solution.contract.noback", "advertise.solution.contract.noback");	
+				return JsonBeanUtil.convertBeanToJsonBean(null,errors);				
+			}
+			return JsonBeanUtil.convertBeanToJsonBean("success");		
+		}
+		
+	@RequestMapping("/remind/{adSolutionId}")
+	@ResponseBody
+	public JsonBean<String> remind(@PathVariable("adSolutionId") Long adSolutionId) {
+		try {
+			adService.remind(adSolutionId);
+		} catch (Exception e) {
+			return JsonBeanUtil.convertBeanToJsonBean(null, e.getMessage());
+		}
+		return JsonBeanUtil.convertBeanToJsonBean("success");
+	}
+	/**
+	 * 功能描述：   修改广告方案
+	 * 创建人：luge
+	 * @param adsolutionid
+	 * @return
+	 */		
+	@RequestMapping("/modifyAdSoulutionStatus/{adsolutionid}")
+	@ResponseBody
+	public JsonBean<String> modifyAdSoulutionStatus(@PathVariable("adsolutionid")Long adsolutionid){             
+
+		try
+		{
+			adService.updateAdSolutionStatus(adsolutionid);
+		}
+		catch (Exception e) {
+			LoggerHelper.err(this.getClass(), e.getMessage(),e);
+			
+			return JsonBeanUtil.convertBeanToJsonBean(null, "AdSoulution.modify.Status.error");
+		}
+		return JsonBeanUtil.convertBeanToJsonBean("success");
+	
+	}
+	/**
+	 * 功能描述：单个广告内容变更Po
+	 * @param adcontentId
+	 * @param contractNumber
+	 * @return
+	 */
+	
+	@RequestMapping("/changePo/{adcontentId}/{contractNumber}")
+    @ResponseBody
+	public JsonBean<String> changePo(
+		@PathVariable("adcontentId")Long adcontentId,
+		@PathVariable("contractNumber")String contractNumber){
+		Map<String,String> errors = new HashMap<String, String>();
+		String po=adService.changePoNum(contractNumber, adcontentId, getUserId());
+		if(StringUtils.isBlank(po)){
+			errors.put("advertise.solution.po.error", "advertise.solution.po.error");
+			return  JsonBeanUtil.convertBeanToJsonBean(null,errors);
+		}else{
+			return JsonBeanUtil.convertBeanToJsonBean("success");	
+		}	    	
+	    }
+}

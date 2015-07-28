@@ -1,0 +1,53 @@
+{
+  "code": 200,
+  "data": {
+    "operationImage": [
+      {
+        "contract": "0",
+        "period": "2014-04-21~2014-04-27",
+        "solution": "3"
+      },
+      {
+        "contract": "0",
+        "period": "2014-04-28~2014-05-04",
+        "solution": "1"
+      },
+      {
+        "contract": "0",
+        "period": "2014-05-05~2014-05-11",
+        "solution": "34"
+      },
+      {
+        "contract": "0",
+        "period": "2014-05-12~2014-05-18",
+        "solution": "16"
+      },
+      {
+        "contract": "0",
+        "period": "2014-05-19~2014-05-25",
+        "solution": "0"
+      }
+    ],
+    "operationList": [
+      {
+        "lastWeek": "16",
+        "ratio": "-100",
+        "thisWeek": "0",
+        "type": "solution"
+      },
+      {
+        "lastWeek": "0",
+        "ratio": "0",
+        "thisWeek": "0",
+        "type": "contract"
+      },
+      {
+        "lastWeek": "16",
+        "ratio": "-100",
+        "thisWeek": "0",
+        "type": "total"
+      }
+    ]
+  },
+  "message": "OK"
+}

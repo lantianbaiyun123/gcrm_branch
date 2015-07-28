@@ -1,0 +1,27 @@
+{
+    "code": 200,
+    "data": [
+        {
+            "i18nName": "38#位置",
+            "id": 46,
+            "materialType": 0,
+            "pv":1100,
+            "click":300
+        },
+        {
+            "i18nName": "3#位置",
+            "id": 50,
+            "materialType": 1,
+            "pv":11,
+            "click":300
+        },
+        {
+            "i18nName": "3#位置",
+            "id": 50,
+            "materialType": 2,
+            "pv":11,
+            "click":300
+        }
+    ],
+    "message": "OK"
+}

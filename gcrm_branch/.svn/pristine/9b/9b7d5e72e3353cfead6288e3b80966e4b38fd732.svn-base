@@ -1,0 +1,1 @@
+define(["app"],function(n){n.registerFilter("ContractFilter",function(){var n={VALID:"CONTRACT_STATUS_VALID",INVALID:"CONTRACT_STATUS_INVALID"};return function(r){return r&&n[r]?n[r]:"--"}})});

@@ -1,0 +1,12 @@
+<style>
+.body{font-size:14px;}
+.important{font-weight:bold;}
+</style>
+<div class="body">
+  </br>
+  <p> 您的客户($customerName)的广告内容($contentNumber)已批准提前上线。</p>
+  <p> 广告内容关联的合同是$contractNumber，请跟进审核，尽快生效备案。</p>
+  <p> 点击查看广告内容详情(<a href="$adSolutionURL">$adSolutionURL</a>)</p>
+  <br/>
+  <p> 系统邮件，请勿回复！</p>
+</div>

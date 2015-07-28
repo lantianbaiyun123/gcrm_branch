@@ -1,0 +1,87 @@
+package com.baidu.gcrm.ad.content.dao;
+
+
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+
+import com.baidu.gcrm.ad.content.model.AdSolutionContent;
+import com.baidu.gcrm.ad.content.model.AdSolutionContent.ApprovalStatus;
+import com.baidu.gcrm.ad.content.model.AdSolutionContent.ContentType;
+import com.baidu.gcrm.ad.model.Contract;
+import com.baidu.gcrm.schedule1.model.Schedules.ScheduleStatus;
+
+public interface IAdSolutionContentRepository extends JpaRepository<AdSolutionContent, Long> {
+    
+	@Query("from AdSolutionContent where adSolutionId =?1 and approvalStatus<>'cancel'")
+	List<AdSolutionContent> findByAdSolutionId(Long adSolutionId);
+	
+	@Query("from AdSolutionContent where adSolutionId =?1")
+	List<AdSolutionContent> findAllByAdSolutionId(Long adSolutionId);
+    
+    @Query("from AdSolutionContent where id in (?1) order by createTime")
+    List<AdSolutionContent> findByIdIn(Collection<Long> adContentIds);
+    
+    List<AdSolutionContent> findByNumberIn(Collection<String> numbers);
+    
+    @Query("select ac.id, a.operator from AdSolutionContent ac, AdvertiseSolution a where ac.adSolutionId = a.id and ac.id in (?1)")
+    List<Object[]> findOperatorByIdIn(Collection<Long> adContentIds);
+    
+
+    List<AdSolutionContent> findByAdSolutionIdAndApprovalStatus(Long adSolutionId,ApprovalStatus status);
+    
+    @Query("select number from AdSolutionContent where adSolutionId=?1")
+    List<String> findNumberByAdSolutionId(Long adSolutionId);
+    
+    @Modifying
+    @Query("update AdSolutionContent set approvalStatus = ?1 where adSolutionId = ?2 and approvalStatus!='cancel'")
+    int updateStatusByAdSolutionId(ApprovalStatus status, Long adSolutionId);
+    
+    @Query("select count(*) from AdSolutionContent a where a.id != ?1 and a.adSolutionId= ?2 and a.approvalStatus!='cancel'")
+	Long countByContentId(Long id,Long adSolutionId);
+    
+    @Query("select c from AdSolutionContent ac,AdvertiseSolution a, Contract c  where ac.adSolutionId=a.id "
+    		+ "and a.contractNumber=c.number and  ac.id=?1")
+    Contract findContractByContentId(Long adContentId);
+    
+    @Query("select c from AdSolutionContent ac,AdvertiseSolution a, Contract c  where ac.adSolutionId=a.id "
+    		+ "and a.contractNumber=c.number and ac.id=?1 and a.contractType is not null and a.contractType <> ''")
+    Contract findWriteBackContractByContentId(Long adContentId);
+    
+    @Query("select count(id) from AdSolutionContent where productId=?1 and approvalStatus in (?2,?3,?4)")
+    Long findSubmitAmountByAdPlatformId(Long adPlatformId, ApprovalStatus approvingStatus, ApprovalStatus approvedStatus,ApprovalStatus effectiveStatus);
+    
+    @Query("select count(c.id) from AdSolutionContent c,Schedules s where c.productId=?1"
+            + " and c.approvalStatus in (?2,?3) and c.id=s.adContentId and s.status<>?4")
+    Long findScheduleAmountByAdPlatformId(Long adPlatformId, ApprovalStatus unconfirmedStatus,
+            ApprovalStatus confirmedStatus, ScheduleStatus releasedStatus);
+    
+    @Modifying
+    @Query("update AdSolutionContent set approvalStatus = ?1 where id = ?2 ")
+    int updateStatusById(ApprovalStatus status, Long id);
+    
+    List<AdSolutionContent> findByPositionIdIn(Collection<Long> positionIds);
+    
+    @Modifying
+    @Query("update AdSolutionContent set approvalDate = ?1 where adSolutionId = ?2 ")
+    int updateApprovalDateByAdSolutionId(Date approvalDate, Long adSolutionId);
+    
+    @Modifying
+    @Query("delete from AdSolutionContent where adSolutionId=?1 ")
+    int deleteByAdSolutionId(Long adSolutionId);
+    
+    @Query("select count(id) from AdSolutionContent where adSolutionId=?1 and approvalStatus not in(?2,?3)")
+    Long findValidAdContent(Long adSolutionId, ApprovalStatus savingStatus, ApprovalStatus refusedStatus);
+    
+    List<AdSolutionContent> findByOldContentIdAndContentType(Long oldContentId, ContentType type);
+    
+    @Query(value="select * from g_advertise_solution_content gasc where not exists (select * from g_advertise_material_apply gama where gasc.id=gama.advertise_solution_content_id) and exists( select * from g_advertise_material gam where gasc.id=gam.advertise_solution_content_id or (gasc.material_file_type=2 and gasc.material_embed_code_content is not null))",nativeQuery = true)
+    List<AdSolutionContent> findAllWithoutMaterialApply();
+    
+    List<AdSolutionContent> findByApprovalStatusIn(Collection<ApprovalStatus> statuses);
+    
+}

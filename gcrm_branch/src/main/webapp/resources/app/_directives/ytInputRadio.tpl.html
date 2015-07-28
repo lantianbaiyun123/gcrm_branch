@@ -1,0 +1,8 @@
+<div>
+<label class="radio radio-inline" ng-repeat="choice in choices" ng-if="!isI18nList" ng-click="change(choice, $event)">
+  <input type="radio" ng-model="selected" ng-value="choice" name="{{typeName}}" ng-disabled="radioDisabled" />{{ typeName + choice | translate}}
+</label>
+<label class="radio radio-inline" ng-repeat="choice in choices" ng-if="isI18nList" ng-click="change(choice, $event)">
+  <input type="radio" ng-model="selected" value="{{choice.id}}" name="{{typeName}}" ng-disabled="radioDisabled || choice.disabled" />{{ choice.i18nName}}
+</label>
+</div>

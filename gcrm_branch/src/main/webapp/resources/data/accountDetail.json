@@ -1,0 +1,13 @@
+{
+  "code": 200,
+  "data": {
+    "accountId": 121,
+    "customerName": "测试代理商1",
+    "customerNumber": 590446490,
+    "email": "zhanglei35@baidu.com",
+    "status": 2,
+    "username": "zhanglei35",
+    "verifyCode": 1234567
+  },
+  "message": "OK"
+}

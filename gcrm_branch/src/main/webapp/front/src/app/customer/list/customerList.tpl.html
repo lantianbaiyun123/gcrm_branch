@@ -1,0 +1,170 @@
+<div class="container customer-list">
+    <div class="panel panel-default gcrm-panel">
+        <div class="panel-top-heading">
+          <h1>
+            <span>{{'PAGE_CUSTOMER_LIST' | translate}}</span>
+            <span class="pull-right">
+                <a href="#/customer/add"  class="btn btn-success" ng-if="BtnIndex.btn_cust_list_create">{{'CUSTOMER_ADD' | translate}}</a>
+            </span>
+          </h1>
+        </div>
+        <div class="panel-heading">
+            <div class="panel-form gcrm-query-panel">
+                <div class="row">
+                  <div class="col-md-4 dropinput-grp">
+                    <div class="col-md-6 input-container btn-group">
+                      <div yt-input-dropdown="queryTypes" dropdown-selected="qForm.queryType" dropdown-type="i18n" please-text="false" />
+                    </div>
+                    <div class="col-md-6 div-input">
+                      <input ng-show="qForm.queryType.value!='SALES' && qForm.queryType.value!='AGENT'" type="text" class="form-control input-sm input-code-type" ng-model="qForm.queryString">
+                      <input ng-show="qForm.queryType.value=='SALES'" type="hidden" ui-select2="belongSalesSuggestOption" ng-model="qForm.belongSales" style="width:150px;border-bottom-left-radius: 0; border-top-left-radius: 0;" />
+                      <input ng-show="qForm.queryType.value=='AGENT'" type="hidden" ui-select2="agentCompanySuggestOption" ng-model="qForm.belongAgent" style="width:150px;border-bottom-left-radius: 0; border-top-left-radius: 0;" />
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <label class="col-md-5">{{'APPROVAL_STATUS' | translate}}：</label>
+                      <div class="col-md-7">
+                        <div yt-input-dropdown="approvalStatuses" dropdown-selected="qForm.approvalStatus" dropdown-type="approval_status" please-text="{{'SELECT_ALL' | translate}}" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-3 col-customer">
+                    <div class="form-group">
+                      <label class="col-md-4">{{'CUSTOMER_BELONGING_COUNTRY' | translate}}：</label>
+                      <div class="col-md-8">
+                        <div class="input-container btn-group">
+                            <input class="min-width-150 input-select2-suggest" type="hidden" ng-model="qForm.country" ui-select2="country" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-2" ng-if="BtnIndex.btn_cust_list_query">
+                    <div class="ml15">
+                      <button class="btn btn-primary btn-sm" ng-click="btnQuery()">{{'BTN_QUERY' | translate}}</button>
+                      <button class="btn btn-link btn-sm" ng-if="!queryMoreShow" ng-click="toggleQueryMore()">{{'BTN_MORE' | translate}}</button>
+                      <button class="btn btn-link btn-sm" ng-if="queryMoreShow" ng-click="toggleQueryMore()">{{'BTN_SIMPLIFY' | translate}}</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row sub-row" collapse="!queryMoreShow">
+                  <div class="col-md-4">
+                    <div class="form-group customer-type">
+                      <label class="col-md-6">{{'CUSTOMER_TYPE' | translate}}：</label>
+                      <div class="col-md-6 pl0 pr6">
+                        <div yt-input-dropdown="customerTypes" dropdown-selected="qForm.customerType" dropdown-type="customer" please-text="{{'SELECT_ALL' | translate}}" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <label class="col-md-5">{{'AGENT_AREA' | translate}}：</label>
+                      <div class="col-md-7">
+                        <div yt-input-dropdown="agentRegions" dropdown-selected="qForm.agentRegion" dropdown-type="i18n" please-text="{{'SELECT_ALL' | translate}}" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+
+        <div ng-if="customerList" class="panel-body gcrm-list">
+            <table class="table table-list table-hover">
+                <thead>
+                    <tr>
+                      <th>{{'CUSTOMER_NUM' | translate}}</th>
+                      <th>{{'COMPANY_NAME' | translate}}</th>
+                      <th>{{'CUSTOMER_TYPE' | translate}}</th>
+                      <th>{{'CUSTOMER_BELONGING_COUNTRY' | translate}}</th>
+                      <th>{{'AGENT_AREA' | translate}}</th>
+                      <th>{{'CUSTOMER_BELONGING_ANGENT' | translate}}</th>
+                      <th>{{'CUSTOMER_BELONGING_SALES' | translate}}</th>
+                      <th>{{'CUSTOMER_APPROVAL_STATUS' | translate}}</th>
+                      <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="customer in customerList" ng-class="{'text-disabled': customer.status==2}">
+                    <td>
+                      <span ng-if="customer.customerNumber">{{customer.customerNumber}}</span>
+                      <span ng-if="!customer.customerNumber">--</span>
+                    </td>
+                    <td class="td-max" title="{{customer.companyName}}">{{customer.companyName}}</td>
+                    <td class="td-max" title="{{'CUSTOMER_' + customer.customerTypeName | translate }}">
+                      <span ng-if="customer.customerTypeName">{{'CUSTOMER_' + customer.customerTypeName | translate }}</span>
+                      <span ng-if="!customer.customerTypeName">--</span>
+                    </td>
+                    <td class="td-max mw70" title="{{customer.countryName}}">{{customer.countryName}}<span ng-if="!customer.countryName">--</span></td>
+                    <td class="td-max mw70" title="{{customer.agentRegionalName}}">
+                      {{customer.agentRegionalName}}
+                      <span ng-if="!customer.agentRegionalName">--</span>
+                    </td>
+                    <td class="td-max mw70" title="{{customer.agentCompanyName}}">
+                      <span ng-if="customer.agentCompanyName">{{customer.agentCompanyName}}</span>
+                      <span ng-if="!customer.agentCompanyName">--</span>
+                    </td>
+                    <td class="td-max mw70" title="{{customer.belongSalesName}}">
+                      {{customer.belongSalesName}}
+                      <span ng-if="!customer.belongSalesName">--</span>
+                    </td>
+                    <td>{{'APPROVAL_STATUS_' + customer.approvalStatusName | translate}}</td>
+                    <td>
+                      <div class="btn-group">
+                        <button type="button" class="btn btn-default btn-xs" ng-click="checkDetail(customer)" ng-if="BtnIndex.btn_cust_list_view">{{'VIEW_DETAIL' | translate}}</button>
+                        <button type="button" class="btn btn-default btn-xs" ng-if="BtnIndex.btn_cust_list_withdraw && customer.buttonRole.withdraw" yt-popover-confirm="withdraw(customer.id)" yt-popover-title="{{'CONFIRM_WITHDRAW' | translate}}" yt-popover-ok-class="btn-warning" yt-popover-ok-text="{{'WITHDRAW' | translate}}" append-to-body="true">{{'WITHDRAW' | translate}}</button>
+                        <button type="button" class="btn btn-default btn-xs" ng-if="BtnIndex.btn_cust_list_cancel && customer.buttonRole.discard" yt-popover-confirm="nullify(customer.id)" yt-popover-title="{{'CONFIRM_NULLITY' | translate}}" yt-popover-ok-class="btn-danger" yt-popover-ok-text="{{'NULLITY' | translate}}" append-to-body="true">{{'NULLITY' | translate}}</button>
+                        <button type="button" class="btn btn-default btn-xs" ng-if="BtnIndex.btn_cust_list_recover && customer.buttonRole.recovery" yt-popover-confirm="recover(customer.id)" yt-popover-title="{{'CONFIRM_RECOVER' | translate}}" yt-popover-ok-text="{{'RECOVER' | translate}}" append-to-body="true">{{'RECOVER' | translate}}</button>
+                        <button ng-if="BtnIndex.btn_cust_list_account_add || BtnIndex.btn_cust_list_remind || BtnIndex.btn_cust_list_sale_transfer" type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                          <span class="caret"></span>
+                          <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu" ng-if="BtnIndex.btn_cust_list_account_add || BtnIndex.btn_cust_list_remind || BtnIndex.btn_cust_list_sale_transfer">
+                          <li ng-class="{'disabled': !customer.buttonRole.addAccount}" ng-if="BtnIndex.btn_cust_list_account_add">
+                            <button class="btn btn-link" ng-disabled="!customer.buttonRole.addAccount" ng-click="addAccount(customer)">{{'ACCOUNT_ADD' | translate}}</button>
+                          </li>
+                          <li ng-class="{'disabled': !customer.buttonRole.reminders}" ng-if="BtnIndex.btn_cust_list_remind">
+                            <button class="btn btn-link" ng-disabled="!customer.buttonRole.reminders"  ng-click="sendReminder(customer.id)">{{'REMIND' | translate}}</button>
+                          </li>
+                          <li ng-class="{'disabled': !customer.buttonRole.changeSaler}" ng-if="BtnIndex.btn_cust_list_sale_transfer">
+                            <button class="btn btn-link" ng-disabled="!customer.buttonRole.changeSaler" ng-click="salseTransfer(customer)">{{'CUSTOMER_SALES_TRANSFER' | translate}}</button>
+                          </li>
+                        </ul>
+                      </div>
+                  </tr>
+                </tbody>
+            </table>
+
+            <div class="row page-row">
+                <div class="pull-left">
+                  <div class="btn-group dropup">
+                    <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
+                        {{pager.pageSize || 10}}&nbsp;&nbsp;<span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                      <li ng-repeat="item in pager.pageSizeSlots">
+                        <a  ng-click="setPageSize(item)">{{item}}</a>
+                      </li>
+                    </ul>
+                  </div>
+                  <span class="page-row-text" ng-if="true">
+                    {{ 'PAGINATION_TOTAL' | translate }}
+                    {{ pager.totalPages+" " || 0 }}
+                    {{ 'PAGINATION_PAGES' | translate }},
+                    {{ pager.totalCount+" " || 0 }}
+                    {{ 'PAGINATION_ROWS' | translate }}
+                  </span>
+                </div>
+
+                <div class="pull-right">
+                    <pagination direction-links="true" total-items="pager.totalCount" page="pager.pageNumber" class="pagination-sm" items-per-page="pager.pageSize" previous-text="&laquo;" next-text="&raquo;" rotate="false" max-size="10"></pagination>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel-body" ng-if="!customerList.length">
+          <div class="alert alert-info mb0">{{'CUSTOMER_NO_ITEM' | translate}}</div>
+        </div>
+
+    </div>
+</div>

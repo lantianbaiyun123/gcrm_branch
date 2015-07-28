@@ -1,0 +1,9 @@
+<style>
+.body{font-size:14px;}
+.important{font-weight:bold;}
+.red{color:red;}
+</style>
+<div class="body">
+	${sendTo}: </ br> 
+	The schedule time of the advertisement you submitted on ${adSubmitTime} (AD code: ${adContentNumber}), has been <span class="red">released</span> at <span class="important">${scheduleUpdateTime}</span>
+</div>

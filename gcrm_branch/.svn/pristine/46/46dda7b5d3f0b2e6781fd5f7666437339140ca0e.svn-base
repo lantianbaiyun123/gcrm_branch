@@ -1,0 +1,49 @@
+package com.baidu.gcrm.occupation.web.vo;
+
+import java.util.Date;
+import java.util.List;
+
+import com.baidu.gcrm.occupation.helper.DatePeriod;
+
+public class InsertDateOfPeriod {
+	private int totalDays;
+	
+	private List<DatePeriod> datePeriod;
+	
+	private List<DateCheck> insertDate;
+	
+	private Date maxDate;
+
+	public int getTotalDays() {
+		return totalDays;
+	}
+
+	public void setTotalDays(int totalDays) {
+		this.totalDays = totalDays;
+	}
+
+	public List<DatePeriod> getDatePeriod() {
+		return datePeriod;
+	}
+
+	public void setDatePeriod(List<DatePeriod> datePeriod) {
+		this.datePeriod = datePeriod;
+	}
+
+	public List<DateCheck> getInsertDate() {
+		return insertDate;
+	}
+
+	public void setInsertDate(List<DateCheck> insertDate) {
+		this.insertDate = insertDate;
+	}
+
+	public Date getMaxDate() {
+		return maxDate;
+	}
+
+	public void setMaxDate(Date maxDate) {
+		this.maxDate = maxDate;
+	}
+
+}

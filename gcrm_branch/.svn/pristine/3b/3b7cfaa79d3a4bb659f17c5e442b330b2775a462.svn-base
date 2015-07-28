@@ -1,0 +1,16 @@
+column.position.channel.cnname=0
+column.position.channel.enname=1
+column.position.area.cnname=2
+column.position.area.enname=3
+column.position.cnname=4
+column.position.enname=5
+column.position.rotationtype=6
+column.position.rotationorder=7
+column.position.rotation.materialtype=8
+column.position.image.area=9
+column.position.image.size=10
+column.position.textlink.length=11
+column.position.salesamount=12
+column.position.pv=13
+column.position.click=14
+column.position.cpt.benchmarkprice=15

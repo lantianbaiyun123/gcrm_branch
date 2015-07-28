@@ -1,0 +1,91 @@
+{
+    "code": 200,
+    "data": {
+        "content": [
+            {
+                "platformName": "中文广告销售",
+                "quotationMain": {
+                    "advertisingPlatformId": 3,
+                    "approveStatus": "APPROVING",
+                    "businessType": "CASH",
+                    "createOperator": 23456789,
+                    "createTime": 1397110857000,
+                    "descreption": "wo le ge qu qu qu!!!",
+                    "endTime": 1397110857000,
+                    "id": 6,
+                    "priceType": "UNIT_PRICE",
+                    "quoteCode": "PP-20140410-720",
+                    "siteId": 2,
+                    "status": "VALID",
+                    "startTime": 1397118799000
+                },
+                "siteName": "zh_CN"
+            },
+            {
+                "platformName": "中文广告销售",
+                "quotationMain": {
+                    "advertisingPlatformId": 3,
+                    "approveStatus": "APPROVED",
+                    "businessType": "SALE",
+                    "createOperator": 23456789,
+                    "createTime": 1397110857000,
+                    "descreption": "wo le ge qu qu qu!!!",
+                    "endTime": 1397110857000,
+                    "id": 7,
+                    "priceType": "UNIT_PRICE",
+                    "quoteCode": "PP-20140410-372",
+                    "siteId": 3,
+                    "status": "INVALID",
+                    "startTime": 1397118802000
+                },
+                "siteName": "测试站点1"
+            }
+        ],
+        "offset": 0,
+        "pageNo": 1,
+        "pageNumber": 1,
+        "pageSize": 20,
+        "result": [{
+                "platformName": "中文广告销售",
+                "quotationMain": {
+                    "advertisingPlatformId": 3,
+                    "approveStatus": "APPROVING",
+                    "businessType": "CASH",
+                    "createOperator": 23456789,
+                    "createTime": 1397110857000,
+                    "descreption": "wo le ge qu qu qu!!!",
+                    "endTime": 1397110857000,
+                    "id": 6,
+                    "priceType": "UNIT_PRICE",
+                    "quoteCode": "PP-20140410-720",
+                    "siteId": 2,
+                    "status": "VALID",
+                    "startTime": 1397118799000
+                },
+                "siteName": "zh_CN"
+            },
+            {
+                "platformName": "中文广告销售",
+                "quotationMain": {
+                    "advertisingPlatformId": 3,
+                    "approveStatus": "APPROVED",
+                    "businessType": "SALE",
+                    "createOperator": 23456789,
+                    "createTime": 1397110857000,
+                    "descreption": "wo le ge qu qu qu!!!",
+                    "endTime": 1397110857000,
+                    "id": 7,
+                    "priceType": "UNIT_PRICE",
+                    "quoteCode": "PP-20140410-372",
+                    "siteId": 3,
+                    "status": "INVALID",
+                    "startTime": 1397118802000
+                },
+                "siteName": "测试站点1"
+            }],
+        "total": 0,
+        "totalCount": 0,
+        "totalPages": 0
+    },
+    "message": "OK"
+}

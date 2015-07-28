@@ -1,0 +1,54 @@
+{
+    "code": 200,
+    "data": [
+	    {
+	    	"processId": "1701437_gcrm_pkg_506_prs1",
+	    	"processName": "竞价方案",
+	    	"startUser": "liuxiao",
+	    	"startTime": "1393415820000",
+	    	"activityId": "4524192_act5",
+	    	"activityName": "区域管理经理审批",
+	    	"actDefId": "act5",
+	    	"activityArrivedTime": "1389618360000",
+	    	"adSolutionId": "1",
+	    	"type":"approval"
+	    },
+	    {
+	    	"processId": "1701442_gcrm_pkg_506_prs1",
+	    	"processName": "广告方案",
+	    	"startUser": "wujun",
+	    	"startTime": "1389619380000",
+	    	"activityId": "4396789_act2",
+	    	"activityName": "变现主管审核报价",
+	    	"actDefId": "act3",
+	    	"activityArrivedTime": "1389619380000",
+	    	"adSolutionId": "4",
+	    	"type":"approval"
+	    },
+	    {
+	    	"processId": "1701416_gcrm_pkg_506_prs1",
+	    	"processName": "广告方案",
+	    	"startUser": "liyazhou",
+	    	"startTime": "1389612300000",
+	    	"activityId": "4396615_act3",
+	    	"activityName": "变现主管审核报价",
+	    	"actDefId": "act3",
+	    	"activityArrivedTime": "1389612300000",
+	    	"adSolutionId": "3",
+	    	"type":"operation"
+	    },
+	    {
+	    	"processId": "1701416_gcrm_pkg_506_prs1",
+	    	"processName": "竞价方案",
+	    	"startUser": "wujun",
+	    	"startTime": "1389612300000",
+	    	"activityId": "4396615_act7",
+	    	"activityName": "法务审批",
+	    	"actDefId": "act7",
+	    	"activityArrivedTime": "1389612300000",
+	    	"adSolutionId": "3",
+	    	"type":"operation"
+	    }
+    ],
+    "message": "OK"
+}

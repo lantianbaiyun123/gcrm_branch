@@ -1,0 +1,1292 @@
+<div class="container ad-solution-detail">
+  <div alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</div>
+  <div class="panel gcrm-panel">
+    <div class="panel-top-heading">
+      <h1>
+        <span>{{'PAGE_AD_SOLUTION' | translate}}</span>
+
+        <span class="pull-right">
+          <!-- <a class="btn btn-default" ng-if="v.adSolution.approvalStatus == 'approving' && v.adSolution.type == 'create'" ng-click="btnCancelAd()">{{'RETRACT' | translate}}</a> -->
+          <a class="btn btn-default" ng-if="BtnIndex.btn_adsol_detail_contract_withdraw && v.canWithdraw" ng-click="btnCancelAd()">{{'RETRACT' | translate}}</a>
+          <div class="dropdown btn-group" ng-if="BtnIndex.btn_adsol_detail_submit_to_busi && !v.contract && v.adSolution.approvalStatus == 'confirmed' && !v.adSolution.contractType && (!v.adSolution.contractStatus || v.adSolution.contractStatus == 'Revoked') && !v.oldSolutionNumber ">
+            <button class="dropdown-toggle btn btn-default">
+              <span>{{'AD_SOLUTION_DETAIL_SUBMIT_TO_BUSINESS' | translate}}</span><span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+              <li ng-repeat="choice in contractTypes">
+                <a ng-click="btnContractType(choice.type)">{{choice.name}}</a>
+              </li>
+            </ul>
+          </div>
+          <a class="btn btn-default" ng-click="btnCreatePO()" ng-if="BtnIndex.btn_adsol_detail_po_create && ( !v.contract || v.contract.state == 'VALID' ) && v.canCreatePO && v.adSolution.approvalStatus == 'confirmed' && !v.approvalContentViews[0].adSolutionContent.poNum && !v.adSolution.contractType && ( ( !v.adSolution.contractStatus ) || (  !v.contract && v.adSolution.contractStatus == 'Revoked') ) && !v.oldSolutionNumber">{{'AD_SOLUTION_DETAIL_CREATE_PO' | translate}}</a>
+          <a class="btn btn-default" ng-click="btnContractType(v.oldSolutionContractType, 'bussinessChange')" ng-if="BtnIndex.btn_adsol_detail_submit_to_busi && v.adSolution.approvalStatus == 'confirmed' && v.oldSolutionNumber && !v.contract.number && !v.adSolution.contractType">{{'AD_SOLUTION_DETAIL_BUSINESS_CHANGE' | translate}}</a>
+          <a class="btn btn-default" ng-click="btnCancelSingle()" ng-if="BtnIndex.btn_adsol_detail_submit_to_busi && ( !v.contract || v.contract.state == 'VALID' ) && v.adSolution.approvalStatus == 'confirmed' && v.adSolution.contractType && v.adSolution.contractStatus == 'display' && !v.approvalContentViews[0].adSolutionContent.poNum">{{'AD_SOLUTION_DETAIL_CANCEL_SINGLE_CONTRACT' | translate}}</a>
+          <a class="btn btn-default" ng-click="btnAdSolutionChange()" ng-if="BtnIndex.btn_adsol_detail_adsol_change && v.contract.state == 'VALID' && v.adSolution.approvalStatus == 'confirmed' && v.contract.number && v.adSolution.contractType && v.canUpdate">{{'AD_SOLUTION_LIST_CHANGE' | translate}}</a>
+          <a class="btn btn-default" ng-click="btnAdModify()" ng-if="BtnIndex.btn_adsol_detail_adsol_mod && ( !v.contract || v.contract.state == 'VALID' ) && v.adSolution.approvalStatus == 'confirmed' && v.adSolution.contractStatus == 'Revoked'">{{'AD_SOLUTION_DETAIL_MODIFY_AD' | translate}}</a>
+          <!-- <a class="btn btn-primary" ng-click="btnSubmitAdSolution()" ng-if="v.adSolution.approvalStatus == 'refused' && !isEditing">
+              {{'AD_BASIC_SUBMIT' | translate}}
+          </a> -->
+        </span>
+      </h1>
+    </div>
+    <div class="gcrm-slots row well">
+      <span class="col-md-3">{{'AD_NUMBER' | translate}}：{{v.adSolution.number}}</span>
+      <span ng-class="{'col-md-3': !v.oldSolutionNumber, 'col-md-2': v.oldSolutionNumber}">{{'AD_TYPE' | translate}}：{{v.adSolution.type | AdSolutionTypeFilter | translate}}</span>
+      <span ng-class="{'col-md-3': !v.oldSolutionNumber, 'col-md-2': v.oldSolutionNumber}">{{'EXECUTOR' | translate}}：{{v.account.name}}</span>
+      <span ng-class="{'col-md-3': !v.oldSolutionNumber, 'col-md-2': v.oldSolutionNumber}">{{'AD_STATUS' | translate}}：{{v.adSolution.approvalStatus | AdSolutionStatusFilter | translate}}</span>
+      <span class="col-md-3" ng-if="v.oldSolutionNumber">{{'AD_BASIC_OLD_SOLUTION_NUMBER' | translate}}：{{v.oldSolutionNumber}}</span>
+
+    </div>
+    <div class="panel-body pt0" id="anchorBasicInfo">
+      <form class="form-horizontal">
+        <div>
+          <h5>{{'AD_BASIC_CUSTOMER_INFO' | translate}}</h5>
+          <div class="form-group">
+            <label class="control-label col-md-2">{{'AD_BASIC_COMPANY_NAME' | translate}}：</label>
+            <div class="col-md-3">
+              <p class="form-control-static">{{v.customerI18nView.customer.companyName}}</p>
+            </div>
+            <label class="control-label col-md-2">{{'AD_BASIC_BELONGS_SALES' | translate}}：</label>
+            <p class="form-control-static col-md-4">{{v.customerI18nView.belongsSales}}</p>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-md-2">{{'AD_BASIC_CUSTOMER_TYPE' | translate}}：</label>
+            <p class="form-control-static col-md-3">{{v.customerI18nView.customerType}}</p>
+            <label class="control-label col-md-2">{{'AD_BASIC_COUNTRY' | translate}}：</label>
+            <p class="form-control-static col-md-4">{{v.customerI18nView.country.i18nName}}</p>
+          </div>
+          <div ng-if="v.customerI18nView.customer.customerType == 'offline'">
+            <div class="form-group">
+              <label class="control-label col-md-2">{{'AD_BASIC_AGENT_TYPE' | translate}}：</label>
+              <p class="form-control-static col-md-3">{{v.customerI18nView.agentType}}</p>
+              <label class="control-label col-md-2">{{'AD_BASIC_AGENT_DISTRICT' | translate}}：</label>
+              <p class="form-control-static col-md-4">{{v.customerI18nView.agentRegional.i18nName}}</p>
+            </div>
+              <div class="form-group">
+              <label class="control-label col-md-2">{{'AD_BASIC_AGENT_COUNTRY' | translate}}：</label>
+              <p class="form-control-static col-md-4"><span ng-repeat="country in v.customerI18nView.agentCountry"><span ng-if="$index>0">、</span>{{country.i18nName}}</span></p>
+            </div>
+          </div>
+        </div>
+        <div>
+          <h5 class="bdt">{{'AD_BASIC_CONTRACT' | translate}}</h5>
+          <div ng-show="v.contract">
+            <div class="form-group">
+              <label class="control-label col-md-2">{{'AD_BASIC_CONTRACT_NUMBER' | translate}}：</label>
+              <div class="col-md-3">
+                <p class="form-control-static">{{v.contract.number}}</p>
+              </div>
+              <label class="control-label col-md-2" >{{'AD_BASIC_CONTRACT_TYPE' | translate}}：</label>
+              <p class="form-control-static col-md-4">{{'CONTRACT_CATEGORY_' + v.contract.category | translate}}</p>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-md-2" >{{'AD_BASIC_CONTRACT_BRIEF' | translate}}：</label>
+              <p class="form-control-static col-md-3">{{v.contract.summary}}</p>
+              <label class="control-label col-md-2" >{{'AD_BASIC_CONTRACT_VALIDITY' | translate}}：</label>
+              <p class="form-control-static col-md-4">{{v.contract.beginDate | date:'yyyy/MM/dd'}} - {{v.contract.endDate | date:'yyyy/MM/dd'}}</p>
+            </div>
+          </div>
+          <div ng-show="!v.contract">
+            <div class="form-group">
+              <label class="control-label col-md-2">{{'AD_BASIC_HAS_CONTRACT' | translate}}：</label>
+              <div class="col-md-3">
+                <p class="form-control-static">{{'NO' | translate}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="panel panel-gcrm panel-ad-content gcrm-panel" ng-repeat="ad in v.approvalContentViews" id="anchorContent{{$index}}">
+    <div class="page-header">
+      <div class="panel-heading">
+        <span class="black-block">&nbsp;</span>
+        <span class="panel-heading-text ng-binding">{{'AD_CONTENT_TITLE' | translate}}{{ $index + 1 }}</span>
+        <div class="pull-right" ng-hide="isEditing">
+          <a class="btn btn-default" ng-if="ad.adSolutionContent.approvalStatus == 'approving' || ad.adSolutionContent.approvalStatus == 'refused' || ad.adSolutionContent.approvalStatus == 'approved' || ad.adSolutionContent.approvalStatus == 'unconfirmed' || ad.adSolutionContent.approvalStatus == 'confirmed' || ad.adSolutionContent.approvalStatus == 'saving'" ng-click="btnApprovalRecord(ad)">{{'VIEW_APPROVAL_RECORD' | translate}}</a>
+          <a class="btn btn-default" ng-click="btnReSchedule(ad)" ng-if="BtnIndex.btn_adsol_detail_reschedule && ad.adSolutionContent.approvalStatus == 'approved' && ad.schedule.status == 'released' && !ad.adSolutionContent.taskInfo">{{'RESCHEDULE' | translate}}</a>
+          <a class="btn btn-default" ng-click="btnConfirmContent(ad)" ng-if="BtnIndex.btn_adsol_detail_cont_conf && ad.adSolutionContent.approvalStatus == 'unconfirmed' && ad.schedule.status != 'released'">{{'CONFIRM' | translate}}</a>
+          <a class="btn btn-default" ng-click="btnEdit(ad)" ng-if="BtnIndex.btn_adsol_detail_cont_mod && (ad.adSolutionContent.approvalStatus == 'refused' || (ad.adSolutionContent.approvalStatus == 'unconfirmed' && ad.schedule.status != 'released') || ad.adSolutionContent.approvalStatus == 'saving')">{{'MODIFY' | translate}}</a>
+          <a class="btn btn-default" ng-click="btnTerminate(ad, $index)" ng-if="BtnIndex.btn_adsol_detail_coop_term && (ad.adSolutionContent.approvalStatus == 'unconfirmed' || (ad.adSolutionContent.approvalStatus == 'approved' && ad.schedule.status == 'released' && !ad.adSolutionContent.taskInfo))">{{'AD_SOLUTION_DETAIL_TERMINATE_COOP' | translate}}</a>
+          <a class="btn btn-default" ng-click="btnEdit(ad, 'true')" ng-if="BtnIndex.btn_adsol_detail_cont_change && v.contract.state == 'VALID' && ad.adSolutionContent.poNum && ad.adSolutionContent.approvalStatus == 'confirmed' && ad.canUpdate">{{'AD_SOLUTION_DETAIL_CHANGE_CONTENT' | translate}}</a>
+          <!-- <a class="btn btn-default" ng-if="ad.adSolutionContent.approvalStatus == 'approving' && v.adSolution.type == 'update' && ad.adSolutionContent.contentType == 'update'" ng-click="btnCancelContent(ad)">{{'RETRACT' | translate}}</a> -->
+          <a class="btn btn-default" ng-if="BtnIndex.btn_adsol_detail_contract_withdraw && ad.canWithdraw" ng-click="btnCancelContent(ad)">{{'RETRACT' | translate}}</a>
+          <a class="btn btn-default" ng-if="BtnIndex.btn_adsol_detail_po_create && ad.canCreatePO" ng-click="btnChangePO(ad)">{{'AD_SOLUTION_DETAIL_CHANGE_PO' | translate}}</a>
+        </div>
+      </div>
+    </div>
+    <div class="panel-body viewing pt0" ng-if='!ad.editing'  ng-class="{'old-content-number-task-info': ad.oldContentNumber}">
+      <div class="gcrm-slots row well" ng-class="{'old-content-number': ad.oldContentNumber}">
+        <span class="col-md-2 ng-binding slot-lg">{{'CONTENT_NUMBER' | translate}}<br>{{ad.adSolutionContent.number}}</span>
+        <span class="col-md-2 ng-binding slot-xs">{{'TYPE' | translate}}<br>{{ad.adSolutionContent.contentType | AdSolutionTypeFilter | translate}}</span>
+        <span class="col-md-2 ng-binding slot-md">{{'CONTENT_STATUS' | translate}}<br>{{ad.adSolutionContent.approvalStatus | AdSolutionStatusFilter | translate}}</span>
+        <span ng-if="!(ad.schedule.status == 'released')" class="col-md-2 ng-binding slot-lg">{{'AD_SOLUTION_DETAIL_SCHEDULE_NO' | translate}}<br>{{ad.schedule.number || '--'}}</span>
+        <span ng-if="ad.schedule.status == 'released'" class="col-md-2 ng-binding slot-lg">{{'AD_SOLUTION_DETAIL_SCHEDULE_NO' | translate}}<br>--</span>
+        <span class="col-md-2 ng-binding slot-mdd">{{'AD_SOLUTION_DETAIL_MATERIAL_NO' | translate}}<br>{{ad.materialApply.number || '--'}}</span>
+        <span class="col-md-2 ng-binding slot-xlg">{{'AD_SOLUTION_LIST_PO' | translate}}<br>{{ad.adSolutionContent.poNum || '--'}}</span>
+        <span class="col-md-2 ng-binding slot-lg" ng-if="ad.oldContentNumber">{{'AD_SOLUTION_LIST_PO_ORIGIN' | translate}}<br>{{ad.oldContentNumber}}</span>
+      </div>
+      <form class="form-horizontal">
+        <div alert type="info" close="ad.adSolutionContent.taskInfo = null" ng-if="ad.adSolutionContent.taskInfo && (ad.adSolutionContent.approvalStatus == 'approved' || ad.adSolutionContent.approvalStatus == 'approving' || ad.adSolutionContent.approvalStatus == 'saving' || ad.adSolutionContent.approvalStatus == 'refused')" class="ml30 mr30 mt10">{{ad.adSolutionContent.taskInfo}}</div>
+        <div class="content-base-info">
+          <h5 class="">
+            {{'AD_CONTENT_BASIC_INFO' | translate}}
+          </h5>
+          <div class="form-group">
+            <label class="control-label col-md-2">
+              {{'AD_CONTENT_ADVERTISER_NAME' | translate}}：
+            </label>
+            <div class="col-md-3">
+              <p class="form-control-static">
+                {{ad.adSolutionContent.advertiser}}
+              </p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-md-2">
+              {{'AD_CONTENT_DESCRIBE' | translate}}：
+            </label>
+            <div class="col-md-3">
+              <p class="form-control-static">
+                {{ad.adSolutionContent.description}}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="content-site-info">
+          <h5 class="bdt">
+            {{'AD_CONTENT_ADDERSS' | translate}}
+          </h5>
+          <div class="form-group">
+            <label class="control-label col-md-2">
+              {{'AD_CONTENT_PRODUCT_PLATFORMS' | translate}}：
+            </label>
+            <div class="col-md-3">
+              <p class="form-control-static">
+                {{ad.adSolutionContent.productName}}
+              </p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-md-2">
+              {{'AD_CONTENT_PRODUCT_SITE' | translate}}：
+            </label>
+            <div class="col-md-3">
+              <p class="form-control-static">
+                {{ad.adSolutionContent.siteName}}
+              </p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-md-2">
+              {{'AD_CONTENT_PRODUCT_ADRRESS' | translate}}：
+            </label>
+            <div class="col-md-5">
+              <p class="form-control-static">
+                {{ad.adSolutionContent.channelName}}-{{ad.adSolutionContent.areaName}}-{{ad.adSolutionContent.positionName}}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="content-period-info">
+          <h5 class="bdt">
+            {{'AD_CONTENT_PRODUCT_TIME' | translate}}
+          </h5>
+          <div ng-if="ad.adSolutionContent.approvalStatus == 'unconfirmed'">
+            <div class="form-group" ng-if="!ad.afterConfirmSchedule">
+              <label class="control-label col-md-2">
+
+              </label>
+              <div class="expected-period col-md-5 row">
+                <p class="form-control-static">
+                  <span class="glyphicon glyphicon-play"></span>{{'AD_SOLUTION_DETAIL_EXPECTED_PERIOD' | translate}}
+                </p>
+              </div>
+              <div class="scheduled-period col-md-5 row">
+                <p class="form-control-static">
+                  <span class="glyphicon glyphicon-play"></span>{{'AD_SOLUTION_DETAIL_SCHEDULED_PERIOD' | translate}}
+                </p>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-md-2">
+                {{'AD_CONTENT_PRODUCT_TIMEPICKER' | translate}}：
+              </label>
+              <div class="col-md-5 row" ng-if="!ad.afterConfirmSchedule">
+                <p class="form-control-static">
+                  <span ng-model="ad.adSolutionContent.periodDescription" period-label></span>
+                </p>
+              </div>
+              <div class="col-md-5 row">
+                <p class="form-control-static">
+                  <span ng-model="ad.schedule.periodDescription" period-label></span>
+                  <span ng-if="!ad.afterConfirmSchedule && ad.overdue" style="color:#a94442;">
+                    <span class="glyphicon glyphicon-flash"></span>
+                    {{'AD_SOLUTION_DETAIL_OVERDUE' | translate}}
+                  </span>
+                </p>
+              </div>
+            </div>
+            <div class="form-group" ng-show="ad.adSolutionContent.insertPeriodDescription">
+              <label class="control-label col-md-2">
+                {{'AD_CONTENT_INSERT_TIMEBUCKER' | translate}}：
+              </label>
+              <div class="col-md-5 row" ng-if="!ad.afterConfirmSchedule">
+                <p class="form-control-static">
+                  <span ng-model="ad.adSolutionContent.insertPeriodDescription" period-label="danger"></span>
+                </p>
+              </div>
+              <div class="col-md-5 row">
+                <p class="form-control-static">
+                  <span ng-model="ad.schedule.insertPeriodDescription" period-label="danger"></span>
+                </p>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-md-2">
+                {{'AD_CONTENT_TOTAL_DAYS' | translate}}：
+              </label>
+              <div class="col-md-5 row" ng-if="!ad.afterConfirmSchedule">
+                <p class="form-control-static ">
+                  {{ad.adSolutionContent.totalDays}}{{'AD_CONTENT_INSERT_DAYS'
+                  | translate}}
+                </p>
+              </div>
+              <div class="col-md-5 row">
+                <p class="form-control-static">
+                  {{ad.scheduleTotalDays}}{{'AD_CONTENT_INSERT_DAYS'
+                  | translate}}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div ng-if="!(ad.adSolutionContent.approvalStatus == 'unconfirmed' || ad.adSolutionContent.approvalStatus == 'confirmed')">
+            <div class="form-group">
+              <label class="control-label col-md-2">
+                {{'AD_CONTENT_PRODUCT_TIMEPICKER' | translate}}：
+              </label>
+              <div class="col-md-8 row">
+                <p class="form-control-static">
+                  <span ng-model="ad.adSolutionContent.periodDescription" period-label></span>
+                </p>
+              </div>
+            </div>
+            <div class="form-group" ng-show="ad.adSolutionContent.insertPeriodDescription">
+              <label class="control-label col-md-2">
+                {{'AD_CONTENT_INSERT_TIMEBUCKER' | translate}}：
+              </label>
+              <div class="col-md-8 row">
+                <p class="form-control-static">
+                  <span ng-model="ad.adSolutionContent.insertPeriodDescription" period-label="danger"></span>
+                </p>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-md-2">
+                {{'AD_CONTENT_TOTAL_DAYS' | translate}}：
+              </label>
+              <div class="col-md-2">
+                <p class="form-control-static ">
+                  {{ad.adSolutionContent.totalDays}}{{'AD_CONTENT_INSERT_DAYS'
+                  | translate}}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div ng-if="ad.adSolutionContent.approvalStatus == 'confirmed'">
+            <div class="form-group">
+              <label class="control-label col-md-2">
+                {{'AD_CONTENT_PRODUCT_TIMEPICKER' | translate}}：
+              </label>
+              <div class="col-md-8 row">
+                <p class="form-control-static">
+                  <span ng-model="ad.adSolutionContent.periodDescription" period-label></span>
+                </p>
+              </div>
+            </div>
+            <div class="form-group" ng-show="ad.adSolutionContent.insertPeriodDescription">
+              <label class="control-label col-md-2">
+                {{'AD_CONTENT_INSERT_TIMEBUCKER' | translate}}：
+              </label>
+              <div class="col-md-8 row">
+                <p class="form-control-static">
+                  <span ng-model="ad.adSolutionContent.insertPeriodDescription" period-label="danger"></span>
+                </p>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-md-2">
+                {{'AD_CONTENT_TOTAL_DAYS' | translate}}：
+              </label>
+              <div class="col-md-2">
+                <p class="form-control-static ">
+                  {{ad.adSolutionContent.totalDays}}{{'AD_CONTENT_INSERT_DAYS'
+                  | translate}}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="content-price-info">
+          <h5 class="bdt">
+            {{'AD_CONTENT_QUOTATION' | translate}}
+          </h5>
+          <div class="form-group">
+            <label class="control-label col-md-2">
+              {{'AD_CONTENT_PRICE_TYPE' | translate}}：
+            </label>
+            <div class="col-md-2">
+              <p class="form-control-static" ng-if="ad.advertiseQuotation.billingModelId">
+                {{'AD_CONTENT_UNIT_PRICE' | translate}}
+              </p>
+              <p class="form-control-static" ng-if="!ad.advertiseQuotation.billingModelId">
+                {{'AD_CONTENT_FALL_INTO' | translate}}
+              </p>
+            </div>
+          </div>
+          <!-- 刊例价、客户报价、折扣 -->
+          <div ng-if="ad.advertiseQuotation.billingModelId && ad.advertiseQuotation.billingModelId != 2">
+            <div class="form-group">
+              <label class="control-label col-md-2">
+                {{'AD_CONTENT_CHARGING_MODE' | translate}}：
+              </label>
+              <div class="col-md-3">
+                <p class="form-control-static">
+                  {{ad.advertiseQuotation.billingModelName}}
+                </p>
+              </div>
+              <label class="control-label col-md-2">
+                {{'AD_CONTENT_PUBLISHED_PRICE' | translate}}：
+              </label>
+              <div class="col-md-3">
+                <p class="form-control-static" ng-if="!!ad.advertiseQuotation.publishPrice">
+                  $ {{ad.advertiseQuotation.publishPrice}}
+                </p>
+                <p class="form-control-static" ng-if="!ad.advertiseQuotation.publishPrice">
+                  {{'AD_CONTENT_NOT_RECORD' | translate}}
+                </p>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-md-2">
+                {{'AD_CONTENT_CUSTOMER_QUOTE' | translate}}：
+              </label>
+              <div class="col-md-3">
+                <p class="form-control-static ">
+                  $ {{ad.advertiseQuotation.customerQuote}}
+                </p>
+              </div>
+              <label class="control-label col-md-2">
+                {{'AD_CONTENT_DISCOUNT' | translate}}：
+              </label>
+              <div class="col-md-3">
+                <p class="form-control-static ">
+                  {{ad.advertiseQuotation.discount}}
+                </p>
+              </div>
+            </div>
+          </div>
+          <!-- 预算、总价 -->
+          <div ng-if="ad.advertiseQuotation.billingModelId == 1 || ad.advertiseQuotation.billingModelId == 5 || ad.advertiseQuotation.billingModelId == 3 || ad.advertiseQuotation.billingModelId == 4">
+            <div class="form-group">
+              <label class="control-label col-md-2">
+                {{'AD_CONTENT_BUDGET' | translate}}：
+              </label>
+              <div class="col-md-3">
+                <p class="form-control-static ">
+                  <span ng-if="ad.advertiseQuotation.budget">$ {{ad.advertiseQuotation.budget}}</span>
+                  <span ng-if="!ad.advertiseQuotation.budget">--</span>
+                </p>
+              </div>
+              <label class="control-label col-md-2" ng-if="ad.advertiseQuotation.billingModelId == 1 || ad.advertiseQuotation.billingModelId == 5">
+                {{'AD_CONTENT_COTALPRICE' | translate}}：
+              </label>
+              <div class="col-md-3" ng-if="ad.advertiseQuotation.billingModelId == 1 || ad.advertiseQuotation.billingModelId == 5">
+                <p class="form-control-static">
+                  $ {{ad.advertiseQuotation.totalPrice}}
+                </p>
+              </div>
+            </div>
+          </div>
+          <!-- 客户行业类型、备案分成比例、实际分成比例、是否为预估值、说明 -->
+          <div ng-if="!ad.advertiseQuotation.billingModelId || ad.advertiseQuotation.billingModelId == 2">
+            <div class="form-group" ng-if="ad.advertiseQuotation.billingModelId == 2">
+              <label class="control-label col-md-2">
+                {{'AD_CONTENT_CHARGING_MODE' | translate}}：
+              </label>
+              <div class="col-md-3">
+                <p class="form-control-static">
+                  {{ad.advertiseQuotation.billingModelName}}
+                </p>
+              </div>
+            </div>
+            <div class="form-group" ng-if="ad.advertiseQuotation.billingModelId == 2">
+              <label class="control-label col-md-2">
+                {{'AD_CONTENT_CUSTOMER_INDUSTRY' | translate}}：
+              </label>
+              <div class="col-md-3">
+                <p class="form-control-static">{{ad.advertiseQuotation.industryType | IndustryTypeFilter | translate}}</p>
+              </div>
+            </div>
+            <div class="form-group" ng-if="!ad.advertiseQuotation.billingModelId || ad.advertiseQuotation.billingModelId == 2">
+              <label class="control-label col-md-2">
+                {{'AD_CONTENT_FILING_PROPORTION' | translate}}：
+              </label>
+              <div class="col-md-7 row" ng-if="!!ad.advertiseQuotation.productRatioMine || !!ad.advertiseQuotation.productRatioCustomer || !!ad.advertiseQuotation.productRatioThird">
+                <div class="col-md-4">
+                  <p class="form-control-static">
+                    {{'AD_CONTENT_REALITING_MINE' | translate}}：{{ad.advertiseQuotation.productRatioMine}}%
+                  </p>
+                </div>
+                <div class="col-md-4" ng-if="ad.advertiseQuotation.productRatioCustomer || ad.advertiseQuotation.productRatioCustomer == 0">
+                  <p class="form-control-static">
+                    {{'AD_CONTENT_REALITING_CURSTOMER' | translate}}：{{ad.advertiseQuotation.productRatioCustomer}}%
+                  </p>
+                </div>
+                <div class="col-md-4" ng-if="ad.advertiseQuotation.productRatioThird || ad.advertiseQuotation.productRatioThird == 0">
+                  <p class="form-control-static">
+                    {{'AD_CONTENT_REALITING_THIRD' | translate}}：{{ad.advertiseQuotation.productRatioThird}}%
+                  </p>
+                </div>
+              </div>
+              <p class="form-control-static" ng-show="!ad.advertiseQuotation.productRatioMine && !ad.advertiseQuotation.productRatioCustomer && !ad.advertiseQuotation.productRatioThird">
+                {{'AD_CONTENT_NOT_RECORD' | translate}}
+              </p>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-md-2">
+                {{'AD_CONTENT_REALITING_PROPORTION' | translate}}：
+              </label>
+              <div class="col-md-7 row">
+                <div class="col-md-4">
+                  <p class="form-control-static">
+                    {{'AD_CONTENT_REALITING_MINE' | translate}}：{{ad.advertiseQuotation.ratioMine}}%
+                  </p>
+                </div>
+                <div class="col-md-4">
+                  <p class="form-control-static">
+                    <span>
+                    {{'AD_CONTENT_REALITING_CURSTOMER' | translate}}：{{ad.advertiseQuotation.ratioCustomer}}%
+                    </span>
+                  </p>
+                </div>
+                <div class="col-md-4">
+                  <p class="form-control-static">
+                    {{'AD_CONTENT_REALITING_THIRD' | translate}}：{{ad.advertiseQuotation.ratioThird}}%
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-md-2">
+                {{'AD_CONTENT_WHETHER' | translate}}：
+              </label>
+              <div class="col-md-3">
+                <p class="form-control-static" ng-if="ad.advertiseQuotation.reachEstimate == true">
+                  {{'YES' | translate}}
+                </p>
+                <p class="form-control-static" ng-if="ad.advertiseQuotation.reachEstimate == false">
+                  {{'NO' | translate}}
+                  </p>
+              </div>
+            </div>
+            <div class="form-group" ng-if="ad.advertiseQuotation.ratioConditionDesc">
+              <label class="control-label col-md-2">
+                {{'AD_CONTENT_FALLINTO_EXPLAIN' | translate}}：
+              </label>
+              <div class="col-md-5">
+                <p class="form-control-static">
+                  {{ad.advertiseQuotation.ratioConditionDesc}}
+                </p>
+              </div>
+            </div>
+          </div>
+          <!-- 日投放量预估、总投放量 -->
+          <div ng-if="ad.advertiseQuotation.billingModelId == 4">
+            <div class="form-group">
+              <label class="control-label col-md-2">
+                {{'AD_CONTENT_QUANTIT_ESTIMATE' | translate}}：
+              </label>
+              <div class="col-md-3">
+                <p class="form-control-static ">
+                  {{ad.advertiseQuotation.dailyAmount}}
+                </p>
+              </div>
+              <label class="control-label col-md-2">
+                {{'AD_CONTENT_QUANTIT_TOTAL' | translate}}：
+              </label>
+              <div class="col-md-3">
+                <p class="form-control-static ">
+                  {{ad.advertiseQuotation.totalAmount}}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="content-material-info" ng-if="ad.position.materialType != 3 && !ad.emptyMaterial">
+          <h5 class=" bdt">
+            {{'AD_CONTENT_MATERIAL' | translate}}
+          </h5>
+          <div class="form-group" ng-if="ad.advertiseCodeMaterial">
+            <label class="control-label col-md-2">{{'AD_CONTENT_EMBED_CODE' | translate}}：</label>
+            <div class="col-md-5">
+              <p class="form-control-static">
+                <a ng-href="{{ad.advertiseCodeMaterial.downloadUrl}}" target="_blank">{{ad.advertiseCodeMaterial.downloadFileName}}</a>
+              </p>
+            </div>
+          </div>
+          <div class="form-group" ng-if="!!ad.adSolutionContent.materialTitle">
+            <label class="control-label col-md-2">
+              {{'AD_CONTENT_MATERIAL_TITLE' | translate}}：
+            </label>
+            <div class="col-md-3">
+              <p class="form-control-static">
+                {{ad.adSolutionContent.materialTitle}}
+              </p>
+            </div>
+          </div>
+          <div class="form-group" ng-if="ad.adSolutionContent.materialUrl">
+            <label class="control-label col-md-2">
+              URL：
+            </label>
+            <div class="col-md-8">
+              <p class="form-control-static ">
+                <a ng-href="{{ad.adSolutionContent.materialUrl}}" target="_blank">{{ad.adSolutionContent.materialUrl}}</a>
+              </p>
+            </div>
+          </div>
+          <div class="form-group" ng-if="ad.advertiseMaterials && ad.advertiseMaterials.length">
+            <label class="control-label col-md-2">
+              {{'AD_CONTENT_MATERIAL_DETAIL' | translate}}：
+            </label>
+            <div class="col-md-10 form-control-static">
+              <div class="col-md-10 form-group">
+                <span class="alert alert-info">
+                  {{'AD_CONTENT_MATERIAL_EXPLAIN' | translate}}：{{'AD_CONTENT_MEASURE' |
+                  translate}}({{ad.position.areaRequired}})、{{'AD_CONTENT_SIZE'
+                  | translate}}({{ad.position.size}})
+                </span>
+              </div>
+              <div class="col-md-12 row">
+                <table id="materialsTable" class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th class="col-md-8">
+                        {{'AD_CONTENT_FILE_CONTENT' | translate}}
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat="material in ad.advertiseMaterials">
+                      <td>
+                        <a ng-href="{{material.downloadUrl}}" target="_blank">
+                          {{material.downloadFileName}}
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="form-group" ng-show="!!ad.adSolutionContent.materialEmbedCodeContent">
+            <label class="control-label col-md-2">
+              {{'AD_CONTENT_CODE_CONTENT' | translate}}：
+            </label>
+            <div class="col-md-5">
+              <p class="form-control-static" name="codeContent">
+                {{ad.adSolutionContent.materialEmbedCodeContent}}
+              </p>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="panel-body editing" ng-if='ad.editing'>
+      <div alert type="info" close="e.showAlert = null" ng-if="e.showAlert">{{'AD_SOLUTION_DETAIL_MODIFY_HINT_1' | translate}}<a href="#/materialDetail?contentId={{e.adSolutionContent.id}}" target="_blank">{{'AD_SOLUTION_DETAIL_MODIFY_HINT_2' | translate}}</a>{{'AD_SOLUTION_DETAIL_MODIFY_HINT_3' | translate}}</div>
+      <form class="form-horizontal" name="newAdForm" novalidate>
+        <div class="content-base-info">
+          <h5>
+            {{'AD_CONTENT_BASIC_INFO' | translate}}
+          </h5>
+          <div class="form-group">
+            <label class="control-label col-md-2">
+              {{'AD_CONTENT_ADVERTISER_NAME' | translate}}：
+            </label>
+            <div ng-class="{'has-error': e.contentSave && newAdForm.customersName.$error.required}">
+              <div class="col-md-5">
+                <input type="text" ng-model="e.advertiser.value" class="form-control" required ng-disabled="true" ng-if="stateCustomerStraight"/>
+                <input type="hidden" ui-select2="optionCustomer" ng-model="e.advertiser" style="width:320px" name="customersName" required ng-if="!stateCustomerStraight">
+              </div>
+              <div class="col-md-3 help-block" ng-show="e.contentSave && newAdForm.customersName.$error.required">
+                {{'AD_CONTENT_NO_CUSTOMERSNAME' | translate}}
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-md-2">
+              {{'AD_CONTENT_DESCRIBE' | translate}}：
+            </label>
+            <div ng-class="{'has-error':e.contentSave && newAdForm.companyDescribe.$error.required}">
+              <div class="col-md-3">
+                <input placeholder="" type="text" class="form-control" name="companyDescribe"
+                ng-model="e.adSolutionContent.description" required />
+              </div>
+              <div class="col-md-3 help-block" ng-show="e.contentSave && newAdForm.companyDescribe.$error.required">
+                {{'AD_CONTENT_NO_ADCONTENT' | translate}}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="content-site-info">
+          <h5 class="ptb10 pl10 bdt">
+            {{'AD_CONTENT_ADDERSS' | translate}}
+          </h5>
+          <div class="form-group">
+            <label class="control-label col-md-2">
+              {{'AD_CONTENT_PRODUCT_PLATFORMS' | translate}}：
+            </label>
+            <div ng-class="{'has-error':e.contentSave && newAdForm.product.$error.required}">
+              <div class="col-md-8">
+                <label class="radio radio-inline" ng-repeat="product in e.adPlatformList">
+                  <input type="radio" ng-model="e.adSolutionContent.productId" ng-change="changeProduct(e.adSolutionContent.productId)" name="product" value="{{product.id}}" required>
+                  {{product.i18nName}}
+                </label>
+              </div>
+              <div class="col-md-2 help-block" ng-show="e.contentSave && newAdForm.product.$error.required">
+                {{'AD_CONTENT_CHOOSE_PLATFORM' | translate}}
+              </div>
+            </div>
+          </div>
+          <div class="form-group" ng-if="e.siteList.length">
+            <label class="control-label col-md-2">
+              {{'AD_CONTENT_PRODUCT_SITE' | translate}}：
+            </label>
+            <div ng-class="{'has-error':e.hiddenElValidator && newAdForm.siteByProduct.$error.required}">
+              <div class="col-md-6 platformaGentType">
+                <label class="radio radio-inline" ng-repeat="siteByProduct in e.siteList">
+                  <input type="radio" ng-model="e.adSolutionContent.siteId" ng-change="changeSite(e.adSolutionContent.productId,e.adSolutionContent.siteId)" name="siteByProduct" value="{{siteByProduct.id}}" required>
+                  {{siteByProduct.i18nName}}
+                </label>
+                <div ng-hide="e.siteList.length" class="form-control-static">
+                  {{'FORM_VALIDATE_INFO_NOT_AVAILABLE' | translate}}
+                </div>
+              </div>
+              <div class="col-md-3 help-block" ng-show="e.hiddenElValidator && newAdForm.siteByProduct.$error.required">
+                {{'AD_CONTENT_CHOOSE_SITE' | translate}}
+              </div>
+            </div>
+          </div>
+          <div class="form-group" ng-if="e.adSolutionContent.siteId || e.adSolutionContent.siteId === 0">
+            <label class="control-label col-md-2">
+              {{'AD_CONTENT_PRODUCT_ADRRESS' | translate}}：
+            </label>
+            <div ng-class="{'has-error':e.hiddenElValidator && newAdForm.adAdress.$error.required}">
+              <div class="col-md-2">
+                <select class="form-control validate" id="adChanel" ng-options="channelBySite.id as channelBySite.i18nName for channelBySite in e.channelVOList"
+                ng-change="changeChannel(e.adSolutionContent.channelId)" ng-model="e.adSolutionContent.channelId">
+                  <option value="">
+                    {{'AD_CONTENT_PRODUCT_CHANNEL' | translate}}
+                  </option>
+                </select>
+              </div>
+              <div class="col-md-2 row">
+                <select class="form-control validate" id="adDistrict" name="adDistrict" ng-options="areaByChannel.i18nName for areaByChannel in e.areaVOList" ng-change="changeArea(e.area.id)" ng-model="e.area">
+                  <option value="">
+                    {{'AD_CONTENT_PRODUCT_AREA' | translate}}
+                  </option>
+                </select>
+              </div>
+              <div class="col-md-2">
+                <select class="form-control validate" ng-options="PositionByArea.i18nName for PositionByArea in e.positionVOList" name="adAdress" ng-model="e.position" ng-change="changePosition()" required>
+                  <option value="">
+                    {{'AD_CONTENT_PRODUCT_ADDRESS' | translate}}
+                  </option>
+                </select>
+              </div>
+              <div class="col-md-1" ng-show="!!e.area && e.area.hasGuideFile">
+                <p class="form-control-static">
+                  <a ng-href="../position/viewGuide/{{e.area.id}}" target="_blank"
+                  class="textDeco">
+                    {{'AD_CONTENT_ADDRESS_GUIDE' | translate}}
+                  </a>
+                </p>
+              </div>
+              <div class="col-md-2 help-block" ng-show="e.hiddenElValidator && newAdForm.adAdress.$error.required">
+                {{'AD_CONTENT_CHOOSE_ADRESS' | translate}}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="content-period-info" ng-show="!!e.position">
+          <h5 class="ptb10 pl10 bdt">
+            {{'AD_CONTENT_PRODUCT_TIME' | translate}}
+          </h5>
+          <div class="form-group" ng-repeat="period in e.datePeriods" ng-class="{'has-error':e.positionChangeValidator && newAdForm.timePickers.$error.required}">
+            <label class="control-label col-md-2" ng-if="!$index">
+              {{'AD_CONTENT_PRODUCT_TIMEPICKER' | translate}}：
+            </label>
+            <label class="control-label col-md-2" ng-if="$index">
+            </label>
+            <div class="col-md-7 dateTimePicker row">
+              <div class="col-md-7">
+                <div class="col-md-5">
+                  <input class="form-control" yt-calendar ng-model="period.from" name="timePickers" ng-change="startTimeChange(period)" required trigger="{{e.position.id}}" future-only="e.calendarFutureOnly"/>
+                </div>
+                <label class="col-md-1 form-control-static pull-left">
+                  -
+                </label>
+                <div class="col-md-5">
+                  <input class="form-control" yt-calendar ng-model="period.to" name="timePickers" ng-change="endTimeChange(period)" required trigger="{{e.position.id}}" min="period.from" future-only="e.calendarFutureOnly"/>
+                </div>
+              </div>
+              <div class="col-md-5">
+                <a class="adDateTime col-md-6" ng-click="removePeriod($index)" ng-hide="e.datePeriods.length == 1">
+                  <p class="text-success form-control-static">
+                    <strong>
+                      -
+                    </strong>
+                    &nbsp;{{'AD_CONTENT_PRODUCT_DELETIME' | translate}}
+                  </p>
+                </a>
+                <a class="adDateTime col-md-6" ng-click="addPeriod()" ng-show="$index == e.datePeriods.length - 1 && period.to && period.from">
+                  <p class="text-success form-control-static">
+                    <strong>
+                      +
+                    </strong>
+                    &nbsp;{{'AD_CONTENT_PRODUCT_ADDTIME' | translate}}
+                  </p>
+                </a>
+              </div>
+            </div>
+            <div class="col-md-3 help-block" ng-show="e.positionChangeValidator && newAdForm.timePickers.$error.required">
+              {{'AD_CONTENT_CHOOSE_TIME' | translate}}
+            </div>
+          </div>
+          <div class="form-group" ng-show="e.insertDates.length">
+            <label class="control-label col-md-2">
+              {{'AD_CONTENT_INSERT_TIMEBUCKER' | translate}}：
+            </label>
+            <div class="col-md-10">
+              <div class="col-md-12 clearfix row">
+                <div class="col-md-2 row">
+                  <label class="checkbox checkbox-inline">
+                    <input type="checkbox" ng-model="e.insertDatesCheckAll" ng-change="toggleCheckAll()"
+                    />
+                    {{'AD_CONTENT_CHECKED_ALL' | translate}}
+                  </label>
+                </div>
+                <div class="col-md-2">
+                  <p class="form-control-static">
+                    {{'AD_CONTENT_INSERT_ALLDAYS' | translate}}
+                    <span class="adDayschecked">
+                      {{e.selectedInsertDays}}
+                    </span>
+                    {{'AD_CONTENT_INSERT_DAYS' | translate}}
+                  </p>
+                </div>
+                <div class="col-md-3 help-block">
+                </div>
+              </div>
+              <div class="col-md-12 row">
+                <div class="col-md-2 row" ng-repeat="insertDate in e.insertDates">
+                  <label class="checkbox checkbox-inline">
+                    <input type="checkbox" ng-model="insertDate.checked" ng-click="toggleCheck(insertDate)"
+                    name="adDays" />
+                    {{insertDate.date | date:'yyyy-MM-dd'}}
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-md-2">
+              {{'AD_CONTENT_TOTAL_DAYS' | translate}}：
+            </label>
+            <div class="col-md-3">
+              <p class="form-control-static" name="adAllDays">
+                {{e.insertDatesTotal - (e.insertDates.length - e.selectedInsertDays)}}
+              </p>
+            </div>
+            <div class="col-md-3 help-block">
+            </div>
+          </div>
+        </div>
+        <div class="content-price-info">
+          <h5 class="ptb10 pl10 bdt">
+            {{'AD_CONTENT_QUOTATION' | translate}}
+          </h5>
+          <div class="price-type-radio form-group">
+            <label class="control-label col-md-2">
+              {{'AD_CONTENT_PRICE_TYPE' | translate}}：
+            </label>
+            <div ng-class="{'has-error': e.contentSave && newAdForm.adPriceType.$error.required}">
+              <div class="col-md-3">
+                <label class="radio radio-inline" ng-repeat="priceType in e.priceTypes">
+                  <input type="radio" ng-model="e.advertiseQuotation.priceType" value="{{priceType.value}}" ng-change="changePriceType()" name="adProductId" required  ng-disabled="e.priceDisabled">
+                  {{priceType.label | translate}}
+                </label>
+              </div>
+              <div class="col-md-3 help-block" ng-show="e.contentSave && newAdForm.adPriceType.$error.required">
+                {{'AD_CONTENT_NO_PRICE_TYPE' | translate}}
+              </div>
+            </div>
+          </div>
+          <div class="unit-select form-group" ng-if="(e.advertiseQuotation.priceType === 'unit' && e.advertiseQuotation.billingModelId > -1) && !e.priceDisabled">
+            <label class="control-label col-md-2">
+              {{'AD_CONTENT_CHARGING_MODE' | translate}}：
+            </label>
+            <div ng-class="{'has-error':e.quotesValidator && newAdForm.accountingType.$error.required}">
+              <div class="col-md-2">
+                <select class="form-control accountingType" name="accountingType" ng-model="e.advertiseQuotation.billingModelId" ng-options="atType.id as atType.i18nName for atType in e.billingModels" required ng-change="changeBillingModel()">
+                  <option value="" ng-selected="selected">
+                    {{'FORM_VALIDATE_INFO_SELECT' | translate}}
+                  </option>
+                </select>
+              </div>
+              <div class="col-md-3 help-block" ng-show="e.hiddenElValidator && newAdForm.accountingType.$error.required">
+                {{'FORM_VALIDATE_INFO_REQUIRED' | translate}}
+              </div>
+            </div>
+            <div ng-if="e.advertiseQuotation.billingModelId == 1">
+              <div class="col-md-3">
+                <p class="form-control-static">
+                  {{'AD_CONTENT_CPC_HINT' | translate}} &nbsp&nbsp&nbspPV:{{e.position.pv}}
+                </p>
+              </div>
+              <div class="col-md-2">
+                <p class="form-control-static">
+                  {{'AD_CONTENT_CPC_HINT_CLICK' | translate}}:{{e.position.click}}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="price-detail" ng-hide="(e.advertiseQuotation.priceType === 'unit' && !e.advertiseQuotation.billingModelId) || e.priceDisabled">
+            <!-- 刊例价、客户报价、折扣 -->
+            <div ng-if="e.advertiseQuotation.billingModelId && e.advertiseQuotation.billingModelId != 2 && e.advertiseQuotation.billingModelId != -1">
+              <div class="form-group">
+                <label class="control-label col-md-2">
+                  {{'AD_CONTENT_PUBLISHED_PRICE' | translate}}：
+                </label>
+                <div class="col-md-2">
+                  <p class="form-control-static" ng-show="e.advertiseQuotation.publishPrice">
+                    <span>$</span>
+                    {{e.advertiseQuotation.publishPrice}}
+                  </p>
+                  <p class="form-control-static" ng-show="!e.advertiseQuotation.publishPrice">
+                    {{'AD_CONTENT_NOT_RECORD' | translate}}
+                  </p>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-md-2">
+                  {{'AD_CONTENT_CUSTOMER_QUOTE' | translate}}：
+                </label>
+                <div ng-class="{'has-error':e.quotesValidator && newAdForm.adCpcQuote.$error.required || newAdForm.adCpcQuote.$error.pattern}">
+                  <div class="col-md-2">
+                    <div class="col-md-12 input-group">
+                      <span class="input-group-addon input-group-default">
+                        $
+                      </span>
+                      <input type="text" class="form-control " ng-model="e.advertiseQuotation.customerQuote" ng-keyup="updateDiscount()" name="adCpcQuote" ng-pattern="/^[1-9]\d*$|^[1-9]\d*\.\d*|^0\.\d*[1-9]\d*$/" />
+                    </div>
+                  </div>
+                  <div class="col-md-3 help-block" ng-show="e.quotesValidator && newAdForm.adCpcQuote.$error.required">
+                    {{'AD_CONTENT_NO_CUSTOMER_QUOTE' | translate}}
+                  </div>
+                  <div class="col-md-3 help-block" ng-show="newAdForm.adCpcQuote.$error.pattern">
+                    {{'AD_CONTENT_NO_MONEY' | translate}}
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-md-2">
+                  {{'AD_CONTENT_DISCOUNT' | translate}}：
+                </label>
+                <div ng-class="{'has-error':e.quotesValidator && newAdForm.cpcDiscount.$error.required || newAdForm.cpcDiscount.$error.pattern}">
+                  <div class="col-md-2">
+                    <input type="text" class="form-control" ng-model="e.advertiseQuotation.discount" ng-keyup="updateCustomerQuote()" name="cpcDiscount"  ng-pattern="/^[1-9]\d*(\.\d*)?|0(\.\d*[1-9]\d*)?$/" />
+                  </div>
+                  <div class="col-md-7 help-block">{{'AD_CONTENT_DISCOUNT_ERROR' | translate}}</div>
+                  <!-- <div class="col-md-3 help-block" ng-show="e.quotesValidator && newAdForm.cpcDiscount.$error.required">
+                    {{'FORM_VALIDATE_INFO_REQUIRED' | translate}}
+                  </div>
+                  <div class="col-md-3 help-block" ng-show="newAdForm.cpcDiscount.$error.pattern">
+                    {{'AD_CONTENT_POSITIVE' | translate}}
+                  </div> -->
+                </div>
+              </div>
+            </div>
+            <!-- 预算、总价 -->
+            <div ng-if="e.advertiseQuotation.billingModelId == 1 || e.advertiseQuotation.billingModelId == 5 || e.advertiseQuotation.billingModelId == 3 || e.advertiseQuotation.billingModelId == 4">
+              <div class="form-group">
+                <label class="control-label col-md-2">
+                  {{'AD_CONTENT_BUDGET' | translate}}：
+                </label>
+                <div ng-class="{'has-error':e.quotesValidator && newAdForm.adCpcBudget.$error.pattern}">
+                  <div class="col-md-2">
+                    <div class="col-md-12 input-group">
+                      <span class="input-group-addon input-group-default">
+                        $
+                      </span>
+                      <input type="text" class="form-control" ng-model="e.advertiseQuotation.budget"
+                      name="adCpcBudget" ng-pattern="/^[1-9]\d*$|^[1-9]\d*\.\d*|^0\.\d*[1-9]\d*$/" />
+                    </div>
+                  </div>
+                  <div class="col-md-3 help-block" ng-show="newAdForm.adCpcBudget.$error.pattern">
+                    {{'AD_CONTENT_NO_MONEY' | translate}}
+                  </div>
+                </div>
+              </div>
+              <div class="form-group" ng-if="e.advertiseQuotation.billingModelId == 1 || e.advertiseQuotation.billingModelId == 5">
+                <label class="control-label col-md-2">
+                  {{'AD_CONTENT_COTALPRICE' | translate}}：
+                </label>
+                <div class="col-md-2">
+                  <p class="form-control-static">
+                    $ {{ e.advertiseQuotation.totalPrice }}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <!-- 客户行业类型、备案分成比例、实际分成比例、是否为预估值、说明 -->
+            <div ng-if="!e.advertiseQuotation.billingModelId || e.advertiseQuotation.billingModelId == 2">
+              <div class="industry-type form-group" ng-if="e.advertiseQuotation.billingModelId == 2">
+                <label class="control-label col-md-2">
+                  {{'AD_CONTENT_CUSTOMER_INDUSTRY' | translate}}：
+                </label>
+                <div ng-class="{'has-error':e.quotesValidator && newAdForm.cpsType.$error.required}">
+                  <div class="col-md-4">
+                    <label class="radio radio-inline" ng-repeat="industry in e.industryTypes">
+                      <input type="radio" ng-model="e.industrySelected" value="{{industry.id}}" ng-change="selectIndusty()" name="industry" />{{industry.id | IndustryTypeFilter | translate}}
+                    </label>
+                  </div>
+                  <div class="col-md-3 help-block" ng-show="e.quotesValidator && newAdForm.cpsType.$error.required">
+                    {{'FORM_VALIDATE_INFO_REQUIRED' | translate}}
+                  </div>
+                </div>
+              </div>
+              <div class="form-group" ng-if="e.advertiseQuotation.billingModelId == 2 && (e.industrySelected == 0 || e.industrySelected)">
+                <label class="control-label col-md-2">{{'AD_CONTENT_FILING_PROPORTION' | translate}}：</label>
+                <div class="col-md-7 row">
+                  <div class="col-md-4" ng-show="e.cpsProductRatioMine || e.cpsProductRatioMine == 0">
+                    <p class="form-control-static">{{'AD_CONTENT_REALITING_MINE' | translate}}：{{e.cpsProductRatioMine}}%</p>
+                  </div>
+                  <div class="col-md-4" ng-show="!e.cpsProductRatioMine && e.cpsProductRatioMine != 0">
+                    <p class="form-control-static">{{'AD_CONTENT_NOT_RECORD' | translate}}</p>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group" ng-if="!e.advertiseQuotation.billingModelId">
+                <label class="control-label col-md-2">
+                  {{'AD_CONTENT_FILING_PROPORTION' | translate}}：
+                </label>
+                <div class="col-md-10 row">
+                  <div class="col-md-8 row" ng-show="!!e.advertiseQuotation.productRatioMine || !!e.advertiseQuotation.productRatioCustomer || !!e.advertiseQuotation.productRatioThird">
+                      <div class="col-md-4">
+                         <p class="form-control-static">{{'AD_CONTENT_REALITING_MINE' | translate}}：{{e.advertiseQuotation.productRatioMine}}%</p>
+                      </div>
+                      <div class="col-md-4">
+                         <p class="form-control-static">{{'AD_CONTENT_REALITING_CURSTOMER' | translate}}：{{e.advertiseQuotation.productRatioCustomer}}%</p>
+                      </div>
+                      <div class="col-md-4">
+                         <p class="form-control-static">{{'AD_CONTENT_REALITING_THIRD' | translate}}：{{e.advertiseQuotation.productRatioThird}}%</p>
+                      </div>
+                  </div>
+                  <div class="col-md-4" ng-show="!e.advertiseQuotation.productRatioMine">
+                    <p class="form-control-static">
+                      {{'AD_CONTENT_NOT_RECORD' | translate}}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-md-2">
+                  {{'AD_CONTENT_REALITING_PROPORTION' | translate}}：
+                </label>
+                <div class="col-md-7 row">
+                  <div class="col-md-4" ng-class="{'has-error':e.quotesValidator && newAdForm.cpsOwner.$error.required || newAdForm.cpsOwner.$error.pattern}">
+                    <div class="col-md-12 input-group">
+                      <span class="input-group-addon input-group-default">
+                        {{'AD_CONTENT_REALITING_MINE_SHORT' | translate}}
+                      </span>
+                      <input type="text" class="form-control" name="cpsOwner" ng-model="e.advertiseQuotation.ratioMine"
+                      ng-blur="quoteTatioMine()" ng-pattern="/^([0-9]\d?(\.\d{1,2})?|0\.\d{1,2}|100|100.00)$/" />
+                      <span class="input-group-addon input-group-default">
+                        %
+                      </span>
+                    </div>
+                    <div class="col-md-12 help-block" ng-show="e.quotesValidator && newAdForm.cpsOwner.$error.required">
+                      {{'FORM_VALIDATE_INFO_REQUIRED' | translate}}
+                    </div>
+                    <div class="col-md-12 help-block" ng-show="newAdForm.cpsOwner.$error.pattern">
+                      {{'AD_CONTENT_NUMBER_FROMAT' | translate}}
+                    </div>
+                  </div>
+                  <div class="col-md-4" ng-class="{'has-error':e.quotesValidator && newAdForm.cpsTatioMt.$error.required || newAdForm.cpsTatioMt.$error.pattern}">
+                    <div class="col-md-12 input-group">
+                      <span class="input-group-addon input-group-default">
+                        {{'AD_CONTENT_REALITING_CURSTOMER_SHORT' | translate}}
+                      </span>
+                      <input type="text" class="form-control" name="cpsTatioMt" ng-model="e.advertiseQuotation.ratioCustomer"
+                      ng-blur="quoteTatioMt()" ng-pattern="/^([0-9]\d?(\.\d{1,2})?|0\.\d{1,2}|100|100.00)$/">
+                      <span class="input-group-addon input-group-default">
+                        %
+                      </span>
+                    </div>
+                    <div class="col-md-12 help-block" ng-show="e.quotesValidator && newAdForm.cpsTatioMt.$error.required">
+                      {{'FORM_VALIDATE_INFO_REQUIRED' | translate}}
+                    </div>
+                    <div class="col-md-12 help-block" ng-show="newAdForm.cpsTatioMt.$error.pattern">
+                      {{'AD_CONTENT_NUMBER_FROMAT' | translate}}
+                    </div>
+                  </div>
+                  <div class="col-md-4" ng-class="{'has-error':e.quotesValidator && newAdForm.cpsTatioThird.$error.required || newAdForm.cpsTatioThird.$error.pattern}">
+                    <div class="col-md-12 input-group">
+                      <span class="input-group-addon input-group-default">
+                        {{'AD_CONTENT_REALITING_THIRD_SHORT' | translate}}
+                      </span>
+                      <input type="text" class="form-control" ng-model="e.advertiseQuotation.ratioThird"
+                      ng-blur="quoteTatioThird()" name="cpsTatioThird" ng-pattern="/^([0-9]\d?(\.\d{1,2})?|0\.\d{1,2}|100|100.00)$/" />
+                      <span class="input-group-addon input-group-default">
+                        %
+                      </span>
+                    </div>
+                    <div class="col-md-12 help-block" ng-show="e.quotesValidator && newAdForm.cpsTatioThird.$error.required">
+                      {{'FORM_VALIDATE_INFO_REQUIRED' | translate}}
+                    </div>
+                    <div class="col-md-12 help-block" ng-show="newAdForm.cpsTatioThird.$error.pattern">
+                      {{'AD_CONTENT_NUMBER_FROMAT' | translate}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-md-2">
+                  {{'AD_CONTENT_WHETHER' | translate}}：
+                </label>
+                <div class="col-md-2">
+                  <label class="radio radio-inline" ng-repeat="radio in e.isEstimated">
+                  <input type="radio" ng-model="e.advertiseQuotation.reachEstimate" ng-value="{{radio.value}}" ng-change="adProduct()" name="isEstimated" />
+                  {{radio.label | translate}}
+                </label>
+                </div>
+                <div class="col-md-5">
+                  <p class="form-control-static gray">
+                    {{'AD_CONTENT_ESTIMATE_HINT' | translate}} {{quote.reachEstimate}}
+                  </p>
+                </div>
+              </div>
+              <div class="form-group" ng-class="{'has-error':e.quotesValidator && (newAdForm.adCpsExplain.$error.required || newAdForm.adCpsExplain.$error.maxlength)}">
+                <label class="control-label col-md-2">
+                  {{'AD_CONTENT_FALLINTO_EXPLAIN' | translate}}：
+                </label>
+                <div class="col-md-5">
+                  <textarea class="form-control" name="adCpsExplain" ng-model="e.advertiseQuotation.ratioConditionDesc"
+                  rows="3" cols="30" ng-maxlength="500">
+                  </textarea>
+                </div>
+                <div class="col-md-3 help-block" ng-show="e.quotesValidator && newAdForm.adCpsExplain.$error.required">
+                  {{'FORM_VALIDATE_INFO_REQUIRED' | translate}}
+                </div>
+                <div ng-show="e.quotesValidator && newAdForm.adCpsExplain.$error.maxlength">
+                  MAX_LENGTH 256 charactor
+                </div>
+              </div>
+            </div>
+            <!-- 日投放量预估、总投放量 -->
+            <div ng-if="e.advertiseQuotation.billingModelId == 4">
+              <h5 class="ptb10 pl10 bdt">{{'AD_CONTENT_QUANTIT' | translate}}</h5>
+              <div class="form-group">
+                <label class="control-label col-md-2">{{'AD_CONTENT_QUANTIT_ESTIMATE' | translate}}：</label>
+                <div ng-class="{'has-error':ad.quotesValidator && newAdForm.cpmDayTotal.$error.required ||newAdForm.cpmDayTotal.$error.pattern}">
+                    <div class="col-md-3">
+                        <input type="text" class="form-control" ng-model="e.advertiseQuotation.dailyAmount" name="cpmDayTotal" ng-pattern="/^\-?\d+$/" ng-change="updateCPMTotalAmount()">
+                    </div>
+                    <div class="col-md-3 help-block" ng-show="ad.quotesValidator && newAdForm.cpmDayTotal.$error.required">{{'AD_CONTENT_NO_QUANTIT_ESTIMATE' | translate}}</div>
+                    <div class="col-md-3 help-block" ng-show="newAdForm.cpmDayTotal.$error.pattern">{{'AD_CONTENT_NOT_QUANTIT_ESTIMATE' | translate}}</div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-md-2">{{'AD_CONTENT_QUANTIT_TOTAL' | translate}}：</label>
+                <div class="col-md-3">
+                    <p class="form-control-static">{{e.advertiseQuotation.totalAmount}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="content-material-info" ng-if="e.position.materialType == 0 || e.position.materialType == 1 || e.position.materialType == 2">
+          <h5 class="ptb10 pl10 bdt">
+            {{'AD_CONTENT_MATERIAL' | translate}}
+          </h5>
+          <div class="material-code form-group">
+            <label class="control-label col-md-2">{{'AD_CONTENT_EMBED_CODE' | translate}}：</label>
+            <div class="fl" ng-if="e.advertiseCodeMaterial">
+              <a class="btn btn-link btn-sm" ng-click="removeCodeUploaded(e)">{{e.advertiseCodeMaterial.downloadFileName}}<span class="glyphicon glyphicon-remove"></span></a>
+            </div>
+            <div class="col-md-2">
+              <span class="btn btn-success btn-sm" yt-ajaxupload='{{ { uploadingText : "" , uploadedText : "" , formatErrorText : "AD_CONTENT_UPLOAD_FILE_TYPE_FORBIDDEN" , uploadFalseText : "" , beginUpload : "btnDisabled" , uploadDone : "btnEnabled" } }}' ng-model="e.advertiseCodeMaterial" upload-url="adsolution/content/uploadAdSolutionContentMaterial" upload-type="" upload-invalidatetype="exe|msi|bat|sh">
+                <i class="glyphicon glyphicon-plus"></i>
+                <span class="upload-text">{{'AJAX_UPLOAD_UPLOAD' | translate}}</span>
+              </span>
+            </div>
+          </div>
+          <div class="material-title form-group" ng-if="e.position.materialType == 1 || e.position.materialType == 2">
+            <label class="control-label col-md-2">
+              {{'AD_CONTENT_MATERIAL_TITLE' | translate}}：
+            </label>
+            <div ng-class="{'has-error':e.materialValidator && newAdForm.materialTitle.$error.required}">
+              <div class="col-md-3">
+                <input placeholder="" type="text" class="form-control" name="materialTitle" ng-model="e.adSolutionContent.materialTitle" />
+              </div>
+              <div class="col-md-3 help-block" ng-show="e.materialValidator && newAdForm.materialTitle.$error.required">
+                {{'AD_CONTENT_NO_MATERIAL_TITLE' | translate}}
+              </div>
+            </div>
+          </div>
+          <div class="material-url form-group">
+            <label class="control-label col-md-2">
+              url：
+            </label>
+            <div ng-class="{'has-error':e.materialValidator && newAdForm.materialUrl.$error.required}">
+              <div class="col-md-3">
+                <input placeholder="" type="url" class="form-control" name="materialUrl"
+                ng-model="e.adSolutionContent.materialUrl" />
+              </div>
+              <div class="col-md-3 help-block" ng-show="newAdForm.materialUrl.$error.url">
+                {{'AD_CONTENT_NO_URL' | translate}}
+              </div>
+            </div>
+          </div>
+          <div class="materialMsg" ng-if="e.position.materialType == 0 ||e.position.materialType == 2">
+            <div class="form-group">
+              <label class="control-label col-md-2">
+                {{'AD_CONTENT_MATERIAL_DETAIL' | translate}}：
+              </label>
+              <div class="col-md-10 form-control-static" ng-class="{'has-error':e.materialValidator && !e.advertiseMaterials.length}">
+                <div class="col-md-9 form-group">
+                  <span class="alert alert-info uploadSize">
+                    {{'AD_CONTENT_MATERIAL_EXPLAIN' | translate}}：{{'AD_CONTENT_MEASURE' |
+                    translate}}({{e.position.areaRequired}})、{{'AD_CONTENT_SIZE'
+                    | translate}}({{e.position.size}})
+                  </span>
+                </div>
+                <div class="col-md-3 help-block" ng-show="e.materialValidator && !e.advertiseMaterials.length">
+                  {{'AD_CONTENT_NO_MATERIAL' | translate}}
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-md-2">
+                &nbsp;
+              </label>
+              <div class="col-md-9 form-control-static">
+                <table class="table table-gcrm">
+                  <thead>
+                    <tr>
+                      <th class="col-md-8 text-left">
+                        {{'AD_CONTENT_FILE_CONTENT' | translate}}
+                      </th>
+                      <th class="col-md-4">
+                        {{'AD_CONTENT_HANDLE' | translate}}
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat="material in e.advertiseMaterials">
+                      <td class="col-md-8">
+                        {{material.downloadFileName}}
+                      </td>
+                      <td class="col-md-4">
+                        <a class="btn" ng-click="removeMaterial($index)">
+                          {{'DELETE' | translate}}
+                        </a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="col-md-8">
+                        <span class="btn btn-link pull-left" yt-jquery-file-upload='{{ { triggerSource : e.position.id , uploadingText : "" , uploadedText : "" , formatErrorText : "AD_CONTENT_UPLOAD_FILE_TYPE_ERROR" , uploadFalseText : "" } }}' ng-model="e.materialUploaded" upload-url="adsolution/content/uploadAdSolutionContentMaterial" upload-invalidatetype="exe|msi|bat|sh" upload-triggersource="{{e.position.id}}">
+                          <i class="glyphicon glyphicon-plus">
+                          </i>
+                          {{'AJAX_UPLOAD_UPLOAD' | translate}}
+                        </span>
+                      </td>
+                      <td class="col-md-4">
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+      <form class="panel-footer text-left" ng-hide="ad.review">
+        <a  class="btn btn-primary" ng-click="adContentApproval(newAdForm, ad, $index);" ng-if="!ad.adSolutionContent.poNum">{{'SUBMIT_TO_APPROVAL' | translate}}</a>
+        <a  class="btn btn-primary" ng-click="adContentApproval(newAdForm, ad, $index, 'true');" ng-if="ad.adSolutionContent.poNum">{{'AD_DETAIL_SUBMIT_CHANGE' | translate}}</a>
+        <a  class="btn btn-default" ng-click="adContentCancel(ad)">{{'CANCEL' | translate}}</a>
+      </form>
+    </div>
+  </div>
+
+  <div class="panel panel-gcrm panel-canceled-list" id="anchorCancelList" ng-show="v.cancelRecord.length">
+    <div class="page-header">
+      <div class="panel-heading">
+        <span class="black-block">&nbsp;</span>
+        <span class="panel-heading-text ng-binding">{{'AD_SOLUTION_DETAIL_CANCELED_CONTENTS' | translate}}</span>
+      </div>
+    </div>
+    <div class="panel-body">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>{{'CONTENT_NUMBER' | translate}}</th>
+            <th>{{'ADVERTISER' | translate}}</th>
+            <th>{{'AD_SOLUTION_DETAIL_CANCEL_REASON' | translate}}</th>
+            <th>{{'SUBMIT_TIME' | translate}}</th>
+            <th>{{'AD_SOLUTION_DETAIL_CANCEL_TIME' | translate}}</th>
+            <th>{{'OPERATOR' | translate}}</th>
+            <th>{{'TABLE_OPERATION' | translate}}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="item in v.cancelRecord">
+            <td>{{item.adNumber}}</td>
+            <td>{{item.advertiser}}</td>
+            <td>{{item.cancelReason | AdContentCancelReasonFilter | translate}}</td>
+            <td>{{item.submitTime | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+            <td>{{item.cancelTime | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+            <td>{{item.operator}}</td>
+            <td><a ng-click="btnViewCanceled(item)">{{'VIEW' | translate}}</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="shortcuts" >
+    <div class="shortcut">
+      <a class="btn btn-default" ng-click="anchorTo('anchorBasicInfo')">{{'APPROVAL_CUSTOMERINFO_LABEL' | translate}}</a>
+    </div>
+    <div class="shortcut" ng-repeat="ad in v.approvalContentViews">
+      <a ng-click="anchorTo('anchorContent' + $index)" class="btn btn-default">
+        <span class="panel-heading-text">{{'APPROVAL_CONTENT_TITLE' | translate}}{{$index + 1}}</span>
+      </a>
+    </div>
+    <div class="shortcut" ng-show="v.cancelRecord.length">
+      <a ng-click="anchorTo('anchorCancelList')" class="btn btn-default">
+        {{'AD_SOLUTION_DETAIL_CANCELED_CONTENTS' | translate}}
+      </a>
+    </div>
+    <div class="shortcut">
+      <a ng-click="anchorTo('navBarTop')" class="btn btn-default">
+        &nbsp;
+        <span class="glyphicon glyphicon-chevron-up"></span>
+        <br>
+        {{'APPROVAL_BACK_TO_TOP' | translate}}
+      </a>
+    </div>
+
+  </div>
+</div>

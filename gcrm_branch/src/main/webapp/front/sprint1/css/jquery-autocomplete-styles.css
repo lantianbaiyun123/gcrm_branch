@@ -1,0 +1,28 @@
+﻿div.autocomplete-suggestions {
+    position: absolute;
+    background-color: #fff;
+    width:100%;
+    max-height: 400px;
+    z-index: 9999;
+    overflow: auto;
+    box-shadow: 0 2px 2px #cfcfcf;
+    border: 1px solid #cfcfcf;
+}
+
+div.autocomplete-suggestions .autocomplete-suggestion {
+    padding: 6px 20px;
+    cursor: pointer;
+    text-align: left;
+}
+div.autocomplete-suggestions .autocomplete-suggestion:nth-child(2n) {
+    background: #f5f6f8;
+}
+.autocomplete-suggestions strong { 
+	font-weight: normal; color: #3399FF; 
+}
+div.autocomplete-suggestions .autocomplete-suggestion:hover{
+	background: #fff6f7;
+}
+.autocomplete-selected { 
+	background: #fff6f7;
+}

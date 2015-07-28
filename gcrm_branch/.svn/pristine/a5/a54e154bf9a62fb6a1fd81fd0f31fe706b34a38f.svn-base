@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+	
+	<context:component-scan base-package="com.baidu.gcrm.**.web"/>
+	<mvc:annotation-driven>
+		<mvc:message-converters>
+			<ref bean="jsonConverter"/>
+			<ref bean="stringHttpMessageConverter"/>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+	
+	<bean id="messageSource" class="com.baidu.gcrm.common.i18n.SerializableResourceBundleMessageSource" lazy-init="false">
+        <property name="basenames" value="/WEB-INF/i18n/messages" />
+        <property name="useCodeAsDefaultMessage" value="true" />
+    </bean> 
+    
+    <bean id="commonServiceBeanFactory" class="com.baidu.gcrm.common.ServiceBeanFactory"
+		lazy-init="false" />
+		
+	<bean id="commonServiceBeanFrontFactory" class="com.baidu.gcrm.common.ServiceBeanFrontFactory"
+		lazy-init="false" />
+    
+   <bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver"/>
+   
+   	<mvc:interceptors>
+		<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+			<property name="paramName" value="lang"/>
+		</bean>
+	</mvc:interceptors>
+	
+	<!-- Forwards requests to the "/" resource to the "index" view -->
+	<mvc:view-controller path="/message.js" view-name="message" />
+	<bean id="validator"
+		class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />
+
+	<!-- Handles HTTP GET requests for /resources/** by efficiently serving 
+		up static resources in the ${webappRoot}/resources/ directory -->
+	<mvc:resources mapping="/resources/**" location="/resources/" />
+    
+    <bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/views/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
+
+	<!-- Define the OXM marshaller which is used to convert the Objects <-> 
+		XML. -->
+	<bean id="oxmMarshaller" class="org.springframework.oxm.xstream.XStreamMarshaller" />
+
+	<bean id="marshallingConverter"
+		class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter">
+		<property name="marshaller" ref="oxmMarshaller" />
+		<property name="unmarshaller" ref="oxmMarshaller" />
+		<property name="supportedMediaTypes" value="application/xml" />
+	</bean>
+	
+	<bean id="jsonConverter" class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+		<property name="supportedMediaTypes" value="application/json;charset=UTF-8" />
+		<property name="features">
+		<array value-type="com.alibaba.fastjson.serializer.SerializerFeature">
+			<value>DisableCircularReferenceDetect</value>
+		</array>
+		</property>
+	</bean>
+
+	<bean id="stringHttpMessageConverter"
+		class="org.springframework.http.converter.StringHttpMessageConverter">
+		<constructor-arg>
+			<bean
+				class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+				<property name="targetClass" value="java.nio.charset.Charset" />
+				<property name="targetMethod" value="forName" />
+				<property name="arguments" value="UTF-8" />
+			</bean>
+		</constructor-arg>
+		<property name="supportedMediaTypes">
+			<list>
+				<bean class="org.springframework.http.MediaType">
+					<constructor-arg index="0" value="text" />
+					<constructor-arg index="1" value="plain" />
+					<constructor-arg index="2" value="UTF-8" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<!-- Required for REST services in order to bind the return value to the 
+		ResponseBody. -->
+
+	<bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
+		<property name="messageConverters">
+			<list>
+				<ref bean="stringHttpMessageConverter" />
+				<ref bean="jsonConverter" />
+			</list>
+		</property>
+	</bean>
+	
+</beans>

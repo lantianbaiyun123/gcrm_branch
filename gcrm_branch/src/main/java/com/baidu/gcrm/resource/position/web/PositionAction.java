@@ -1,0 +1,532 @@
+package com.baidu.gcrm.resource.position.web;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
+import org.apache.poi.ss.usermodel.Row;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.stereotype.Controller;
+import org.springframework.util.FileCopyUtils;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ValidationUtils;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.alibaba.fastjson.JSON;
+import com.baidu.gcrm.ad.web.utils.AutoSuggestBean;
+import com.baidu.gcrm.common.ControllerHelper;
+import com.baidu.gcrm.common.IFileUploadService;
+import com.baidu.gcrm.common.PatternUtil;
+import com.baidu.gcrm.common.auth.service.IUserDataRightService;
+import com.baidu.gcrm.common.excel.ExcelReader;
+import com.baidu.gcrm.common.excel.PoiRowCallback;
+import com.baidu.gcrm.common.exception.CRMBaseException;
+import com.baidu.gcrm.common.json.JsonBean;
+import com.baidu.gcrm.common.json.JsonBeanUtil;
+import com.baidu.gcrm.common.util.HttpHeaderUtil;
+import com.baidu.gcrm.i18n.model.I18nKV;
+import com.baidu.gcrm.i18n.service.I18nKVService;
+import com.baidu.gcrm.resource.adplatform.model.AdPlatformSiteRelation;
+import com.baidu.gcrm.resource.adplatform.service.IAdPlatformSiteRelationService;
+import com.baidu.gcrm.resource.position.model.Position;
+import com.baidu.gcrm.resource.position.model.Position.PositionPropertyStatus;
+import com.baidu.gcrm.resource.position.model.Position.PositionStatus;
+import com.baidu.gcrm.resource.position.model.Position.PositionType;
+import com.baidu.gcrm.resource.position.model.PositionQueryBean;
+import com.baidu.gcrm.resource.position.service.IPositionService;
+import com.baidu.gcrm.resource.position.web.helper.PositionImportHelper;
+import com.baidu.gcrm.resource.position.web.validator.PositionNameValidator;
+import com.baidu.gcrm.resource.position.web.validator.PositionPropertyValidator;
+import com.baidu.gcrm.resource.position.web.validator.PositionValidator;
+import com.baidu.gcrm.resource.position.web.vo.PositionCondition;
+import com.baidu.gcrm.resource.position.web.vo.ErrorCellVO;
+import com.baidu.gcrm.resource.position.web.vo.PositionVO;
+import com.baidu.gcrm.resource.site.model.Site;
+import com.baidu.gcrm.schedule1.model.Schedules;
+import com.baidu.gcrm.schedule1.model.Schedules.ScheduleStatus;
+import com.baidu.gcrm.schedule1.service.ISchedulesService;
+import com.baidu.gcrm.stock.service.IStockService;
+import com.baidu.gcrm.valuelistcache.model.AdvertisingPlatform;
+
+@Controller
+@RequestMapping("/position")
+public class PositionAction extends ControllerHelper{
+    
+    Logger logger = LoggerFactory.getLogger(PositionAction.class);
+    
+    @Autowired
+    IPositionService positionService;
+    
+    @Autowired
+    IFileUploadService fileUploadService;
+    
+    @Autowired
+    ISchedulesService schedulesService;
+    
+    @Autowired
+    IStockService stockService;
+    
+    @Autowired
+    I18nKVService i18nService;
+    
+    @Autowired
+    IUserDataRightService userDataRightService;
+    
+    @Autowired
+    IAdPlatformSiteRelationService relationService;
+    
+    @RequestMapping("/preSavePosition")
+    @ResponseBody
+    public JsonBean<Position> preSavePosition(@RequestBody Position position) {
+        Position currPosition = positionService.queryPreSaveTree(position.getAdPlatformId(), position.getSiteId());
+        return JsonBeanUtil.convertBeanToJsonBean(currPosition);
+    }
+    
+    @RequestMapping("/queryPosition/{id}")
+    @ResponseBody
+    public JsonBean<PositionVO> queryPosition(@PathVariable Long id) {
+        return JsonBeanUtil.convertBeanToJsonBean(positionService.findPositionVOById(id));
+        
+    }
+    
+    @RequestMapping("/queryPositionBySiteId")
+    @ResponseBody
+    public JsonBean<List<PositionVO>> queryPositionBySiteId(@RequestParam("productId") Long adPlatformId, @RequestParam("siteId") Long siteId) {
+        List<PositionVO> positionVO = positionService.findChannelBySiteIdAndStatus(adPlatformId, siteId, currentLocale,
+            null);
+        return JsonBeanUtil.convertBeanToJsonBean(positionVO);
+    }
+    
+    @RequestMapping("/queryPositionByParentId")
+    @ResponseBody
+    public JsonBean<List<PositionVO>> queryPositionByParentId(@RequestParam("parentId") Long parentId) {
+        List<PositionVO> positionVO = positionService.findByParentIdAndStatus(parentId, currentLocale,
+                null);
+        return JsonBeanUtil.convertBeanToJsonBean(positionVO);
+    }
+    
+    
+    @RequestMapping("/positionNumSuggest")
+    @ResponseBody
+    public JsonBean<List<AutoSuggestBean<String>>> customersSuggest(@RequestParam("query")String tag){
+        List<AutoSuggestBean<String>> suggests = new ArrayList<AutoSuggestBean<String>>();
+        if(StringUtils.isBlank(tag)){
+            return JsonBeanUtil.convertBeanToJsonBean(suggests);
+        }
+        
+        List<Position> positions   = positionService.findByPositionNumber(tag, PositionType.position);
+        for (Position position : positions) {
+            String positionNumber = position.getPositionNumber();
+            suggests.add(new AutoSuggestBean<String>(positionNumber, positionNumber));
+        }
+        return JsonBeanUtil.convertBeanToJsonBean(suggests);
+    }
+    
+    @RequestMapping(value = "/viewGuide/{id}")
+    public void viewGuideFile(HttpServletRequest request,
+            HttpServletResponse response,@PathVariable Long id){
+        Position position = positionService.findById(id);
+        if (position == null || PatternUtil.isBlank(position.getGuideFileName())) {
+            return;
+        }
+        String guideFileName = position.getGuideFileName();
+        String downloadFileName = position.getGuideFileDownloadName();
+        HttpHeaderUtil.setDownloadHeader(downloadFileName, request, response, false);
+        
+        try {
+            FileCopyUtils.copy(fileUploadService.download(guideFileName), response.getOutputStream());
+        } catch (Exception e) {
+            logger.error("=====download guide file fail====",e.getMessage());
+        }
+    }
+    
+    @RequestMapping("/savePosition")
+    @ResponseBody
+    public JsonBean<Position> savePosition(@RequestBody Position position, BindingResult bindingResult) {
+        ValidationUtils.invokeValidator(new PositionValidator(), 
+                position, bindingResult);
+        if (bindingResult.hasErrors()) {
+            return JsonBeanUtil.convertBeanToJsonBean(position,
+                    super.collectErrors(bindingResult));
+        }
+        generatePropertyForCreate(position);
+        try {
+            positionService.savePositionAndI18nInfo(position, false);
+        } catch (CRMBaseException e) {
+            return JsonBeanUtil.convertBeanToJsonBean(null, "resource.position.add.error");
+        }
+        return JsonBeanUtil.convertBeanToJsonBean(position);
+        
+    }
+    
+    @RequestMapping("/updatePositionProperty")
+    @ResponseBody
+    public JsonBean<Position> updatePositionProperty(@RequestBody Position currPosition, BindingResult bindingResult) {
+        Long id = currPosition.getId();
+        if (id == null) {
+            JsonBeanUtil.convertBeanToJsonBean(null);
+        }
+        Position dbPosition = positionService.findById(id);
+        PositionStatus dbPositionStatus = dbPosition.getStatus();
+        PositionType type = dbPosition.getType(); 
+        currPosition.setType(type);
+        
+        ValidationUtils.invokeValidator(new PositionPropertyValidator(), 
+                currPosition, bindingResult);
+        if (bindingResult.hasErrors()) {
+            return JsonBeanUtil.convertBeanToJsonBean(currPosition, super.collectErrors(bindingResult));
+        }
+        
+        //check sales amount
+        if (PositionType.position == type
+            && PositionStatus.enable == dbPositionStatus) {
+            
+            Integer currSalesAmount =  currPosition.getSalesAmount();
+            Integer dbSalesAmount = dbPosition.getSalesAmount();
+            if (currSalesAmount != dbSalesAmount || 
+                (currSalesAmount != null && dbSalesAmount != null
+                && currSalesAmount.intValue() != dbSalesAmount.intValue())) {
+                Long usedCount = stockService.findMaxOccupiedCPTStock(id);
+                if (usedCount != null && usedCount.longValue() > 0 && (currSalesAmount == null 
+                    || currSalesAmount.intValue() < usedCount.longValue())) {
+                    return JsonBeanUtil.convertBeanToJsonBean(currPosition, String.valueOf(usedCount), JsonBeanUtil.CODE_ERROR_DISPLAY_DIRECTLY);
+                }
+            }
+        }
+        
+        generatePropertyForUpdate(currPosition);
+        positionService.updatePositionProperty(currPosition,dbPosition);
+        return JsonBeanUtil.convertBeanToJsonBean(currPosition);
+        
+    }
+    
+    @RequestMapping("/updatePositionName")
+    @ResponseBody
+    public JsonBean<PositionVO> updatePositionName(@RequestBody PositionVO positionVO, BindingResult bindingResult) {
+        if (positionVO.getId() == null) {
+            JsonBeanUtil.convertBeanToJsonBean(null);
+        }
+        
+        ValidationUtils.invokeValidator(new PositionNameValidator(), 
+                positionVO, bindingResult);
+        if (bindingResult.hasErrors()) {
+            return JsonBeanUtil.convertBeanToJsonBean(positionVO,
+                    super.collectErrors(bindingResult));
+        }
+        
+        positionService.updatePositionName(positionVO);
+        return JsonBeanUtil.convertBeanToJsonBean(positionVO);
+        
+    }
+    
+    @RequestMapping("/updateGuideFileProperty")
+    @ResponseBody
+    public JsonBean<Position> updateGuideFileProperty(@RequestBody Position position) {
+        Position existsPosition = positionService.findById(position.getId());
+        if (existsPosition == null || PositionType.area != existsPosition.getType()) {
+            return null;
+        }
+        
+        //process old file
+        String existsGuideFileName = existsPosition.getGuideFileName();
+        if (!PatternUtil.isBlank(existsGuideFileName)) {
+            try {
+                fileUploadService.deleteFile(existsGuideFileName);
+            } catch (Exception e) {
+                logger.error("deleteFile failed!",existsGuideFileName);
+            }
+        }
+        
+        existsPosition.setGuideFileName(position.getGuideFileName());
+        existsPosition.setGuideUrl(position.getGuideUrl());
+        existsPosition.setGuideFileDownloadName(position.getGuideFileDownloadName());
+        generatePropertyForUpdate(existsPosition);
+        positionService.savePosition(existsPosition);
+        
+        return JsonBeanUtil.convertBeanToJsonBean(position);
+    }
+    
+    @RequestMapping("/uploadGuideFile")
+    @ResponseBody
+    public JsonBean<Position> uploadGuideFile(Position position) {
+        boolean isSuccess = processFile(position);
+        position.setFile(null);
+        if (!isSuccess) {
+            return JsonBeanUtil.convertBeanToJsonBean(position, "", JsonBeanUtil.CODE_ERROR_DISPLAY_DIRECTLY);
+        }
+        return JsonBeanUtil.convertBeanToJsonBean(position);
+    }
+    
+    @RequestMapping("/queryUsedAmount/{id}")
+    @ResponseBody
+    public JsonBean<Long> queryUsedAmount(@PathVariable Long id) {
+        List<ScheduleStatus> scheduleStatus = new LinkedList<ScheduleStatus> ();
+        scheduleStatus.add(ScheduleStatus.confirmed);
+        scheduleStatus.add(ScheduleStatus.locked);
+        Position position = positionService.findById(id);
+        List<Schedules> schedules = schedulesService.findByPositionAndStatus(position, scheduleStatus);
+        Long amount = Long.valueOf(0l);
+        if (!CollectionUtils.isEmpty(schedules)) {
+            amount = Long.valueOf(schedules.size());
+        }
+        return JsonBeanUtil.convertBeanToJsonBean(amount);
+    }
+    
+    
+    @RequestMapping("/disable/{id}")
+    @ResponseBody
+    public JsonBean<Position> disable(@PathVariable Long id) {
+        Position updatePosition = generateUpdatePosition(id, PositionStatus.disable);
+        Position dbPosition = positionService.findById(id);
+        List<Position> occupationPositionList = positionService.findOperateOccupationPosition(updatePosition, dbPosition);
+        Position position = positionService.updatePositionStatus(updatePosition, dbPosition, occupationPositionList);
+        return JsonBeanUtil.convertBeanToJsonBean(position);
+    }
+    
+    @RequestMapping("/hasPositions/{id}")
+    @ResponseBody
+    public JsonBean<Boolean> hasPositions(@PathVariable Long id) {
+        Position dbPosition = positionService.findById(id);
+        if (PositionType.position == dbPosition.getType()) {
+            return JsonBeanUtil.convertBeanToJsonBean(Boolean.valueOf(true)); 
+        }
+        List<Position> existsPositions = positionService.findByIndexStrAndType(id, dbPosition.getIndexStr(), PositionType.position);
+        if (CollectionUtils.isEmpty(existsPositions)) {
+            return JsonBeanUtil.convertBeanToJsonBean(Boolean.valueOf(false));
+        } else {
+            return JsonBeanUtil.convertBeanToJsonBean(Boolean.valueOf(true));
+        }
+    }
+    
+    @RequestMapping("/hasProperty/{id}")
+    @ResponseBody
+    public JsonBean<Boolean> hasProperty(@PathVariable Long id) {
+        Position dbPosition = positionService.findById(id);
+        if (PositionType.position == dbPosition.getType()) {
+            return JsonBeanUtil.convertBeanToJsonBean(Boolean.valueOf(true)); 
+        }
+        List<Position> existsPositions = positionService.findByIndexStrLikeAndTypeAndPropertyStatus(id, dbPosition.getIndexStr(),
+                PositionType.position, PositionPropertyStatus.enable);
+        
+        if (CollectionUtils.isEmpty(existsPositions)) {
+            return JsonBeanUtil.convertBeanToJsonBean(Boolean.valueOf(false));
+        } else {
+            return JsonBeanUtil.convertBeanToJsonBean(Boolean.valueOf(true));
+        }
+    }
+    
+    @RequestMapping("/enable/{id}")
+    @ResponseBody
+    public JsonBean<Position> enable(@PathVariable Long id) {
+        Position updatePosition = generateUpdatePosition(id, PositionStatus.enable);
+        Position dbPosition = positionService.findById(id);
+        List<Position> occupationPositionList = positionService.findOperateOccupationPosition(updatePosition, dbPosition);
+        //check property
+        List<Long> ids = new LinkedList<Long> ();
+        if (!CollectionUtils.isEmpty(occupationPositionList)) {
+            for (Position temPosition : occupationPositionList) {
+                boolean hasProperty = positionService.hasProperty(temPosition);
+                if (!hasProperty) {
+                    ids.add(temPosition.getId());
+                }
+            }
+        }
+        
+        if (!CollectionUtils.isEmpty(ids)) {
+            Map<String,List<String>> errorMap = new HashMap<String,List<String>> ();
+            List<String> nameList = new LinkedList<String> ();
+            for (Long positionId : ids) {
+                I18nKV i18nKV = i18nService.findByIdAndLocale(Position.class, positionId, currentLocale);
+                nameList.add(i18nKV.getExtraValue());
+            }
+            errorMap.put("resource.position.property.null", nameList);
+            
+            return JsonBeanUtil.convertBeanToJsonBean(null,errorMap, JsonBeanUtil.CODE_ERROR_DISPLAY_DIRECTLY);
+            
+        }
+        
+        Position position = positionService.updatePositionStatus(updatePosition, dbPosition, occupationPositionList);
+        return JsonBeanUtil.convertBeanToJsonBean(position);
+    }
+    
+    private Position generateUpdatePosition(Long id,PositionStatus status) {
+        Position updatePosition = new Position();
+        updatePosition.setId(id);
+        updatePosition.setStatus(status);
+        generatePropertyForUpdate(updatePosition);
+        
+        return updatePosition;
+    }
+    
+    
+    
+    private boolean processFile(Position position) {
+        boolean isProcessFileSuccess = true;
+        MultipartFile file = position.getFile();
+        if(file != null && !file.isEmpty()){
+            String tempUrl = new StringBuilder().append("/").append(UUID.randomUUID().toString()).toString();
+            String fileUrl = "";
+            try {
+                fileUrl = fileUploadService.upload(tempUrl, file.getBytes());
+            } catch (IOException e1) {
+                isProcessFileSuccess = false;
+                logger.error("uploadPositionFile failed!",tempUrl);
+            }
+            
+            
+            if (isProcessFileSuccess) {
+                position.setGuideFileName(tempUrl);
+                position.setGuideUrl(fileUrl);
+                position.setGuideFileDownloadName(file.getOriginalFilename());
+            }
+        }
+        
+        return isProcessFileSuccess;
+    }
+    
+    @RequestMapping("/query")
+    @ResponseBody
+    public JsonBean<PositionCondition<PositionQueryBean>> query(PositionCondition<PositionQueryBean> page) {
+        page.setResultClass(PositionQueryBean.class);
+        page.setType(PositionType.position.ordinal());
+        Long ucId = this.getUserId();
+        List<AdvertisingPlatform> adPlatformList = userDataRightService.getPlatformListByUcId(ucId,null);
+        if (CollectionUtils.isEmpty(adPlatformList)) {
+            return JsonBeanUtil.convertBeanToJsonBean(null);
+        }
+        List<Site> siteList = userDataRightService.getSiteListByUcId(ucId, null);
+        if (CollectionUtils.isEmpty(siteList)) {
+            return JsonBeanUtil.convertBeanToJsonBean(null);
+        }
+        List<Long> adPlatformIds = new LinkedList<Long> ();
+        for (AdvertisingPlatform temAdvertisingPlatform : adPlatformList) {
+            adPlatformIds.add(temAdvertisingPlatform.getId());
+        }
+        List<Long> siteIds = new LinkedList<Long> ();
+        for (Site temSite : siteList) {
+            siteIds.add(temSite.getId());
+        }
+        
+        List<AdPlatformSiteRelation> relations = relationService.findByAdPlatformIdAndSiteId(adPlatformIds, siteIds);
+        if (CollectionUtils.isEmpty(relations)) {
+            return JsonBeanUtil.convertBeanToJsonBean(null);
+        }
+        
+        return JsonBeanUtil.convertBeanToJsonBean(positionService.query(page, relations, currentLocale));
+    }
+    
+    @RequestMapping("/queryTree")
+    @ResponseBody
+    public JsonBean<PositionCondition<PositionQueryBean>> queryTree(PositionCondition<PositionQueryBean> page) {
+        page.setResultClass(PositionQueryBean.class);
+        page.setQueryAll(true);
+        return JsonBeanUtil.convertBeanToJsonBean(positionService.queryListTree(page, currentLocale));
+    }
+    
+    @RequestMapping("/downloadImportTemplate")
+    public void downloadImportTemplate(HttpServletResponse response) {
+        try {
+            response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=UTF-8");
+            response.setHeader("Content-Disposition", "attachment; filename=positionImportTemplate.xlsx");
+            FileCopyUtils.copy(new ClassPathResource("template/positionImportTemplate.xlsx").getInputStream(),
+                    response.getOutputStream());
+        } catch (IOException e) {
+            logger.error("downloadImportTemplate failed!", e);
+        }
+    }
+    
+    @RequestMapping("/importPosition")
+    @ResponseBody
+    public void importPosition(Position position, HttpServletResponse resp) {
+        PrintWriter writer = null;
+        try {
+            writer = resp.getWriter();
+            resp.setContentType("text/plain; charset=UTF-8");
+            //read file
+            MultipartFile file = position.getFile();
+            if(file == null || file.isEmpty()) {
+                writer.println(JSON.toJSONString(JsonBeanUtil.convertBeanToJsonBean(null, "resource.position.import.error")));
+                return;
+            }
+            Long adPlatformId = position.getAdPlatformId();
+            Long siteId = position.getSiteId();
+            if (adPlatformId == null || siteId == null) {
+                position.setFile(null);
+                writer.println(JSON.toJSONString(JsonBeanUtil.convertBeanToJsonBean(position)));
+                return;
+            }
+            
+            final Map<String,List<ErrorCellVO>> errorMap = new HashMap<String,List<ErrorCellVO>> ();
+            final Map<String,PositionVO> allImportDataMap = new HashMap<String,PositionVO>();
+            final Map<String,String> allDataCheckMap = new HashMap<String,String>();
+            final Map<String,String> dbPositionNameMap = PositionValidator.getExistsPositionMap(adPlatformId, siteId);
+            ExcelReader.read(file.getInputStream(), new PoiRowCallback(){
+                @Override
+                public void call(Row row) {
+                    if (row.getRowNum() == 0) {
+                        return;
+                    }
+                    PositionImportHelper.processRow(row, errorMap,allImportDataMap,
+                            allDataCheckMap, dbPositionNameMap);
+                            
+                }
+            });
+            
+            
+            if (errorMap.size() > 0) {
+                position.setFile(null);
+                writer.println(JSON.toJSONString(JsonBeanUtil.convertBeanToJsonBean(position,
+                        errorMap, JsonBeanUtil.CODE_ERROR_DISPLAY_DIRECTLY)));
+                return;
+            } else if (allImportDataMap.size() < 1) {
+                writer.println(JSON.toJSONString(JsonBeanUtil.convertBeanToJsonBean(null, "resource.position.import.error")));
+                return;
+            }
+            
+            //convert to tree structure
+            Position savePosition = new Position();
+            savePosition.setAdPlatformId(adPlatformId);
+            savePosition.setSiteId(siteId);
+            PositionImportHelper.convertToPositionBean(savePosition, allImportDataMap, dbPositionNameMap);
+            
+            //save
+            generatePropertyForCreate(savePosition);
+            positionService.savePositionAndI18nInfo(savePosition, true);
+            
+        } catch (CRMBaseException e) {
+            position.setFile(null);
+            writer.println(JSON.toJSONString(JsonBeanUtil.convertBeanToJsonBean(null, "resource.position.import.error")));
+            return;
+        } catch (IOException e) {
+            logger.error("read import file stream failed!", e);
+        }
+        if (writer != null) {
+            position.setFile(null);
+            writer.println(JSON.toJSONString(JsonBeanUtil.convertBeanToJsonBean(position)));
+        }
+    }
+    
+    @RequestMapping("/initPositionCode")
+    public void initPositionCode(HttpServletResponse response) {
+        positionService.initPositionCode();
+    }
+    
+}

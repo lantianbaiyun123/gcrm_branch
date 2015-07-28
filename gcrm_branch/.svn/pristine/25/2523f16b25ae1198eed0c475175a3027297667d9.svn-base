@@ -1,0 +1,31 @@
+<div class="panel gcrm-panel customer-adsolution-list">
+  <div class="panel-body">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>{{'ACCOUNT_EMAIL' | translate}}</th>
+          <th>{{'ACCOUNT_USERNAME' | translate}}</th>
+          <th>{{'ACCOUNT_STATUS' | translate}}</th>
+          <th>{{'ACCOUNT_CREATETIME' | translate}}</th>
+          <th>{{'ACCOUNT_CREATER' | translate}}</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="item in accountList.list">
+          <td>{{item.email}}</td>
+          <td>{{item.username}}</td>
+          <td>{{item.status}}</td>
+          <td>{{item.createDate}}</td>
+          <td>{{item.creator}}</td>
+          <td>
+            <a class="btn btn-link">{{'EDIT' | translate}}</a>
+            <a class="btn btn-link">{{'REMOVE' | translate}}</a>
+            <a class="btn btn-link">{{'DISABLE' | translate}}</a>
+            <a class="btn btn-link">{{'ENABLE' | translate}}</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

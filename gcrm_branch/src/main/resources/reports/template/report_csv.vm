@@ -1,0 +1,13 @@
+﻿##输出表头各列名称
+#set($displayColConfigs=$transformerConfig.getDisplayColumnConfigs())
+#foreach($columnConfig in $displayColConfigs)
+#set($colHeaderName=$templateUtil.localize($columnConfig.name, $reportlocale))
+$templateUtil.escapeDelimiter($colHeaderName,","),#end
+
+##输出表中各行值 
+#set ($dataList=$pageCritera.getContent())
+#foreach($data in $dataList)
+#foreach($columnConfig in $displayColConfigs)
+$templateUtil.escapeDelimiter($templateUtil.displayCellValue($data,$columnConfig),","),#end
+
+#end

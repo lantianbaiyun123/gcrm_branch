@@ -1,0 +1,9 @@
+{
+    "expr": true,
+    "curly": true,
+    "immed": true,
+    "noarg": true,
+    "sub": true,
+    "eqnull": true,
+    "trailing": true
+}

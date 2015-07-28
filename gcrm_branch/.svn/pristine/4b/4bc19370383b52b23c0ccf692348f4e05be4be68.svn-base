@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+
+	<bean id="publishSendMail" class="com.baidu.gcrm.valuelist.quartz.PublishSendMail">
+	</bean>
+	
+	<!-- publishSendMailDetail -->
+	<bean id="publishSendMailDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="publishSendMail" />
+		<property name="targetMethod" value="sendOnlineCollectionMail" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="publishSendMailTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="publishSendMailDetail" />
+		<property name="cronExpression" value="${publish.sendmail.task}" />
+	</bean>
+
+	<!-- publishSendMaterMailDetail -->
+	<bean id="publishSendMaterMailDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="publishSendMail" />
+		<property name="targetMethod" value="sendMaterCollectionMail" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="publishSendMaterMailTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="publishSendMaterMailDetail" />
+		<property name="cronExpression" value="${publish.sendmatermail.task}" />
+	</bean>
+
+	<bean id="qutationMainValid" class="com.baidu.gcrm.valuelist.quartz.QutationMainValid">
+	</bean>
+	<!-- qutationMainValidDetail -->
+	<bean id="qutationMainValidDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="qutationMainValid" />
+		<property name="targetMethod" value="doIt" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="qutationMainValidTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="qutationMainValidDetail" />
+		<property name="cronExpression" value="${quotation.valid.cron}" />
+	</bean>
+
+    <!-- refresh cache  -->
+	<bean id="cacheRefreshJob" class="com.baidu.gcrm.valuelist.quartz.CacheRefreshJob">
+	</bean>
+	<!-- JobDetail -->
+	<bean id="jobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="cacheRefreshJob" />
+		<property name="targetMethod" value="doIt" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- trigger -->
+	<bean id="simpleTrigger"
+		class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
+		<!-- see the example of method invoking job above -->
+		<property name="jobDetail" ref="jobDetail" />
+		<!-- 10 seconds -->
+		<!-- <property name="startDelay" value="5" /> -->
+		<!-- repeat every 5 seconds -->
+		<property name="repeatInterval" value="3600000" />
+	</bean>
+
+	<!-- init position date -->
+	<bean id="initPositionDateJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="positionDateServiceImpl" />
+		<property name="targetMethod" value="initPositionDateTimer" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="initPositionDateTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="initPositionDateJobDetail" />
+		<property name="cronExpression" value="${position.occupation.init.cron}" />
+	</bean>
+	
+	<!-- update stock -->
+	<bean id="updateStockJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="stockServiceImpl" />
+		<property name="targetMethod" value="updateStocksTimer" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="updateStockTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="updateStockJobDetail" />
+		<property name="cronExpression" value="${position.stock.update.cron}" />
+	</bean>
+
+	<!-- batch unpublish task -->
+	<bean id="batchUnpublishTaskJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="publishDateServiceImpl" />
+		<property name="targetMethod" value="batchUnpublishTimer" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="batchUnpublishTaskTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="batchUnpublishTaskJobDetail" />
+		<property name="cronExpression" value="${batch.unpublish.task}" />
+	</bean>
+	
+	<bean id="batchPublishTaskJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="publishDateServiceImpl" />
+		<property name="targetMethod" value="batchPublishTimer" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="batchPublishTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="batchPublishTaskJobDetail" />
+		<property name="cronExpression" value="${batch.publish.task}" />
+	</bean>
+	<!-- sync hao123 ad data -->
+	<bean id="hao123AdDataSyncTaskJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="adContentStatisticServiceImpl" />
+		<property name="targetMethod" value="syncHao123AdContentPublishData" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="hao123AdDataSyncTaskTaskTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="hao123AdDataSyncTaskJobDetail" />
+		<property name="cronExpression" value="${adcontent.hao123.statistic.task}" />
+	</bean>
+	
+	<!-- incriment random prefix value -->
+    <bean id="incrimentRandomPrefixJobDetail"
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="randomStringServiceImpl" />
+        <property name="targetMethod" value="incrementAllRandomPrefixValue" />
+        <property name="concurrent" value="false" />
+    </bean>
+    <bean id="incrimentRandomPrefixTrigger"
+        class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="incrimentRandomPrefixJobDetail" />
+        <property name="cronExpression" value="${random.prefix.incriment.task}" />
+    </bean>
+
+	<bean id="analysisOperateReport" class="com.baidu.gcrm.valuelist.quartz.OperateReportJob">
+	</bean>
+	<!-- analysisOperateReportDetail -->
+	<bean id="analysisOperateReportDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="analysisOperateReport" />
+		<property name="targetMethod" value="doIt" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="analysisOperateReportTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="analysisOperateReportDetail" />
+		<property name="cronExpression" value="${analysis.operateReport.cron}" />
+	</bean>
+
+	<bean id="PositionMailJob" class="com.baidu.gcrm.valuelist.quartz.PositionMailJob">
+	</bean>
+	<!-- analysisOperateReportDetail -->
+	<bean id="PositionMailJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="PositionMailJob" />
+		<property name="targetMethod" value="sendPositonFullMail" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="positionMailJobTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="PositionMailJobDetail" />
+		<property name="cronExpression" value="${position.full.task}" />
+	</bean>
+	
+	<!-- remind advertise operator -->
+	<bean id="remindAdvertiseOperatorJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="scheduleTimerServiceImpl" />
+		<property name="targetMethod" value="remindAdvertiseOperatorTimer" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="remindAdvertiseOperatorTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="remindAdvertiseOperatorJobDetail" />
+		<property name="cronExpression" value="${remind.advertise.operator.cron}" />
+	</bean>
+	
+	<!-- remind advertise operator -->
+	<bean id="autoReleaseScheduleJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="scheduleTimerServiceImpl" />
+		<property name="targetMethod" value="autoReleaseScheduleTimer" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="autoReleaseScheduleTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="autoReleaseScheduleJobDetail" />
+		<property name="cronExpression" value="${auto.release.schedule.cron}" />
+	</bean>
+	
+		<!-- notice clear and remove since timeout operator -->
+	<bean id="noticeClearRemoveJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="noticeServiceImpl" />
+		<property name="targetMethod" value="clearTimeoutTimer" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="noticeClearRemoveTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="noticeClearRemoveJobDetail" />
+		<property name="cronExpression" value="${notice.clear.remove.cron}" />
+	</bean>
+	
+	<!-- read from ecom statistics file and update -->
+	<bean id="readAndBackupFileJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="fileTimerServiceImpl" />
+		<property name="targetMethod" value="readAndBackupFileTimer" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="readAndBackupFileTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="readAndBackupFileJobDetail" />
+		<property name="cronExpression" value="${read.publish.statistics.cron}" />
+	</bean>
+	
+	<!-- generate adcontent file every 5 minutes -->
+	<bean id="generateADContentFileEveryFiveMinutesJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="fileTimerServiceImpl" />
+		<property name="targetMethod" value="generateADContentFileEveryFiveMinutes" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="generateADContentFileEveryFiveMinutesTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="generateADContentFileEveryFiveMinutesJobDetail" />
+		<property name="cronExpression" value="${adcontent.generator.everyFiveMinutes.cron}" />
+	</bean>
+	
+	<!-- generate position file every 5 minutes -->
+	<bean id="generatePositionFileEveryFiveMinutesJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="fileTimerServiceImpl" />
+		<property name="targetMethod" value="generatePositionFileEveryFiveMinutes" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="generatePositionFileEveryFiveMinutesTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="generatePositionFileEveryFiveMinutesJobDetail" />
+		<property name="cronExpression" value="${position.generator.everyFiveMinutes.cron}" />
+	</bean>
+	
+	<!-- sync newrights data 
+	<bean id="newrightsDataSyncJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="rightsSyncServiceImpl" />
+		<property name="targetMethod" value="syncAllDataToDB" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="newrightsDataSyncJobTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="newrightsDataSyncJobDetail" />
+		<property name="cronExpression" value="${newrights.syncData.task}" />
+	</bean>
+	-->
+
+	<!-- factory -->
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean"
+		lazy-init="true">
+		<property name="triggers">
+			<list>
+				<!-- <ref bean="cronTrigger" /> -->
+				<ref bean="simpleTrigger" />
+				<ref bean="initPositionDateTrigger" />
+				<ref bean="updateStockTrigger" />
+				<ref bean="qutationMainValidTrigger" />
+				<ref bean="batchUnpublishTaskTrigger" />
+				<ref bean="batchPublishTaskTrigger" />
+				<ref bean="publishSendMailTrigger" />
+				<ref bean="publishSendMaterMailTrigger" />
+				<ref bean="hao123AdDataSyncTaskTaskTrigger" />
+				<ref bean="analysisOperateReportTrigger" />
+				<ref bean="positionMailJobTrigger" />
+				<ref bean="remindAdvertiseOperatorTrigger" />
+				<ref bean="autoReleaseScheduleTrigger" />
+				<ref bean="noticeClearRemoveTrigger" />
+				<!-- <ref bean="readAndBackupFileTrigger" /> -->
+				<ref bean="generateADContentFileEveryFiveMinutesTrigger" />
+				<ref bean="generatePositionFileEveryFiveMinutesTrigger" />
+				<!-- <ref bean="incrimentRandomPrefixTrigger"/>-->
+			</list>
+		</property>
+	</bean>
+</beans>

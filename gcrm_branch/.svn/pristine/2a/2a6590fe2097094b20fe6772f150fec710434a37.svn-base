@@ -1,0 +1,184 @@
+package com.baidu.gcrm.occupation1.service.impl;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import com.baidu.gcrm.common.DateUtils;
+import com.baidu.gcrm.common.log.LoggerHelper;
+import com.baidu.gcrm.occupation.helper.DatePeriod;
+import com.baidu.gcrm.occupation1.dao.PositionDateRepository;
+import com.baidu.gcrm.occupation1.model.PositionDate;
+import com.baidu.gcrm.occupation1.model.PositionDate.PositionDateStatus;
+import com.baidu.gcrm.occupation1.service.IPositionDateRelationService;
+import com.baidu.gcrm.occupation1.service.IPositionDateService;
+import com.baidu.gcrm.occupation1.web.vo.DateOccupation;
+import com.baidu.gcrm.occupation1.web.vo.DateOccupationQueryCondition;
+import com.baidu.gcrm.resource.position.model.Position;
+import com.baidu.gcrm.resource.position.model.Position.PositionStatus;
+import com.baidu.gcrm.resource.position.model.Position.PositionType;
+import com.baidu.gcrm.resource.position.service.IPositionService;
+import com.baidu.gcrm.stock.service.IStockService;
+import com.baidu.gcrm.stock.vo.DateStock;
+import com.baidu.gcrm.valuelistcache.model.BillingModel;
+
+@Service
+public class PositionDateServiceImpl implements IPositionDateService {
+
+    @Autowired
+    IPositionService positionService;
+
+    @Autowired
+    PositionDateRepository positionDateDao;
+    
+    @Autowired
+    IStockService stockService;
+    
+    @Autowired
+    IPositionDateRelationService relationService;
+
+    @Value("#{appproperties['occupation.init.count']}")
+    private int initalDaysCount;
+
+    @Override
+    public void initPositionDateTimer() {
+        List<Position> positions = positionService.findByStatusAndType(PositionStatus.enable, PositionType.position);
+        if (CollectionUtils.isEmpty(positions)) {
+            return;
+        }
+        LoggerHelper.info(getClass(), "开始更新位置投放时间定时任务。");
+
+        Map<Long, Position> posIdMap = new HashMap<Long, Position>();
+        List<PositionDate> positionDates = new ArrayList<PositionDate>();
+        for (Position position : positions) {
+            List<PositionDate> newPositionDates = initPositionDate(position);
+            if (CollectionUtils.isEmpty(newPositionDates)) {
+                continue;
+            }
+            positionDates.addAll(newPositionDates);
+            posIdMap.put(position.getId(), position);
+        }
+
+        stockService.createNewStocks(positionDates, posIdMap);
+
+        LoggerHelper.info(getClass(), "成功更新位置投放时间{}个。", positions.size());
+    }
+
+    @Override
+    public List<PositionDate> initPositionDate(Position position) {
+        if (!PositionType.position.equals(position.getType())) {
+            return new ArrayList<PositionDate>();
+        }
+
+        Date farthestDate = positionDateDao.getFarthestDateByPosition(position.getId());
+
+        String currentFormatDate = DateUtils.getCurrentFormatDate(DateUtils.YYYY_MM_DD);
+        Date currentDate = DateUtils.getString2Date(currentFormatDate);
+        Date from = (farthestDate == null) ? currentDate : DateUtils.getNDayFromDate(farthestDate, 1);
+        int offDays = DateUtils.getOffDays(currentDate.getTime(), from.getTime());
+        int days = initalDaysCount - offDays;
+        LoggerHelper.info(getClass(), "从{}开始初始化{}天，位置id：{}", from, days, position.getId());
+        // initial one year from current date in db
+        return initOccupationByYear(position, from, days);
+    }
+
+    private List<PositionDate> initOccupationByYear(Position position, Date from, int n) {
+        List<PositionDate> existedPositionDates = positionDateDao.findByPositionId(position.getId());
+
+        List<PositionDate> positionDates = new ArrayList<PositionDate>();
+        List<Date> dates = DateUtils.getNDatesFromDate(from, n);
+        for (Date date : dates) {
+            PositionDate positionDate = generatePositionDate(position, date);
+            if (!existedPositionDates.contains(positionDate)) {
+                positionDates.add(positionDate);
+                existedPositionDates.add(positionDate);
+            }
+        }
+        return positionDateDao.save(positionDates);
+    }
+
+    private PositionDate generatePositionDate(Position position, Date date) {
+        PositionDate positionDate = new PositionDate();
+        positionDate.setPositionId(position.getId());
+        positionDate.setDate(date);
+        positionDate.setStatus(PositionDateStatus.ENABLED);
+        return positionDate;
+    }
+
+    @Override
+    public void enablePositionDate(Position position) {
+        // enable
+        Long positionId = position.getId();
+        positionDateDao.updateStatus(PositionDateStatus.ENABLED, new Date(), positionId);
+        // init position date
+        List<PositionDate> positionDates = initPositionDate(position);
+        // init stocks
+        Map<Long, Position> posIdMap = new HashMap<Long, Position>();
+        posIdMap.put(position.getId(), position);
+        stockService.createNewStocks(positionDates, posIdMap);
+    }
+    
+    @Override
+    public Date getFarthestDateByPosition(Long positionId) {
+        return positionDateDao.getFarthestDateByPosition(positionId);
+    }
+    
+    @Override
+    public List<DateOccupation> queryDateOccupations(DateOccupationQueryCondition condition) {
+        List<DateOccupation> dateOccs = new ArrayList<DateOccupation>();
+        if (condition == null) {
+            return dateOccs;
+        }
+        Long billingModelId = condition.getBillingModelId();
+        // 如果不是查询计费方式是CPT的库存，则统一查询CPM库存
+        if (!BillingModel.CPT_ID.equals(billingModelId)) {
+            condition.setBillingModelId(BillingModel.CPM_ID);
+        }
+        
+        DatePeriod period = condition.getPeriod();
+        List<Long> posDateIds = positionDateDao.findPositionDateIdsByPositionIdAndDateBetween(
+                condition.getPositionId(), period.getFrom(), period.getTo());
+        List<DateStock> stocks = stockService.queryDateStocks(condition.getBillingModelId(), posDateIds);
+        if (CollectionUtils.isEmpty(stocks)) {
+            return dateOccs;
+        }
+        Map<Long, Long> biddingCountMap = relationService.getCountGroupByPositionDateId(posDateIds);
+        for (DateStock stock : stocks) {
+            DateOccupation dateOcc = new DateOccupation();
+            dateOcc.setDate(stock.getDate());
+            dateOcc.setOccupied(stock.getOccupiedStock());
+            dateOcc.setRemained(stock.getTotalStock() - stock.getOccupiedStock());
+            dateOcc.setFull(dateOcc.getRemained() <= 0L);
+            Long biddingCount = biddingCountMap.get(stock.getPositionDateId());
+            dateOcc.setBiddingCount(biddingCount == null ? 0 : biddingCount.intValue());
+            
+            dateOccs.add(dateOcc);
+        }
+        
+        return dateOccs;
+    }
+    
+    @Override
+    public List<PositionDate> findAll() {
+        return positionDateDao.findAll();
+    }
+
+    @Override
+    public List<PositionDate> findByPositionIdAndDateIn(Long positionId, Collection<Date> dates) {
+        return positionDateDao.findByPositionIdAndDateIn(positionId, dates);
+    }
+
+    @Override
+    public List<Long> findByDateFromTo(Date from, Date to) {
+        return positionDateDao.findByDateFromTo(from, to);
+    }
+    
+}

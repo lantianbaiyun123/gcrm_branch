@@ -1,0 +1,33 @@
+<div class="modal-header">
+    <h4>{{title | translate}}</h4>
+</div>
+<div class="modal-body">
+  <form class="form-horizontal po-modal-form">
+    <div class="form-group">
+      <label class="control-label col-md-3">
+        {{'AD_BASIC_CONTRACT_NUMBER' | translate}}：
+      </label>
+      <div>
+        <div class="col-md-8">
+          <input type="hidden" ui-select2="optionContract" ng-model="po.contract" style="width:320px" name="customersName" required>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-md-3" >{{'AD_BASIC_CONTRACT_TYPE' | translate}}：</label>
+      <p class="form-control-static col-md-8" ng-if="po.contract.data.category">{{'CONTRACT_CATEGORY_' + po.contract.data.category | translate}}</p>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-md-3" >{{'AD_BASIC_CONTRACT_BRIEF' | translate}}：</label>
+      <p class="form-control-static col-md-8">{{po.contract.data.summary}}</p>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-md-3" >{{'AD_BASIC_CONTRACT_VALIDITY' | translate}}：</label>
+      <p class="form-control-static col-md-8">{{po.contract.data.beginDate | date:'yyyy/MM/dd'}} - {{po.contract.data.endDate | date:'yyyy/MM/dd'}}</p>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-primary"  ng-click="ok()">{{'CONFIRM' | translate}}</button>
+  <button type="button" class="btn btn-default" ng-click="cancel()">{{'CANCEL' | translate}}</button>
+</div>

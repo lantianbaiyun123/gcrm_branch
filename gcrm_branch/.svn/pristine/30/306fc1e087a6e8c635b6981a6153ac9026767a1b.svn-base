@@ -1,0 +1,88 @@
+{
+    "code": 200,
+    "data": {
+        "adPlatformId": 1,
+        "content": [
+            {
+                "adPlatformId": 1,
+                "adPlatformName": "hao123变现",
+                "channelName": "测试频道1",
+                "i18nExtraValue": "hao123变现-测试站点1-测试频道1",
+                "i18nValue": "测试频道1",
+                "id": 385,
+                "indexStr": "1-1-",
+                "modifyButtons": [
+                    "modifyName"
+                ],
+                "positionNumber": "572549",
+                "queryButtons": [],
+                "siteId": 1,
+                "siteName": "测试站点1",
+                "status": "enable",
+                "type": "channel"
+            },
+            {
+                "adPlatformId": 1,
+                "adPlatformName": "hao123变现",
+                "areaName": "1",
+                "channelName": "测试频道1",
+                "i18nExtraValue": "hao123变现-测试站点1-测试频道1-1",
+                "i18nValue": "1",
+                "id": 386,
+                "indexStr": "1-1-385-",
+                "modifyButtons": [
+                    "batchModifyProperty",
+                    "addImage",
+                    "modifyName"
+                ],
+                "parentId": 385,
+                "positionNumber": "274420",
+                "queryButtons": [
+                    "viewImage"
+                ],
+                "siteId": 1,
+                "siteName": "测试站点1",
+                "status": "enable",
+                "type": "area"
+            },
+            {
+                "adPlatformId": 1,
+                "adPlatformName": "hao123变现",
+                "areaName": "1",
+                "channelName": "测试频道1",
+                "i18nExtraValue": "hao123变现-测试站点1-测试频道1-1-3",
+                "i18nValue": "3",
+                "id": 387,
+                "indexStr": "1-1-385-386-",
+                "modifyButtons": [
+                    "addProperty",
+                    "modifyOccupation",
+                    "modifyName"
+                ],
+                "name": "3",
+                "parentId": 386,
+                "positionNumber": "157932",
+                "queryButtons": [
+                    "viewProperty",
+                    "viewOccupation"
+                ],
+                "siteId": 1,
+                "siteName": "测试站点1",
+                "status": "disable",
+                "type": "position"
+            }
+        ],
+        "offset": 0,
+        "pageNo": 1,
+        "pageNumber": 1,
+        "pageSize": 20,
+        "queryAll": true,
+        "result": [],
+        "resultClass": "com.baidu.gcrm.resource.position.model.PositionQueryBean",
+        "siteId": 1,
+        "total": 3,
+        "totalCount": 0,
+        "totalPages": 0
+    },
+    "message": "OK"
+}

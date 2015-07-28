@@ -1,0 +1,20 @@
+<div class="modal-header">
+  <h4>{{title}}</h4>
+</div>
+<div class="modal-header">
+  <dl>
+    <div ng-repeat="errorType in errors">
+      <dt>{{errorType.typeName}}</dt>
+      <dd>
+        <ul>
+          <li ng-repeat="item in errorType.list">
+            {{item}}
+          </li>
+        </ul>
+      </dd>
+    </div>
+  </dl>
+</div>
+<div class="modal-body clearfix">
+  <button type="button" class="btn btn-primary pull-right" ng-click="ok()">{{'CONFIRM' | translate}}</button>
+</div>

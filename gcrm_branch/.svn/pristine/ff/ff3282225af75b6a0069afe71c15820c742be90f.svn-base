@@ -1,0 +1,691 @@
+package com.baidu.gcrm.publish.service.impl;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.baidu.gcrm.ad.content.model.AdSolutionContent;
+import com.baidu.gcrm.ad.content.model.AdSolutionContentApply;
+import com.baidu.gcrm.ad.content.model.AdSolutionContentApply.ApprovalStatus;
+import com.baidu.gcrm.ad.content.service.IAdSolutionContentApplyService;
+import com.baidu.gcrm.ad.content.service.IAdSolutionContentService;
+import com.baidu.gcrm.ad.material.service.IMaterialManageService;
+import com.baidu.gcrm.ad.material.vo.MaterialContentVO;
+import com.baidu.gcrm.ad.model.AdvertiseSolution;
+import com.baidu.gcrm.ad.model.AdvertiseType;
+import com.baidu.gcrm.ad.model.Contract;
+import com.baidu.gcrm.ad.model.Contract.ContractState;
+import com.baidu.gcrm.common.Constants;
+import com.baidu.gcrm.common.DateUtils;
+import com.baidu.gcrm.common.ServiceBeanFactory;
+import com.baidu.gcrm.common.auth.RequestThreadLocal;
+import com.baidu.gcrm.common.exception.CRMBaseException;
+import com.baidu.gcrm.common.exception.CRMRuntimeException;
+import com.baidu.gcrm.common.log.LoggerHelper;
+import com.baidu.gcrm.common.random.IRandomCheckCallback;
+import com.baidu.gcrm.common.random.IRandomStringService;
+import com.baidu.gcrm.common.random.RandomType;
+import com.baidu.gcrm.data.service.IADContentDataStatisService;
+import com.baidu.gcrm.data.service.IPublishDateStatisticsService;
+import com.baidu.gcrm.occupation.helper.DatePeriod;
+import com.baidu.gcrm.occupation.helper.DatePeriodHelper;
+import com.baidu.gcrm.occupation.service.IPositionOccupationCommonService;
+import com.baidu.gcrm.publish.dao.IPublishRepository;
+import com.baidu.gcrm.publish.helper.PublishDateHelper;
+import com.baidu.gcrm.publish.model.Publish;
+import com.baidu.gcrm.publish.model.Publish.PublishStatus;
+import com.baidu.gcrm.publish.model.Publish.PublishType;
+import com.baidu.gcrm.publish.model.PublishDate;
+import com.baidu.gcrm.publish.model.PublishDate.PublishPeriodStatus;
+import com.baidu.gcrm.publish.model.PublishRecord.OperateType;
+import com.baidu.gcrm.publish.service.IPublishDateService;
+import com.baidu.gcrm.publish.service.IPublishMailService;
+import com.baidu.gcrm.publish.service.IPublishOwnerService;
+import com.baidu.gcrm.publish.service.IPublishRecordService;
+import com.baidu.gcrm.publish.service.IPublishService;
+import com.baidu.gcrm.resource.position.model.Position;
+import com.baidu.gcrm.resource.position.service.IPositionService;
+import com.baidu.gcrm.schedule.model.Schedule;
+import com.baidu.gcrm.schedule.model.Schedule.ScheduleStatus;
+import com.baidu.gcrm.schedule.service.IScheduleService;
+
+@Service
+public class PublishServiceImpl implements IPublishService {
+	
+	@Autowired
+	IPublishRepository publishDao;
+	@Autowired
+	IPublishDateService publishDateService;
+	@Autowired
+	IPositionOccupationCommonService occupationService;
+	@Autowired
+	IScheduleService scheduleService;
+	@Autowired
+	IPublishRecordService publishRecordService;
+	@Autowired
+	IPublishOwnerService ownerService;
+	@Autowired
+	IPublishMailService publishMailService; 
+	@Autowired
+	IAdSolutionContentService contentService;
+	@Autowired
+	IRandomStringService randomService;
+	@Autowired
+	IPositionService positionService;
+	@Autowired
+	IAdSolutionContentApplyService contentApplyService;
+	@Autowired
+	IMaterialManageService materialService;
+	@Autowired
+	IADContentDataStatisService dataStatisService;
+	@Autowired
+	IPublishDateStatisticsService publishDateStatisticsService;
+	
+	private static final int NUMBER_LENGTH = 10;
+	
+	
+	@Override
+	public void terminateAll(String number, Long operatorId) {
+		Publish publish = findByNumber(number);
+		checkPermission(publish, operatorId);
+		checkOperationPermitOrNot(publish, OperateType.terminate);
+
+		updatePublishTerminate(operatorId, publish);
+		unpublishOngoingDates(operatorId, publish);
+		//未上线的时间段设置为结束
+		updatePublishDateStatusEnd(publish);
+		occupationService.releaseOccupationAfterPublishTerminate(publish.getScheduleNumber(), publish.getAdContentId());
+		
+		publishRecordService.createAndSavePublishRecord(publish, operatorId, OperateType.terminate);
+		LoggerHelper.info(getClass(), "上线单编号：{}，终止投放成功，上线单：{}。", number, publish);
+
+		publishMailService.terminateContentByMail(publish);
+	}
+
+	private void updatePublishTerminate(Long operatorId, Publish publish) {
+		Date currentDate = new Date();
+		publish.setStatus(PublishStatus.terminate);
+		publish.setUpdateTime(currentDate);
+		publish.setUpdateOperator(operatorId);
+		save(publish);
+	}
+
+	private void unpublishOngoingDates(Long operatorId, Publish publish) {
+		Date currentDate = new Date();
+		List<PublishDate> publishDates = publishDateService.findByPublishNumberAndStatus(publish.getNumber(), PublishPeriodStatus.ongoing);
+		if (CollectionUtils.isEmpty(publishDates)) {
+			return;
+		}
+		
+		for (PublishDate publishDate : publishDates) {
+			publishDate.setActuralEnd(currentDate);
+			publishDate.setStatus(PublishPeriodStatus.end);
+			publishDate.setEndOperator(operatorId);
+		}
+		publishDateService.saveAll(publishDates);
+	}
+	
+	private void updatePublishDateStatusEnd(Publish publish) {
+		List<PublishDate> publishDates = publishDateService.findByPublishNumberAndStatus(publish.getNumber(), PublishPeriodStatus.not_start);
+		if (CollectionUtils.isEmpty(publishDates)) {
+			return;
+		}
+		for (PublishDate publishDate : publishDates) {
+			publishDate.setStatus(PublishPeriodStatus.end);
+		}
+		publishDateService.saveAll(publishDates);
+	}
+	
+	@Override
+	public void updateMaterial(String number, Long operatorId) {
+		Publish publish = findByNumber(number);
+		checkPermission(publish, operatorId);
+		checkOperationPermitOrNot(publish, OperateType.material_update);
+		
+		// publish.setType(scheduleService.isScheduleLocked(publish.getScheduleNumber()) ? PublishType.normal : PublishType.force);
+		publish.setType(PublishType.normal);
+		publish.setUpdateTime(new Date());
+		publish.setUpdateOperator(operatorId);
+		save(publish);
+		
+		publishRecordService.createAndSavePublishRecord(publish, operatorId, OperateType.material_update);
+		LoggerHelper.info(getClass(), "上线单编号：{}，物料上线成功，上线单：{}", number, publish);
+		publishMailService.materialOngoing(publish);
+	}
+	
+	/**
+	 * 检查当前用户是否有操作权限
+	 * @param id
+	 * @param username
+	 */
+	void checkPermission(Publish publish, Long userId) {
+		boolean isPermited = ownerService.checkPublishPermission(publish, userId);
+		if (isPermited) {
+			return;
+		}
+		throw new CRMRuntimeException("publish.not.authorized");
+	}
+	
+	/**
+	 * 检查当前时间段是否允许执行指定类型操作
+	 * @param type 操作类型
+	 */
+	void checkOperationPermitOrNot(Publish publish, OperateType type) {
+		PublishType publishType = publish.getType();
+		PublishStatus publishStatus = publish.getStatus();
+
+		switch (type) {
+			case terminate :
+				if (PublishStatus.publish_finish.equals(publishStatus)) {
+					throw new CRMRuntimeException("publish.finish.already");
+				}
+				break;
+			case material_update :
+				if (!PublishType.material.equals(publishType)) {
+					throw new CRMRuntimeException("operation.not.permit");
+				}
+				break;
+			default :
+				break;
+		}
+	}
+
+	@Override
+	public Publish save(Publish publish) {
+		return publishDao.save(publish);
+	}
+	
+	@Override
+	public Publish saveAndFlush(Publish publish) {
+		return publishDao.saveAndFlush(publish);
+	}
+	
+	@Override
+	public String generateNumber() throws CRMBaseException{
+	    
+        return randomService.random(NUMBER_LENGTH, RandomType.random_publish, new IRandomCheckCallback(){
+            @Override
+            public boolean exists(String randomStr) {
+                Publish exists = publishDao.findByNumber(randomStr);
+                if (exists != null) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
+	}
+	
+	@Override
+	public Publish findByAdContentId(Long adContentId) {
+		return publishDao.findByAdContentId(adContentId);
+	}
+	
+	@Override
+	public Publish findByNumber(String number) {
+		return publishDao.findByNumber(number);
+	}
+	
+	@Override
+	public Publish findByScheduleNumber(String scheduleNumber) {
+		return publishDao.findByScheduleNumber(scheduleNumber);
+	}
+	
+	@Override
+	public void updatePublishTypeByScheduleNumber(String scheduleNumber, PublishType type) {
+		publishDao.updatePublishTypeByScheduleNumber(type, scheduleNumber);
+	}
+	
+	@Override
+	public void updatePublishBySchedule(String scheduleNumber, List<Date> addDates) {
+		if (CollectionUtils.isEmpty(addDates)) {
+			return;
+		}
+		
+		Publish publish = publishDao.findByScheduleNumber(scheduleNumber);
+		if (publish == null) {
+			return;
+		}
+		
+		String publishNumber = publish.getNumber();
+		List<PublishDate> publishDates = publishDateService.findByPublishNumber(publishNumber);
+		List<PublishDate> newPublishDates = PublishDateHelper.updatePublishDateAfterAddingDates(publishDates, addDates, publishNumber);
+		publishDateService.deleteByPublishNumber(publishNumber);
+		publishDateService.saveAll(newPublishDates);
+		if (PublishStatus.publish_finish.equals(publish.getStatus()) && CollectionUtils.isNotEmpty(newPublishDates)) {
+			PublishDate lastPublishDate = newPublishDates.get(newPublishDates.size() - 1);
+			if (PublishPeriodStatus.not_start.equals(lastPublishDate.getStatus()) && lastPublishDate.getPlanEnd().after(DateUtils.getCurrentDate())) {
+				publish.setStatus(PublishStatus.publishing);
+				publishDao.save(publish);
+				LoggerHelper.info(getClass(), "更新上线单后，上线单状态由【完成】变为【上线中】");
+			}
+		}
+		LoggerHelper.info(getClass(), "更新排期单后，更新上线单成功，排期单编号：{}，上线单：{}，原上线时间：{}，上线时间：{}", scheduleNumber, publish,
+				publishDates, newPublishDates);
+	}
+	
+	@Override
+	public void updatePublishAfterScheduleInserted(String scheduleNumber, Date removedDate) {
+		if (removedDate == null) {
+			return;
+		}
+		LoggerHelper.info(getClass(), "插单后，查看是否需要更新上线单。排期单编号：{}", scheduleNumber);
+		Publish publish = publishDao.findByScheduleNumber(scheduleNumber);
+		if (publish == null) {
+			return;
+		}
+		
+		String publishNumber = publish.getNumber();
+		List<PublishDate> publishDates = publishDateService.findByPublishNumber(publishNumber);
+		List<PublishDate> newPublishDates = PublishDateHelper.updatePublishDateAfterRemovingDate(publishDates, removedDate, publishNumber);
+		if (publishDates.size() == newPublishDates.size() && CollectionUtils.isEqualCollection(publishDates, newPublishDates)) {
+			LoggerHelper.info(getClass(), "插单后，上线时间没有变化，插单时间：{}", removedDate);
+		}
+		publishDateService.deleteByPublishNumber(publishNumber);
+		publishDateService.saveAll(newPublishDates);
+		
+		LoggerHelper.info(getClass(), "插单{}后，更新上线单成功，排期单编号：{}，上线单：{}，原上线时间：{}，上线时间：{}", removedDate, scheduleNumber, publish,
+				publishDates, newPublishDates);
+	}
+	
+	@Override
+	public void terminateAllAfterRelease(String scheduleNumber) {
+		Publish publish = publishDao.findByScheduleNumber(scheduleNumber);
+		if (publish == null) {
+			return;
+		}
+
+		List<PublishDate> publishDates = publishDateService.findByPublishNumberAndStatus(publish.getNumber(),
+				PublishPeriodStatus.ongoing);
+
+		publishDateService.unpublishAllAfterRelease(publishDates, DateUtils.getCurrentDate(), Constants.SYSTEM_OPERATOR);
+		// TODO 是否可以删除所有还未投放的时间段
+		releasePublish(publish);
+		
+		scheduleService.updateScheduleCompleted(publish.getScheduleNumber());
+		LoggerHelper.info(getClass(), "释放排期单后，终止全部投放成功，排期单编号：{}，上线单：{}，上线时间：{}", scheduleNumber, publish, publishDates);
+		publishMailService.terminateContentByMail(publish);
+	}
+
+	@Override
+	public void triggerMaterialPublish(Long adContentId, String materialNumber, Long operatorId) {
+		Publish publish = publishDao.findByAdContentId(adContentId);
+		if (publish == null) {
+			LoggerHelper.err(getClass(), "触发物料上线任务时失败，广告内容id[{}]对应的上线单不存在", adContentId);
+			return;
+		}
+		triggerMaterialPublish(publish, materialNumber, operatorId);
+	}
+	
+	@Override
+	public void triggerMaterialPublish(Publish publish, String materialNumber, Long operatorId) {
+        if (publish == null) {
+            LoggerHelper.err(getClass(), "触发物料上线任务时失败，上线单不存在");
+            return;
+        }
+        if (contentService.findAutoPublishStatus(publish.getAdContentId())) {
+            LoggerHelper.info(getClass(), "该广告内容id={}是自动上线，所以不需要 触发物料上线，所属上线单号{}", publish.getAdContentId(),
+                    publish.getNumber());
+            return;
+        }
+		String oldMaterialNumber = publish.getMaterialNumber();
+		publish.setMaterialNumber(materialNumber);
+		publish.setUpdateTime(new Date());
+		publish.setUpdateOperator(operatorId);
+		String publishNumber = publish.getNumber();
+		if (PublishStatus.publishing.equals(publish.getStatus())) {
+			List<PublishDate> ongoingDates = publishDateService.findByPublishNumberAndStatus(publishNumber, PublishPeriodStatus.ongoing);
+			if (CollectionUtils.isNotEmpty(ongoingDates)) {
+				publish.setType(PublishType.material);
+				LoggerHelper.info(getClass(), "上线单：{}有正在投放的时间段，修改上线类型为物料上线。", publishNumber);
+			}
+		}
+		saveAndFlush(publish);
+		
+		LoggerHelper.info(getClass(), "更新物料编号成功，上线单编号：{}，原物料编号：{}，新物料编号：{}", 
+				publishNumber, oldMaterialNumber, publish.getMaterialNumber());
+	}
+	
+	@Override
+	public List<Publish> findByStatus(PublishStatus status) {
+		return publishDao.findByStatus(status);
+	}
+	
+	public List<Publish> findByStatusIn(Collection<PublishStatus> statuses){
+	    return publishDao.findByStatusIn(statuses);
+	}
+	@Override
+	@Deprecated
+	public void updateToNormalStatus(Long adContentId) {
+		Publish publish = findByAdContentId(adContentId);
+		if (publish == null) {
+			LoggerHelper.err(getClass(), "触发上线单状态为正常上线失败，上线单不存在");
+			return;
+		}
+		
+		if (PublishType.force.equals(publish.getType())) {
+			publish.setType(PublishType.normal);
+		} 
+		publish.setUpdateOperator(Constants.SYSTEM_OPERATOR);
+		publish.setUpdateTime(new Date());
+		save(publish);
+		LoggerHelper.info(getClass(), "触发上线单状态为正常上线成功，广告内容id：{}，上线单编号：{}，上线单类型：{}", adContentId, publish.getNumber(),
+				publish.getType());
+	}
+	
+	@Override
+	public void autoPublishAfterChangePO(AdSolutionContent content) {
+		if (content == null) {
+			return;
+		}
+		
+		Long adContentId = content.getId();
+		Publish publish = findByAdContentId(adContentId);
+
+		if (publish == null) {
+			LoggerHelper.err(getClass(), "变更PO后，发现广告内容没有上线单，广告内容id：{}", adContentId);
+			return;
+		}
+		if (!PublishStatus.publishing.equals(publish.getStatus())) {
+			LoggerHelper.info(getClass(), "变更PO后，发现上线单还未上线，无需自动上线，上线单编号：{}", publish.getNumber());
+			return;
+		}
+		
+		Long oldContentId = content.getOldContentId();
+		Publish oldPublish = findByAdContentId(oldContentId);
+		while (oldPublish == null) {
+			content = contentService.findOne(oldContentId);
+			if (content == null) {
+				LoggerHelper.err(getClass(), "变更PO后，没有旧的已上线广告内容，上线单编号：{}", publish.getNumber());
+				return;
+			}
+			oldContentId = content.getOldContentId();
+			if (oldContentId == null) {
+				LoggerHelper.err(getClass(), "变更PO后，没有旧的已上线广告内容，上线单编号：{}", publish.getNumber());
+				return;
+			}
+			oldPublish = findByAdContentId(oldContentId);
+		}
+		Schedule schedule = scheduleService.findByNumber(oldPublish.getScheduleNumber());
+		if (schedule == null) {
+			LoggerHelper.err(getClass(), "变更PO后，没有旧的已上线广告内容对应排期单，上线单编号：{}", publish.getNumber());
+			return;
+		}
+		Date approveDate = content.getApprovalDate();
+		Date currentDate = DateUtils.getCurrentDateOfZero();
+		List<PublishDate> publishDates = publishDateService.findByPublishNumber(publish.getNumber());
+		for (int i = 0; i < publishDates.size(); i++) {
+			PublishDate publishDate = publishDates.get(i);
+			if (!PublishPeriodStatus.end.equals(publishDate.getStatus())) {
+				continue;
+			}
+			Date acturalEnd = publishDate.getActuralEnd();
+			String formatDate = DateUtils.getDate2String(DateUtils.YYYY_MM_DD, acturalEnd);
+			if (formatDate.equals(DateUtils.getDate2String(DateUtils.YYYY_MM_DD, approveDate))) {
+				if (!Constants.SYSTEM_OPERATOR.equals(publishDate.getEndOperator())) {
+					LoggerHelper.info(getClass(), "变更PO后，新内容审核通过当天不是系统下线，无需自动上线，上线单编号：{}", publish.getNumber());
+					return;
+				}
+				if (i + 1 >= publishDates.size()) {
+					LoggerHelper.info(getClass(), "变更PO后，自动下线的时间段后没有时间段，无需自动上线，上线单编号：{}", publish.getNumber());
+					return;
+				}
+				PublishDate nextPublishDate = publishDates.get(i + 1);
+				if (!PublishPeriodStatus.not_start.equals(nextPublishDate.getStatus())) {
+					LoggerHelper.info(getClass(), "变更PO后，自动下线的时间段的下段时间已上线，无需自动上线，上线单编号：{}，前一段时间：{}，自动上线的时间段：{}",
+							publish.getNumber(), publishDate, nextPublishDate);
+					return;
+				}
+				Date planStart = nextPublishDate.getPlanStart();
+				if (planStart.after(approveDate) || planStart.before(approveDate)) {
+					LoggerHelper.info(getClass(), "变更PO后，上线时间不连续，无需自动上线，上线单编号：{}", publish.getNumber());
+					return;
+				}
+				if (currentDate.after(nextPublishDate.getPlanEnd())) {
+					LoggerHelper.info(getClass(), "变更PO后，自动上线时间已过，不再自动上线，上线单编号：{}", publish.getNumber());
+					return;
+				}
+				
+				Set<Date> allDates = DatePeriodHelper.getAllDates(schedule.getPeriodDescription());
+				List<Date> subDates = DatePeriodHelper.getDatesInPeriod(new DatePeriod(nextPublishDate.getPlanStart(), currentDate));
+				if (allDates.containsAll(subDates)) {
+					nextPublishDate.setActuralStart(new Date());
+					nextPublishDate.setStartOperator(Constants.SYSTEM_OPERATOR);
+					nextPublishDate.setStatus(PublishPeriodStatus.ongoing);
+					publishDateService.save(nextPublishDate);
+					LoggerHelper.info(getClass(), "变更PO后，自动上线成功，追溯的排期单{}对应时间：{}，前一段时间：{}，自动上线的时间段：{}", schedule.getNumber(),
+							schedule.getPeriodDescription(), publishDate, nextPublishDate);
+					return;
+				}
+				LoggerHelper.info(getClass(), "变更PO后，新的上线时间在旧上线单中不完全存在，不能自动上线，上线单编号：{}", publish.getNumber());
+				return;
+			}
+		}
+		LoggerHelper.info(getClass(), "变更PO后，发现旧上线单没有在新内容审核通过时系统自动下线，无需自动上线，上线单编号：{}", publish.getNumber());
+	}
+	
+	@Override
+	public Publish createPublish(AdSolutionContent content, Schedule schedule, String materialNumber) {
+		try {
+			if (content == null || schedule == null) {
+				return null;
+			}
+			Position position = positionService.findById(content.getPositionId());
+			if (position == null) {
+				return null;
+			}
+			AdvertiseSolution solution = ServiceBeanFactory.getAdSolutionService().findById(content.getAdSolutionId());
+			if (solution == null) {
+				return null;
+			}
+
+			Publish publish = new Publish();
+			publish.setAdContentNumber(content.getNumber());
+			publish.setAdContentId(content.getId());
+			publish.setAdSolutionNumber(solution.getNumber());
+			publish.setCreateOperator(RequestThreadLocal.getLoginUserId());
+			publish.setCreateTime(DateUtils.getCurrentDate());
+			publish.setMaterialNumber(materialNumber);
+			publish.setPositionId(position.getId());
+			publish.setNumber(generateNumber());
+			publish.setPositionNumber(position.getPositionNumber());
+			publish.setScheduleNumber(schedule.getNumber());
+			publish.setStatus(PublishStatus.unpublish);
+			publish.setCustomerNumber(solution.getCustomerNumber().toString());
+			publish.setOnlineNumber(publish.getNumber());
+			publish.setType(PublishType.normal);
+			List<PublishDate> publishDates = saveAndGetPublishDates(content, schedule, publish);
+			save(publish);
+			
+			// 初始化新上线单时间段对应的统计数据
+            publishDateStatisticsService.initByPublishNumber(publish.getNumber());
+			LoggerHelper.info(getClass(), "广告内容：{}，生成上线申请单：{}", content.getId(), publish);
+			LoggerHelper.info(getClass(), "生成上线申请单对应上线时间段：{}", new ArrayList<PublishDate>(publishDates));
+			LoggerHelper.info(getClass(), "自动检查新上线申请单是否可以自动上线，上线单号{}", publish.getNumber());
+            publishDateService.autoPublish(Arrays.asList(publish));
+			return publish;
+		} catch (Exception e) {
+			LoggerHelper.err(getClass(), "生成上线单失败，广告内容id：{}，错误原因：{}", content.getId(), e.getMessage());
+			throw new CRMRuntimeException(e);
+		}
+	}
+
+	private List<PublishDate> saveAndGetPublishDates(AdSolutionContent content, Schedule schedule, Publish publish) {
+		String periodDescription = schedule.getPeriodDescription();
+		List<DatePeriod> periods = DatePeriodHelper.getDatePeriods(periodDescription);
+		List<PublishDate> publishDates = new ArrayList<PublishDate>();
+		if (content.getOldContentId() != null) {
+			// 如果广告内容是方案变更后生成的，原来的内容可能已经上线，需要合并原来已上线的时间段
+			publishDates = getPublishDatesIfPublishAlready(content, periods, publish);
+		}
+		if (CollectionUtils.isEmpty(publishDates)) {
+			publishDates = publishDateService.generatePublishDatesAndSave(periods, publish.getNumber());
+		}
+		
+		return publishDates;
+	}
+	
+	private List<PublishDate> getPublishDatesIfPublishAlready(AdSolutionContent content, List<DatePeriod> periods, Publish newPublish) {
+		String newPublishNumber = newPublish.getNumber();
+		List<PublishDate> publishDates = new ArrayList<PublishDate>();
+		Long oldContentId = content.getOldContentId();
+		Long positionId = content.getPositionId();
+		Publish publish = findByAdContentId(oldContentId);
+		while (publish == null) {
+			content = contentService.findOne(oldContentId);
+			if (content == null) {
+				return publishDates;
+			}
+			oldContentId = content.getOldContentId();
+			if (oldContentId == null) {
+				return publishDates;
+			}
+			publish = findByAdContentId(oldContentId);
+		}
+		
+		Date approvalDate = content.getApprovalDate();
+		if (approvalDate == null) {
+			approvalDate = DateUtils.getCurrentDate();
+			LoggerHelper.err(getClass(), "广告内容id：{}的审核通过时间为空，设置为当前时间：{}。", content.getId(), approvalDate);
+		}
+		
+		if (!publish.getPositionId().equals(positionId)) {
+			// 旧内容与新内容不是同一位置，删掉旧内容对应的审批通过时间后的时间段数据
+			publishDateStatisticsService.deleteNotStartStatistics(publish.getNumber(), approvalDate);
+			return publishDates;
+		}
+		newPublish.setOnlineNumber(publish.getOnlineNumber());
+		newPublish.setProperty(Integer.valueOf(Constants.OLD_PUBLISH_NUMBER));
+		if (PublishStatus.unpublish.equals(publish.getStatus())) {
+			// 旧内容没有上线，所以删掉所有上线时间段对应统计数据记录
+			publishDateStatisticsService.deleteByPublishNumber(publish.getNumber());
+			return publishDates;
+		}
+		
+		publishDates = publishDateService.combinePublishDatesAndSave(periods, approvalDate, newPublishNumber, publish.getNumber());
+		updatePublishStatus(newPublish, publishDates);
+		publishDateStatisticsService.initStatisticsAfterPublishUpdate(publishDates, publish.getNumber(), approvalDate);
+		return publishDates;
+	}
+	
+	private void updatePublishStatus(Publish newPublish, List<PublishDate> publishDates) {
+		for (PublishDate publishDate : publishDates) {
+			if (!PublishPeriodStatus.not_start.equals(publishDate.getStatus())) {
+				newPublish.setStatus(PublishStatus.publishing);
+				break;
+			}
+		}
+	}
+	
+	@Override
+	public boolean tryLockScheduleAndCreatePublish(AdSolutionContent content) {
+		if (content == null) {
+			return false;
+		}
+		// 广告内容必须是有效状态
+		if (!content.getApprovalStatus().equals(com.baidu.gcrm.ad.content.model.AdSolutionContent.ApprovalStatus.effective)) {
+			LoggerHelper.err(getClass(), "广告内容{}不存在或不是确认状态，不能锁定", content.getNumber());
+			return false;
+		}
+		// 广告内容必须有PO号或广告方案有有效的合同，或者提前上线申请通过审核,0元测试单除外
+		if (!isContractPassed(content)) {
+			LoggerHelper.info(getClass(), "合同或PO没有生效，也没有审核通过的提前上线流程，不能锁定排期单，内容编号：{}", content.getNumber());
+			return false;
+		}
+		
+		MaterialContentVO materialContentVO = materialService.findFullAdContVoMaterByContent(content);
+		if (materialContentVO == null) {
+			LoggerHelper.info(getClass(), "没有审核通过的物料，不能锁定排期单，内容编号：{}", content.getNumber());
+			return false;
+		}
+		
+		Schedule schedule = scheduleService.findByAdContentIdAndStatus(content.getId(), ScheduleStatus.confirmed);
+		if (schedule == null) {
+			LoggerHelper.err(getClass(), "生成上线单时发现广告内容没有已确认的排期单，广告内容编号：{}", content.getNumber());
+			return false;
+		}
+		scheduleService.lockSchedule(schedule);
+		createPublish(content, schedule, materialContentVO.getMaterialNumber());
+		LoggerHelper.info(getClass(), "广告内容满足生成上线单条件，广告内容编号：{}，物料单编号：{}，排期单编号：{}", content.getNumber(),
+				materialContentVO.getMaterialNumber(), schedule.getNumber());
+		//生成此条广告内容的report相关数据
+		dataStatisService.insertData4AdContent(content);
+		return true;
+	}
+	
+	private boolean isContractPassed(AdSolutionContent content) {
+		boolean isContractPassed = true;
+		// O元测试单无需po或合同或提前上线申请即可投放
+		if(AdvertiseType.zerotest==contentService.findContentAdvertiseType(content)){
+		    return isContractPassed;
+		}
+		// 广告内容必须有PO号或广告方案有有效的合同
+		if (StringUtils.isBlank(content.getPoNum())) {
+			Contract contract = contentService.findWriteBackContractByContentId(content.getId());
+			if (contract == null || !ContractState.VALID.equals(contract.getState())) {
+				isContractPassed = false;
+			}
+		}
+		AdSolutionContentApply contentApply = contentApplyService.findAdContentApplyByConId(content.getId());
+		if (contentApply != null) {
+			boolean isContentApplyPassed = ApprovalStatus.approved.equals(contentApply.getApprovalStatus());
+			if (isContractPassed && ApprovalStatus.approving.equals(contentApply.getApprovalStatus())) {
+				try {
+					contentApplyService.terminateOnlineApplyProcess(contentApply);
+				} catch (Exception e) {
+					// 终止流程失败不能影响锁定排期单
+					LoggerHelper.err(getClass(), "终止上线申请单审批失败:"+e.getMessage(), e);
+				}
+			}
+			if (isContentApplyPassed) {
+				isContractPassed = true;
+			}
+		}
+		return isContractPassed;
+	}
+    
+	@Override
+	public boolean isPublishInterval(String publishNumber) {
+		List<PublishDate> dates = publishDateService.findByPublishNumberAndStatus(publishNumber, PublishPeriodStatus.ongoing);
+		return CollectionUtils.isEmpty(dates);
+	}
+	
+	@Override
+	public Publish findByAdContentIdandStatus(Long adContentId, PublishStatus status) {
+	    return publishDao.findByAdContentIdAndStatus(adContentId, status);
+	}
+	
+	@Override
+	public void releasePublish(Publish publish) {
+	    publish.setStatus(PublishStatus.release);
+        publish.setUpdateOperator(RequestThreadLocal.getLoginUserId());
+        publish.setUpdateTime(new Date());
+        save(publish);
+	}
+	
+	@Override
+	public void unpublishBeforeDeadline(Long adContentId) {
+	    Publish publish = publishDao.findByAdContentId(adContentId);
+        if (publish == null) {
+            return;
+        }
+	    publishDateService.unpublishAndRemovePublishDates(publish);
+	    publish.setStatus(PublishStatus.publish_finish);
+        publish.setUpdateOperator(Constants.SYSTEM_OPERATOR);
+        publish.setUpdateTime(new Date());
+        save(publish);
+	}
+	
+	@Override
+	public void updateAdSolutionNumberByAdContentIdIn(List<Long> adContentIds, String newAdSolutionNumber) {
+	    publishDao.updateAdSolutionNumberByAdContentIdIn(newAdSolutionNumber, adContentIds);
+	}
+}

@@ -1,0 +1,130 @@
+<div class="content-period-info" ng-show="!!e.position && e.advertiseQuotation.billingModelId && (e.advertiseQuotation.customerQuote || e.advertiseQuotation.ratioMine || basic.advertiseType==='zerotest')">
+  <h5 class="ptb10 pl10 bdt">
+    {{'AD_CONTENT_PRODUCT_TIME' | translate}}
+  </h5>
+  <div class="form-group" ng-repeat="period in e.datePeriods">
+    <label class="control-label col-md-2" ng-if="!$index">
+      {{'AD_CONTENT_PRODUCT_TIMEPICKER' | translate}}：
+    </label>
+    <label class="control-label col-md-2" ng-if="$index">
+    </label>
+    <div class="col-md-7 dateTimePicker row">
+      <div class="col-md-6">
+        <div class="col-md-5"  ng-class="{'has-error':e.positionChangeValidator && !period.from}">
+          <input class="form-control" yt-calendar ng-model="period.from" name="periodFrom{{$index}}" ng-change="startTimeChange(period)" required max="{{e.position.maxDate}}" content-id="e.adSolutionContent.id" position-id="e.position.id" billing-model-id="e.advertiseQuotation.billingModelId" ng-disabled="period.startDisabled">
+        </div>
+        <label class="col-md-1 form-control-static pull-left">
+          -
+        </label>
+        <div class="col-md-5"  ng-class="{'has-error':e.positionChangeValidator && !period.to}">
+          <input class="form-control" yt-calendar ng-model="period.to" name="periodTo{{$index}}" ng-change="endTimeChange(period)" required  min="period.from" max="{{e.position.maxDate}}" content-id="e.adSolutionContent.id"  position-id="e.position.id" billing-model-id="e.advertiseQuotation.billingModelId" ng-disabled="period.endDisabled">
+        </div>
+      </div>
+      <div class="col-md-6">
+        <a class="adDateTime col-md-6" ng-click="removePeriod($index)" ng-hide="e.datePeriods.length == 1">
+          <p class="text-success form-control-static">
+            <strong>
+              -
+            </strong>
+            &nbsp;{{'AD_CONTENT_PRODUCT_DELETIME' | translate}}
+          </p>
+        </a>
+        <a class="adDateTime col-md-6" ng-click="addPeriod()" ng-show="$index == e.datePeriods.length - 1 && period.to && period.from">
+          <p class="text-success form-control-static">
+            <strong>
+              +
+            </strong>
+            &nbsp;{{'AD_CONTENT_PRODUCT_ADDTIME' | translate}}
+          </p>
+        </a>
+        <div class="help-block-error" ng-show="e.positionChangeValidator && !(period.from && period.to)">
+          {{'AD_CONTENT_CHOOSE_TIME' | translate}}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-md-2">
+      {{'AD_CONTENT_TOTAL_DAYS' | translate}}：
+    </label>
+    <div class="col-md-8">
+      <p class="form-control-static" name="adAllDays">
+        <!-- {{e.totalDays - (e.insertDates.length - e.selectedInsertDays)}} -->
+        <span>{{e.totalDays}}</span>
+        <span class="form-control-static text-danger ml10" ng-if="formAd.totalDays.$error.max">{{'TEST_SOLUTION_CAN_NOT_EXCEED_14' | translate}}</span>
+      </p>
+      <input type="number" ng-if="basic.advertiseType==='nozerotest' || basic.advertiseType==='zerotest'" name="sumDays" ng-hide="true" ng-model="e.totalDays" max="14">
+    </div>
+  </div>
+  <div ng-if="e.totalDays">
+    <!-- [4] CPC、CPM的日投放量预估、总投放量 -->
+    <div ng-if="e.advertiseQuotation.billingModelId == 4 || e.advertiseQuotation.billingModelId == 1">
+      <!-- <h5 class="ptb10 pl10 bdt">{{'AD_CONTENT_QUANTIT' | translate}}</h5> -->
+      <div class="form-group">
+        <label class="control-label col-md-2">{{'AD_CONTENT_QUANTIT_ESTIMATE' | translate}}：</label>
+        <div ng-class="{'has-error':e.quotesValidator && formAd.cpmDayTotal.$error.required || formAd.cpmDayTotal.$error.pattern}">
+          <div class="col-md-3">
+            <!-- <input type="text" class="form-control" ng-model="e.advertiseQuotation.dailyAmount" name="cpmDayTotal" ng-pattern="/^\-?\d+$/" ng-change="handleDailyAmountChanged()" required> -->
+            <div class="input-group">
+              <span class="input-group-addon bckgrd-w">
+                <input type="checkbox" ng-model="e.setDailyAmount" ng-change="handleSetDailyChanged()" ng-disabled="e.advertiseQuotation.billingModelId == 4">
+              </span>
+              <input type="text" class="form-control" ng-model="e.advertiseQuotation.dailyAmount" name="cpmDayTotal" ng-pattern="/^\-?\d+$/" ng-change="handleDailyAmountChanged()" ng-disabled="!e.setDailyAmount" ng-required="e.setDailyAmount">
+            </div>
+          </div>
+          <p class="col-md-3 form-control-static text-danger" ng-show="e.quotesValidator && formAd.cpmDayTotal.$error.required">
+            {{'AD_CONTENT_NO_QUANTIT_ESTIMATE' | translate}}
+          </p>
+          <p class="col-md-3 form-control-static text-danger" ng-show="formAd.cpmDayTotal.$error.pattern">
+            {{'AD_CONTENT_NOT_QUANTIT_ESTIMATE' | translate}}
+          </p>
+          <p class="col-md-5 form-control-static text-danger min-stock-hint" ng-show="e.setDailyAmount && e.minStock<e.advertiseQuotation.dailyAmount && !formAd.cpmDayTotal.$error.pattern">
+            <span class="min-stock-period" tooltip="{{e.minStockPeriods}}" tooltip-append-to-body="true">{{e.minStockPeriods}}</span>
+            <span>{{e.minStockHint}}</span>
+          </p>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-md-2">{{'AD_CONTENT_QUANTIT_TOTAL' | translate}}：</label>
+        <div class="col-md-3">
+          <p class="form-control-static">
+            {{e.advertiseQuotation.totalAmount}}
+            <span ng-if="!e.advertiseQuotation.totalAmount && e.advertiseQuotation.totalAmount!=0">--</span>
+          </p>
+        </div>
+      </div>
+    </div>
+    <!-- 预算 -->
+    <div class="form-group">
+      <label class="control-label col-md-2">
+        {{'AD_CONTENT_BUDGET' | translate}}：
+      </label>
+      <div ng-class="{'has-error':(e.quotesValidator && formAd.adCpcBudget.$error.required) || formAd.adCpcBudget.$error.pattern}">
+        <div class="col-md-2">
+          <div class="col-md-12 input-group">
+            <span class="input-group-addon input-group-default">$</span>
+            <input type="text" class="form-control" ng-model="e.advertiseQuotation.budget" name="adCpcBudget" ng-pattern="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" ng-change="handleBudgetChanged()" ng-blur="updateDailyAmount()" ng-required="e.advertiseQuotation.billingModelId==4 || e.advertiseQuotation.billingModelId==5" ng-if="basic.advertiseType!=='zerotest'">
+            <input type="text" class="form-control" ng-model="e.advertiseQuotation.budget" name="adCpcBudget" ng-required="e.advertiseQuotation.billingModelId==4 || e.advertiseQuotation.billingModelId==5" ng-if="basic.advertiseType==='zerotest'" disabled>
+          </div>
+        </div>
+        <p class="col-md-3 form-control-static text-danger" ng-show="formAd.adCpcBudget.$error.pattern && !formAd.adCpcBudget.$error.required">
+          {{'AD_CONTENT_NO_MONEY' | translate}}
+        </p>
+        <p class="col-md-3 form-control-static text-danger" ng-show="e.quotesValidator && formAd.adCpcBudget.$error.required">
+          {{'AD_CONTENT_NO_BUDGET' | translate}}
+        </p>
+      </div>
+    </div>
+    <!-- [1]CPC、[5]CPT 总价 -->
+    <!-- <div class="form-group" ng-if="e.advertiseQuotation.billingModelId == 1 || e.advertiseQuotation.billingModelId == 5">
+      <label class="control-label col-md-2">
+        {{'AD_CONTENT_COTALPRICE' | translate}}：
+      </label>
+      <div class="col-md-2">
+        <p class="form-control-static" ng-if="e.advertiseQuotation.totalPrice && basic.advertiseType !== 'zerotest'">$&nbsp;{{e.advertiseQuotation.totalPrice}}</p>
+        <p class="form-control-static" ng-if="!e.advertiseQuotation.totalPrice && basic.advertiseType !== 'zerotest'"></p>
+        <p class="form-control-static" ng-if="basic.advertiseType === 'zerotest'">$&nbsp;0</p>
+      </div>
+    </div> -->
+  </div>
+</div>

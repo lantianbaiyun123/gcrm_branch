@@ -1,0 +1,163 @@
+{
+    "customer": {
+        "customerType": "offline",
+        "agentType": "exclusive",
+        "agentRegional": 3,
+        "currencyType": 3,
+        "belongSales": null,
+        "companyName": "123",
+        "businessLicense": "123",
+        "registerTime": "2014-05-05",
+        "url": "http://sds",
+        "companySize": "less_50",
+        "registerCapital": "1",
+        "businessScope": "1231",
+        "address": "123",
+        "description": "123",
+        "agentCountry": 8,
+        "businessType": "CASH"
+    },
+    "contacts": [
+        {
+            "isEditing": true,
+            "name": "12",
+            "positionName": "321",
+            "superiorPosition": "123",
+            "department": "123",
+            "mobile": "123",
+            "telephone": "123",
+            "email": "123",
+            "isLegalPerson": false,
+            "isDecisionMaker": true
+        },
+        {
+            "isEditing": true,
+            "name": "123",
+            "positionName": "123",
+            "superiorPosition": "123",
+            "genderType": "female",
+            "department": "123",
+            "mobile": "21",
+            "telephone": "321",
+            "email": "312",
+            "isLegalPerson": true,
+            "isDecisionMaker": false
+        }
+    ],
+    "opportunity": {
+        "payTypes": [
+            "prepay",
+            "paylater"
+        ],
+        "billingModels": [
+            "CPC",
+            "CPA",
+            "CPT",
+            "CPS",
+            "CPM"
+        ],
+        "payment": "paylater",
+        "billingModelsSelected": [
+            "CPC",
+            "CPT",
+            "CPS",
+            "CPM"
+        ],
+        "businessTypesSelected": [
+            "SALE",
+            "CASH"
+        ],
+        "platforms": [
+            {
+                "businessType": 1,
+                "i18nName": "中文广告销售",
+                "id": 3,
+                "name": "中文广告销售",
+                "status": 1
+            },
+            {
+                "businessType": 0,
+                "i18nName": "变现",
+                "id": 4,
+                "name": "变现",
+                "status": 1
+            },
+            {
+                "businessType": 0,
+                "i18nName": "变现",
+                "id": 44,
+                "name": "hao123",
+                "status": 1
+            }
+        ],
+        "currencyTypes": [
+            {
+                "i18nName": "泰国铢",
+                "id": 3,
+                "name": "THB",
+                "radio": 5.2749
+            },
+            {
+                "i18nName": "美元",
+                "id": 1,
+                "name": "USD",
+                "radio": 0.1647
+            },
+            {
+                "i18nName": "巴西币",
+                "id": 4,
+                "name": "BRC",
+                "radio": 1049.5771
+            },
+            {
+                "i18nName": "人民币",
+                "id": 2,
+                "name": "CNY",
+                "radio": 1
+            }
+        ],
+        "businessTypes": [
+            "CASH",
+            "SALE"
+        ],
+        "currencyType": {
+            "i18nName": "美元",
+            "id": 1,
+            "name": "USD",
+            "radio": 0.1647
+        },
+        "budget": "123",
+        "spendingTime": "123123",
+        "paymentPeriod": "12321",
+        "platformsSelected": [
+            {
+                "businessType": 1,
+                "i18nName": "中文广告销售",
+                "id": 3,
+                "name": "中文广告销售",
+                "status": 1
+            },
+            {
+                "businessType": 0,
+                "i18nName": "变现",
+                "id": 4,
+                "name": "变现",
+                "status": 1
+            },
+            {
+                "businessType": 0,
+                "i18nName": "变现",
+                "id": 44,
+                "name": "hao123",
+                "status": 1
+            }
+        ],
+        "description": "123123"
+    },
+    "qualification": {},
+    "attachment": [
+        {
+            "isEditing": true
+        }
+    ]
+}

@@ -1,0 +1,69 @@
+{
+    "code": 200,
+    "data": {
+        "content": [
+            {
+                "id": 4,
+                "status": "sent",
+                "title": "hao123的一个公告",
+                "sentTime": 1392803492000,
+                "receiveScope": "external",
+                "customers": [
+                    {
+                        "email": "wujun@baidu.com",
+                        "id": 3,
+                        "realname": "吴俊",
+                        "role": "国代",
+                        "status": 1,
+                        "ucid": 10000000,
+                        "value": "wujun"
+                    },
+                    {
+                        "email": "dangqianyonghu@baidu.com",
+                        "id": 4,
+                        "realname": "当前用户",
+                        "role": "PM",
+                        "status": 1,
+                        "ucid": 1000,
+                        "value": "current"
+                    }
+                ]
+            },
+            {
+                "id": 4,
+                "status": "sent",
+                "title": "hao123的一个公告",
+                "sentTime": 1392803492000,
+                "receiveScope": "internal",
+                "users": [
+                    {
+                        "email": "dangqianyonghu@baidu.com",
+                        "id": 4,
+                        "realname": "当前用户",
+                        "role": "PM",
+                        "status": 1,
+                        "ucid": 1000,
+                        "username": "current"
+                    },
+                    {
+                        "email": "dangqianyonghu@baidu.com",
+                        "id": 4,
+                        "realname": "当前用户",
+                        "role": "PM",
+                        "status": 1,
+                        "ucid": 1000,
+                        "username": "current"
+                    }
+                ]
+            }
+        ],
+        "offset": 0,
+        "pageNumber": 1,
+        "pageSize": 20,
+        "queryType": "CONTENTID",
+        "resultClass": "com.baidu.gcrm.notice.model.Notice",
+        "totalCount": 593,
+        "totalPages": 20
+    },
+    "message": "OK"
+}

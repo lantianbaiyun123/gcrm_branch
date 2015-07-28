@@ -1,0 +1,98 @@
+{
+    "code": 200,
+    "data": {
+    "id": 1,
+    "i18nName": "hao123",
+    "sites": [
+      {
+        "id": 10,
+        "i18nName": "泰国",
+        "isChecked": false,
+        "allowCanceled": false
+      },
+      
+      {
+        "id": 11,
+        "i18nName": "巴西",
+        "isChecked": true,
+        "allowCanceled": true
+      },
+      {
+        "id": 10,
+        "i18nName": "泰国",
+        "isChecked": false,
+        "allowCanceled": false
+      },
+      
+      {
+        "id": 11,
+        "i18nName": "巴西",
+        "isChecked": true,
+        "allowCanceled": true
+      },{
+        "id": 10,
+        "i18nName": "泰国",
+        "isChecked": false,
+        "allowCanceled": false
+      },
+      
+      {
+        "id": 11,
+        "i18nName": "巴西",
+        "isChecked": true,
+        "allowCanceled": true
+      },{
+        "id": 10,
+        "i18nName": "泰国撒旦扣价法",
+        "isChecked": false,
+        "allowCanceled": false
+      },
+      
+      {
+        "id": 11,
+        "i18nName": "巴西多翻空结算贷款",
+        "isChecked": true,
+        "allowCanceled": true
+      },{
+        "id": 10,
+        "i18nName": "泰国",
+        "isChecked": false,
+        "allowCanceled": false
+      },
+      
+      {
+        "id": 11,
+        "i18nName": "巴西",
+        "isChecked": true,
+        "allowCanceled": true
+      },{
+        "id": 10,
+        "i18nName": "泰国",
+        "isChecked": false,
+        "allowCanceled": false
+      },
+      
+      {
+        "id": 11,
+        "i18nName": "巴西sdfsdf",
+        "isChecked": true,
+        "allowCanceled": true
+      },{
+        "id": 10,
+        "i18nName": "泰国",
+        "isChecked": false,
+        "allowCanceled": false
+      },
+      
+      {
+        "id": 11,
+        "i18nName": "巴西",
+        "isChecked": true,
+        "allowCanceled": true
+      }
+    
+    ]
+        
+    },
+    "message": "OK"
+}

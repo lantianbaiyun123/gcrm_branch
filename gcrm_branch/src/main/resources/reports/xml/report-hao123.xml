@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<reports>
+	<report id="tracereport" name="report.title.hao123report">
+		<dataSource id="ds1">
+			<query nativesql="true" dynamic="true">
+				<![CDATA[
+			   select gpds.id,gads.site_id,gads.channel_id,gads.area_id,gads.position_id,gads.rotation_type,gads.position_number,
+					  gads.advertisers,gads.number,gads.description,gads.industry,gpd.actural_start,gpd.actural_end,gads.customer_quote,
+					  gads.ratio_mine,gads.billing_model_id,gpds.impressions,gpds.uv,gpds.clicks,gpds.click_uv 
+				 from g_publish_date_statistics gpds,g_adcontent_data_statistics gads,g_publish_date gpd 
+				 where gpds.ad_content_id=gads.ad_content_id and gpds.publish_date_id=gpd.id
+				 #if($templateUtil.isNotEmpty($pageCritera.beginDate))
+					 and actural_start>=?
+				 #end
+				 #if($templateUtil.isNotEmpty($pageCritera.endDate))
+					 and actural_start< date_add(?,interval 1 day)
+				 #end
+				 #if($templateUtil.isNotEmpty($pageCritera.siteId))
+					 and site_id = ?
+				 #else
+				     and site_id in ($pageCritera.allSites)
+				 #end
+			  order by actural_start desc
+				]]>
+			</query>
+			<inputBindings name="input binding Name">
+				<inputBinding object="pageCritera" property="beginDate" ifTrue="$templateUtil.isNotEmpty($pageCritera.beginDate)"/>
+				<inputBinding object="pageCritera" property="endDate" ifTrue="$templateUtil.isNotEmpty($pageCritera.endDate)"/>
+				<inputBinding object="pageCritera" property="siteId" ifTrue="$templateUtil.isNotEmpty($pageCritera.siteId)"/>
+			</inputBindings>
+			<columns>
+				<column name="resource.site" field1="siteId" field2="siteName" expression="com.baidu.gcrm.resource.site.model.Site" converter="i18NColumnConvert"/>
+				<column name="resource.position.channel" field1="channelId" field2="channelName" expression="com.baidu.gcrm.resource.position.model.Position" converter="i18NColumnConvert"/>
+				<column name="resource.position.area" field1="areaId" field2="areaName" expression="com.baidu.gcrm.resource.position.model.Position" converter="i18NColumnConvert"/>
+				<column name="resource.position.position" field1="positionId" field2="positionName" expression="com.baidu.gcrm.resource.position.model.Position" converter="i18NColumnConvert"/>
+				<column name="view.type" field1="rotationType" field2="rotationName" expression="0|resource.position.type.notRotated;1|resource.position.type.rotated" converter="enumColumnConvert"/>
+				<column name="position.number" field1="postionNumber"/>
+			    <column name="schedulecondition.querytype.advertisers" field1="advertisers"/>
+				<column name="schedulecondition.querytype.adcontentnum" field1="number"/>
+				<column name="customer.title.description" field1="description"/>
+				<column name="costomerResource.major.customer.resources.industry" field1="industry" field2="industryName" expression="com.baidu.gcrm.valuelistcache.model.Industry" converter="cacheColumnConvert"/>
+				<column name="task.time.online" field1="acturalStart" pattern="yyyy-MM-dd HH:mm:ss"/>
+			    <column name="task.time.offline" field1="acturalEnd" pattern="yyyy-MM-dd HH:mm:ss"/>
+				<column name="advertise.content.singlePriceWithUnit" field1="singlePrice"/>
+				<column name="name.billingModel" field1="billingModelId" field2="billingModelName" expression="com.baidu.gcrm.valuelistcache.model.BillingModel" converter="cacheColumnConvert"/>
+				<column name="impressions" field1="impressions"/>
+				<column name="UV" field1="uv"/>
+				<column name="Click Times" field1="clicks"/>
+				<column name="Click UV" field1="clickUV"/>
+				<column name="CTR" field1="ctr"/>
+				<column name="CVR" field1="cvr"/>
+			</columns>
+		</dataSource>
+        <transformer id="tr1" dataSourceId="ds1">
+			<templates>
+				<template id="csv_template" downLoadFileName="hao123report%s.csv" name="/reports/template/report_csv.vm"/>
+			</templates>
+	    </transformer>
+	</report>
+	
+</reports>

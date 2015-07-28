@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <property name="logPathPrefix" value="/home/work/logs/gcrm" />
+    
+	<!-- 日志文件  appender定义 -->
+	<appender name="rootAppender"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+
+		<File>${logPathPrefix}/gcrm_other.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>${logPathPrefix}/history/%d{yyyy-MM-dd}.gcrm_other.log.%i.bak
+			</FileNamePattern>
+			<maxHistory>200</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<charset>UTF-8</charset>
+			<pattern>%d [%thread] %-5level %logger{36} %line - %msg%n</pattern>
+		</encoder>
+	</appender>
+	
+	<appender name="orgAppender"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		
+		<File>${logPathPrefix}/gcrm_org.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+			<FileNamePattern>${logPathPrefix}/history/gcrm_org.log.%i.bak
+			</FileNamePattern>
+			<MinIndex>1</MinIndex>
+			<MaxIndex>13</MaxIndex>
+		</rollingPolicy>
+		<triggeringPolicy
+			class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+			<MaxFileSize>50MB</MaxFileSize>
+		</triggeringPolicy>
+		<encoder>
+			<charset>UTF-8</charset>
+			<pattern>%d [%thread] %-5level %logger{36} %line - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="gcrmAppender"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+
+		<File>${logPathPrefix}/gcrm.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- rollover daily -->
+			<fileNamePattern>${logPathPrefix}/history/%d{yyyy-MM-dd}.gcrm.%i.log
+			</fileNamePattern>
+			<maxHistory>20</maxHistory>
+			<TimeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>50MB</maxFileSize>
+			</TimeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+
+		<encoder>
+			<charset>UTF-8</charset>
+			<pattern>%d [%thread] %-5level %logger{36} %line - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+
+	<appender name="gcrmErrorAppender"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>ERROR</level>
+		</filter>
+		
+		<File>${logPathPrefix}/gcrm_error.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+			<FileNamePattern>${logPathPrefix}/history/gcrm_error.log.%i.bak
+			</FileNamePattern>
+			<MinIndex>1</MinIndex>
+			<MaxIndex>13</MaxIndex>
+		</rollingPolicy>
+		<triggeringPolicy
+			class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+			<MaxFileSize>50MB</MaxFileSize>
+		</triggeringPolicy>
+		<encoder>
+			<charset>UTF-8</charset>
+			<Pattern>%d [%thread] %-5level %logger{36} %line - %msg%n</Pattern>
+		</encoder>
+	</appender>
+
+	<appender name="comAppender"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>${logPathPrefix}/gcrm_com.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>${logPathPrefix}/history/%d{yyyy-MM-dd}.gcrm_com.log.zip
+			</FileNamePattern>
+		</rollingPolicy>
+		<encoder>
+			<charset>UTF-8</charset>
+			<pattern>%d [%thread] %-5level %logger{36} %line - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="profilingAppender"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+
+		<File>${logPathPrefix}/gcrm_profiling.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>${logPathPrefix}/statistics/%d{yyyy-MM-dd}.gcrm_profiling.log.zip
+			</FileNamePattern>
+		</rollingPolicy>
+		<encoder>
+			<charset>UTF-8</charset>
+			<Pattern>%d [%thread] %-5level %logger{36} %line - %msg%n</Pattern>
+		</encoder>
+	</appender>
+
+	<appender name="mailServiceAppender"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+
+		<File>${logPathPrefix}/mailService.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+			<FileNamePattern>${logPathPrefix}/history/mailService.log.%i.bak
+			</FileNamePattern>
+			<MinIndex>1</MinIndex>
+			<MaxIndex>13</MaxIndex>
+		</rollingPolicy>
+		<triggeringPolicy
+			class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+			<MaxFileSize>50MB</MaxFileSize>
+		</triggeringPolicy>
+		<encoder>
+			<charset>UTF-8</charset>
+			<Pattern>%d [%thread] %-5level %logger{36} %line - %msg%n</Pattern>
+		</encoder>
+	</appender>
+	
+	<appender name="operationAppender"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+
+		<File>${logPathPrefix}/operation.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+			<FileNamePattern>${logPathPrefix}/history/operation.%i.bak
+			</FileNamePattern>
+			<MinIndex>1</MinIndex>
+			<MaxIndex>13</MaxIndex>
+		</rollingPolicy>
+		<triggeringPolicy
+			class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+			<MaxFileSize>50MB</MaxFileSize>
+		</triggeringPolicy>
+		<encoder>
+			<charset>UTF-8</charset>
+			<pattern>%d [%thread] %-5level %logger{36} %line - %msg%n</pattern>
+		</encoder>
+	</appender>
+	
+	<appender name="webServiceAppender"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+
+		<File>${logPathPrefix}/webService.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+			<FileNamePattern>${logPathPrefix}/history/webService.%i.bak
+			</FileNamePattern>
+			<MinIndex>1</MinIndex>
+			<MaxIndex>13</MaxIndex>
+		</rollingPolicy>
+		<triggeringPolicy
+			class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+			<MaxFileSize>50MB</MaxFileSize>
+		</triggeringPolicy>
+		<encoder>
+			<charset>UTF-8</charset>
+			<pattern>%d [%thread] %-5level %logger{36} %line - %msg%n</pattern>
+		</encoder>
+	</appender>
+	<appender name="ftpAppender"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>${logPathPrefix}/ftp.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- rollover daily -->
+			<fileNamePattern>${logPathPrefix}/history/%d{yyyy-MM-dd}.initTask.%i.log
+			</fileNamePattern>
+			<maxHistory>20</maxHistory>
+			<TimeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>50MB</maxFileSize>
+			</TimeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<encoder>
+			<charset>UTF-8</charset>
+			<pattern>%d [%thread] %-5level %logger{36} %line - %msg%n</pattern>
+		</encoder>
+	</appender>
+	
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>
+				%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{80} - %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+	
+	<logger name="org" additivity="true">
+		<level value="ERROR" />
+		<appender-ref ref="orgAppender" />
+	</logger>
+	
+	<logger name="com.baidu" additivity="false">
+		<level value="INFO" />
+		<appender-ref ref="gcrmAppender" />
+		<appender-ref ref="gcrmErrorAppender" />
+	</logger>
+	
+	<logger name="com" additivity="true">
+		<level value="ERROR" />
+		<appender-ref ref="comAppender" />
+	</logger>
+	
+	<logger name="ProfilingInterceptorLog" additivity="false">
+		<level value="TRACE" />
+		<appender-ref ref="profilingAppender" />
+	</logger>
+	
+	<logger name="mailServiceLog" additivity="false">
+		<level value="TRACE" />
+		<appender-ref ref="mailServiceAppender" />
+	</logger>
+	
+	<logger name="operationLog" additivity="false">
+		<level value="TRACE" />
+		<appender-ref ref="operationAppender" />
+	</logger>
+	
+	<logger name="ftpLog" additivity="false">
+		<level value="INFO" />
+		<appender-ref ref="ftpAppender" />		
+		<appender-ref ref="gcrmAppender" />
+		<appender-ref ref="gcrmErrorAppender" />
+	</logger>
+	
+	<logger name="org.apache.cxf" level="INFO">
+	  <appender-ref ref="webServiceAppender"/>
+	</logger>
+	
+	<logger name="wsserviceLog" additivity="false">
+		<level value="TRACE" />
+		<appender-ref ref="webServiceAppender" />
+		<appender-ref ref="gcrmAppender" />
+		<appender-ref ref="gcrmErrorAppender" />
+	</logger>
+	
+	<logger name="com.baidu.gcrm.ws" additivity="true">
+		<level value="TRACE" />
+		<appender-ref ref="webServiceAppender" />
+	</logger>
+	
+	<root level="ERROR">
+		<appender-ref ref="rootAppender" />
+	</root>
+	
+</configuration>
+

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+
+<g_advertise_quotation id="1" advertise_solution_content_id="1" price_type="0" billing_model_id="1" publish_price="10" customer_quote="12" traffic_amount="1000" click_amount="1000" discount="1.2" budget="12" total_price="264000"/>
+<g_advertise_quotation id="2" advertise_solution_content_id="3" price_type="0" billing_model_id="1" publish_price="10" customer_quote="100" traffic_amount="1000" click_amount="1000" discount="10" budget="10" total_price="2500000"/>
+
+<g_modify_table_info id="1" table_name="AdvertiseQuotation" table_field="priceType" field_name="价格种类"/>
+<g_modify_table_info id="2" table_name="AdvertiseQuotation" table_field="publishPrice" field_name="刊例价"/>
+<g_modify_table_info id="3" table_name="AdvertiseQuotation" table_field="trafficAmount" field_name="流量"/>
+<g_modify_table_info id="4" table_name="AdvertiseQuotation" table_field="billingModelId" field_name="计费方式"/>
+<g_modify_record id="1" table_name="AdvertiseQuotation" modified_data_id="1" modify_field="priceType" operate_type="modify" old_value="unit" new_value="ratio" create_operator="1"/>
+<g_modify_record id="2" table_name="AdvertiseQuotation" modified_data_id="1" modify_field="publishPrice" operate_type="modify" old_value="5" new_value="10" create_operator="1"/>
+<g_modify_record id="3" table_name="AdvertiseQuotation" modified_data_id="1" modify_field="trafficAmount" operate_type="modify" old_value="500" new_value="10000" create_operator="1"/>
+</dataset>

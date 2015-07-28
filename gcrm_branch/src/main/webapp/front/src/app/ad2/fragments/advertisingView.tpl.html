@@ -1,0 +1,176 @@
+<div class="content-period-info">
+  <h5 class="bdt">{{'AD_CONTENT_PRODUCT_TIME' | translate}}</h5>
+  <div ng-if="ad.adSolutionContent.approvalStatus == 'unconfirmed'">
+    <div class="form-group" ng-if="!ad.afterConfirmSchedule">
+      <label class="control-label col-md-2"></label>
+      <div class="expected-period col-md-5 row">
+        <p class="form-control-static">
+          <span class="glyphicon glyphicon-play"></span>{{'AD_SOLUTION_DETAIL_EXPECTED_PERIOD' | translate}}
+        </p>
+      </div>
+      <div class="scheduled-period col-md-5 row">
+        <p class="form-control-static">
+          <span class="glyphicon glyphicon-play"></span>{{'AD_SOLUTION_DETAIL_SCHEDULED_PERIOD' | translate}}
+        </p>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-md-2">
+        {{'AD_CONTENT_PRODUCT_TIMEPICKER' | translate}}：
+      </label>
+      <div class="col-md-5 row" ng-if="!ad.afterConfirmSchedule">
+        <p class="form-control-static">
+          <span ng-model="ad.adSolutionContent.periodDescription" period-label></span>
+        </p>
+      </div>
+      <div class="col-md-5 row">
+        <p class="form-control-static">
+          <span ng-model="ad.schedule.periodDescription" period-label></span>
+          <span ng-if="!ad.afterConfirmSchedule && ad.overdue" style="color:#a94442;">
+            <span class="glyphicon glyphicon-flash"></span>
+            {{'AD_SOLUTION_DETAIL_OVERDUE' | translate}}
+          </span>
+        </p>
+      </div>
+    </div>
+    <div class="form-group" ng-show="ad.adSolutionContent.insertPeriodDescription">
+      <label class="control-label col-md-2">
+        {{'AD_CONTENT_INSERT_TIMEBUCKER' | translate}}：
+      </label>
+      <div class="col-md-5 row" ng-if="!ad.afterConfirmSchedule">
+        <p class="form-control-static">
+          <span ng-model="ad.adSolutionContent.insertPeriodDescription" period-label="danger"></span>
+        </p>
+      </div>
+      <div class="col-md-5 row">
+        <p class="form-control-static">
+          <span ng-model="ad.schedule.insertPeriodDescription" period-label="danger"></span>
+        </p>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-md-2">
+        {{'AD_CONTENT_TOTAL_DAYS' | translate}}：
+      </label>
+      <div class="col-md-5 row" ng-if="!ad.afterConfirmSchedule">
+        <p class="form-control-static ">
+          {{ad.adSolutionContent.totalDays}}{{'AD_CONTENT_INSERT_DAYS' | translate}}
+        </p>
+      </div>
+      <div class="col-md-5 row">
+        <p class="form-control-static">
+          {{ad.scheduleTotalDays}}{{'AD_CONTENT_INSERT_DAYS' | translate}}
+        </p>
+      </div>
+    </div>
+  </div>
+  <div ng-if="!(ad.adSolutionContent.approvalStatus == 'unconfirmed' || ad.adSolutionContent.approvalStatus == 'confirmed')">
+    <div class="form-group">
+      <label class="control-label col-md-2">
+        {{'AD_CONTENT_PRODUCT_TIMEPICKER' | translate}}：
+      </label>
+      <div class="col-md-8 row">
+        <p class="form-control-static">
+          <span ng-model="ad.adSolutionContent.periodDescription" period-label></span>
+        </p>
+      </div>
+    </div>
+    <div class="form-group" ng-show="ad.adSolutionContent.insertPeriodDescription">
+      <label class="control-label col-md-2">
+        {{'AD_CONTENT_INSERT_TIMEBUCKER' | translate}}：
+      </label>
+      <div class="col-md-8 row">
+        <p class="form-control-static">
+          <span ng-model="ad.adSolutionContent.insertPeriodDescription" period-label="danger"></span>
+        </p>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-md-2">
+        {{'AD_CONTENT_TOTAL_DAYS' | translate}}：
+      </label>
+      <div class="col-md-2">
+        <p class="form-control-static ">
+          {{ad.adSolutionContent.totalDays}}{{'AD_CONTENT_INSERT_DAYS'
+          | translate}}
+        </p>
+      </div>
+    </div>
+  </div>
+  <div ng-if="ad.adSolutionContent.approvalStatus == 'confirmed'">
+    <div class="form-group">
+      <label class="control-label col-md-2">
+        {{'AD_CONTENT_PRODUCT_TIMEPICKER' | translate}}：
+      </label>
+      <div class="col-md-8 row">
+        <p class="form-control-static">
+          <span ng-model="ad.adSolutionContent.periodDescription" period-label></span>
+        </p>
+      </div>
+    </div>
+    <div class="form-group" ng-show="ad.adSolutionContent.insertPeriodDescription">
+      <label class="control-label col-md-2">
+        {{'AD_CONTENT_INSERT_TIMEBUCKER' | translate}}：
+      </label>
+      <div class="col-md-8 row">
+        <p class="form-control-static">
+          <span ng-model="ad.adSolutionContent.insertPeriodDescription" period-label="danger"></span>
+        </p>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-md-2">
+        {{'AD_CONTENT_TOTAL_DAYS' | translate}}：
+      </label>
+      <div class="col-md-2">
+        <p class="form-control-static">
+          {{ad.adSolutionContent.totalDays}}{{'AD_CONTENT_INSERT_DAYS' | translate}}
+        </p>
+      </div>
+    </div>
+  </div>
+  <!-- 日投放量预估、总投放量 -->
+  <div ng-if="ad.advertiseQuotation.billingModelId == 4 || ad.advertiseQuotation.billingModelId == 1">
+    <div class="form-group">
+      <label class="control-label col-md-2">
+        {{'AD_CONTENT_QUANTIT_ESTIMATE' | translate}}：
+      </label>
+      <div class="col-md-3">
+        <p class="form-control-static ">
+          <span>{{ad.advertiseQuotation.dailyAmount}}</span>
+          <span ng-if="!ad.advertiseQuotation.dailyAmount">--</span>
+        </p>
+      </div>
+      <label class="control-label col-md-2">
+        {{'AD_CONTENT_QUANTIT_TOTAL' | translate}}：
+      </label>
+      <div class="col-md-3">
+        <p class="form-control-static ">
+          <span>{{ad.advertiseQuotation.totalAmount}}</span>
+          <span ng-if="!ad.advertiseQuotation.totalAmount">--</span>
+        </p>
+      </div>
+    </div>
+  </div>
+  <!-- 预算 -->
+  <div class="form-group" ng-if="ad.advertiseQuotation.billingModelId != 2">
+    <label class="control-label col-md-2">
+      {{'AD_CONTENT_BUDGET' | translate}}：
+    </label>
+    <div class="col-md-3">
+      <p class="form-control-static ">
+        <span ng-if="ad.advertiseQuotation.budget && basic.advertiseType !== 'zerotest'">$&nbsp;{{ad.advertiseQuotation.budget}}</span>
+        <span ng-if="!ad.advertiseQuotation.budget && basic.advertiseType !== 'zerotest'">--</span>
+        <span ng-if="basic.advertiseType === 'zerotest'">$&nbsp;0</span>
+      </p>
+    </div>
+    <!-- <label class="control-label col-md-2" ng-if="ad.advertiseQuotation.billingModelId == 1 || ad.advertiseQuotation.billingModelId == 5">
+      {{'AD_CONTENT_COTALPRICE' | translate}}：
+    </label>
+    <div class="col-md-3" ng-if="ad.advertiseQuotation.billingModelId == 1 || ad.advertiseQuotation.billingModelId == 5">
+      <p class="form-control-static">
+        $ {{ad.advertiseQuotation.totalPrice}}
+      </p>
+    </div> -->
+  </div>
+</div>

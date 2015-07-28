@@ -1,0 +1,70 @@
+<div class="modal-header">
+    <h4>
+        <span>{{'QUOTATION_CONFIRM_CONFLICT_PROMPT' | translate}}</span>
+    </h4>
+</div>
+<div class="modal-body">
+  <div class="submit-msg" ng-if="modalDatas.length" ng-repeat="conflict in modalDatas" ng-class="{'border-top': $index}">
+      <div ng-if="conflict.conflictType == 1">
+          <h6>{{'QUOTATION_CONFIRM_CONFLICT_NEW_BEGIN_TIME_EARLIER' | translate}}：</h6>
+          <dl class="dl-horizontal">
+            <div ng-repeat="msg in conflict.msgs">
+              <dt>{{msg.siteName}}</dt>
+              <dd>
+                <span>{{'QUOTATION_CONFIRM_CONFLICT_OLD_END_TIME' | translate}}</span>
+                <span>{{msg.endTime}}</span>
+              </dd>
+            </div>
+          </dl>
+          <p class="text-danger msg" ng-bind-html="conflict.msgMain"></p>
+      </div>
+
+      <div ng-if="conflict.conflictType == 2">
+          <h6>{{'QUOTATION_CONFIRM_CONFLICT_NEW_END_TIME_EARLIER' | translate}}：</h6>
+          <dl class="dl-horizontal">
+            <div ng-repeat="msg in conflict.msgs">
+              <dt>{{msg.siteName}}</dt>
+              <dd>
+                <span>{{'QUOTATION_CONFIRM_CONFLICT_OLD_BEGIN_TIME' | translate}}</span>
+                <span>{{msg.startTime}}</span>
+              </dd>
+            </div>
+          </dl>
+          <p class="text-danger msg" ng-bind-html="conflict.msgMain"></p>
+      </div>
+
+      <div ng-if="conflict.conflictType == 3">
+          <h6>{{'QUOTATION_CONFIRM_CONFLICT_NEW_BEGEIN_END_BETWEEN' | translate}}：</h6>
+          <dl class="dl-horizontal">
+            <div ng-repeat="msg in conflict.msgs" ng-class="{'msg-top-margin': $index}">
+              <dt>{{msg.siteName}}</dt>
+              <dd>
+                <span>{{'QUOTATION_CONFIRM_CONFLICT_OLD_EFFECTIVE_TIME' | translate}}</span>
+                <span>{{msg.startTime}}~{{msg.endTime}}</span>
+              </dd>
+              <p class="text-danger msg" ng-bind-html="conflict.msgMain"></p>
+              <p class="msg-period text-danger" ng-repeat="period in msg.msgPeriods"><strong>{{period}}</strong></p>
+            </div>
+          </dl>
+      </div>
+
+      <div ng-if="conflict.conflictType == 4">
+          <h6>{{'QUOTATION_CONFIRM_CONFLICT_NEW_BEGEIN_END_OVER' | translate}}：</h6>
+          <dl class="dl-horizontal">
+            <div ng-repeat="msg in conflict.msgs">
+              <dt>{{msg.siteName}}</dt>
+              <dd>
+                <span>{{'QUOTATION_CONFIRM_CONFLICT_OLD_EFFECTIVE_TIME' | translate}}</span>
+                <span>{{msg.startTime}}~{{msg.endTime}}</span>
+              </dd>
+              <p class="text-danger msg"  ng-bind-html="conflict.msgMain"></p>
+            </div>
+          </dl>
+      </div>
+  </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="ok()">{{'CONFIRM' | translate}}</button>
+    <span></span>
+    <button class="btn btn-default" ng-click="back()" ng-disabled="popoverConfirmShow">{{'CANCEL' | translate}}</button>
+</div>

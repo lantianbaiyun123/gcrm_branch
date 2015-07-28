@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+    
+    <bean id="ehcacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">  
+        <property name="configLocation">    
+            <value>classpath:ehcache.xml</value>    
+        </property>
+    </bean>
+    
+    <bean id="ehcacheClient" class="org.springframework.cache.ehcache.EhCacheFactoryBean">  
+        <property name="cacheManager">  
+            <ref local="ehcacheManager"/>  
+        </property>
+    </bean> 
+    
+    <!-- 值列表对象的缓存配置 -->
+	<bean id="valueListEhcache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
+		<property name="cacheManager" ref="ehcacheManager" />
+		<property name="cacheName" value="objectCache" />
+	</bean>
+    
+    <bean id="ehcacheProxy" class="com.baidu.gcrm.common.cache.EhcacheProxy"/>
+    
+    <bean id="valuelistehcacheProxy" class="com.baidu.gcrm.common.cache.EhcacheProxy">
+    	<property name="ehcacheClient" ref="valueListEhcache"/>
+    </bean>
+    
+    <bean id="localCacheTemplate" class="com.baidu.gcrm.common.cache.CacheTemplate">
+    </bean>
+    
+    <bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <property name="corePoolSize" value="10" />
+        <property name="maxPoolSize" value="50" />
+    </bean>
+    
+	<util:properties id="importproperties" location="classpath:import.properties"/>
+	<bean id="appproperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">  
+       <property name="locations">  
+		  <list>  
+		    <value>classpath:appcommon.properties</value>  
+		    <value>classpath:app.properties</value>  
+		  </list>  
+       </property>  
+    </bean>  
+	<bean id="gcrmConfig" class="com.baidu.gcrm.common.GcrmConfig" lazy-init="false" scope="singleton">
+		<property name="props">
+            <list>
+				<ref local="appproperties"/>
+				<ref local="importproperties"/>
+            </list>
+		</property>
+	</bean>
+	<bean name="passwordEncoder" class="org.springframework.security.crypto.password.StandardPasswordEncoder" />
+	
+	<bean id="prepareDecorators" class="java.util.ArrayList">
+		<constructor-arg>
+			<list>
+				<ref bean="PrepareActivityDataDecorator"/>
+				<ref bean="PrepareParticipantsDecorator"/>
+			</list>
+		</constructor-arg>
+	</bean>
+	
+	<!--Mail Service-->
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="${mail.host}" />
+		<property name="javaMailProperties">
+			<props>
+				<prop key="mail.smtp.auth">true</prop>
+			</props>
+		</property>
+		<property name="username">
+			<value>${mail.username}</value>
+		</property>
+		<property name="password" value="${mail.password}" />
+	</bean>
+	 <bean id="velocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
+   		<property name="velocityProperties">      
+            <props>      
+                <prop key="resource.loader">class</prop>   
+                <prop key="class.resource.loader.path">/WEB-INF/classes/vm</prop> 
+                <prop key="class.resource.loader.class">      
+                    org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader      
+                </prop>          
+            </props>      
+        </property>            
+ 	</bean>
+</beans>

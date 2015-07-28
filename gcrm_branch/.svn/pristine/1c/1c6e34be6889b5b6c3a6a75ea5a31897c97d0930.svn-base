@@ -1,0 +1,1 @@
+define(["app"],function(t){t.registerFilter("AdProjectStatusFilter",function(){var t=["课程","直播","活动","专题"];return function(r){return t[r-1]}})});

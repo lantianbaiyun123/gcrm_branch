@@ -1,0 +1,96 @@
+{
+    "code": 200,
+    "data": [
+        {
+          "conflictType": "1",
+          "msgs": [
+            {
+              "endTime": "2014-05-22",
+              "platforName": "中文广告销售",
+              "quoteCode": "PP-20130423-540",
+              "siteName": "泰语区",
+              "startTime": "2014-05-01"
+
+            },
+            {
+              "endTime": "2014-05-22",
+              "platforName": "中文广告销售",
+              "quoteCode": "PP-20130423-540",
+              "siteName": "2语区",
+              "startTime": "2014-05-01"
+
+            },
+            {
+              "endTime": "2014-05-22",
+              "platforName": "中文广告销售",
+              "quoteCode": "PP-20130423-540",
+              "siteName": "ddd区",
+              "startTime": "2014-05-01"
+
+            }
+          ],
+          "newPeriods": "2014-05-01"
+        },
+        {
+          "conflictType": "2",
+          "msgs": [
+            {
+              "endTime": "2014-05-22",
+              "platforName": "中文广告销售",
+              "quoteCode": "PP-20130423-540",
+              "siteName": "泰语区",
+              "startTime": "2014-05-01"
+
+            },
+            {
+              "endTime": "2014-05-22",
+              "platforName": "中文广告销售",
+              "quoteCode": "PP-20130423-540",
+              "siteName": "泰语区",
+              "startTime": "2014-05-07"
+
+            }
+          ],
+          "newPeriods": "2014-05-01"
+        },
+        {
+          "conflictType": "3",
+          "msgs": [
+            {
+              "endTime": "2014-05-22",
+              "platforName": "中文广告销售",
+              "quoteCode": "PP-20130423-540",
+              "siteName": "泰语区",
+              "startTime": "2014-05-01",
+              "msgPeriods": ["2014-05-01~2014-05-04", "2014-05-01~2014-05-12"]
+
+            },
+            {
+              "endTime": "2014-05-23",
+              "platforName": "中文广告销售",
+              "quoteCode": "PP-20130423-540",
+              "siteName": "A语区",
+              "startTime": "2014-05-01",
+              "msgPeriods": ["2014-05-01~2014-05-04", "2014-05-01~2014-05-12"]
+
+            }
+          ],
+          "newPeriods": "2014-05-01"
+        },
+        {
+          "conflictType": "4",
+          "msgs": [
+            {
+              "endTime": "2014-05-22",
+              "platforName": "中文广告销售",
+              "quoteCode": "PP-20130423-540",
+              "siteName": "泰语区",
+              "startTime": "2014-05-01"
+
+            }
+          ],
+          "newPeriods": "2014-05-01"
+        }
+    ],
+    "message": "OK"
+}

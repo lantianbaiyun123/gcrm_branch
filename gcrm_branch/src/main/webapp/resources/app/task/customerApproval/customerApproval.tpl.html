@@ -1,0 +1,292 @@
+<div class="customer-approval">
+  <div class="proposal-panel panel gcrm-panel">
+    <div class="panel-heading">
+        <span class="black-block">&nbsp;</span>
+        <span class="panel-heading-text">{{'CUSTOMER_INFO' | translate}}</span>
+    </div>
+
+    <div class="panel-body">
+      <h5 class="mt0 pb10" id="basicInfo">{{'CUSTOMER_BASIC_INFO' | translate}}</h5>
+      <div class="row basic-info">
+        <dl class="dl-horizontal">
+        <dt>{{'CUSTOMER_COMPANY_NAME' | translate}}：</dt><dd>{{customer.companyName}}</dd>
+        <dt>{{'CUSTOMER_TYPE' | translate}}：</dt><dd>{{'CUSTOMER_' + customer.customerType | translate}}</dd>
+        <dt>{{'BELONGING_COUNTRY' | translate}}：</dt><dd>{{approvalInfo.country.i18nName}}</dd>
+        <div>
+          <dt>{{'BUSINESS_SCOPE' | translate}}：</dt><dd>{{customer.businessScope || '--'}}</dd>
+        </div>
+        <div ng-if="customer.customerType != 'offline'">
+          <dt>{{'BELONGING_INDUSTRY' | translate}}：</dt><dd>{{approvalInfo.industry.i18nName}}</dd>
+        </div>
+        <div>
+          <dt>{{'BUSINESSLICENSE_NUMBER' | translate}}：</dt><dd>{{customer.businessLicense || '--'}}</dd>
+        </div>
+        <dt>{{'COMPANY_SIZE' | translate}}：</dt><dd>{{'COMPANYSIZE_' + customer.companySize | translate}}</dd>
+        <dt>{{'REGTIME' | translate}}：</dt>
+        <dd>
+          {{customer.registerTime | date: 'yyyy-MM-dd'}}
+          <span ng-if="!customer.registerTime">--</span>
+        </dd>
+        <div>
+          <dt>{{'REGISTERED_CAPITAL' | translate}}：</dt><dd>{{approvalInfo.currencyType.sign}}{{customer.registerCapital | number:2}}<span ng-if="!(customer.registerCapital && approvalInfo.currencyType.sign)">--</span></dd>
+        </div>
+        <dt>{{'COMPANY_ADDRESS' | translate}}：</dt><dd>{{customer.address}}</dd>
+        <dt>{{'COMPANY_URL' | translate}}：</dt><dd><a ng-href="{{customer.url}}" target="_blank">{{customer.url}}</a></dd>
+        <dt>{{'BUSINESS_TYPE' | translate}}：</dt><dd><span ng-repeat="item in customer.businessTypes"><span ng-if="$index">、</span>{{'BUSINESS_TYPE_' + item | translate}}</span></dd>
+        <div>
+          <dt>{{'DESCRIPTION' | translate}}：</dt><dd>{{customer.description}}<span ng-if="!customer.description">--</span></dd>
+        </div>
+        <div>
+          <dt>{{'BELONGING_SALES' | translate}}：</dt><dd>{{approvalInfo.belongSales.realname || '--'}}</dd>
+          <dt>{{'CUSTOMER_SALES_AUTHORITIES' | translate}}：</dt><dd>{{approvalInfo.belongManager.realname || '--'}}</dd>
+        </div>
+        <div ng-if="customer.customerType == 'nondirect'">
+          <dt>{{'BELONGING_ANGENT_COMPANY' | translate}}：</dt>
+          <dd>
+            <span>{{approvalInfo.agentCompany.companyName}}</span>
+            <span class="pl5 text-danger" ng-if="approvalInfo.agentCompany.companyStatus!=1">
+              <span class="glyphicon glyphicon-warning-sign"></span>
+              <span>{{'ANGENT_QUALIFICATION_HAS_NOT_CERTIFIED' | translate}}</span>
+            </span>
+          </dd>
+        </div>
+        <div ng-if="customer.customerType == 'offline'">
+          <dt>{{'AGENT_TYPE' | translate}}：</dt><dd>{{'AGENT_' + approvalInfo.agentType | translate}}</dd>
+          <dt>{{'AGENT_AREA' | translate}}：</dt><dd>{{approvalInfo.agentRegional.i18nName}}</dd>
+          <dt>{{'AGENT_COUNTRY' | translate}}：</dt><dd><span ng-repeat="item in approvalInfo.agentCountry"><span ng-if="$index">、</span>{{item.i18nName}}</span></dd>
+        </div>
+      </dl>
+      </div>
+      <h5 class="bdt pt15 pb10 pl10" id="contactInfo">{{'CUSTOMER_CONTACT_INFO' | translate}}</h5>
+      <div ng-if="!contacts.length" class="pb20 pl40">{{'NOTHING' | translate}}</div>
+      <div ng-if="contacts" class="table-contact-wrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th class="min-w60">{{'CONTACT_NAME' | translate}}</th>
+              <th style="max-width: 45px;">{{'GENDER' | translate}}</th>
+              <th class="min-w80">{{'DUTY_TITLE' | translate}}</th>
+              <th class="min-w60">{{'CUSTOMER_HIGHER_AUTHORITIES' | translate}}</th>
+              <th class="min-w80">{{'CUSTOMER_DEPARTMENT' | translate}}</th>
+              <th style="width:130px;">{{'CUSTOMER_CONTACT_PHONE_NUMBERS' | translate}}</th>
+              <th>{{'MAILBOX' | translate}}</th>
+              <th style="width:45px" class="ta-c">{{'LEGAL_PERSON' | translate}}</th>
+              <th style="width:60px" class="ta-c">{{'DECISION_MAKER' | translate}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="contact in contacts">
+              <td>
+                {{contact.name}}
+                <span ng-if="!contact.name">--</span>
+              </td>
+              <td>
+                <span ng-if="contact.gender">{{'SEX_' + contact.gender | translate}}</span>
+                <span ng-if="!contact.gender">--</span>
+              </td>
+              <td>
+                {{contact.positionName}}
+                <span ng-if="!contact.positionName">--</span>
+              </td>
+              <td>
+                {{contact.superiorPosition}}
+                <span ng-if="!contact.superiorPosition">--</span>
+              </td>
+              <td>
+                {{contact.department}}
+                <span ng-if="!contact.department">--</span>
+              </td>
+              <td>
+                {{contact.telephone}}
+                <br ng-if="contact.telephone">
+                {{contact.mobile}}
+                <span ng-if="!contact.telephone && !contact.mobile">--</span>
+              </td>
+              <td class="td-max" title="yeyan@baidu.com">
+                <a ng-href="mailto:{{contact.email}}">{{contact.email}}</a>
+                <span ng-if="!contact.email">--</span>
+              </td>
+              <td class="ta-c">
+                <span ng-if="contact.isLegalPerson=='ENABLE'" class="glyphicon glyphicon-ok"></span>
+                <span ng-if="contact.isLegalPerson!='ENABLE'">--</span>
+              </td>
+              <td class="ta-c">
+                <span ng-if="contact.isDecisionMaker=='ENABLE'" class="glyphicon glyphicon-ok"></span>
+                <span ng-if="contact.isDecisionMaker!='ENABLE'">--</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <h5 ng-if="customer.customerType!='offline'" class="bdt pt15 pb10 pl10" id="opportunity">{{'BUSINESS_OPPORTUNITY' | translate}}</h5>
+      <div ng-if="customer.customerType!='offline' && !opportunityView" class="pb20 pl40">{{'NOTHING' | translate}}</div>
+      <dl ng-if="customer.customerType!='offline' && opportunityView" class="dl-horizontal">
+        <dt>{{'CUSTOMER_ONLINE_AD_BUDGET' | translate}}：</dt>
+        <dd>{{opportunityView.currencyType.sign}}{{opportunityView.budget | number:2}}<span ng-if="!opportunityView.budget">--</span></dd>
+        <dt>{{'CUSTOMER_BUDGET_LAUNCH_TIME' | translate}}：</dt>
+        <dd>
+          <span ng-if="opportunityView.spendingTime">{{opportunityView.spendingTime}}</span>
+          <span ng-if="!opportunityView.spendingTime">--</span>
+        </dd>
+        <dt>{{'CUSTOMER_ACCEPTABLE_PAYMENT_MODE' | translate}}：</dt><dd><span ng-if="opportunityView.payment">{{'PAYTYPE_' + opportunityView.payment | translate}}</span><span ng-if="!opportunityView.payment">--</span></dd>
+        <dt>{{'CUSTOMER_NEEDED_PAYMENT_CYCLE' | translate}}：</dt>
+        <dd>
+          <span ng-if="opportunityView.paymentPeriod">{{opportunityView.paymentPeriod}}{{'DAY_S' | translate}}</span>
+          <span ng-if="!opportunityView.paymentPeriod">--</span>
+        </dd>
+        <dt>{{'CUSTOMER_EXPECT_CHARGE_MODE' | translate}}：</dt><dd>{{opportunityView.billingModel}}<span ng-if="!opportunityView.billingModel">--</span></dd>
+        <dt>{{'LAUNCH_PLATFORM' | translate}}：</dt>
+        <dd ng-if="opportunityView.platformCash">
+          <span class="label label-primary">{{'BUSSINESS_CASH' | translate}}</span>&nbsp;&nbsp;
+          <span>{{opportunityView.platformCash}}</span>
+        </dd>
+        <dd ng-if="opportunityView.platformSale">
+          <span class="label label-primary">{{'BUSSINESS_SALE' | translate}}</span>&nbsp;&nbsp;
+          <span>{{opportunityView.platformSale}}</span>
+        </dd>
+        <dd ng-if="!(opportunityView.platformCash || opportunityView.platformSale)">--</dd>
+        <dt>{{'OTHER_DESCRIPTION' | translate}}：</dt><dd>{{opportunityView.description}}<span ng-if="!opportunityView.description">--</span></dd>
+      </dl>
+
+      <h5 ng-if="customer.customerType=='offline'" class="bdt pt15 pb10 pl10" id="qualification">{{'AGENT_QUALIFICATION' | translate}}</h5>
+      <div ng-if="customer.customerType=='offline' && !qualification" class="pb20 pl40">{{'NOTHING' | translate}}</div>
+      <dl ng-if="customer.customerType=='offline' && qualification" class="dl-horizontal">
+        <dt>{{'CUSTOMER_MAIN_PARTNERS' | translate}}：</dt><dd>{{qualification.partner}}<span ng-if="!qualification.partner">--</span></dd>
+        <dt>{{'CUSTOMER_MAIN_RESOURCES' | translate}}：</dt>
+        <dd class="pr20" ng-if="qualification.customerResources">
+          <table class="table table-resources">
+            <thead>
+              <tr>
+                <th class="w60"></th>
+                <th>{{'CUSTOMER_INDUSTRY' | translate}}</th>
+                <th>{{'CUSTOMER_ADVERTISERS_COMPANY' | translate}}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="resource in qualification.customerResources">
+                <td>top{{$index+1}}</td>
+                <td>{{resource.industry}}</td>
+                <td>{{resource.advertisersCompany}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </dd>
+        <dd ng-if="!qualification.customerResources.length">--</dd>
+        <dt>{{'CUSTOMER_PERFORMANCE_HIGHLIGHTS' | translate}}：</dt><dd>{{qualification.performanceHighlights}}<span ng-if="!qualification.performanceHighlights">--</span></dd>
+      </dl>
+      <h5 class="bdt pt15 pb10 pl10" id="attachment">{{'CUSTOMER_QUALIFICATION_MATERIAL' | translate}}</h5>
+      <div ng-if="!attachment" class="mpb20 pl40">{{'NOTHING' | translate}}</div>
+      <dl ng-if="attachment" class="dl-horizontal">
+        <dt ng-if="attachment.businesslicense">{{'ATTACHMENT_businesslicense' | translate}}：</dt>
+        <dd ng-if="attachment.businesslicense">
+          <span ng-repeat="license in attachment.businesslicense">
+            <span ng-if="$index">、</span>
+            <a ng-href="{{license.downLoadUrl}}" target="_blank">{{license.name}}</a>
+          </span>
+        </dd>
+        <dt ng-if="attachment.creditreference">{{'ATTACHMENT_creditreference' | translate}}：</dt>
+        <dd ng-if="attachment.creditreference">
+          <span ng-repeat="license in attachment.creditreference">
+            <span ng-if="$index">、</span>
+            <a ng-href="{{license.downLoadUrl}}" target="_blank">{{license.name}}</a>
+          </span>
+        </dd>
+        <dt ng-if="attachment.cooperationprove">{{'ATTACHMENT_cooperationprove' | translate}}：</dt>
+        <dd ng-if="attachment.cooperationprove">
+          <span ng-repeat="license in attachment.cooperationprove">
+            <span ng-if="$index">、</span>
+            <a ng-href="{{license.downLoadUrl}}" target="_blank">{{license.name}}</a>
+          </span>
+        </dd>
+        <dt ng-if="attachment.agentcertificate">{{'ATTACHMENT_agentcertificate' | translate}}：</dt>
+        <dd ng-if="attachment.agentcertificate">
+          <span ng-repeat="license in attachment.agentcertificate">
+            <span ng-if="$index">、</span>
+            <a ng-href="{{license.downLoadUrl}}" target="_blank">{{license.name}}</a>
+          </span>
+        </dd>
+      </dl>
+    </div>
+  </div>
+
+  <div class="proposal-panel panel gcrm-panel">
+    <div class="panel-heading">
+        <span class="black-block">&nbsp;</span>
+        <span class="panel-heading-text">{{'QUOTATION_APPROVAL_OPERATION' | translate}}</span>
+    </div>
+    <div class="panel-body">
+      <div class="form-horizontal clearfix tables-wrap">
+          <div class="form-group" ng-if="approvalInfo.addPlusOperate">
+              <label class="control-label col-md-2">{{'CUSTOMER_IF_APPROVAL_PLUS' | translate}}：</label>
+              <div ng-class="{'has-error':checkApprovalPlus && (plus.approvalPlus!=1 && plus.approvalPlus!=0)}">
+                  <div class="col-md-3">
+                      <label class="radio radio-inline mr13"><input type="radio" ng-value="true" ng-model="plus.approvalPlus"/>{{'YES' | translate}}</label>
+                      <label class="radio radio-inline"><input type="radio" ng-value="false" ng-model="plus.approvalPlus"/>{{'NO' | translate}}</label>
+                  </div>
+                  <div class="col-md-7 radio-inline-hint text-danger" ng-show="checkApprovalPlus && plus.approvalPlus!=1 && plus.approvalPlus!=0">
+                      <span class="glyphicon glyphicon-warning-sign"></span>{{'CUSTOMER_SELECT_APPROVAL_PLUS' | translate}}
+                  </div>
+              </div>
+          </div>
+          <div class="form-group">
+              <label class="control-label col-md-2">{{'APPROVAL_AUDIT_OPINION' | translate}}：</label>
+              <div ng-class="{'has-error':checkApprovalStatus && (form.approvalStatus!=1 && form.approvalStatus!=0)}">
+                  <div class="col-md-3">
+                      <label class="radio radio-inline"><input type="radio" ng-value="1" ng-model="form.approvalStatus"/> {{'AGREE' | translate}} </label>
+                      <label class="radio radio-inline"><input type="radio" ng-value="0" ng-model="form.approvalStatus"/> {{'REJECT' | translate}} </label>
+                  </div>
+                  <div class="col-md-7 radio-inline-hint text-danger" ng-show="!submitSuccessful && checkApprovalStatus && (form.approvalStatus!=1 && form.approvalStatus!=0)">
+                      <span class="glyphicon glyphicon-warning-sign"></span>{{'APPROVAL_CHOOSE_AUDIT_OPINION' | translate}}
+                  </div>
+              </div>
+          </div>
+          <div class="form-group">
+              <label class="control-label col-md-2">{{'AD_CONTENT_OTHER_EXPLAIN' | translate}}：</label>
+              <div class="col-md-6 div-approval-suggestion" ng-class="{'has-error':checkApprovalSuggestion && !form.approvalSuggestion}">
+                  <textarea class="form-control" rows="3" ng-model="form.approvalSuggestion"></textarea>
+              </div>
+              <div class="col-md-3 approval-suggestion-hint text-info" ng-show="form.approvalStatus==0 && !form.approvalSuggestion">
+                  <span class="glyphicon glyphicon-warning-sign"></span>&nbsp;&nbsp;{{'APPROVAL_REVOKE_NOTES' | translate}}
+              </div>
+          </div>
+      </div>
+    </div>
+
+    <div class="panel-footer text-left">
+        <a  class="btn btn-primary" ng-click="submitApproval()" ng-disabled="submitDisabble || !tasksReady || (form.approvalStatus!=0 && form.approvalStatus!=1) || (form.approvalStatus==0 && !form.approvalSuggestion)">{{'APPROVAL_SUBMIT' | translate}}</a>
+        <a  class="btn btn-default" ng-click="goNextTask()" ng-disabled="!(nextTask.foreignKey && nextTask.activityId) || submitDisabble || !tasksReady">{{'APPROVAL_NEXTTASK_TEXT' | translate}}</a>
+    </div>
+  </div>
+  <div class="shortcuts" >
+    <div class="shortcut">
+      <a class="btn btn-default" ng-click="modalApprovalRecord()">{{'APPROVAL_APPROVAL_RECORD' | translate}}</a>
+    </div>
+    <div class="shortcut">
+      <a class="btn btn-default" ng-click="modalModifyRecord()">{{'APPROVAL_UPDATE_RECORD' | translate}}</a>
+    </div>
+    <div class="shortcut">
+      <a class="btn btn-default" ng-click="anchorTo('basicInfo')">{{'CUSTOMER_BASIC_INFO' | translate}}</a>
+    </div>
+    <div class="shortcut" ng-if="contacts">
+      <a class="btn btn-default" ng-click="anchorTo('contactInfo')">{{'CUSTOMER_CONTACT_INFO' | translate}}</a>
+    </div>
+    <div class="shortcut" ng-if="opportunityView">
+      <a class="btn btn-default" ng-click="anchorTo('opportunity')">{{'BUSINESS_OPPORTUNITY' | translate}}</a>
+    </div>
+    <div class="shortcut" ng-if="qualification">
+      <a class="btn btn-default" ng-click="anchorTo('qualification')">{{'AGENT_QUALIFICATION' | translate}}</a>
+    </div>
+    <div class="shortcut" ng-if="attachment">
+      <a class="btn btn-default" ng-click="anchorTo('attachment')">{{'CUSTOMER_QUALIFICATION_MATERIAL' | translate}}</a>
+    </div>
+
+    <div class="shortcut">
+      <a ng-click="anchorTo('navBarTop')" class="btn btn-default">
+        &nbsp;
+        <span class="glyphicon glyphicon-chevron-up"></span>
+        <br>
+        {{'APPROVAL_BACK_TO_TOP' | translate}}
+      </a>
+    </div>
+  </div>
+</div>

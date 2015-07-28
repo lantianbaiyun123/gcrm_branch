@@ -1,0 +1,8 @@
+<div alert type="info" close="e.showAlert = null" ng-if="e.showAlert">{{'AD_SOLUTION_DETAIL_MODIFY_HINT_1' | translate}}<a href="#/materialDetail?contentId={{ad.adSolutionContent.id}}" target="_blank">{{'AD_SOLUTION_DETAIL_MODIFY_HINT_2' | translate}}</a>{{'AD_SOLUTION_DETAIL_MODIFY_HINT_3' | translate}}</div>
+<form class="form-horizontal" name="newAdForm" novalidate>
+  <div ui-view="contentFragmentGeneralEdit"></div>
+  <div ui-view="contentFragmentPositionEdit"></div>
+  <div ui-view="contentFragmentAdvertisingEdit"></div>
+  <div ui-view="contentFragmentPricingEdit"></div>
+  <div ui-view="contentFragmentMaterialEdit"></div>
+</form>

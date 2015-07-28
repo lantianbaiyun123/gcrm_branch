@@ -1,0 +1,138 @@
+/*benchmarkPriceCommon*/
+.dl-horizontal .multiple { line-height: 28px; }
+.repeat.ng-enter,
+.repeat.ng-move
+{
+  -webkit-transition: .2s linear all;
+  opacity: 0;
+  /*height: 0;*/
+}
+
+.repeat.ng-enter.ng-enter-active,
+.repeat.ng-move.ng-move-active{
+  opacity: 1;
+  /*height: 32px;*/
+}
+
+.repeat.ng-leave{
+  -webkit-transition: 0.2s linear all;
+  opacity: 1;
+}
+.repeat.ng-leave.ng-leave-active{
+  opacity: 0;
+  /*height: 0;*/
+}
+/*benchmarkPriceCommon End*/
+/*benchmarkPriceEdit*/
+.benchmark-price-edit .radio-inline { margin-left: 0; margin-right: 10px; }
+.benchmark-price-edit .time-dash { width: 16px; text-align: center; line-height: 33px; }
+.benchmark-price-edit .no-padding-left { padding-left: 0; }
+.benchmark-price-edit .price-comment { width: 278px; }
+.benchmark-price-edit .basic-info-panel { padding-bottom: 0px; }
+.benchmark-price-edit .price-panel { padding-top: 0px; }
+.benchmark-price-edit .input-container .btn-full-width { width: 100%; padding-left: 6px; padding-right: 6px; }
+.benchmark-price-edit .input-container .btn-text { text-align: left; text-overflow: ellipsis; overflow: hidden; }
+.benchmark-price-edit .table-wrap { padding-left: 150px; padding-right:15px;}
+.benchmark-price-edit .table-price .th-add { width: 35px; height: 35px; padding-top: 0; padding-bottom: 0;}
+.benchmark-price-edit .table-price .site-select { width: 120px; }
+.benchmark-price-edit .table-price .td-site-select { width: 120px; }
+.benchmark-price-edit .table-price .td-price { width: 70px; }
+.benchmark-price-edit .table-price .td-ratio { width: 110px; }
+.benchmark-price-edit .table-price .td-rebate { width: 120px; }
+.benchmark-price-edit .table-price .td-price-cps { width: 160px; }
+.benchmark-price-edit .table-price .td-price-cps label { /*margin-top: 5px;*/ margin-bottom: 0; margin-left:2px; font-weight: normal; }
+.benchmark-price-edit .table-price .td-price-cps .cps-ratio-group { margin-top: 10px;}
+.benchmark-price-edit .table-price .td-price-cps .input-group { margin-top: 5px; }
+.benchmark-price-edit .table-price .td-price-cps .pre-addon{ text-align: center; padding-right: 0; padding-left: 0; width: 55px; }
+.benchmark-price-edit .table-price .td-sm-line-height { line-height: 30px; }
+.benchmark-price-edit .table-price .price-add { padding-left: 0; padding-right: 0; color: #5cb85c;}
+.benchmark-price-edit .table-price .price-add:hover { color: #468847; }
+.benchmark-price-edit .table-price .price-delete { padding-left: 0; padding-right: 0; color: #ccc;}
+.benchmark-price-edit .table-price .price-delete:hover { color: #d9534f; }
+.benchmark-price-edit .table-price .td-testify-materials { min-width: 120px; }
+.benchmark-price-edit .table-price .td-testify-materials .material-add { display:block;}
+.benchmark-price-edit .table-price .td-testify-materials .add-hint { margin-left: 5px; line-height: 22px; }
+.benchmark-price-edit .table-price .td-testify-materials .testify-material-wrap { clear: left; padding-top: 10px; }
+.benchmark-price-edit .table-price .td-testify-materials .testify-material { min-width: 90px; max-width: 150px; display: inline-block; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
+.benchmark-price-edit .table-price .td-testify-materials .unit-max { max-width: 130px; }
+.benchmark-price-edit .table-price .td-testify-materials .ratio-max { max-width: 230px; }
+.benchmark-price-edit .table-price .td-testify-materials .rebate-max { max-width: 370px; }
+.benchmark-price-edit .table-price .testify-material-wrap .btn-link { color: #ccc; padding: 0; line-height: 1; width: 20px;}
+.benchmark-price-edit .table-price .testify-material-wrap .btn-link:hover { color: #d9534f; }
+.benchmark-price-edit .table-price .input-group-addon { font-size: 12px; }
+/*benchmarkPriceEdit END*/
+
+/*benchmarkPriceEdit.submitModal*/
+.benchmark-price-submit-modal .submit-msg { padding-bottom: 15px; }
+.benchmark-price-submit-modal .submit-msg.border-top { padding-top: 25px; border-top: 1px solid #ccc; }
+.benchmark-price-submit-modal .submit-msg h6 { margin-bottom: 8px; margin-top: 0; }
+.benchmark-price-submit-modal .submit-msg dl { margin-bottom: 5px;}
+.benchmark-price-submit-modal .submit-msg dl dt,
+.benchmark-price-submit-modal .submit-msg dl dd { font-size: 12px; line-height: 24px; }
+.benchmark-price-submit-modal .submit-msg dl dt { width: 65px;}
+.benchmark-price-submit-modal .submit-msg dl dd { margin-left: 85px;}
+.benchmark-price-submit-modal .modal-body { padding-bottom: 10px;}
+.benchmark-price-submit-modal .modal-footer { margin-top: 0px;}
+.benchmark-price-submit-modal .submit-msg .msg-top-margin { margin-top:10px;}
+.benchmark-price-submit-modal .submit-msg .msg { margin-top: 5px; margin-bottom: 5px; font-size: 12px;}
+.benchmark-price-submit-modal .submit-msg .msg-period { font-size: 12px; margin-bottom: 5px }
+/*benchmarkPriceEdit.submitModal END*/
+
+/*benchmarkPriceList*/
+.benchmark-price-list .form-group { margin-bottom: 0;}
+.benchmark-price-list .input-label { margin-top: 10px; margin-bottom: 5px; padding-left: 5px; height: 20px; }
+.benchmark-price-list .input-container { width: 100%; }
+.benchmark-price-list .input-container .btn-full-width { width: 100%; padding-left: 6px; padding-right: 6px; }
+.benchmark-price-list .input-container .btn-text { text-align: left; text-overflow: ellipsis; overflow: hidden; }
+.benchmark-price-list .form-operator .pl7 { padding-left: 7px; }
+.benchmark-price-list .form-operator .col-md-3 { width: 20%; }
+.benchmark-price-list .input-select2-suggest { width: 79px; height: 30px; }
+.benchmark-price-list .input-select2-suggest .select2-choice { height: 30px; }
+.benchmark-price-list .panel-query .main-row { padding-top: 5px; padding-bottom: 5px; }
+.benchmark-price-list .panel-query .time-dash { width: 6%; text-align: center; line-height: 33px; }
+.benchmark-price-list .panel-query .span-datepicker { width: 47%; }
+.benchmark-price-list .panel-query .select2-container .select2-choice {
+    background: #fff;
+    filter: none;
+    height: 30px;
+    padding-top: 2px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    border-color: #ccc;
+}
+.benchmark-price-list .panel-query .select2-container.select2-allowclear .select2-choice abbr { top: 8px; right: 10px;}
+.benchmark-price-list .alert { margin-bottom: 10px; }
+.benchmark-price-list .page-row { margin: 15px 5px 10px; }
+.benchmark-price-list .table-list tbody tr td { vertical-align: middle; }
+.benchmark-price-list .table-list  .btn-xs { padding: 1px 0; font-size: 12px; line-height: 1.5; border-radius: 3px; }
+.benchmark-price-list .td-price-number { min-width: 130px; }
+.benchmark-price-list .td-business-type { width: 80px; }
+.benchmark-price-list .td-price-type { width: 80px; }
+.benchmark-price-list .td-platform { width: 100px; }
+.benchmark-price-list .td-site-area { width: 80px; }
+.benchmark-price-list .td-active-time { min-width: 170px; }
+.benchmark-price-list .td-approval-status { width: 80px; }
+.benchmark-price-list .td-status { width: 80px; }
+.benchmark-price-list .td-operator { width: 80px; }
+.benchmark-price-list .td-operation { min-width: 120px; }
+/*benchmarkPriceList END*/
+
+/*benchmarkPriceCurrent*/
+.benchmark-price-current .panel-body .nav-tabs { padding-top: 0 }
+.benchmark-price-current .panel-body .tab-pane .nav-pills { padding-top: 15px; padding-bottom: 15px; }
+.benchmark-price-current .panel-body .tab-pane .nav-pills li { margin-right: 5px; }
+.benchmark-price-current .panel-body .tab-pane .nav-pills li a { padding: 5px 10px; }
+.benchmark-price-current .table-current { border-top: 2px solid #ddd; border-bottom: 2px solid #ddd;}
+.benchmark-price-current .table-current tr th,
+.benchmark-price-current .table-current tr td { vertical-align: middle; }
+.benchmark-price-current .table-current thead tr th { border-top: 1px solid #ddd; }
+.benchmark-price-current .table-current thead tr .th-middle { border-bottom: 1px solid #ddd; }
+.benchmark-price-current .table-current .border-right {border-right: 1px solid #ddd;}
+/*benchmarkPriceCurrent END*/
+
+/*benchmarkPriceApproval*/
+.benchmark-price-approval .dl-horizontal { padding-right: 20px; }
+.benchmark-price-modify-record .modal-footer { margin-top: 0; }
+/*benchmarkPriceApproval END*/

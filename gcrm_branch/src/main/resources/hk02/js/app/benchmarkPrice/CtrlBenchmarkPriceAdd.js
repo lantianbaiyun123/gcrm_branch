@@ -1,0 +1,1 @@
+define(["app","../_common/ytCommon"],function(e){e.registerController("CtrlBenchmarkPriceAdd",["$scope","$state","$log","PageSet",function(e,t,n,o){o.set({activeIndex:1,siteName:"benchmarkPriceAdd"}),e.quotationMain={},e.quotationList=[],e.msgs.listAlerts=[]}])});

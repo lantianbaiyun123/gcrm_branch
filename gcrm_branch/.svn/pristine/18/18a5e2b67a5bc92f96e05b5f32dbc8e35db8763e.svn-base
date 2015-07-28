@@ -1,0 +1,49 @@
+{
+  "servers": {
+    "8787": {
+      "basePath": "../resources"
+    },
+    "8788": {
+      "basePath": "../resources"
+    },
+    "8789": {
+      "basePath": "../resources"
+    }
+  },
+  "transRules": {
+    "8787": {
+      "targetServer": {
+        "host": "10.46.133.242",
+        "port": "8101"
+      },
+      "regExpPath": {
+        "gcrm/": {
+          "path": "gcrm/"
+        }
+      }
+    },
+    "8788": {
+      "targetServer": {
+        "host": "10.44.86.65",
+        "port": "8687"
+      },
+      "regExpPath": {
+        "gcrm/": {
+          "path": "gcrm/"
+        }
+      }
+    },
+    "8789": {
+      "targetServer": {
+        "host": "172.21.195.4",
+        "port": "8080"
+      },
+      "regExpPath": {
+        "gcrm/": {
+          "path": "gcrm/"
+        }
+      }
+    },
+    "ajaxOnly": false
+  }
+}

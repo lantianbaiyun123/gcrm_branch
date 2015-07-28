@@ -1,0 +1,8 @@
+<form class="form-horizontal">
+  <div alert type="info" close="ad.adSolutionContent.taskInfo = null" ng-if="ad.adSolutionContent.taskInfo && (ad.adSolutionContent.approvalStatus == 'approved' || ad.adSolutionContent.approvalStatus == 'approving' || ad.adSolutionContent.approvalStatus == 'saving' || ad.adSolutionContent.approvalStatus == 'refused')">{{ad.adSolutionContent.taskInfo}}</div>
+  <div ui-view="contentFragmentGeneralView"></div>
+  <div ui-view="contentFragmentPositionView"></div>
+  <div ui-view="contentFragmentAdvertisingView"></div>
+  <div ui-view="contentFragmentPricingView"></div>
+  <div ui-view="contentFragmentMaterialView"></div>
+</form>

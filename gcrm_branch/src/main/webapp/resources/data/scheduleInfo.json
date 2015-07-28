@@ -1,0 +1,82 @@
+{
+    "code": 201,
+    "message": "OK",
+    "data": {
+		"allDates" : {
+			"122" : {
+				"date":1395849600000,
+                "insertDate": true
+			},
+			"123" : {
+				"date":1395936000000,
+				"insertDate": true
+			},
+			"124": {
+				"date":1396022400000,
+				"insertDate": true
+			},
+			"125": {
+				"date":1396108800000,
+				"insertDate": true
+			},
+            "126": {
+                "date":1396195200000,
+                "insertDate": false
+            }
+		},
+        "positionId":123,
+        "billingModelId":123,
+        "scheduleList" : [
+            {
+                "adContentId":123,
+                "adContentNumber": "1234567890-11",
+                "advertiser":"百度",
+                "operator":"test",
+                "positionId": 120,
+                "billingModelId": 1,
+				"id":184,
+				"state":"confirmed",
+				"occupyDates":[123,124]
+            },
+            {
+                "adContentId":123,
+                "adContentNumber": "1234567890-12",
+                "adContentName":"广告内容2",
+                "advertiser":"百度",
+                "operator":"test",
+                "positionId": 120,
+                "billingModelId": 1,
+				"id":185,
+				"state":"locked",
+				"occupyDates":[122,125]
+            },
+            {
+                "adContentId":123,
+                "adContentNumber": "1234567890-18",
+                "adContentName":"广告内容5",
+                "advertiser":"百度",
+                "operator":"test",
+                "positionId": 120,
+                "billingModelId": 1,
+				"id":186,
+				"state":"reserved",
+				"occupyDates":[126],
+				"insertDates":[124],
+                "allowInsertDates":[124]
+            },
+            {
+                "adContentId":123,
+                "adContentNumber": "1234567890-22",
+                "adContentName":"广告内容4",
+                "advertiser":"百度",
+                "operator":"test",
+                "positionId": 120,
+                "billingModelId": 1,
+                "state":"released",
+				"occupyDates":[125,126],
+				"insertDates":[123,124],
+                "allowInsertDates": [123]
+            }
+        ]
+    }
+}

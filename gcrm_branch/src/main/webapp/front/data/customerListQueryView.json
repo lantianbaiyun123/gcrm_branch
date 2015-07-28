@@ -1,0 +1,40 @@
+{
+  "code": 200,
+  "data": {
+    "agentRegionals": [
+      {
+        "i18nName": "泰语区",
+        "id": 1,
+        "name": "泰语区"
+      },
+      {
+        "i18nName": "葡萄语区",
+        "id": 3,
+        "name": "西葡语区"
+      },
+      {
+        "i18nName": "印尼语区",
+        "id": 2,
+        "name": "印尼语区"
+      },
+      {
+        "i18nName": "阿语区",
+        "id": 4,
+        "name": "阿语区"
+      }
+    ],
+    "approveState": [
+      "saving",
+      "refused",
+      "approving",
+      "approved"
+    ],
+    "customerTypes": [
+      "offline",
+      "direct",
+      "nondirect",
+      "union"
+    ]
+  },
+  "message": "OK"
+}

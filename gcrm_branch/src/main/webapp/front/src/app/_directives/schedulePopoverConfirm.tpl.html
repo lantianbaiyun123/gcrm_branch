@@ -1,0 +1,20 @@
+<div class="popover {{placement}}" ng-style="{display: (isOpen && 'block') || 'none', top: position.top+'px', left: position.left+'px'}" style="min-width:400px">
+  <!-- <div class="arrow"></div> -->
+  <div class="popover-inner">
+    <h3 class="popover-title">{{title | translate}}</h3>
+    <div class="popover-content">
+      <p ng-repeat="msg in msgs">
+          <span>{{msg.advertiser}}</span>,&nbsp;
+          {{'ORIGINAL' | translate}}<strong class="text-info">&nbsp;{{msg.oldAmount}}</strong>&nbsp;{{'DAY_S' | translate}},&nbsp;
+          {{'CHANGE_TO' | translate}}<strong class="text-danger">&nbsp;{{msg.newAmount}}&nbsp;</strong>{{'DAY_S' | translate}}
+      </p>
+      <div class="popover-footer clearfix">
+        <div class="pull-right">
+          <span>{{'ARE_YOU_SURE'| translate}}</span>
+          <button class="btn btn-warning" ng-click="ok()">{{'CONFIRM' | translate}}</button>
+          <button class="btn btn-default" ng-click="cancel()">{{'CANCEL' | translate}}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

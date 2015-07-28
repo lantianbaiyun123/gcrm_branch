@@ -1,0 +1,36 @@
+{
+  "code": 200,
+  "data": [
+    {
+      "businessType": 0,
+      "i18nName": "Hao123",
+      "id": 17,
+      "status": 1
+    },
+    {
+      "businessType": 1,
+      "i18nName": "凤巢-关键字",
+      "id": 19,
+      "status": 1
+    },
+    {
+      "businessType": 1,
+      "i18nName": "凤巢-网盟",
+      "id": 20,
+      "status": 1
+    },
+    {
+      "businessType": 1,
+      "i18nName": "品专",
+      "id": 21,
+      "status": 1
+    },
+    {
+      "businessType": 1,
+      "i18nName": "中文Hao123",
+      "id": 18,
+      "status": 1
+    }
+  ],
+  "message": "OK"
+}

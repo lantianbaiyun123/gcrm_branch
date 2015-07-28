@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<!-- 轮播 -->
+	<!-- idle -->
+	<g_position_occupation id="1" position_id="1" date="2014-01-28" sold_amount="0" total_amount="3" status="1" cur_schedule_number="" history_schedules=""/>
+	<!-- bidding -->
+	<g_position_occupation id="2" position_id="1" date="2014-01-29" sold_amount="0" total_amount="3" status="1" cur_schedule_number="" history_schedules=""/>
+	<!-- part reserved -->
+	<g_position_occupation id="3" position_id="1" date="2014-01-30" sold_amount="0" total_amount="3" status="1" cur_schedule_number="" history_schedules=""/>
+	<!-- only part confirmed -->
+	<g_position_occupation id="4" position_id="1" date="2014-01-31" sold_amount="2" total_amount="3" status="1" cur_schedule_number=",22222222,66666666," history_schedules=""/>
+	<!-- only part locked -->
+	<g_position_occupation id="5" position_id="1" date="2014-02-01" sold_amount="2" total_amount="3" status="1" cur_schedule_number=",33333333,77777777," history_schedules=""/>
+	<!-- part confirmed and locked -->
+	<g_position_occupation id="6" position_id="1" date="2014-02-02" sold_amount="2" total_amount="3" status="1" cur_schedule_number=",66666666,77777777," history_schedules=""/>
+	<!-- all confirmed and locked -->
+	<g_position_occupation id="7" position_id="1" date="2014-02-03" sold_amount="3" total_amount="3" status="1" cur_schedule_number=",22222222,66666666,33333333," history_schedules=",44444444,77777777,44444444,"/>
+	
+	<!-- 非轮播 -->
+	<!-- idle -->
+	<g_position_occupation id="8" position_id="2" date="2014-01-28" sold_amount="0" total_amount="1" status="1" cur_schedule_number="" history_schedules=""/>
+	<!-- bidding -->
+	<g_position_occupation id="9" position_id="2" date="2014-01-29" sold_amount="0" total_amount="1" status="1" cur_schedule_number="" history_schedules=""/>
+	<!-- reserved -->
+	<g_position_occupation id="10" position_id="2" date="2014-01-30" sold_amount="0" total_amount="1" status="1" cur_schedule_number="" history_schedules=""/>
+	<!-- confirmed -->
+	<g_position_occupation id="11" position_id="2" date="2014-01-31" sold_amount="1" total_amount="1" status="1" cur_schedule_number=",99999999," history_schedules=",11111111,88888888,"/>
+	<!-- locked -->
+	<g_position_occupation id="12" position_id="2" date="2014-02-01" sold_amount="1" total_amount="1" status="1" cur_schedule_number=",00000000," history_schedules=",88888888,99999999,"/>
+	
+	<!-- bidding -->
+	<g_adcontent_position_date_relation id="1" ad_content_id="100" position_occ_id="2"/>
+	<g_adcontent_position_date_relation id="2" ad_content_id="101" position_occ_id="2"/>
+	<!-- reserved -->
+	<g_adcontent_position_date_relation id="3" ad_content_id="1" position_occ_id="3"/>
+	<g_adcontent_position_date_relation id="4" ad_content_id="1" position_occ_id="4"/>
+	<g_adcontent_position_date_relation id="5" ad_content_id="1" position_occ_id="5"/>
+	<g_adcontent_position_date_relation id="6" ad_content_id="1" position_occ_id="6"/>
+	<g_adcontent_position_date_relation id="7" ad_content_id="5" position_occ_id="3"/>
+	
+	<g_adcontent_position_date_relation id="10" ad_content_id="8" position_occ_id="10"/>
+	<!-- confirmed -->
+	<g_adcontent_position_date_relation id="11" ad_content_id="2" position_occ_id="4"/>
+	<g_adcontent_position_date_relation id="13" ad_content_id="2" position_occ_id="7"/>
+	<g_adcontent_position_date_relation id="14" ad_content_id="6" position_occ_id="4"/>
+	<g_adcontent_position_date_relation id="15" ad_content_id="6" position_occ_id="6"/>
+	<g_adcontent_position_date_relation id="16" ad_content_id="6" position_occ_id="7"/>
+	
+	<g_adcontent_position_date_relation id="17" ad_content_id="9" position_occ_id="11"/>
+	
+	<!-- locked -->
+	<g_adcontent_position_date_relation id="18" ad_content_id="3" position_occ_id="5"/>
+	<g_adcontent_position_date_relation id="19" ad_content_id="3" position_occ_id="7"/>
+	<g_adcontent_position_date_relation id="20" ad_content_id="7" position_occ_id="5"/>
+	<g_adcontent_position_date_relation id="21" ad_content_id="7" position_occ_id="6"/>
+	
+	<g_adcontent_position_date_relation id="22" ad_content_id="10" position_occ_id="12"/>
+	
+	<!-- bidding -->
+	<g_adcontent_position_date_relation id="23" ad_content_id="100" position_occ_id="3"/>
+	<g_adcontent_position_date_relation id="24" ad_content_id="101" position_occ_id="3"/>
+	<g_adcontent_position_date_relation id="25" ad_content_id="102" position_occ_id="9"/>
+	<g_adcontent_position_date_relation id="26" ad_content_id="102" position_occ_id="10"/>
+	<g_adcontent_position_date_relation id="27" ad_content_id="103" position_occ_id="9"/>
+	<g_adcontent_position_date_relation id="28" ad_content_id="103" position_occ_id="10"/>
+	
+	<!-- reserved -->
+	<g_schedule id="1" number="11111111" ad_content_id="1" position_id="1" billing_model_id="1" 
+	occupy_period="[NULL]" insert_period="[NULL]" status="0" create_time="2014-01-14 20:08:32" 
+	confirm_time="[NULL]" lock_time="[NULL]" release_time="[NULL]"/>
+	<!-- confirmed -->
+	<g_schedule id="2" number="22222222" ad_content_id="2" position_id="1" billing_model_id="1" 
+	occupy_period="[NULL]" insert_period="[NULL]" status="1" create_time="2014-01-14 20:08:32" 
+	confirm_time="2014-01-15 20:08:32" lock_time="[NULL]" release_time="[NULL]"/>
+	<!-- locked -->
+	<g_schedule id="3" number="33333333" ad_content_id="3" position_id="1" billing_model_id="1" 
+	occupy_period="[NULL]" insert_period="[NULL]" status="2" create_time="2014-01-14 20:08:32" 
+	confirm_time="2014-01-15 20:08:32" lock_time="2014-01-16 20:08:32" release_time="[NULL]"/>
+	<!-- released -->
+	<g_schedule id="4" number="44444444" ad_content_id="4" position_id="2" billing_model_id="1" 
+	occupy_period="[NULL]" insert_period="[NULL]" status="3" create_time="2014-01-14 20:08:32" 
+	confirm_time="2014-01-15 20:08:32" lock_time="[NULL]" release_time="[NULL]"/>
+	<!-- reserved -->
+	<g_schedule id="5" number="55555555" ad_content_id="5" position_id="2" billing_model_id="1" 
+	occupy_period="[NULL]" insert_period="[NULL]" status="0" create_time="2014-01-14 20:08:32" 
+	confirm_time="2014-01-15 20:08:32" lock_time="2014-01-16 20:08:32" release_time="2014-01-17 20:08:32"/>
+	<!-- confirmed -->
+	<g_schedule id="6" number="66666666" ad_content_id="6" position_id="1" billing_model_id="1" 
+	occupy_period="[NULL]" insert_period="[NULL]" status="1" create_time="2014-01-14 20:08:32" 
+	confirm_time="[NULL]" lock_time="[NULL]" release_time="[NULL]"/>
+	<!-- locked -->
+	<g_schedule id="7" number="77777777" ad_content_id="7" position_id="2" billing_model_id="1" 
+	occupy_period="[NULL]" insert_period="[NULL]" status="2" create_time="2014-01-14 20:08:32" 
+	confirm_time="2014-01-15 20:08:32" lock_time="2014-01-15 20:08:32" release_time="[NULL]"/>
+	<!-- reserved -->
+	<g_schedule id="8" number="88888888" ad_content_id="8" position_id="2" billing_model_id="1" 
+	occupy_period="[NULL]" insert_period="[NULL]" status="0" create_time="2014-01-14 20:08:32" 
+	confirm_time="2014-01-15 20:08:32" lock_time="[NULL]" release_time="[NULL]"/>
+	<!-- confirmed -->
+	<g_schedule id="9" number="99999999" ad_content_id="9" position_id="2" billing_model_id="1" 
+	occupy_period="[NULL]" insert_period="[NULL]" status="1" create_time="2014-01-14 20:08:32" 
+	confirm_time="2014-01-15 20:08:32" lock_time="[NULL]" release_time="[NULL]"/>
+	<!-- locked -->
+	<g_schedule id="10" number="00000000" ad_content_id="10" position_id="2" billing_model_id="1" 
+	occupy_period="[NULL]" insert_period="[NULL]" status="2" create_time="2014-01-14 20:08:32" 
+	confirm_time="2014-01-15 20:08:32" lock_time="[NULL]" release_time="[NULL]"/>
+</dataset>

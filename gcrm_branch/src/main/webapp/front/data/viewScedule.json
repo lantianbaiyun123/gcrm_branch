@@ -1,0 +1,227 @@
+{
+    "code": 200,
+    "data": {
+        "account": {
+            "id": 6,
+            "name": "test",
+            "status": "ENABLE",
+            "type": "INNER",
+            "ucid": 1
+        },
+        "adSolution": {
+            "approvalStatus": "saving",
+            "contractNumber": "123456ABCDE",
+            "createOperator": 1000,
+            "createTime": 1392803492000,
+            "customerNumber": 12345678,
+            "id": 4,
+            "number": "21352984",
+            "operator": 1,
+            "type": "create",
+            "updateOperator": 5,
+            "updateTime": 1392803492000
+        },
+        "adSolutionType": "新建",
+        "approvalContentViews": [{
+                "adSolutionContent": {
+                    "adSolutionId": 4,
+                    "advertiser": "测试人员",
+                    "allowInsert": 1,
+                    "approvalStatus": "approving",
+                    "areaId": 2,
+                    "channelId": 1,
+                    "description": "1010",
+                    "guideUrl": "http://www.baidu.com",
+                    "id": 4,
+                    "insertPeriodDescription": "2014-02-24",
+                    "materialEmbedCode": 0,
+                    "materialEmbedCodeContent": "aaaaaaaaa",
+                    "materialTitle": "物料title",
+                    "materialUrl": "http://www.baidu.com",
+                    "periodDescription": "2014-02-24",
+                    "positionId": 9,
+                    "productId": 2,
+                    "siteId": 3,
+                    "totalDays": 1
+                },
+                "advertiseMaterials": [{
+                        "adSolutionContentId": 4,
+                        "createOperator": 1000,
+                        "createTime": 1393397365000,
+                        "downloadFileName": "0116度学堂首页机构icon.png",
+                        "fileUrl": "http://localhost:8080/gcrm/adapprovalinfo/downloadAdvertiseMaterial?advertiseMaterialId=3",
+                        "id": 3,
+                        "uploadFileName": "/8f98a1f3-7cdf-45fb-b8d9-459485c4ddf1"
+                    }
+                ],
+                "advertiseQuotation": {
+                    "adSolutionContentId": 4,
+                    "billingModelId": 1,
+                    "billingModelName": "CPC",
+                    "budget": 10,
+                    "clickAmount": 1000,
+                    "customerQuote": 10,
+                    "discount": 1,
+                    "id": 3,
+                    "priceType": "unit",
+                    "publishPrice": 10,
+                    "totalPrice": 240000,
+                    "trafficAmount": 1000
+                },
+                "infoViews": [{
+                        "date": 1393171200000,
+                        "insertInfos": [{
+                                "adContentId": 237,
+                                "billingModelId": 1,
+                                "billingModelName": "CPC",
+                                "businessAllow": -1,
+                                "customerName": "anhuantestdate",
+                                "description": "1010"
+                            }, {
+                                "adContentId": 238,
+                                "billingModelId": 1,
+                                "billingModelName": "CPC",
+                                "businessAllow": -1,
+                                "customerName": "直客-1",
+                                "description": "1010"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "contract": {
+            "advertiseSolutionId": 1,
+            "beginDate": 1388592000000,
+            "category": "代理协议",
+            "customerNumber": 12345678,
+            "endDate": 1420128000000,
+            "number": "123456ABCDE",
+            "state": "VALID",
+            "summary": "这是合同摘要这是合同摘要这是合同摘要这是合同摘要"
+        },
+        "creatOperator": {
+            "id": 5,
+            "name": "测试5",
+            "status": "ENABLE",
+            "type": "INNER",
+            "ucid": 5
+        },
+        "customerI18nView": {
+            "agentCountry": [{
+                    "code": "LK",
+                    "i18nName": "斯里兰卡",
+                    "id": 5,
+                    "name": "斯里兰卡"
+                }
+            ],
+            "agentRegional": {
+                "agentCountries": [{
+                        "code": "PK",
+                        "i18nName": "巴基斯坦",
+                        "id": 11,
+                        "name": "巴基斯坦"
+                    }, {
+                        "code": "TH",
+                        "i18nName": "泰国",
+                        "id": 1,
+                        "name": "泰国"
+                    }, {
+                        "code": "MM",
+                        "i18nName": "缅甸",
+                        "id": 7,
+                        "name": "缅甸"
+                    }, {
+                        "code": "TW",
+                        "i18nName": "台湾",
+                        "id": 4,
+                        "name": "台湾"
+                    }, {
+                        "code": "BD",
+                        "i18nName": "孟加拉",
+                        "id": 10,
+                        "name": "孟加拉"
+                    }, {
+                        "code": "PH",
+                        "i18nName": "菲律宾",
+                        "id": 2,
+                        "name": "菲律宾"
+                    }, {
+                        "code": "KH",
+                        "i18nName": "柬埔寨",
+                        "id": 9,
+                        "name": "柬埔寨"
+                    }, {
+                        "code": "LK",
+                        "i18nName": "斯里兰卡",
+                        "id": 5,
+                        "name": "斯里兰卡"
+                    }, {
+                        "code": "LA",
+                        "i18nName": "老挝",
+                        "id": 8,
+                        "name": "老挝"
+                    }, {
+                        "code": "VN",
+                        "i18nName": "越南",
+                        "id": 3,
+                        "name": "越南"
+                    }, {
+                        "code": "IN",
+                        "i18nName": "印度",
+                        "id": 6,
+                        "name": "印度"
+                    }
+                ],
+                "i18nName": "泰语区",
+                "id": 1,
+                "name": "泰语区"
+            },
+            "agentType": "独家代理",
+            "approvalStatus": "审核中",
+            "belongsSales": "测试5",
+            "companySize": "50~100人",
+            "country": {
+                "code": "JO",
+                "i18nName": "约旦",
+                "id": 29,
+                "name": "约旦"
+            },
+            "currencyType": {
+                "i18nName": "美元",
+                "id": 1,
+                "name": "USD",
+                "radio": 0.1647
+            },
+            "customer": {
+                "address": "ss",
+                "agentCountry": "5",
+                "agentRegional": 1,
+                "agentType": 0,
+                "approvalStatus": 2,
+                "belongSales": 5,
+                "businessLicense": "111",
+                "businessScope": "",
+                "businessType": 0,
+                "companyName": "代理-1",
+                "companySize": "less_100",
+                "companyStatus": 0,
+                "country": 29,
+                "createOperator": 1000,
+                "createTime": 1392785570000,
+                "currencyType": 1,
+                "customerNumber": 12345678,
+                "description": "",
+                "id": 1,
+                "registerCapital": 23,
+                "registerTime": 1391356800000,
+                "type": "0",
+                "updateOperator": 1000,
+                "updateTime": 1394421992000,
+                "url": "http://sssss"
+            },
+            "customerType": "广告代理（线下）"
+        }
+    },
+    "message": "OK"
+}

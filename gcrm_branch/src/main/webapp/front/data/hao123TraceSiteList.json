@@ -1,0 +1,28 @@
+{
+    "code": 200,
+    "data": [
+        {
+            "adPlatformId": 17,
+            "createOperator": 7400780,
+            "createTime": 1402411628000,
+            "id": 43,
+            "siteId": 10,
+            "siteName": "巴西",
+            "status": "enable",
+            "updateOperator": 7400780,
+            "updateTime": 1402411628000
+        },
+        {
+            "adPlatformId": 17,
+            "createOperator": 7400780,
+            "createTime": 1402411628000,
+            "id": 43,
+            "siteId": 11,
+            "siteName": "巴西rio",
+            "status": "enable",
+            "updateOperator": 7400780,
+            "updateTime": 1402411628000
+        }
+    ],
+    "message": "OK"
+}

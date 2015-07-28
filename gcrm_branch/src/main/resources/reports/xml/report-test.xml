@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<reports>
+	<report id="tracereport-jpql" name="report.title.hao123report">
+		<dataSource id="ds1">
+			<query nativesql="false" dynamic="true">
+				<![CDATA[
+				select hrb from Hao123ReportBean hrb where 1=1
+				 #if($templateUtil.isNotEmpty($pageCritera.beginDate))
+				 and hrb.acturalStart>=?1
+				 #end
+				 #if($templateUtil.isNotEmpty($pageCritera.endDate))
+				 and hrb.acturalStart<?2
+				 #end
+				order by hrb.acturalStart desc
+				]]>
+			</query>
+			<inputBindings name="input binding Name">
+				<inputBinding object="pageCritera" property="beginDate" ifTrue="$templateUtil.isNotEmpty($pageCritera.beginDate)"/>
+				<inputBinding object="pageCritera" property="endDate" ifTrue="$templateUtil.isNotEmpty($pageCritera.endDate)"/>
+			</inputBindings>
+			<columns>
+				<column name="resource.site" field1="siteId" field2="siteName" expression="com.baidu.gcrm.resource.site.model.Site" converter="i18NColumnConvert"/>
+				<column name="resource.position.channel" field1="channelId" field2="channelName" expression="com.baidu.gcrm.resource.position.model.Position" converter="i18NColumnConvert"/>
+				<column name="resource.position.area" field1="areaId" field2="areaName" expression="com.baidu.gcrm.resource.position.model.Position" converter="i18NColumnConvert"/>
+				<column name="resource.position.position" field1="positionId" field2="positionName" expression="com.baidu.gcrm.resource.position.model.Position" converter="i18NColumnConvert"/>
+				<column name="costomerResource.major.customer.resources.industry" field1="industry" field2="industryName" expression="com.baidu.gcrm.valuelistcache.model.Industry" converter="cacheColumnConvert"/>
+				<column name="name.billingModel" field1="billingModelId" field2="billingModelName" expression="com.baidu.gcrm.valuelistcache.model.BillingModel" converter="cacheColumnConvert"/>
+			</columns>
+		</dataSource>
+	</report>
+</reports>

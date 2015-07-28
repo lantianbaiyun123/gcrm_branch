@@ -1,0 +1,119 @@
+package com.baidu.gcrm.ad.web.utils;
+
+import java.text.DecimalFormat;
+import java.util.Set;
+
+import com.baidu.gcrm.ad.content.model.AdSolutionContent;
+import com.baidu.gcrm.ad.model.AdvertiseSolution;
+
+public class AdvertiseSolutionUtils {
+    
+    private static int limitSize = 99;
+    
+    /**
+    * 功能描述：   复制广告方案对象
+    * 创建人：yudajun    
+    * 创建时间：2014-3-25 下午4:24:20   
+    * 修改人：yudajun
+    * 修改时间：2014-3-25 下午4:24:20   
+    * 修改备注：   
+    * 参数： @param dest
+    * 参数： @param orig
+    * @version
+     */
+	public static void copySolutionProperties(AdvertiseSolution dest,AdvertiseSolution orig){
+		if(dest == null || orig == null){
+			return;
+		}
+		dest.setApprovalStatus(orig.getApprovalStatus());
+		dest.setBudget(orig.getBudget());
+		dest.setContractNumber(orig.getContractNumber());
+		dest.setCreateOperator(orig.getCreateOperator());
+		dest.setCreateTime(orig.getCreateTime());
+		dest.setCurrencyType(orig.getCurrencyType());
+		dest.setCustomerNumber(orig.getCustomerNumber());
+		dest.setEndTime(orig.getEndTime());
+		dest.setId(orig.getId());
+		dest.setLocked(orig.getLocked());
+		dest.setNumber(orig.getNumber());
+		dest.setOldSolutionId(orig.getOldSolutionId());
+		dest.setOperator(orig.getOperator());
+		dest.setStartTime(orig.getStartTime());
+		dest.setType(orig.getType());
+		dest.setUpdateOperator(orig.getUpdateOperator());
+		dest.setUpdateTime(orig.getUpdateTime());
+		dest.setAdvertiseType(orig.getAdvertiseType());
+	}
+	/**
+	* 功能描述：   复制广告内容
+	* 创建人：yudajun    
+	* 创建时间：2014-3-25 下午4:41:17   
+	* 修改人：yudajun
+	* 修改时间：2014-3-25 下午4:41:17   
+	* 修改备注：   
+	* 参数： @param dest
+	* 参数： @param orig
+	* @version
+	 */
+	public static void copySolutionContentProperties(AdSolutionContent dest,AdSolutionContent orig){
+		if(dest == null || orig == null){
+			return;
+		}
+		
+		dest.setAdSolutionId(orig.getAdSolutionId());
+		dest.setAdvertiser(orig.getAdvertiser());
+		dest.setAdvertiserId(orig.getAdvertiserId());
+		dest.setApprovalStatus(orig.getApprovalStatus());
+		dest.setAreaId(orig.getAreaId());
+		dest.setAreaName(orig.getAreaName());
+		
+		dest.setChangedPosition(orig.isChangedPosition());
+		dest.setChannelId(orig.getChannelId());
+		dest.setChannelName(orig.getChannelName());
+		dest.setCreateOperator(orig.getCreateOperator());
+		dest.setCreateTime(orig.getCreateTime());
+		
+		dest.setDescription(orig.getDescription());
+		
+		dest.setGuideUrl(orig.getGuideUrl());
+		
+		dest.setId(orig.getId());
+		
+		dest.setMaterialEmbedCode(orig.getMaterialEmbedCode());
+		dest.setMaterialEmbedCodeContent(orig.getMaterialEmbedCodeContent());
+		dest.setMaterialTitle(orig.getMaterialTitle());
+		dest.setMaterialType(orig.getMaterialType());
+		dest.setMaterialUrl(orig.getMaterialUrl());
+		dest.setMaterialFileType(orig.getMaterialFileType());
+		dest.setMonitorUrl(orig.getMonitorUrl());
+		dest.setNumber(orig.getNumber());
+		
+		dest.setOldContentId(orig.getOldContentId());
+		dest.setPeriodDescription(orig.getPeriodDescription());
+		dest.setPositionId(orig.getPositionId());
+		dest.setPositionName(orig.getPositionName());
+		dest.setProductId(orig.getProductId());
+		dest.setProductName(orig.getProductName());
+		
+		dest.setScheduleId(orig.getScheduleId());
+		dest.setSiteId(orig.getSiteId());
+		dest.setSiteName(orig.getSiteName());
+		
+		dest.setTotalDays(orig.getTotalDays());
+		
+		dest.setUpdateOperator(orig.getUpdateOperator());
+		dest.setUpdateTime(orig.getUpdateTime());
+	}
+	
+    public static String generateContentNumber(String adSolutionNumber, Set<String> numberSuffixSet) {
+        DecimalFormat formater = new DecimalFormat("00");
+        String tempNumberSuffix = null;
+        for (int i = 1; i <= limitSize; i++) {
+            tempNumberSuffix = formater.format(i);
+            if (!numberSuffixSet.contains(tempNumberSuffix)) {
+                break;
+            }
+        }
+        return new StringBuilder(adSolutionNumber).append("-").append(tempNumberSuffix).toString();
+    }
+}

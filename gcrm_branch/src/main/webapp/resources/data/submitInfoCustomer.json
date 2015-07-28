@@ -1,0 +1,58 @@
+{
+  "code": 200,
+  "data": [
+    {
+      "agentCompanyName": "eeeeecccc",
+      "approvalStatus": 0,
+      "approvalStatusName": "saving",
+      "belongSales": 1000,
+      "belongSalesName": "current",
+      "businessType": "2",
+      "buttonRole": {
+        "addAccount": false,
+        "changeSaler": true,
+        "discard": true,
+        "recovery": false,
+        "reminders": false,
+        "show": true,
+        "withdraw": false
+      },
+      "companyName": "www",
+      "country": 15,
+      "countryName": "新西兰",
+      "customerNumber": "502331295",
+      "customerType": 1,
+      "customerTypeName": "direct",
+      "id": 789,
+      "status": 0,
+      "taskInfor": "Saler 黎亚洲22"
+    },
+    {
+      "agentCompanyName": "张三",
+      "approvalStatus": 2,
+      "approvalStatusName": "approving",
+      "belongSales": 1000,
+      "belongSalesName": "current",
+      "businessType": "2",
+      "buttonRole": {
+        "addAccount": false,
+        "changeSaler": true,
+        "discard": true,
+        "recovery": false,
+        "reminders": true,
+        "show": true,
+        "withdraw": true
+      },
+      "companyName": "XXXX",
+      "country": 16,
+      "countryName": "巴西",
+      "customerNumber": "325940374",
+      "customerType": 1,
+      "customerTypeName": "direct",
+      "id": 794,
+      "status": 0,
+      "taskInfor": "Saler 黎亚洲111"
+    }
+  ],
+  "message": "OK"
+}

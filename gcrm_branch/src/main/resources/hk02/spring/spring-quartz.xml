@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+
+	<bean id="publishSendMail" class="com.baidu.gcrm.valuelist.quartz.PublishSendMail">
+	</bean>
+  	<!-- publishSendMailDetail -->
+	<bean id="publishSendMailDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="publishSendMail" />
+		<property name="targetMethod" value="sendOnlineCollectionMail" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<bean id="publishSendMailTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="publishSendMailDetail"/>
+        <property name="cronExpression" value="${publish.sendmail.task}" />
+    	</bean>
+
+<!-- publishSendMaterMailDetail -->
+	<bean id="publishSendMaterMailDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="publishSendMail" />
+		<property name="targetMethod" value="sendMaterCollectionMail" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<bean id="publishSendMaterMailTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="publishSendMaterMailDetail"/>
+        <property name="cronExpression" value="${publish.sendmatermail.task}" />
+    	</bean>
+    	
+    	
+    	
+    <bean id="qutationMainValid" class="com.baidu.gcrm.valuelist.quartz.QutationMainValid">
+	</bean>
+    
+    <!-- qutationMainValidDetail -->
+	<bean id="qutationMainValidDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="qutationMainValid" />
+		<property name="targetMethod" value="doIt" />
+		<property name="concurrent" value="false" />
+	</bean>	
+	
+    <bean id="qutationMainValidTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="qutationMainValidDetail"/>
+        <property name="cronExpression" value="${quotation.valid.cron}" />
+    </bean>
+    
+	<bean id="cacheRefreshJob" class="com.baidu.gcrm.valuelist.quartz.CacheRefreshJob">
+	</bean>
+	
+	<!-- JobDetail -->
+	<bean id="jobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="cacheRefreshJob" />
+		<property name="targetMethod" value="doIt" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<!-- trigger -->
+	<bean id="simpleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
+		<!-- see the example of method invoking job above -->
+		<property name="jobDetail" ref="jobDetail" />
+		<!-- 10 seconds -->
+		<!-- <property name="startDelay" value="5" /> -->
+		<!-- repeat every 5 seconds -->
+		<property name="repeatInterval" value="3600000" />
+	</bean>
+	
+	<!-- init position date -->
+	<bean id="initPositionDateJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="positionDateServiceImpl" />
+		<property name="targetMethod" value="initPositionDateTimer" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="initPositionDateTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="initPositionDateJobDetail" />
+		<property name="cronExpression" value="${position.occupation.init.cron}" />
+	</bean>
+    
+    <bean id= "batchUnpublishTaskJobDetail" class ="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean" >
+        <property name= "targetObject" ref = "publishDateServiceImpl"/>
+        <property name= "targetMethod" value ="batchUnpublishTimer" />
+        <property name= "concurrent" value = "false"/>
+    </bean>
+  
+    <bean id= "batchUnpublishTaskTrigger" class ="org.springframework.scheduling.quartz.CronTriggerFactoryBean" >
+        <property name= "jobDetail" ref = "batchUnpublishTaskJobDetail" />
+        <property name= "cronExpression" value ="${batch.unpublish.task}" />
+    </bean>
+	
+	<bean id="batchPublishTaskJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="publishDateServiceImpl" />
+		<property name="targetMethod" value="batchPublishTimer" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="batchPublishTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="batchPublishTaskJobDetail" />
+		<property name="cronExpression" value="${batch.publish.task}" />
+	</bean>
+	<!-- factory -->
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean" lazy-init="true">
+    <property name="triggers">
+        <list>
+            <!-- <ref bean="cronTrigger" /> -->
+            <!-- <ref bean="simpleTrigger" />
+            <ref bean="initPositionDateTrigger" />
+            <ref bean="qutationMainValidTrigger" />
+            <ref bean= "batchUnpublishTaskTrigger" />
+            <ref bean="batchPublishTaskTrigger" />
+		    <ref bean="publishSendMailTrigger" />
+          	<ref bean="publishSendMaterMailTrigger" /> -->
+        </list>
+    </property>
+</bean>
+
+</beans>
+
+
+

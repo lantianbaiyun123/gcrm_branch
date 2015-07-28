@@ -1,0 +1,18 @@
+package com.baidu.gcrm.ws.service;
+
+import javax.jws.WebService;
+import javax.jws.soap.SOAPBinding;
+
+/**
+ * gcrm为bpm提供的触发事件接口，功能：标杆价审批完成。具体如下：
+ * <li>如果标杆价有冲突时间</li>
+ * <li>发送邮件/li>
+ * 
+ * @author anhuan
+ *
+ */
+@WebService(targetNamespace = "http://gcrm.baidu.com")
+@SOAPBinding(style = SOAPBinding.Style.RPC)
+public interface ICompleteQuoteService {
+	void completeQuote(String quoteId);
+}

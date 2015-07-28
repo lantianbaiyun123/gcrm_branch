@@ -1,0 +1,15 @@
+<div class="popover {{placement}}" ng-style="{display: (isGoodToOpen && 'block') || 'none', top: position.top+'px', left: position.left+'px', zIndex: 3000}">
+  <div class="arrow"></div>
+  <div class="popover-inner">
+    <h3 class="popover-title">{{title}}</h3>
+    <div class="popover-content">
+      <div ng-bind-html="msg"></div>
+      <div class="popover-footer clearfix">
+        <div class="align-center">
+          <button class="btn {{okBtnClass}}" ng-click="ok()">{{okText}}</button>
+          <button class="btn btn-default" ng-click="cancel()">{{'CANCEL' | translate}}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,17 @@
+{
+    "errors": {
+        "customer.address": "customer.address.required",
+        "customer.agentCountry": "customer.agentCountry.required",
+        "customer.agentRegional": "customer.agentRegional.required",
+        "customer.agentType": "customer.agentType.required",
+        "customer.belongSales": "customer.belongSales.required",
+        "customer.businessLicense": "customer.businessLicense.required",
+        "customer.country": "customer.country.required",
+        "customer.registerTime": "customer.registerTime.required",
+        "customer.type": "customer.type.required",
+        "customer.url": "customer.url.required"
+    },
+    "success": false,
+    "message": "kaka",
+    "code": 201
+}

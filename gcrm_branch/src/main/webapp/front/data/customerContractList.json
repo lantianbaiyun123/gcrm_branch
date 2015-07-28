@@ -1,0 +1,16 @@
+{
+    "code": 200,
+    "data": [
+        {
+            "beginDate": 1391184000000,
+            "category": "代理协议",
+            "customerNumber": 497307238,
+            "endDate": 1427472000000,
+            "number": "123456ABCDEeeeee",
+            "state": "VALID",
+            "summary": "这是合同摘要这是合同摘要这是合同摘要这是合同摘要",
+            "sales": "这是cxx"
+        }
+    ],
+    "message": "OK"
+}

@@ -1,0 +1,37 @@
+{
+    "code": 200, 
+    "data": [
+        {
+            "adSolutionContent": {
+                "adSolutionId": 428, 
+                "advertiser": "直客-1", 
+                "approvalStatus": "saving", 
+                "areaId": 2, 
+                "areaName": "测试区域1", 
+                "changedPosition": false, 
+                "channelId": 1, 
+                "channelName": "测试频道1", 
+                "description": "test", 
+                "id": 238, 
+                "insertPeriodDescription": "", 
+                "materialEmbedCode": 0, 
+                "materialEmbedCodeContent": "", 
+                "materialTitle": "1", 
+                "materialUrl": "1", 
+                "periodDescription": "2014-03-06,2014-03-15;", 
+                "positionId": 13, 
+                "positionName": "测试4轮播位", 
+                "productId": 2, 
+                "scheduleId": 2, 
+                "siteId": 3, 
+                "siteName": "测试站点1", 
+                "totalDays": 10, 
+                "updateOperator": 1000, 
+                "updateTime": 1394033953000
+            }, 
+            "poNumber": "", 
+            "schedulePeriod": "2014-05-02"
+        }
+    ], 
+    "message": "OK"
+}

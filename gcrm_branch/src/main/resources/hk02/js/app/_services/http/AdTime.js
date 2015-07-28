@@ -1,0 +1,1 @@
+define(["app"],function(t){t.registerFactory("AdTime",["$http",function(t){return{queryInsertDates:function(e,n){t({method:"post",url:"/gcrm/occupation/queryInsertDates",data:JSON.stringify(e)}).success(function(t){n(t)})}}}])});

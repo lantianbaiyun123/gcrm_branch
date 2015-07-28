@@ -1,0 +1,176 @@
+cas.appid=240
+cas.errno=131;132;101;102;103;104;105;110;111;114;116;122;123;124;125
+cas.defaultPwd=Crm888
+uc.usersecureinfo.key=335f5352088d7d9bf74191e006d8e24c
+uc.usersecureinfo.errno=101;102;103;
+uc.usersecureinfo.findpwd=http://aq.baidu.com/new/?language=@#/findpwd
+uc.usersecureinfo.changepwd=http://aq.baidu.com/passwd/
+occupation.init.count=365
+newrights.sysname=gcrm
+com.baidu.log.not.output=doTask,doWork,findByUcid,getByIdAndLocale,getI18Info,findById,getCurrentActivitiesOfUser
+
+#bpm
+gwfp.login.name=gcrm
+gwfp.login.password=123456
+cms.login.name=erp_cms
+cms.login.password=erp_cms
+bpm.client.id=gcrm
+ad.package.id=gcrm_pkg_506
+ad.process.defineId=gcrm_pkg_506_prs1
+adplan.activityData.lessThanEighty=isLessThan80Percent
+adplan.activityData.lessThanFifty=isLessThan50Percent
+adplan.activityData.withoutRecord=isWithoutRecord
+adplan.activityData.insertOrder=isInsertOrder
+adplan.activityData.acturalRatioLessThanMine=isActualRatioLessThanMine
+adplan.activityData.needSuperiorApproval=needSuperiorApproval
+bidding.process.defineId=gcrm_pkg_506_prs2
+quote.package.id=gcrm_pkg_506
+quote.process.defineId=gcrm_pkg_506_prs3
+material.package.id=gcrm_pkg_506
+material.process.defineId=gcrm_pkg_506_prs4
+cms.package.id=erp_cms_pkg_1266
+cms.process.defineId=erp_cms_pkg_8843_prs1
+customer.package.id=gcrm_pkg_506
+customer.process.defineId=gcrm_pkg_506_prs6
+adContentOnlineApply.package.id=gcrm_pkg_506
+adContentOnlineApply.process.defineId=gcrm_pkg_506_prs7
+quote.clash.subject.zh=[Baidu-\u9EA6\u54F2\u4F26\u7CFB\u7EDF]\u6807\u6746\u4EF7\u53D8\u5316
+quote.finish.email.subject.zh=[Baidu-\u9EA6\u54F2\u4F26\u7CFB\u7EDF]\u6807\u6746\u4EF7\u5907\u6848
+quote.finish.email.subject.en=[Baidu-Magellan System]The benchmark price Keep on record
+quote.clash.subuject.en=[Baidu-Magellan System]The benchmark price change
+quote.clash.email.templateName.zh=quoteClash.zh.vm
+quote.clash.email.templateName.en=quoteClash.en.vm
+quote.finish.templateName.zh=quoteProcessFinish.zh.vm
+quote.finish.templateName.en=quoteProcessFinish.en.vm
+quote.activityDate.buType=buType
+
+#ws
+ws.password=e10adc3949ba59abbe56e057f20f883e
+
+#mail
+gcrm.test.mode.mail=lixiaoli@baidu.com,gongyao@baidu.com,liudisheng@baidu.com,yangjianguo@baidu.com
+com.baidu.mailfrom=CRM-bpit@baidu.com
+fully.baidu.mail=zhouting01@baidu.com
+bufinance.baidu.mail=shanying@baidu.com
+contract.baidu.mail=cmd_pay@baidu.com
+inneraudit.baidu.mail=likai03@baidu.com
+velocity.basefolder=/vm
+doc.url=doc/Benchmark.doc
+schedule.complete.email.subject.zh=[Baidu-\u9EA6\u54F2\u4F26\u7CFB\u7EDF]\u6392\u671F\u6210\u529F\u901A\u77E5
+schedule.complete.email.subject.en=[Baidu-Magellan System]Schedule Succeeded
+schedule.complete.email.templateName.zh=scheduleComplete.zh.vm
+schedule.complete.email.templateName.en=scheduleComplete.en.vm
+schedule.update.email.subject.zh=[Baidu-\u9EA6\u54F2\u4F26\u7CFB\u7EDF]\u6392\u671F\u53D8\u66F4\u901A\u77E5
+schedule.update.email.subject.en=[Baidu-Magellan System]Schedule Changed
+schedule.update.email.templateName.zh=updateSchedule.zh.vm
+schedule.update.email.templateName.en=updateSchedule.en.vm
+schedule.release.email.subject.zh=[Baidu-\u9EA6\u54F2\u4F26\u7CFB\u7EDF]\u6392\u671F\u91CA\u653E\u901A\u77E5
+schedule.release.email.subject.en=[Baidu-Magellan System]Schedule Released
+schedule.release.email.templateName.zh=releaseSchedule.zh.vm
+schedule.release.email.templateName.en=releaseSchedule.en.vm
+position.disable.email.subject.en=[Baidu-Magellan System]Position Disabled
+position.disable.email.subject.zh=[Baidu-\u9EA6\u54F2\u4F26\u7CFB\u7EDF]\u4F4D\u7F6E\u7981\u7528\u901A\u77E5
+position.disable.email.templateName.en=positionDisableContent.en.vm
+position.disable.email.templateName.zh=positionDisableContent.zh.vm
+publish.reminders.email.subject.zh=[Baidu-\u9EA6\u54F2\u4F26\u7CFB\u7EDF]-\u7269\u6599\u50AC\u529E
+publish.reminders.email.subject.en=\u3010baidu-Magellan system\u3011- Material Reminder
+publish.terminate.email.subject.zh=[Baidu-\u9EA6\u54F2\u4F26\u7CFB\u7EDF]-\u7EC8\u6B62\u6295\u653E\u63D0\u9192
+publish.terminate.email.subject.en=[baidu-Magellan system]-Termination Notice
+publish.online.email.subject.zh=[Baidu-\u9EA6\u54F2\u4F26\u7CFB\u7EDF]-\u4E0A\u7EBF\u63D0\u9192
+publish.online.email.subject.en=[baidu-Magellan system]-Online Notice
+publish.offline.email.subject.zh=[Baidu-\u9EA6\u54F2\u4F26\u7CFB\u7EDF]-\u4E0B\u7EBF\u63D0\u9192
+publish.offline.email.subject.en=[baidu-Magellan system]-Offline Notice
+publish.collect.email.subject.zh=\u3010Baidu-\u9EA6\u54F2\u4F26\u7CFB\u7EDF\u3011\u4E0A\u7EBF\u4EFB\u52A1
+publish.collect.email.subject.en=\u3010Baidu-Magellan System\u3011The on-line tasks
+publish.collectmaterial.subject.zh=\u3010Baidu-\u9EA6\u54F2\u4F26\u7CFB\u7EDF\u3011\u7269\u6599\u53D8\u66F4
+publish.collectmaterial.subject.en=\u3010Baidu-Magellan System\u3011Material change
+publish.material.subject.zn=\u3010Baidu-\u9EA6\u54F2\u4F26\u7CFB\u7EDF\u3011- \u7269\u6599\u53D8\u66F4\u4E0A\u7EBF\u63D0\u9192
+publish.material.subject.en=\u3010baidu-Magellan system\u3011-Replacement Material Online Notice
+position.full.email.subject.zh=\u3010Baidu-\u9EA6\u54F2\u4F26\u7CFB\u7EDF\u3011- \u6EE1\u8F7D\u7387\u7EDF\u8BA1
+position.Full.Situation.email.temlpateName.zh=positionFullSituation.zh.vm
+account.registerMailVerify.email.subject.zh=\u3010Baidu-\u9EA6\u54F2\u4F26\u3011\u90AE\u7BB1\u9A8C\u8BC1
+account.registerMailVerify.email.subject.en=[Baidu-Magellan System]-Email Verification
+account.registerSucc.email.subject.zh=\u3010baidu-\u9EA6\u54F2\u4F26\u7CFB\u7EDF\u3011- \u5E7F\u544A\u6295\u653E\u6570\u636E\u5E73\u53F0\u8D26\u53F7\u548C\u5BC6\u7801
+account.registerSucc.email.subject.en=[Baidu-Magellan System]-Advertise data platform account and password
+adcontent.change.email.subject.zh=[Baidu-\u9EA6\u54F2\u4F26\u7CFB\u7EDF]\u5185\u5BB9\u53D8\u66F4\u63D0\u9192
+publish.comeplete.email.templateName.zh=publishComeplete.zh.vm
+publish.comeplete.email.templateName.en=publishComeplete.en.vm
+publish.CollectContent.email.templateName.zh=publishcollectContent.zh.vm
+publish.CollectContent.email.templateName.en=publishcollectContent.en.vm
+publish.CollectMaterial.email.templateName.zh=publishcollectMaterial.zh.vm
+publish.CollectMaterial.email.templateName.en=publishcollectMaterial.en.vm
+account.registerMailVerify.email.templateName.zh=registerMailVerify.zh.vm
+account.registerMailVerify.email.templateName.en=registerMailVerify.en.vm
+account.registerSucc.email.templateName.zh=registerSucc.zh.vm
+account.registerSucc.email.templateName.en=registerSucc.en.vm
+adcontent.change.email.templateName.zh=changeAdcontent.zh.vm
+publish.alert.email.subject.en=[Baidu-Magellan System] Online Alarm
+publish.alert.both.email.templateName.en=publishAlertBoth.en.vm
+publish.alert.material.email.templateName.en=publishAlertMaterial.en.vm
+publish.alert.contract.email.templateName.en=publishAlertContract.en.vm
+stock.influence.email.subject.en=[Baidu-Magellan system]- Offline Notice
+stock.influence.email.subject.zh=\u3010baidu-\u9EA6\u54F2\u4F26\u7CFB\u7EDF\u3011\u5E7F\u544A\u65B9\u6848\u5F71\u54CD\u63D0\u9192
+stock.influence.email.templateName.en=stockInfluence.en.vm
+stock.influence.email.templateName.zh=stockInfluence.zh.vm
+
+gcrm_admin=CRM-bpit@baidu.com
+mail.host=mail2-in.baidu.com
+mail.username=
+mail.password=
+onlineApply.approve.subject.en=[baidu-Magellan Reminder] Ahead Online Approved
+onlineApply.contractEffective.subject.en=[baidu-Magellan Reminder] The Contract is active
+onlineApply.approve.subject.templateName.en=onlineApplyApproved.en.vm
+onlineApply.approve.subject.templateName.zh=onlineApplyApproved.zh.vm
+onlineApply.contractEffective.subject.templateName.en=onlineApplyContractEffective.en.vm
+onlineApply.contractEffective.subject.templateName.zh=onlineApplyContractEffective.zh.vm
+gcrm.QuotationCode.length=3
+
+#position code
+position.code.templateName.en=positionCode.en.vm
+
+#http client
+http.page.size=300
+http.fail.retry=3
+http.connect.timeout=30000
+
+#hao123
+hao123.ad.publish.data.url=http://ds.global.hao123.com:8089/data/fetch/ad_statistic/
+
+#uc
+uc.role.realization.excutive=cash_leader
+AREA_MANAGER=gcrm_area_manager
+GLOBAL_CEO=global_ceo
+DEPT_MANAGER=dept_manager
+
+#mdm
+mdm.app.key=3fe77e48436acd303028fa9f38f6738a
+mdm.monitor=10.38.87.29:8123,10.50.112.65:8123
+mdm.registry=10.38.87.29:8113,10.50.112.65:8113
+mdm.app.name =mdm_abroad
+mdm.get.code.switch=false
+
+#personal
+personal.notDispaly.task.user.role=-.sales-.
+personal.dispaly.moduleCount.user.role=-.operation_person-.
+
+#random
+random.postfix.length=4
+random.retry.limit=15
+random.conflict.retry.limit=5
+
+#lang cookie
+cookie.lang.name=GCRM_LANG
+
+#dataRight
+dataRight.role.Max_Role_Key=pm,cash_leader,gpm_cash_leader,ibd_cash_leader,sales_manager,finance_manager,law_manager,global_cfo,Global_ceo,business_man
+dataRight.role.Rloe_Classfiy_Key=[{"classfiyId":1,"roleList":["sales"]},{"classfiyId":2,"roleList":["countryAgent","sales_leader","dept_manager","gpm_leader","ibd_leader","country_leader","notice_admin"]},{"classfiyId":3,"roleList":["sales","sales_leader"]}]
+dataRight.owner_oper_funcs=btn_cust_list_create,btn_cust_list_cancel,btn_cust_list_remind,btn_cust_list_withdraw,btn_cust_list_recover,btn_cust_detail_submit,btn_cust_detail_cancel,btn_cust_detail_remind,btn_cust_detail_contact_mod,btn_cust_detail_busiopp_mod,btn_cust_detail_qualify,btn_adsol_list_sol_change,btn_adsol_list_remind,btn_adsol_list_cont_conf,btn_adsol_detail_cont_conf,btn_adsol_detail_cont_mod,btn_adsol_detail_coop_term,btn_adsol_detail_reschedule,btn_adsol_detail_po_create,btn_adsol_detail_submit_to_busi,btn_adsol_detail_cont_change,btn_adsol_detail_adsol_change,btn_adsol_detail_contract_withdraw,btn_adsol_detail_contract_change,btn_adsol_detail_cont_save,btn_adsol_detail_submit,btn_adsol_detail_adsol_mod,btn_quotprice_list_withdraw,btn_quotprice_list_remind,btn_quotprice_list_cancel_recover,btn_quotprice_detail_withdraw,btn_quotprice_detail_cancel_recover,btn_tool_notice_save,btn_tool_notice_send,btn_adsol_detail_adsol_del
+#file
+file.temp.directory=/home/work/gcrm/temp/
+file.backup.directory=/home/work/gcrm/backup/
+file.target.directory=/home/work/ftp/gcrm/data/
+file.adcompaign.name=gmlads.info.xml
+file.position.name=gmlposition.info.xml
+file.materialdefault.name=gmlmaterial.info.xml
+#platform auto publish setting
+hao123.autoPublished=true

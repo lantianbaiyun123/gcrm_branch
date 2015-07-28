@@ -1,0 +1,3 @@
+hudson_job_path,/home/jenkins/.jenkins/jobs/
+hudson_master,jenkins@cq01-testing-share09.cq01.baidu.com
+revision_path,ftp://work:123456@cq01-testing-share09.cq01.baidu.com/.jenkins/jobs/$job_name/builds/$build_number/revision.txt

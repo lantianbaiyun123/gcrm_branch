@@ -1,0 +1,23 @@
+<div tabset justified="true">
+    <div tab ng-repeat="(type, data) in taskQuery.types" heading="{{data.name}}({{(myTask | filter: {type:type}).length}})" select="taskQuery.taskType=type" active="data.active" ng-click="goFirst(type)">
+        <div class="search-box p10">
+            <div class="form-group has-feedback">
+              <input type="text" class="form-control" ng-model="taskQuery.queryText" yt-placeholder="{{'TASK_SUBMITPEOPLE_OR_CONTENTTYPE_OR_NUMBER' | translate}}">
+              <span class="glyphicon glyphicon-search form-control-feedback"></span>
+            </div>
+        </div>
+        <div class="task-list list-group">
+            <a class="list-group-item {{item.ngClass}}" ng-repeat="item in myTask | filter:taskQuery.search" ng-click="goTask(item)" >
+                <span>[{{item.startTime | date: 'yyyy-MM-dd HH:mm'}}]</span>
+                <span class="text-info">{{item.startUser}}</span>
+                <span>{{'APPROVAL_SUBMIT' | translate}}</span>
+                <br />
+                <span class="text-info">{{item.processName}}</span>
+                <span>{{item.activityName}}</span>
+            </a>
+        </div>
+        <div class="nothing-yet" ng-if="(myTask | filter: {type:type}).length == 0">
+            <span class="glyphicon glyphicon-exclamation-sign text-primary"></span><span>&nbsp;&nbsp;{{'TASK_NO_CONTENT' | translate}}&nbsp;&nbsp;</span>
+        </div>
+    </div>
+</div>

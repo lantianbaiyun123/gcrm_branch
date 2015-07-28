@@ -1,0 +1,32 @@
+<div class="modal-header">
+  <h4>
+    <span>{{'CUSTOMER_SALES_TRANSFER' | translate}}</span>
+  </h4>
+</div>
+<div class="modal-body">
+  <div class="form-horizontal" role="form">
+    <div class="form-group">
+      <label class="col-sm-3 control-label">{{'CUSTOMER' | translate}}：</label>
+      <div class="col-sm-9">
+        <p class="form-control-static">{{customerData.companyName}}</p>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-3 control-label">{{'CUSTOMER_ORIGINAL_SALES' | translate}}：</label>
+      <div class="col-sm-6">
+        <p class="form-control-static">{{customerData.belongSalesName}}</p>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-3 control-label">{{'CUSTOMER_TRANSFER_TO' | translate}}：</label>
+      <div class="col-sm-6">
+        <input class="min-w250 input-select2-suggest" type="hidden" ng-model="customerData.newSales" ui-select2="salesSelect2" />
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="ok()" ng-disabled="!customerData.newSales.id || submitDisabled">{{'CONFIRM' | translate}}</button>
+    <span></span>
+    <button class="btn btn-default" ng-click="cancel()">{{'CANCEL' | translate}}</button>
+</div>

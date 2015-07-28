@@ -1,0 +1,26 @@
+{
+    "code": 200,
+    "data": [
+        {
+            "data": 917145191,
+            "value": "www1"
+        },
+        {
+            "data": 345262364,
+            "value": "www1"
+        },
+        {
+            "data": 959879323,
+            "value": "www2"
+        },
+        {
+            "data": 799143487,
+            "value": "www3"
+        },
+        {
+            "data": 100920620,
+            "value": "www4"
+        }
+    ],
+    "message": "OK"
+}

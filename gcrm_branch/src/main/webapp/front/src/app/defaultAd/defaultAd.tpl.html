@@ -1,0 +1,16 @@
+<div class="container default-ad">
+  <div class="panel panel-default gcrm-panel">
+    <div class="panel-top-heading">
+      <h1>
+        <span>{{'PAGE_DEFAULT_AD' | translate}}</span>
+      </h1>
+    </div>
+    <div class="panel-body text-center pt50 pb50">
+      <!-- <button class="btn btn-lg btn-success" ng-click="">{{'导入默认广告' | translate}}</button> -->
+      <span class="btn btn-success btn-lg" yt-ajaxupload="{{uploadOpts}}" ng-model="importRet" upload-url="material/importDefault"  send-begin-cbfn="beginUpload()" uploaded-cbfn="uploaded()" upload-type="" upload-invalidatetype="exe|msi|bat|sh">
+        <span class="glyphicon glyphicon-plus"></span>
+        <span class="upload-text">{{'IMPORT_DEFAULT_AD' | translate}}</span>
+      </span>
+    </div>
+  </div>
+</div>

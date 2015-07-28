@@ -1,0 +1,74 @@
+{
+    "code": 200,
+    "data": [
+        {
+            "accountId": 121,
+            "createDate": 1399293175000,
+            "creator": "当前用户",
+            "email": "zhanglei35@baidu.com",
+            "status": "VERIFIED",
+            "username": "zhanglei35"
+        },
+        {
+            "accountId": 126,
+            "createDate": 1399457469000,
+            "creator": "当前用户",
+            "status": "DISABLE",
+            "username": "zhanglei35"
+        },
+        {
+            "accountId": 128,
+            "createDate": 1400315821000,
+            "creator": "当前用户",
+            "status": "ENABLE",
+            "username": "yuyande"
+        },
+        {
+            "accountId": 129,
+            "createDate": 1400588496000,
+            "creator": "当前用户",
+            "email": "15910411724@163.com",
+            "status": "ENABLE",
+            "username": "zhangxiaobin01"
+        },
+        {
+            "accountId": 130,
+            "createDate": 1400588820000,
+            "creator": "当前用户",
+            "email": "15910411724@163.com",
+            "status": "ENABLE",
+            "username": "liuxiao06"
+        },
+        {
+            "accountId": 131,
+            "createDate": 1400589691000,
+            "creator": "当前用户",
+            "email": "15910411724@163.com",
+            "status": "ENABLE",
+            "username": "raymonzhang"
+        },
+        {
+            "accountId": 133,
+            "createDate": 1400657934000,
+            "creator": "当前用户",
+            "email": "15910411724@163.com",
+            "status": "ENABLE",
+            "username": "maizhelun"
+        },
+        {
+            "accountId": 137,
+            "createDate": 1400665585000,
+            "creator": "当前用户",
+            "email": "v_wujun@baidu.com",
+            "status": "UNVERIFY"
+        },
+        {
+            "accountId": 140,
+            "createDate": 1400665882000,
+            "creator": "当前用户",
+            "email": "v_wujun01@baidu.com",
+            "status": "UNVERIFY"
+        }
+    ],
+    "message": "OK"
+}

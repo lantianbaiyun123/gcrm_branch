@@ -1,0 +1,1 @@
+define(["app"],function(t){t.registerFactory("Industry",["$http","APP_CONTEXT",function(t,n){return{getIndustryTypes:function(){return t({method:"get",url:n+"quote/findIndustryType"})}}}])});

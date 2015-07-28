@@ -1,0 +1,8 @@
+{
+  "code":200,
+  "data":{
+   "accountId": 12,
+   "verCode": "12345"
+  },
+  "message":"OK"
+}

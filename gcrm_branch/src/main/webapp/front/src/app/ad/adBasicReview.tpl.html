@@ -1,0 +1,103 @@
+<div class="panel panel-gcrm gcrm-panel" ng-show="basicReview">
+	<div class="panel-top-heading">
+    <h1>
+      <span>{{'PAGE_AD_SOLUTION' | translate}}</span>
+      <span class="pull-right">
+        <a class="btn btn-default" ng-click="basicEdit()" ng-hide="stateEditing || adSolutionTypeUpdate || !BtnIndex.btn_adsol_detail_submit">{{'MODIFY' | translate}}</a>
+        <a ng-disabled="disableToApproval" class="btn btn-primary" ng-click="adProgramSubmit();" ng-hide="stateEditing || !ads.length || !BtnIndex.btn_adsol_detail_submit">
+          {{'AD_BASIC_SUBMIT' | translate}}
+        </a>
+        <a ng-disabled="disableToApproval" class="btn btn-primary" ng-show="stateEditing && ads.length && BtnIndex.btn_adsol_detail_submit" popover="{{'AD_BASIC_SUBMIT_HINT' | translate}}"
+        popover-trigger="mouseenter" style="opacity: 0.65;filter: alpha(opacity=65);">
+          {{'AD_BASIC_SUBMIT' | translate}}
+        </a>
+        <!-- <a class="btn btn-primary" ng-show="stateEditing && !ads.length" popover="{{'AD_BASIC_SUBMIT_NO_CONTENT' | translate}}"
+            popover-trigger="mouseenter" style="opacity: 0.65;filter: alpha(opacity=65);">
+                {{'AD_BASIC_SUBMIT' | translate}}
+            </a> -->
+      </span>
+    </h1>
+  </div>
+	<div class="gcrm-slots row well">
+    <span ng-class="{'col-md-4': !oldSolutionNumber,'col-md-3': oldSolutionNumber}">{{'AD_BASIC_OPERATOR' | translate}}：{{basicReviewData.operatorName}}</span>
+    <span ng-class="{'col-md-4': !oldSolutionNumber,'col-md-3': oldSolutionNumber}">{{'AD_BASIC_SOLUTION_STATUS' | translate}}：{{'AD_SOLUTION_STATUS_' + basicReviewData.programStatus | translate}}</span>
+    <span ng-class="{'col-md-4': !oldSolutionNumber,'col-md-3': oldSolutionNumber}">{{'AD_BASIC_SOLUTION_TYPE' | translate}}：{{'AD_SOLUTION_TYPE_' + basicReviewData.programType | translate}}</span>
+    <span class="col-md-3" ng-if="oldSolutionNumber">{{'AD_BASIC_OLD_SOLUTION_NUMBER' | translate}}：{{oldSolutionNumber}}</span>
+  </div>
+	<!-- <a id="editBaseInfo" class="btn btn-link pull-right" ng-click="basicEdit();" ng-hide="stateEditing"></a> -->
+	<!-- <a id="editBaseInfo" href="###" data-id="10" class="btn btn-link
+	pull-right hide">添加</a> -->
+	<!-- <div class="panel-heading"><span class="black-block">&nbsp;</span><span class="panel-heading-text">{{'AD_BASIC_BASIC_INFO' | translate}}</span></div> -->
+	<div class="panel-body pt0">
+		<form action="" class="form-horizontal" id="baseInfo">
+			<h5 class="ptb10 pl10">{{'AD_BASIC_CUSTOMER_INFO' | translate}}</h5>
+			<div class="form-group">
+				<label class="control-label col-md-2">{{'AD_BASIC_COMPANY_NAME' | translate}}：</label>
+				<div class="col-md-3">
+					<p class="form-control-static">{{basicReviewData.customerI18nView.customer.companyName}}</p>
+				</div>
+				<label class="control-label col-md-2">{{'AD_BASIC_BELONGS_SALES' | translate}}：</label>
+				<p class="form-control-static col-md-4" id="sale">{{basicReviewData.customerI18nView.belongsSales}}</p>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-md-2">{{'AD_BASIC_CUSTOMER_TYPE' | translate}}：</label>
+				<p class="form-control-static col-md-3" id="customerType">{{basicReviewData.customerI18nView.customerType}}</p>
+				<label class="control-label col-md-2">{{'AD_BASIC_COUNTRY' | translate}}：</label>
+				<p class="form-control-static col-md-4" id="country">{{basicReviewData.customerI18nView.country.i18nName}}</p>
+			</div>
+			<div ng-if="basicReviewData.customerI18nView.customer.businessType == 0">
+				<div class="form-group">
+					<label class="control-label col-md-2">{{'AD_BASIC_AGENT_TYPE' | translate}}：</label>
+					<p class="form-control-static col-md-3" id="agentType">{{basicReviewData.customerI18nView.agentType}}</p>
+					<label class="control-label col-md-2">{{'AD_BASIC_AGENT_DISTRICT' | translate}}：</label>
+					<p class="form-control-static col-md-4" id="agentArea">{{basicReviewData.customerI18nView.agentRegional.i18nName}}</p>
+				</div>
+					<div class="form-group">
+					<label class="control-label col-md-2">{{'AD_BASIC_AGENT_COUNTRY' | translate}}：</label>
+					<p class="form-control-static col-md-4" id="agentCountry"><span ng-repeat="country in basicReviewData.customerI18nView.agentCountry"><span ng-if="$index>0">、</span>{{country.i18nName}}</span></p>
+				</div>
+			</div>
+			<h5 class="bdt ptb10 pl10">{{'AD_BASIC_CONTRACT' | translate}}</h5>
+			<div ng-show="basicReviewData.hasContract">
+				<div class="form-group">
+					<label class="control-label col-md-2" for="registerTime">{{'AD_BASIC_CONTRACT_NUMBER' | translate}}：</label>
+					<div class="col-md-3">
+							<p class="form-control-static">{{basicReviewData.contract.number}}</p>
+					</div>
+					<label class="control-label col-md-2" for="registerTime" >{{'AD_BASIC_CONTRACT_TYPE' | translate}}：</label>
+					<p class="form-control-static col-md-4" id="contractType">{{'CONTRACT_CATEGORY_' + basicReviewData.contract.category | translate}}</p>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-md-2" for="registerTime" >{{'AD_BASIC_CONTRACT_BRIEF' | translate}}：</label>
+					<p class="form-control-static col-md-3" id="contractSummary">{{basicReviewData.contract.summary}}</p>
+					<label class="control-label col-md-2" for="belongSales" >{{'AD_BASIC_CONTRACT_VALIDITY' | translate}}：</label>
+					<p class="form-control-static col-md-4" id="contractexpDate">{{basicReviewData.contract.beginDate | date:'yyyy/MM/dd'}} - {{basicReviewData.contract.endDate | date:'yyyy/MM/dd'}}</p>
+				</div>
+			</div>
+			<div ng-show="!basicReviewData.hasContract">
+				<div class="form-group">
+					<label class="control-label col-md-2" for="registerTime">{{'AD_BASIC_HAS_CONTRACT' | translate}}：</label>
+					<div class="col-md-3">
+							<p class="form-control-static">{{'NO' | translate}}</p>
+					</div>
+				</div>
+			</div>
+
+			<!-- <h5 class="bdt ptb10 pl10">广告预算</h5>
+			<div class="form-group">
+				<label class="control-label col-md-2" for="registerTime">广告预算：</label>
+				<div class="col-md-4">
+					<p class="form-control-static">2222222</p>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-md-2" for="registerTime">投放周期：</label>
+				<div class="col-md-4">
+					<p class="form-control-static">10天</p>
+				</div>
+			</div> -->
+		</form>
+	</div>
+</div>
+
+

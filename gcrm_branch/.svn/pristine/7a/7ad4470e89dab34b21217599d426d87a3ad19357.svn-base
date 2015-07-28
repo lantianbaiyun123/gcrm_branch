@@ -1,0 +1,15 @@
+<style>
+.body{font-size:14px;}
+.important{font-weight:bold;}
+</style>
+<div class="body">
+	$operator:</br>
+  </br>
+  
+  The related contract ($contractNumber) of your ahead AD application is active and documented.<br/>
+Please get into the AD campaign ($adSolutionNumber) management page to create the PO as soon as possible.<br/>
+AD content details please click here (<a href="$adSolutionURL">$adSolutionURL</a>).<br/> 
+
+This is a system email, please don’t reply.
+</div>
+<br/><br/><br/>

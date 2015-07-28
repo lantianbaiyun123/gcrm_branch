@@ -1,0 +1,128 @@
+<style>
+.body{font-size:16px;}
+.important{font-weight:bold;}
+	table { border-collapse: collapse; border-spacing: 0; font-size:12px; }
+    th, td { border: 1px solid #000; padding: 10px; }
+    td { text-align: left; overflow: hidden; text-overflow: ellipsis; max-width: 80px;}
+    ul { list-style-type: none; padding: 0; margin: 0;}
+}
+</style>
+<div class="body">
+	$operator,您好 </br>
+  </br>
+  #if($confirmTime) $confirmTime #end #if($adOperator) $adOperator #end 对广告内容#if($oldAdcontent) $oldAdcontent #end进行了变更；变更后信息如下： </br>
+  </br>
+<TABLE width="100%">
+    <thead>
+      <tr>
+        <th style="min-width: 40px;">广告内容编号</th>
+        <th style="min-width: 60px;">广告主</th>
+        <th style="min-width: 60px;">上线码</th>
+        <th style="min-width: 75px;">位置</th>
+        <th style="max-width: 135px; word-wrap: break-word; word-break: break-all">物料</th>
+        <th style="min-width: 150px;">投放时间</th>
+      </tr>
+    </thead>
+     <tbody>
+
+<TR>
+<TD >
+原：#if($oldAdcontent) $oldAdcontent #end</br>
+新：#if($newAdcontent) $newAdcontent #end</br>
+</TD>
+<TD style="max-width: 100px;">$advertiser</TD>
+<TD style="max-width: 100px;">
+原：#if($oldonlineNum) $oldonlineNum #end</br>
+新：#if($newonlineNum) $newonlineNum #end</br>
+</TD>
+<TD>
+原：#if($oldpositionName) $oldpositionName #end</br>
+新：#if($newpositionName) $newpositionName #end</br>
+</TD>
+<TD style="max-width: 135px; word-wrap: break-word; word-break: break-all">
+#if($oldcontentVO)
+原： <ul>
+ 			<li>
+              <span>物料类型：</span>
+               #if($oldcontentVO.materialType==0)
+              <span>图片</span>
+             	 #end
+             	  #if($oldcontentVO.materialType==1)
+              <span>文字</span>
+             	 #end
+             	  #if($oldcontentVO.materialType==2)
+              <span>图片+文字</span>
+             	 #end
+            </li>
+            #if($oldcontentVO.materialType!=0)
+            <li>
+              <span>title：</span>
+              <span>$oldcontentVO.materialTitle</span>
+            </li>
+            #end
+ 			<li>
+              <span>url：</span>
+              <span><a href=$oldcontentVO.materialUrl>$oldcontentVO.materialUrl</a></span>
+            </li>
+			#if($oldcontentVO.materialType==0||$oldcontentVO.materialType==2)
+			<li>
+              <span>详细物料：</span>
+              #foreach ($mater in $oldcontentVO.imageList) 
+              <span><a href=$mater.fileUrl target="_blank">$mater.downloadFileName</a></span>
+              <span>  </span>
+			 	#end
+            </li>
+            #end
+			<li> #if($oldcontentVO.codeFile.downloadFileName)
+              <span>嵌入代码：</span>
+              <span><a href=$oldcontentVO.codeFile.fileUrl>$oldcontentVO.codeFile.downloadFileName </a></span>
+              #end
+            </li>
+</ul>#end
+
+#if($newcontentVO)
+新:<ul>
+ 			<li>
+              <span>物料类型：</span>
+               #if($newcontentVO.materialType==0)
+              <span>图片</span>
+             	 #end
+             	  #if($newcontentVO.materialType==1)
+              <span>文字</span>
+             	 #end
+             	  #if($newcontentVO.materialType==2)
+              <span>图片+文字</span>
+             	 #end
+            </li>
+            #if($newcontentVO.materialType!=0)
+            <li>
+              <span>title：</span>
+              <span>$newcontentVO.materialTitle</span>
+            </li>
+            #end
+ 			<li>
+              <span>url：</span>
+              <span><a href=$newcontentVO.materialUrl>$newcontentVO.materialUrl</a></span>
+            </li>
+			#if($newcontentVO.materialType==0||$newcontentVO.materialType==2)
+			<li>
+              <span>详细物料：</span>
+              #foreach ($mater in $newcontentVO.imageList) 
+              <span><a href=$mater.fileUrl target="_blank">$mater.downloadFileName</a></span>
+              <span>  </span>
+			 	#end
+            </li>
+            #end
+			<li> #if($newcontentVO.codeFile.downloadFileName)
+              <span>嵌入代码：</span>
+              <span><a href=$newcontentVO.codeFile.fileUrl>$oldcontentVO.codeFile.downloadFileName </a></span>
+              #end
+            </li>
+</ul>#else 新: 无变化 #end
+</TD>
+<TD style="min-width: 150px;">
+原：#if($oldpdTime) $oldpdTime #end</br>
+新：#if($newpdTime) $newpdTime #end</br>
+</TD>
+</TR> </TR>    </tbody></TABLE>	
+</div>

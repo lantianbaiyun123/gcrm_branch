@@ -1,0 +1,68 @@
+package com.baidu.gcrm.process.web;
+
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.baidu.gcrm.ad.service.IAdvertiseSolutionService;
+import com.baidu.gcrm.bpm.service.IBpmProcessService;
+import com.baidu.gcrm.bpm.web.helper.Activity;
+import com.baidu.gcrm.common.ControllerHelper;
+import com.baidu.gcrm.common.auth.RequestThreadLocal;
+import com.baidu.gcrm.common.exception.CRMBaseException;
+import com.baidu.gcrm.common.json.JsonBean;
+import com.baidu.gcrm.common.json.JsonBeanUtil;
+import com.baidu.gcrm.process.vo.TaskCount;
+import com.baidu.gcrm.user.model.User;
+
+@Controller
+@RequestMapping("/process")
+public class ProcessAction extends ControllerHelper {
+	@Autowired
+	private IBpmProcessService processService;
+	@Autowired
+	private IAdvertiseSolutionService adService;
+	
+	
+	@RequestMapping("/tasks")
+	@ResponseBody
+	public JsonBean<List<Activity>> tasks() {
+		List<Activity> activities = processService.getCurrentActivitiesOfUser(getUserName(), currentLocale);
+		return JsonBeanUtil.convertBeanToJsonBean(activities);
+	}
+	
+	@RequestMapping("/taskCount")
+	@ResponseBody
+	public JsonBean<TaskCount> taskCount() {
+		TaskCount taskCount = processService.getTaskCountOfCurrentUser(getUserName());
+		return JsonBeanUtil.convertBeanToJsonBean(taskCount);
+	}
+	
+	@Override
+	protected String getUserName() {
+		String userName = null;
+		User user = RequestThreadLocal.getLoginUser();
+		if(user != null){
+			if(StringUtils.isNotEmpty(user.getUuapName())){
+				userName = user.getUuapName();
+			}else{
+				userName = user.getUsername();
+			}
+		}
+		return userName;
+	}
+
+	@RequestMapping("/completeProcess")
+	public JsonBean<String> completeProcess(Long id, String startUser) {
+		try {
+            adService.completeAdApproveAndCreateSchedule(id, startUser);
+            return JsonBeanUtil.convertBeanToJsonBean("success");
+        } catch (CRMBaseException e) {
+            return JsonBeanUtil.convertBeanToJsonBean(null, "process.complete.error");
+        }
+	}
+}

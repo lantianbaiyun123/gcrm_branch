@@ -1,0 +1,16 @@
+<div class="modal-header">
+  <h4>{{'RESOURCE_POSITION_CODE' | translate}}</h4>
+</div>
+<div class="modal-body">
+  <p>{{e.code}}</p>
+</div>
+<div class="modal-footer">
+  <div class="pull-left">
+    <button class="btn btn-default" ng-click="copyCode()" clip-copy="e.code">{{'COPY_CODE' | translate}}</button>
+    <span class="text-success repeat pl10" ng-if="e.copied">
+      <span class="glyphicon glyphicon-ok"></span>
+      <span>{{'COPIED' | translate}}</span>
+    </span>
+  </div>
+  <button class="btn btn-default" ng-click="cancel()">{{'CLOSE' | translate}}</button>
+</div>

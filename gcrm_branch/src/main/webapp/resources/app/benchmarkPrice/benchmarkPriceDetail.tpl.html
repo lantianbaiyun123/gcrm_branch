@@ -1,0 +1,101 @@
+<div class="container benchmark-price-detail">
+  <div class="message-alert" ng-if="quotationMain.approveStatus!='CANCEL' && quotationMain.approveStatus!='APPROVED'">
+    <div alert class="repeat" ng-repeat="alert in msgs.detailAlerts" type="alert.type" close="closeMsg($index)">{{alert.msg}}</div>
+  </div>
+  <div class="message-alert" ng-if="quotationMain.approveStatus=='CANCEL'">
+    <div alert ng-repeat="alert in msgs.detailAlerts" type="alert.type" ng-if="quotationMain.approveStatus=='CANCEL'">{{alert.msg}}</div>
+  </div>
+  <div class="panel panel-default gcrm-panel">
+    <div class="panel-top-heading">
+      <h1>
+        <span>{{'PAGE_BENCHMARK_PRICE_DETAIL' | translate }}</span>
+        <span class="pull-right">
+            <a ng-click="modalApprovalRecord()" class="btn btn-link">{{'VIEW_APPROVAL_RECORD' | translate }}</a>
+            <a class="btn btn-warning" ng-if="(!OwnerOpers.btn_quotprice_detail_withdraw || IS_OWNER) && quotationMain.approveStatus=='APPROVING' && BtnIndex.btn_quotprice_detail_withdraw" yt-popover-confirm="withdrawPrice()" yt-popover-title="{{'QUOTATION_CONFIRM_WITHDRAW' | translate}}" yt-popover-ok-class="btn-warning" yt-popover-ok-text="{{'QUOTATION_WITHDRAW' | translate}}">{{'QUOTATION_WITHDRAW' | translate }}</a>
+            <a class="btn btn-danger" ng-if="(!OwnerOpers.btn_quotprice_detail_cancel_recover || IS_OWNER) && quotationMain.approveStatus=='APPROVED' && (quotationMain.status=='VALID' || quotationMain.status=='INVALID') && BtnIndex.btn_quotprice_detail_cancel_recover" yt-popover-confirm="nullifyPrice()" yt-popover-title="{{'QUOTATION_CONFIRM_NULLITY' | translate}}" yt-popover-ok-class="btn-danger" yt-popover-ok-text="{{'QUOTATION_NULLITY' | translate}}">{{'QUOTATION_NULLITY' | translate }}</a>
+        </span>
+      </h1>
+    </div>
+
+    <div class="gcrm-slots row well">
+      <span class="col-md-3">{{'QUOTATION_SERIAL' | translate }}：{{quotationMain.quoteCode}}</span>
+      <span class="col-md-3">{{'QUOTATION_SUBMIT_OPERATOR' | translate }}：{{quotationMain.createrName}}</span>
+      <span class="col-md-3">{{'QUOTATION_APPROVAL_STATUS' | translate }}：{{quotationMain.approveStatus | QuotationApprovalStatusFilter | translate}}</span>
+      <span class="col-md-3">{{'QUOTATION_STATUS' | translate }}：{{quotationMain.status | QuotationStatusFilter | translate}}</span>
+    </div>
+
+    <div class="panel-body" ng-if="!(quotationMain.status=='INVALID' && (quotationMain.approveStatus=='SAVING' || quotationMain.approveStatus=='CANCEL'))">
+      <dl class="dl-horizontal">
+        <dt>{{'QUOTATION_BUSINESS_TYPE' | translate }}：</dt><dd>{{quotationMain.businessType | BusinessTypeFilter | translate}}</dd>
+        <dt>{{'QUOTATION_PLATEFORM' | translate }}：</dt><dd>{{quotationMain.platformName}}</dd>
+        <dt>{{'QUOTATION_PRICE_TYPE' | translate }}：</dt><dd>{{quotationMain.priceType | PriceTypeFilter | translate}}</dd>
+        <dt>{{'QUOTATION_EFFECTIVE_TIME' | translate }}：</dt><dd>{{quotationMain.startTime | date: 'yyyy-MM-dd'}} ~ {{quotationMain.endTime | date: 'yyyy-MM-dd'}}</dd>
+        <dt>{{'QUOTATION_PRICE_DESCRIPTION' | translate }}：</dt><dd>{{quotationMain.descreption}}</dd>
+        <dt>{{'QUOTATION_SITE' | translate }}：</dt><dd>{{quotationMain.siteName}}</dd>
+        <dt>{{'QUOTATION_BENCHMARK_PRICE' | translate }}：</dt>
+        <dd>
+          <table class="table" ng-if="quotationMain.priceType == 'unit'">
+            <thead>
+              <tr>
+                <th>CPC($)</th>
+                <th>CPT($)</th>
+                <th>CPM($)</th>
+                <th>CPA($)</th>
+                <th>CPS(%)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{{quotationList[0].unit.cpc.value}}</td>
+                <td>{{quotationList[0].unit.cpt.value}}</td>
+                <td>{{quotationList[0].unit.cpm.value}}</td>
+                <td>{{quotationList[0].unit.cpa.value}}</td>
+                <td>
+                  <span ng-if="quotationList[0].isUnifyedCPS && quotationList[0].unit.cps[0].value">
+                    {{'QUOTATION_UNIFIED_RATIO' | translate }}：{{quotationList[0].unit.cps[0].value}}%
+                  </span>
+                  <span ng-if="!quotationList[0].isUnifyedCPS">
+                    <span>{{'INDUSTRY_MAIN_TYPE_GAME' | translate}}</span>
+                    <span ng-repeat="one in quotationList[0].unit.cps" ng-if="$index && one.parentId==1">
+                      (<span>{{one.industryTypeName}}：<span ng-if="one.value">{{one.value}}%</span><span ng-if="!one.value">--</span></span>)
+                    </span>
+                    <br>
+                    <span>{{'INDUSTRY_MAIN_TYPE_ECOMMERCE' | translate}}</span>
+                    <span ng-repeat="one in quotationList[0].unit.cps" ng-if="$index && one.parentId==3">
+                      (<span>{{one.industryTypeName}}：<span ng-if="one.value">{{one.value}}%</span><span ng-if="!one.value">--</span></span>)
+                    </span>
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <table class="table" ng-if="quotationMain.priceType == 'ratio'">
+            <thead>
+              <tr>
+                <th>{{'QUOTATION_RATIO_MINE' | translate }}(%)</th>
+                <th>{{'QUOTATION_RATIO_CUSTOMER' | translate }}(%)</th>
+                <th>{{'QUOTATION_RATIO_THIRD' | translate }}(%)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{{quotationList[0].ratio.ratioMine}}%</td>
+                <td>{{quotationList[0].ratio.ratioCustomer}}%</td>
+                <td>{{quotationList[0].ratio.ratioThird}}%</td>
+              </tr>
+            </tbody>
+          </table>
+          <span ng-if="quotationMain.priceType == 'rebate'">{{'QUOTATION_REBATE' | translate }}：{{quotationList[0].rebate.ratioRebate}}%</span>
+        </dd>
+        <dt class="multiple">{{'QUOTATION_TESTIFY_MATERIAL' | translate }}：</dt>
+        <dd ng-repeat="material in quotationList[0].quotationMaterialList" class="multiple">
+          <a target="_blank" href="{{material.downLoadUrl}}" ng-if="material.downLoadUrl">{{material.downloadFileName}}</a>
+        </dd>
+      </dl>
+    </div>
+
+    <div ui-view="benchmarkPriceEdit" class="benchmark-price-edit" ng-if="quotationMain.status=='INVALID' && (quotationMain.approveStatus=='SAVING' || quotationMain.approveStatus=='CANCEL')">
+
+    </div>
+  </div>
+</div>

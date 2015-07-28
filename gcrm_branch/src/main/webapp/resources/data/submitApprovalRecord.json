@@ -1,0 +1,28 @@
+{
+    "record":{
+        "adSolutionId":30,
+        "taskId":"4577753_act1",
+        "taskName":"Submit plan",
+        "approvalStatus":1,
+        "approvalSuggestion":"ok,pass",
+        "processId":"1718742_gcrm_pkg_506_prs1",
+		"activityId":"4577753_act1"
+    },
+
+    "insertRecords":[
+        {
+            "adsolutionContentId":10,
+            "insertedAdsolutionContentId":20,
+            "insertPeriod":"2014-02-10",
+            "allowInsert":1
+        },
+
+        {
+            "adsolutionContentId":10,
+            "insertedAdsolutionContentId":30,
+            "insertPeriod":"2014-02-20",
+            "allowInsert":1
+        }
+    ]
+}
+

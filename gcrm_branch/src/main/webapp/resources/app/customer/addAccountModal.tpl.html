@@ -1,0 +1,67 @@
+<div class="modal-header">
+  <h4>
+    <span>{{'ACCOUNT_ADD' | translate}}</span>
+  </h4>
+</div>
+<!-- verifiedStatus=0 未发送 -->
+<!-- verifiedStatus=='UNVERIFY' 未验证 -->
+<!-- verifiedStatus=='VERIFIED' 已验证 -->
+<div class="modal-body">
+  <div class="form-horizontal" role="form">
+    <div class="form-group">
+      <label class="col-md-3 control-label">{{'CUSTOMER' | translate}}：</label>
+      <div class="col-md-9">
+        <p class="form-control-static">{{accountData.companyName}}</p>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-md-3 control-label"><span class="required-star">*</span>{{'MAILBOX' | translate}}：</label>
+      <div class="col-md-4" ng-if="verifiedStatus!='VERIFIED'">
+        <input type="email" ng-pattern="/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}$/" class="form-control" ng-model="accountData.email" ng-change="emailChanged()" yt-placeholder="e.g huangfeihong@baidu.com"  required>
+      </div>
+      <div class="col-md-5" ng-if="verifiedStatus!='VERIFIED'">
+        <p ng-if="!verifiedStatus" class="form-control-static hint">
+          <button class="btn btn-default btn-xs" ng-disabled="!accountData.email" ng-click="validateEmail()">{{'ACCOUNT_SEND_VERIFYCODE' | translate}}</button>
+          <span class="ml5 text-warning" ng-if="!accountData.email">{{'ACCOUNT_MUST_MAILBOX_FORMAT' | translate}}</span>
+        </p>
+        <p class="form-control-static hint" ng-if="verifiedStatus=='UNVERIFY'">
+          <button class="btn btn-link btn-xs" ng-click="validateEmail()">{{'RESEND' | translate}}</button>
+          {{'ACCOUNT_EMAIL_VERIFYCODE_TO_USER' | translate}}
+        </p>
+      </div>
+      <div class="col-md-9" ng-if="verifiedStatus=='VERIFIED'">
+        <p class="form-control-static">{{accountData.email}}</p>
+      </div>
+    </div>
+    <div class="form-group" ng-if="verifiedStatus=='UNVERIFY'">
+      <label class="col-md-3 control-label"><span class="required-star">*</span>{{'VERIFICATION_CODE' | translate}}：</label>
+      <div class="col-md-4">
+        <input type="text" class="form-control" ng-model="accountData.verCodeInput" required>
+      </div>
+      <div class="col-md-5">
+        <p class="form-control-static">
+          <span ng-if="accountData.verCodeInput==accountData.verCode" class="glyphicon glyphicon-ok-sign text-success"></span>
+          <span ng-if="accountData.verCodeInput!=accountData.verCode" class="glyphicon glyphicon glyphicon-remove-sign text-danger"></span>
+        </p>
+      </div>
+    </div>
+    <div class="form-group" ng-if="verifiedStatus=='VERIFIED'">
+      <label class="col-md-3 control-label"><span class="required-star">*</span>{{'ACCOUNT_USERNAME' | translate}}：</label>
+      <div class="col-md-4" ng-class="{'has-error': isUserNameError}">
+        <input type="text" ng-pattern="/^[a-zA-Z0-9]{3,}$/" class="form-control" ng-model="accountData.userName" yt-placeholder="e.g：seven11" tooltip="{{'ACCOUNT_LEAST_3_LETTER_NUMBER' | translate}}" tooltip-trigger="focus" tooltip-placement="bottom" required tooltip-append-to-body="true" ng-change="resetDuplication()" yt-focusme="userNameFocus">
+      </div>
+      <div class="col-md-5" ng-if="isUserNameError">
+        <p class="form-control-static hint text-danger">{{userNameErrorText}}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-footer mt0">
+<button ng-if="verifiedStatus!='VERIFIED'" class="btn btn-primary" ng-click="next()" ng-disabled="verifiedStatus!='UNVERIFY' || accountData.verCodeInput!=accountData.verCode || nextDisabled">{{'NEXT_STEP' | translate}}</button>
+  <button ng-if="verifiedStatus=='VERIFIED'" class="btn btn-primary" ng-click="ok()" ng-disabled="submitDisabled || !accountData.userName">{{'CONFIRM' | translate}}</button>
+  <span></span>
+  <button ng-hide="verifiedStatus" class="btn btn-default" ng-click="cancel()">{{'CANCEL' | translate}}</button>
+  <span></span>
+  <button ng-show="verifiedStatus" class="btn btn-default" ng-click="close()">{{'CLOSE' | translate}}</button>
+</div>

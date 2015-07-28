@@ -1,0 +1,60 @@
+{
+  "code": 200,
+  "data": {
+    "content": [
+      {
+        "adContentDesc": "4",
+        "adContentNumber": "00017757-01",
+        "advertisers": "Dubizzle",
+        "areaId": 1747,
+        "channelId": 1746,
+        "number": "0000011982",
+        "onlineNumber": "0000011982",
+        "positionId": 1748,
+        "positionName": "Hao123/越南/图片/Banner区/首页Banner2",
+        "productId": 17,
+        "publishStatus": "terminate",
+        "scheduleId": 1019,
+        "scheduleNumber": "00012147",
+        "siteId": 18
+      },
+      {
+        "adContentDesc": "刊登新产品广告",
+        "adContentNumber": "00010237-01",
+        "advertisers": "jiangshanit",
+        "areaId": 1452,
+        "channelId": 1451,
+        "number": "0000019145",
+        "onlineNumber": "0000019145",
+        "positionId": 1454,
+        "positionName": "Hao123/巴西/首页/Banner区/Banner",
+        "productId": 17,
+        "publishStatus": "publish_finish",
+        "scheduleId": 1023,
+        "scheduleNumber": "00011287",
+        "siteId": 12
+      }
+    ],
+    "currentOperChannelIds": [],
+    "currentOperPlatIds": [
+      17,
+      20,
+      21,
+      16,
+      18,
+      19
+    ],
+    "offset": 0,
+    "operatorIdList": [],
+    "pageNumber": 1,
+    "pageSize": 20,
+    "queryAll": false,
+    "queryType": "adSolutionNumber",
+    "result": [],
+    "resultClass": "com.baidu.gcrm.publish.web.vo.PublishDoneListVO",
+    "total": 2,
+    "totalCount": 2,
+    "totalPages": 1
+  },
+  "message": "OK"
+}

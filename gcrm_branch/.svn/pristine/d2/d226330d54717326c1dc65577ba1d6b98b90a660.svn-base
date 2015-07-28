@@ -1,0 +1,68 @@
+<div class="content-material-info" ng-if="ad.position.materialType != 3 && !ad.emptyMaterial">
+  <h5 class="bdt">
+    {{'AD_CONTENT_MATERIAL' | translate}}
+  </h5>
+  <div class="plr15">
+    <table class="table table-vm">
+      <thead>
+        <tr>
+          <th class="w30"></th>
+          <th>{{'MATERIAL_FILE_TYPE' | translate}}</th>
+          <th>Title</th>
+          <th>URL</th>
+          <th>{{'MATERIAL_DETAIL_INFO' | translate}}</th>
+          <th>{{'THIRDPARTY_MONITOR' | translate}}</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody ng-repeat="m in ad.adSolutionContent.materialApplyList">
+        <tr>
+          <td>
+            <button class="btn btn-link btn-xs" ng-if="m.materialMenuList.length" ng-click="toggleMaterialDetail(m)"><span class="glyphicon" ng-class="{'glyphicon-plus-sign': !m.showDetail, 'glyphicon-minus-sign':m.showDetail}"></span></button>
+          </td>
+          <td>
+            <span ng-if="m.materialFileType>=0">{{'MATERIALFILETYPE_' + m.materialFileType | translate}}</span>
+            <span ng-if="!(m.materialFileType>=0)">{{'POSTIION_MATERIAL_TYPE_TEXT' | translate}}</span>
+          </td>
+          <td class="td-max" title="{{m.materialTitle}}">
+            <span>{{m.materialTitle}}</span>
+            <span ng-if="!m.materialTitle">--</span>
+          </td>
+          <td class="td-max mw160" title="{{m.materialUrl}}">
+            <a href="{{m.materialUrl}}" target="_blank">{{m.materialUrl}}</a>
+            <span ng-if="!m.materialUrl">--</span>
+          </td>
+          <td class="td-max mw200" ng-if="m.materialFileType==0 || m.materialFileType==1" title="{{m.materialList[0].downloadFileName}}">
+            <span>
+              <span ng-repeat="item in m.materialList">
+                <span ng-if="$index">、</span>
+                <a href="{{item.downloadUrl}}" target="_blank">{{item.downloadFileName}}</a>
+              </span>
+            </span>
+          </td>
+          <td class="td-max mw200" title="{{m.materialEmbedCodeContent}}" ng-if="m.materialFileType==2">
+            <span>{{m.materialEmbedCodeContent}}</span>
+          </td>
+          <td ng-if="!(m.materialFileType>=0)">--</td>
+          <td class="td-max mw160" title="{{m.monitorUrl}}">
+            <a href="{{m.monitorUrl}}" target="_blank">{{m.monitorUrl}}</a>
+            <span ng-if="!m.monitorUrl">--</span>
+          </td>
+        </tr>
+        <tr ng-if="m.showDetail" ng-repeat="mm in m.materialMenuList">
+          <td class="align-right">&gt;&gt;</td>
+          <td>{{'DROPDOWN_MENU' | translate}}{{$index + 1}}</td>
+          <td class="td-max" title="{{mm.materialTitle}}">{{mm.materialTitle}}</td>
+          <td class="td-max mw160" title="{{mm.materialUrl}}">
+            <a href="{{mm.materialUrl}}">{{mm.materialUrl}}</a>
+          </td>
+          <td class="td-max mw200" title="{{mm.material.downloadFileName}}">
+            <a href="{{mm.material.downloadUrl}}" target="_blank">{{mm.material.downloadFileName}}</a>
+          </td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

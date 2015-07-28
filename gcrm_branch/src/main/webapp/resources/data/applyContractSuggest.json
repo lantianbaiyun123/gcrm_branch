@@ -1,0 +1,21 @@
+{
+  "code": 200,
+  "data": [
+    {
+      "data": {
+        "applier": "孙梅媚",
+        "beginDate": 1402502400000,
+        "category": "GJXY",
+        "customerId": 131,
+        "endDate": 1409155200000,
+        "number": "001415GJXY0081",
+        "sales": "徐智",
+        "state": "VALID",
+        "summary": "1233",
+        "syncDate": 1403843079000
+      },
+      "value": "001415GJXY0081"
+    }
+  ],
+  "message": "OK"
+}

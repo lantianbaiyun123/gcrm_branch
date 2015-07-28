@@ -1,0 +1,37 @@
+package com.baidu.gcrm.ad.dao;
+
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+
+import com.baidu.gcrm.ad.model.AdvertiseSolution;
+import com.baidu.gcrm.ad.model.AdvertiseSolutionApproveState;
+
+public interface AdvertiseSolutionRepository extends JpaRepository<AdvertiseSolution, Long>{
+
+	AdvertiseSolution findByNumber(String number);
+	
+	@Query("select a.realname from AdvertiseSolution ad, User a where ad.operator=a.ucid and ad.id=?")
+	String findOperatorNameById(Long id);
+	
+	@Query("select contractNumber from AdvertiseSolution where id=?")
+	String findContractNumberById(Long id);
+	
+	@Modifying
+	@Query("update AdvertiseSolution set contractNumber = ?1 where id = ?2")
+	int updateContractNumberById(String contractNumber, Long id);
+	
+	@Query(" from AdvertiseSolution where contractNumber=?")
+	List<AdvertiseSolution> findAdSolutionByContractNumber(String contractNumber);
+	
+	@Query("select a.username from AdvertiseSolution ad, User a where ad.operator=a.ucid and ad.id=?")
+	String findOperatorUsernameById(Long id);
+	
+	List<AdvertiseSolution> findByApprovalStatusIn(List<AdvertiseSolutionApproveState> list);
+	
+	@Modifying
+    @Query("update AdvertiseSolution set approvalStatus = ?2 where id = ?1")
+	void updateApprovalStatusById(Long id, AdvertiseSolutionApproveState status);
+}

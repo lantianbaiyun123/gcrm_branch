@@ -1,0 +1,1 @@
+define(["app"],function(A){A.registerFilter("QuotationStatusFilter",function(){var A={INVALID:"QUOTATION_STATUS_INVALID",VALID:"QUOTATION_STATUS_VALID",OVERDUE_INVALID:"QUOTATION_STATUS_OVERDUE_INVALID",CANCEL:"QUOTATION_STATUS_CANCEL"};return function(T){return A[T]?A[T]:T}})});

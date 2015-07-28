@@ -1,0 +1,33 @@
+<div class="panel gcrm-panel">
+  <div class="panel-body">
+    <table class="table" ng-if="contractList.list.length">
+      <thead>
+        <tr>
+          <th></th>
+          <th>{{'CONTRACT_PO' | translate}}</th>
+          <th>{{'TYPE' | translate}}</th>
+          <th>{{'EFFECTIVE_TIME' | translate}}</th>
+          <th>{{'CUSTOMER_CONTRACT_STATUS' | translate}}</th>
+          <th>{{'CUSTOMER_SALES' | translate}}</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="item in contractList.list">
+          <td>{{$index + 1}}</td>
+          <td><a ng-click="navToContractDetail(item)">{{item.number}}</a></td>
+          <td>{{'CONTRACT_CATEGORY_' + item.category | translate}}</td>
+          <td>{{item.beginDate | date:'yyyy-MM-dd'}} ~ <span ng-if="item.endDate">{{item.endDate | date:'yyyy-MM-dd'}}</span> <span ng-if="!item.endDate"> ∞</span>  </td>
+          <td>{{'CONTRACT_STATE_' + item.state | translate}}</td>
+          <td>{{item.sales}}</td>
+          <td>
+            <a ng-click="navToContractDetail(item)">{{'VIEW_DETAIL' | translate}}</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div ng-if="!contractList.list.length">
+      {{'CUSTOMER_NO_CONTRACT' | translate}}
+    </div>
+  </div>
+</div>

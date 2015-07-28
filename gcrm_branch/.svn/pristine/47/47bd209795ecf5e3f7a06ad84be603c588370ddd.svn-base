@@ -1,0 +1,43 @@
+{
+  "code": 200,
+  "data": [
+    {
+      "businessType": 1,
+      "i18nName": "213",
+      "id": 20,
+      "status": 0
+    },
+    {
+      "businessType": 0,
+      "i18nName": "hao123变现",
+      "id": 1,
+      "name": "hao123变现",
+      "status": 1
+    },
+    {
+      "businessType": 0,
+      "i18nName": "蓝鹰",
+      "id": 13,
+      "status": 1
+    },
+    {
+      "businessType": 0,
+      "i18nName": "刘晓Hao123",
+      "id": 22,
+      "status": 1
+    },
+    {
+      "businessType": 0,
+      "i18nName": "晓丽",
+      "id": 12,
+      "status": 1
+    },
+    {
+      "businessType": 0,
+      "i18nName": "压测平台",
+      "id": 21,
+      "status": 1
+    }
+  ],
+  "message": "OK"
+}

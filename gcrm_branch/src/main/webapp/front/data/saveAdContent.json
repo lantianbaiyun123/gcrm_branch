@@ -1,0 +1,809 @@
+提交请求格式
+{
+    "advertiseQuotation": {
+        "ratioThird": 0,
+        "reachEstimate": false,
+        "discount": "1.00",
+        "ratioMine": null,
+        "ratioCustomer": null,
+        "ratioConditionDesc": "wwwww",
+        "publishPrice": null,
+        "customerQuote": "100",
+        "budget": null,
+        "totalPrice": "10000.00",
+        "dailyAmount": null,
+        "totalAmount": null,
+        "priceType": "unit",
+        "billingModelId": 1,
+        "id": 6372,
+        "industryType": null
+    },
+    "adSolutionContent": {
+        "approvalStatus": "saving",
+        "description": "asdfasdfasdf",
+        "productId": "17",
+        "siteId": "12",
+        "channelId": 1434,
+        "adSolutionId": "6463",
+        "advertiser": "STARK INTERACTIVE TECHNOLOGY LIMITED",
+        "advertiserId": 1000000103,
+        "areaId": 1435,
+        "positionId": 1440,
+        "materialType": 0,
+        "materialApplyList": [
+            {
+                "materialEmbedCode": 0,
+                "materialEmbedCodeContent": "asfasdfasdfsaf",
+                "materialTitle": "asfasdf",
+                "materialUrl": "asfasdfasdf",
+                "materialFileType": "0",
+                "monitorUrl": "33333333333",
+                "materialList": [
+                    {
+					    "picWidth":300,
+						"picHeight":200,
+						"fileSize":30,
+						"uploadFileName":"wwwwwww.txt",
+                        "fileUrl": "http://10.240.166.3/gcm-storage%2F2bdab384-0376-4d57-b72f-9324c90332a0?sign=MBO%3AN29h9ewpiKZHcPVah2p76Tgqb2L9ow13n%3ApBD97zeaMvbKJryhe%2Fbh8pgKrFc%3D",
+                        "downloadFileName": "6463"
+                    }
+                ],
+                "materialMenuList": [
+                    {
+                        "materialTitle": "asfasfdasd",
+                        "materialUrl": "asfasdfasdf",
+                        "material":{
+						"picWidth":300,
+						"picHeight":200,
+						"fileSize":30,
+						"uploadFileName":"wwwwwww.txt",
+                        "fileUrl": "http://10.240.16eeeee6.3/gcm-storage%2F2bdab384-0376-4d57-b72f-9324c90332a0?sign=MBO%3AN29h9ewpiKZHcPVah2p76Tgqb2L9ow13n%3ApBD97zeaMvbKJryhe%2Fbh8pgKrFc%3D",
+                        "downloadFileName": "64eeeee3"
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    "advertiser": {
+        "data": 1000000103,
+        "value": "STARK INTERACTIVE TECHNOLOGY LIMITED"
+    },
+    "adPlatformList": [
+        {
+            "businessType": 0,
+            "i18nName": "Hao123",
+            "id": 17,
+            "status": 1
+        },
+        {
+            "businessType": 0,
+            "i18nName": "PC App Store",
+            "id": 16,
+            "status": 1
+        }
+    ],
+    "priceTypes": [
+        {
+            "label": "AD_CONTENT_UNIT_PRICE",
+            "value": "unit"
+        },
+        {
+            "label": "AD_CONTENT_FALL_INTO",
+            "value": "ratio"
+        }
+    ],
+    "billingModels": [
+        {
+            "i18nName": "CPC",
+            "id": 1,
+            "name": "CPC",
+            "type": 0
+        },
+        {
+            "i18nName": "CPA",
+            "id": 3,
+            "name": "CPA",
+            "type": 0
+        },
+        {
+            "i18nName": "CPT",
+            "id": 5,
+            "name": "CPT",
+            "type": 0
+        },
+        {
+            "i18nName": "CPS",
+            "id": 2,
+            "name": "CPS",
+            "type": 1
+        },
+        {
+            "i18nName": "CPM",
+            "id": 4,
+            "name": "CPM",
+            "type": 0
+        }
+    ],
+    "industryTypes": {
+        "电商类": [
+            {
+                "id": 0,
+                "industryTypeName": "IT"
+            },
+            {
+                "id": 2,
+                "industryTypeName": "其他"
+            }
+        ],
+        "游戏": [
+            {
+                "id": 1,
+                "industryTypeName": "游戏"
+            }
+        ]
+    },
+    "isEstimated": [
+        {
+            "label": "YES",
+            "value": true
+        },
+        {
+            "label": "NO",
+            "value": false
+        }
+    ],
+    "priceDisabled": true,
+    "materialFileTypes": [
+        {
+            "id": 0,
+            "i18nName": "图片"
+        },
+        {
+            "id": 1,
+            "i18nName": "flash"
+        },
+        {
+            "id": 2,
+            "i18nName": "代码"
+        }
+    ],
+    "setMonitor": false,
+    "canUpdate": true,
+    "innerScope": "$SCOPE",
+    "review": false,
+    "isSaved": true,
+    "area": {
+        "hasGuideFile": false,
+        "i18nData": {
+            "cnExtraName": "Hao123>巴西>图片>Banner区",
+            "cnName": "Banner区",
+            "enExtraName": "Hao123>br>subpage-image>Banner",
+            "enName": "Banner"
+        },
+        "i18nName": "Banner区",
+        "id": 1435,
+        "indexStr": "17-12-1434-"
+    },
+    "position": {
+        "areaRequired": "png/gif/jpg,960*90",
+        "click": 50,
+        "hasGuideFile": false,
+        "i18nData": {
+            "cnExtraName": "Hao123>巴西>图片>Banner区>首页Banner2",
+            "cnName": "首页Banner2",
+            "enExtraName": "Hao123>br>subpage-image>Banner>imageHomepage_banner2",
+            "enName": "imageHomepage_banner2"
+        },
+        "i18nName": "首页Banner2",
+        "id": 1436,
+        "indexStr": "17-12-1434-1435-",
+        "materialType": 0,
+        "pv": 10000,
+        "rotationType": 0,
+        "salesAmount": 1,
+        "size": "30K"
+    },
+    "datePeriods": [
+        {
+            "from": "2014-11-06",
+            "to": "2014-11-07"
+        }
+    ],
+    "totalDays": 2,
+    "insertDates": [],
+    "selectedInsertDates": [],
+    "selectedInsertDays": 0,
+    "insertDatesCheckAll": true,
+    "sumDays": 2,
+    "contentSave": true,
+    "hiddenElValidator": true,
+    "positionChangeValidator": true,
+    "quotesValidator": true,
+    "materialValidator": true,
+    "codeContentValidator": false,
+    "siteList": [
+        {
+            "allowCanceled": false,
+            "checked": false,
+            "i18nName": "阿联酋",
+            "id": 10,
+            "timeZoneOffset": "0"
+        },
+        {
+            "allowCanceled": false,
+            "checked": false,
+            "i18nName": "埃及",
+            "id": 11,
+            "timeZoneOffset": "0"
+        },
+        {
+            "allowCanceled": false,
+            "checked": false,
+            "i18nName": "巴西",
+            "id": 12,
+            "timeZoneOffset": "0"
+        },
+        {
+            "allowCanceled": false,
+            "checked": false,
+            "i18nName": "摩洛哥",
+            "id": 13,
+            "timeZoneOffset": "0"
+        },
+        {
+            "allowCanceled": false,
+            "checked": false,
+            "i18nName": "沙特",
+            "id": 15,
+            "timeZoneOffset": "0"
+        },
+        {
+            "allowCanceled": false,
+            "checked": false,
+            "i18nName": "台湾地区",
+            "id": 17,
+            "timeZoneOffset": "0"
+        },
+        {
+            "allowCanceled": false,
+            "checked": false,
+            "i18nName": "泰国",
+            "id": 16,
+            "timeZoneOffset": "0"
+        },
+        {
+            "allowCanceled": false,
+            "checked": false,
+            "i18nName": "印尼",
+            "id": 19,
+            "timeZoneOffset": "0"
+        },
+        {
+            "allowCanceled": false,
+            "checked": false,
+            "i18nName": "越南",
+            "id": 18,
+            "timeZoneOffset": "0"
+        }
+    ],
+    "channelVOList": [
+        {
+            "hasGuideFile": false,
+            "i18nData": {
+                "cnExtraName": "Hao123>巴西>图片",
+                "cnName": "图片",
+                "enExtraName": "Hao123>br>subpage-image",
+                "enName": "subpage-image"
+            },
+            "i18nName": "图片",
+            "id": 1434,
+            "indexStr": "17-12-"
+        },
+        {
+            "hasGuideFile": false,
+            "i18nData": {
+                "cnExtraName": "Hao123>巴西>游戏",
+                "cnName": "游戏",
+                "enExtraName": "Hao123>br>subpage-Game",
+                "enName": "subpage-Game"
+            },
+            "i18nName": "游戏",
+            "id": 1440,
+            "indexStr": "17-12-"
+        },
+        {
+            "hasGuideFile": false,
+            "i18nData": {
+                "cnExtraName": "Hao123>巴西>首页",
+                "cnName": "首页",
+                "enExtraName": "Hao123>br>homepage",
+                "enName": "homepage"
+            },
+            "i18nName": "首页",
+            "id": 1451,
+            "indexStr": "17-12-"
+        },
+        {
+            "hasGuideFile": false,
+            "i18nData": {
+                "cnExtraName": "Hao123>巴西>视频",
+                "cnName": "视频",
+                "enExtraName": "Hao123>br>subpage-video",
+                "enName": "subpage-video"
+            },
+            "i18nName": "视频",
+            "id": 1480,
+            "indexStr": "17-12-"
+        }
+    ],
+    "areaVOList": [
+        {
+            "hasGuideFile": false,
+            "i18nData": {
+                "cnExtraName": "Hao123>巴西>图片>Banner区",
+                "cnName": "Banner区",
+                "enExtraName": "Hao123>br>subpage-image>Banner",
+                "enName": "Banner"
+            },
+            "i18nName": "Banner区",
+            "id": 1435,
+            "indexStr": "17-12-1434-"
+        }
+    ],
+    "positionVOList": [
+        {
+            "areaRequired": "png/gif/jpg,960*90",
+            "click": 50,
+            "hasGuideFile": false,
+            "i18nData": {
+                "cnExtraName": "Hao123>巴西>图片>Banner区>首页Banner2",
+                "cnName": "首页Banner2",
+                "enExtraName": "Hao123>br>subpage-image>Banner>imageHomepage_banner2",
+                "enName": "imageHomepage_banner2"
+            },
+            "i18nName": "首页Banner2",
+            "id": 1436,
+            "indexStr": "17-12-1434-1435-",
+            "materialType": 0,
+            "pv": 10000,
+            "rotationType": 0,
+            "salesAmount": 1,
+            "size": "30K"
+        },
+        {
+            "areaRequired": "png/gif/jpg,728*90",
+            "click": 50,
+            "hasGuideFile": false,
+            "i18nData": {
+                "cnExtraName": "Hao123>巴西>图片>Banner区>首页Banner1",
+                "cnName": "首页Banner1",
+                "enExtraName": "Hao123>br>subpage-image>Banner>imageHomepage_banner1",
+                "enName": "imageHomepage_banner1"
+            },
+            "i18nName": "首页Banner1",
+            "id": 1437,
+            "indexStr": "17-12-1434-1435-",
+            "materialType": 0,
+            "pv": 10000,
+            "rotationType": 0,
+            "salesAmount": 1,
+            "size": "30K"
+        },
+        {
+            "areaRequired": "png/gif/jpg,240*240",
+            "click": 30,
+            "hasGuideFile": false,
+            "i18nData": {
+                "cnExtraName": "Hao123>巴西>图片>Banner区>图片页右侧Banner",
+                "cnName": "图片页右侧Banner",
+                "enExtraName": "Hao123>br>subpage-image>Banner>imageContentpage_rightbanner",
+                "enName": "imageContentpage_rightbanner"
+            },
+            "i18nName": "图片页右侧Banner",
+            "id": 1438,
+            "indexStr": "17-12-1434-1435-",
+            "materialType": 0,
+            "pv": 15000,
+            "rotationType": 0,
+            "salesAmount": 1,
+            "size": "30K"
+        },
+        {
+            "areaRequired": "png/gif/jpg,234*30",
+            "click": 50,
+            "hasGuideFile": false,
+            "i18nData": {
+                "cnExtraName": "Hao123>巴西>图片>Banner区>图片页顶部Banner",
+                "cnName": "图片页顶部Banner",
+                "enExtraName": "Hao123>br>subpage-image>Banner>imageContentpage_topbanner",
+                "enName": "imageContentpage_topbanner"
+            },
+            "i18nName": "图片页顶部Banner",
+            "id": 1439,
+            "indexStr": "17-12-1434-1435-",
+            "materialType": 0,
+            "pv": 15000,
+            "rotationType": 0,
+            "salesAmount": 1,
+            "size": "15K"
+        }
+    ],
+    "periods": [
+        {
+            "from": "2014-11-06",
+            "to": "2014-11-07"
+        }
+    ],
+    "insertDate": [],
+    "industrySelected": null,
+    "setDailyAmount": false
+}
+
+
+返回请求：
+
+{
+    "code": 200,
+    "data": {
+        "adPlatformList": [
+            {
+                "businessType": 0,
+                "i18nName": "Hao123",
+                "id": 17,
+                "status": 1
+            },
+            {
+                "businessType": 1,
+                "i18nName": "FC-network union",
+                "id": 20,
+                "status": 1
+            },
+            {
+                "businessType": 1,
+                "i18nName": "Brand link",
+                "id": 21,
+                "status": 1
+            },
+            {
+                "businessType": 0,
+                "i18nName": "PC App Store",
+                "id": 16,
+                "status": 1
+            },
+            {
+                "businessType": 1,
+                "i18nName": "Chinese Hao123",
+                "id": 18,
+                "status": 1
+            },
+            {
+                "businessType": 1,
+                "i18nName": "FC-keywords",
+                "id": 19,
+                "status": 1
+            }
+        ],
+        "adSolutionContent": {
+            "adSolutionId": 6463,
+            "advertiser": "STARK INTERACTIVE TECHNOLOGY LIMITED",
+            "advertiserId": 1000000103,
+            "approvalStatus": "saving",
+            "areaId": 1435,
+            "areaName": "Banner",
+            "changedPosition": false,
+            "channelId": 1434,
+            "channelName": "subpage-image",
+            "contentType": "create",
+            "createOperator": 7426946,
+            "createTime": 1414984401000,
+            "description": "asdfasdfasdf",
+            "id": 6410,
+            "materialApplyList": [
+                {
+                    "adSolutionContentId": 6410,
+                    "applyState": "create",
+                    "createOperator": 7426946,
+                    "createTime": 1414984401000,
+                    "id": 1301,
+                    "materialEmbedCodeContent": "asfasdfasdfsaf",
+                    "materialFileType": 0,
+                    "materialList": [
+                        {
+                            "adSolutionContentId": 6410,
+                            "createOperator": 7426946,
+                            "createTime": 1414984401000,
+                            "downloadFileName": "6463",
+                            "downloadUrl": "/gcrm/material/downloadMaterialFile?materialFileId=348",
+                            "fileSize": 30,
+                            "fileUrl": "http://10.240.166.3/gcm-storage%2F2bdab384-0376-4d57-b72f-9324c90332a0?sign=MBO%3AN29h9ewpiKZHcPVah2p76Tgqb2L9ow13n%3ApBD97zeaMvbKJryhe%2Fbh8pgKrFc%3D",
+                            "id": 348,
+                            "materialApplyId": 1301,
+                            "materialFileType": "IMAGE",
+                            "picHeight": 200,
+                            "picWidth": 300,
+                            "updateOperator": 7426946,
+                            "updateTime": 1414984401000,
+                            "uploadFileName": "wwwwwww.txt"
+                        }
+                    ],
+                  
+                    "materialMenuList": [
+                        {
+                            "materialTitle": "asfasfdasd",
+                            "materialUrl": "asfasdfasdf",
+                            "id": 6,
+                            "materialApplyId": 1301,
+                            "material": {
+                            "downloadFileName": "64eeeee3",
+                            "fileSize": 30,
+                            "fileUrl": "http://10.240.16eeeee6.3/gcm-storage%2F2bdab384-0376-4d57-b72f-9324c90332a0?sign=MBO%3AN29h9ewpiKZHcPVah2p76Tgqb2L9ow13n%3ApBD97zeaMvbKJryhe%2Fbh8pgKrFc%3D",
+                            "picHeight": 200,
+                            "picWidth": 300,
+                            "uploadFileName": "wwwwwww.txt",
+                            "downloadUrl": "/material/downloadMaterialMenuFile/false?materialMenuFileId=6"
+                            }
+                        }
+                    ],
+                    "materialTitle": "asfasdf",
+                    "materialUrl": "asfasdfasdf",
+                    "monitorUrl": "33333333333",
+                    "number": "00014919",
+                    "updateOperator": 7426946,
+                    "updateTime": 1414984401000
+                }
+            ],
+            "modifyStatus": "MODIFYED",
+            "number": "00018010-06",
+            "periodDescription": "2014-11-06,2014-11-07;",
+            "positionId": 1440,
+            "positionName": "subpage-Game",
+            "productId": 17,
+            "productName": "Hao123",
+            "materialMenuEnabled": false,
+            "siteId": 12,
+            "siteName": "br",
+            "totalDays": 2,
+            "updateOperator": 7426946,
+            "updateTime": 1414984401000
+        },
+        "advertiseQuotation": {
+            "adSolutionContentId": 6410,
+            "billingModelId": 1,
+            "billingModelName": "CPC",
+            "customerQuote": 100,
+            "discount": 1,
+            "id": 6372,
+            "priceType": "unit",
+            "ratioConditionDesc": "wwwww",
+            "ratioThird": 0,
+            "reachEstimate": false,
+            "totalPrice": 10000,
+            "updateOperator": 7426946,
+            "updateTime": 1414984401000
+        },
+        "areaVOList": [
+            {
+                "hasGuideFile": false,
+                "i18nData": {
+                    "cnExtraName": "Hao123>巴西>图片>Banner区",
+                    "cnName": "Banner区",
+                    "enExtraName": "Hao123>br>subpage-image>Banner",
+                    "enName": "Banner"
+                },
+                "i18nName": "Banner",
+                "id": 1435,
+                "indexStr": "17-12-1434-"
+            }
+        ],
+        "channelVOList": [
+            {
+                "hasGuideFile": false,
+                "i18nData": {
+                    "cnExtraName": "Hao123>巴西>图片",
+                    "cnName": "图片",
+                    "enExtraName": "Hao123>br>subpage-image",
+                    "enName": "subpage-image"
+                },
+                "i18nName": "subpage-image",
+                "id": 1434,
+                "indexStr": "17-12-"
+            },
+            {
+                "hasGuideFile": false,
+                "i18nData": {
+                    "cnExtraName": "Hao123>巴西>游戏",
+                    "cnName": "游戏",
+                    "enExtraName": "Hao123>br>subpage-Game",
+                    "enName": "subpage-Game"
+                },
+                "i18nName": "subpage-Game",
+                "id": 1440,
+                "indexStr": "17-12-"
+            },
+            {
+                "hasGuideFile": false,
+                "i18nData": {
+                    "cnExtraName": "Hao123>巴西>首页",
+                    "cnName": "首页",
+                    "enExtraName": "Hao123>br>homepage",
+                    "enName": "homepage"
+                },
+                "i18nName": "homepage",
+                "id": 1451,
+                "indexStr": "17-12-"
+            },
+            {
+                "hasGuideFile": false,
+                "i18nData": {
+                    "cnExtraName": "Hao123>巴西>视频",
+                    "cnName": "视频",
+                    "enExtraName": "Hao123>br>subpage-video",
+                    "enName": "subpage-video"
+                },
+                "i18nName": "subpage-video",
+                "id": 1480,
+                "indexStr": "17-12-"
+            }
+        ],
+        "datePeriodState": [],
+        "emptyMaterial": false,
+        "onlineApplyAllowed": false,
+        "position": {
+            "hasGuideFile": false,
+            "i18nData": {
+                "cnExtraName": "Hao123>巴西>游戏",
+                "cnName": "游戏",
+                "enExtraName": "Hao123>br>subpage-Game",
+                "enName": "subpage-Game"
+            },
+            "i18nName": "subpage-Game",
+            "id": 1440,
+            "indexStr": "17-12-"
+        },
+        "positionVOList": [
+            {
+                "areaRequired": "png/gif/jpg,960*90",
+                "click": 50,
+                "hasGuideFile": false,
+                "i18nData": {
+                    "cnExtraName": "Hao123>巴西>图片>Banner区>首页Banner2",
+                    "cnName": "首页Banner2",
+                    "enExtraName": "Hao123>br>subpage-image>Banner>imageHomepage_banner2",
+                    "enName": "imageHomepage_banner2"
+                },
+                "i18nName": "imageHomepage_banner2",
+                "id": 1436,
+                "indexStr": "17-12-1434-1435-",
+                "materialType": 0,
+                "pv": 10000,
+                "rotationType": 0,
+                "salesAmount": 1,
+                "size": "30K"
+            },
+            {
+                "areaRequired": "png/gif/jpg,728*90",
+                "click": 50,
+                "hasGuideFile": false,
+                "i18nData": {
+                    "cnExtraName": "Hao123>巴西>图片>Banner区>首页Banner1",
+                    "cnName": "首页Banner1",
+                    "enExtraName": "Hao123>br>subpage-image>Banner>imageHomepage_banner1",
+                    "enName": "imageHomepage_banner1"
+                },
+                "i18nName": "imageHomepage_banner1",
+                "id": 1437,
+                "indexStr": "17-12-1434-1435-",
+                "materialType": 0,
+                "pv": 10000,
+                "rotationType": 0,
+                "salesAmount": 1,
+                "size": "30K"
+            },
+            {
+                "areaRequired": "png/gif/jpg,240*240",
+                "click": 30,
+                "hasGuideFile": false,
+                "i18nData": {
+                    "cnExtraName": "Hao123>巴西>图片>Banner区>图片页右侧Banner",
+                    "cnName": "图片页右侧Banner",
+                    "enExtraName": "Hao123>br>subpage-image>Banner>imageContentpage_rightbanner",
+                    "enName": "imageContentpage_rightbanner"
+                },
+                "i18nName": "imageContentpage_rightbanner",
+                "id": 1438,
+                "indexStr": "17-12-1434-1435-",
+                "materialType": 0,
+                "pv": 15000,
+                "rotationType": 0,
+                "salesAmount": 1,
+                "size": "30K"
+            },
+            {
+                "areaRequired": "png/gif/jpg,234*30",
+                "click": 50,
+                "hasGuideFile": false,
+                "i18nData": {
+                    "cnExtraName": "Hao123>巴西>图片>Banner区>图片页顶部Banner",
+                    "cnName": "图片页顶部Banner",
+                    "enExtraName": "Hao123>br>subpage-image>Banner>imageContentpage_topbanner",
+                    "enName": "imageContentpage_topbanner"
+                },
+                "i18nName": "imageContentpage_topbanner",
+                "id": 1439,
+                "indexStr": "17-12-1434-1435-",
+                "materialType": 0,
+                "pv": 15000,
+                "rotationType": 0,
+                "salesAmount": 1,
+                "size": "15K"
+            }
+        ],
+        "siteList": [
+            {
+                "allowCanceled": false,
+                "checked": false,
+                "i18nName": "ae",
+                "id": 10,
+                "timeZoneOffset": "0"
+            },
+            {
+                "allowCanceled": false,
+                "checked": false,
+                "i18nName": "ar",
+                "id": 11,
+                "timeZoneOffset": "0"
+            },
+            {
+                "allowCanceled": false,
+                "checked": false,
+                "i18nName": "br",
+                "id": 12,
+                "timeZoneOffset": "0"
+            },
+            {
+                "allowCanceled": false,
+                "checked": false,
+                "i18nName": "ma",
+                "id": 13,
+                "timeZoneOffset": "0"
+            },
+            {
+                "allowCanceled": false,
+                "checked": false,
+                "i18nName": "sa",
+                "id": 15,
+                "timeZoneOffset": "0"
+            },
+            {
+                "allowCanceled": false,
+                "checked": false,
+                "i18nName": "th",
+                "id": 16,
+                "timeZoneOffset": "0"
+            },
+            {
+                "allowCanceled": false,
+                "checked": false,
+                "i18nName": "tw",
+                "id": 17,
+                "timeZoneOffset": "0"
+            },
+            {
+                "allowCanceled": false,
+                "checked": false,
+                "i18nName": "vn",
+                "id": 18,
+                "timeZoneOffset": "0"
+            },
+            {
+                "allowCanceled": false,
+                "checked": false,
+                "i18nName": "id",
+                "id": 19,
+                "timeZoneOffset": "0"
+            }
+        ]
+    },
+    "message": "OK"
+}

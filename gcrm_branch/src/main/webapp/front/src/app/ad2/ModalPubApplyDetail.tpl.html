@@ -1,0 +1,71 @@
+<div class="modal-header">
+    <h4>{{'APPLICATION_FOR_ADVERTISING_AHEAD' | translate}}</h4>
+</div>
+<div class="modal-body">
+  <div class="alert alert-info" ng-if="applyDetail.adSolutionContentApply.taskInfo">{{applyDetail.adSolutionContentApply.taskInfo}}</div>
+  <form class="form-horizontal">
+    <div class="form-group">
+      <label class="control-label col-md-2">
+        {{'CONTENT_NUMBER' | translate}}：
+      </label>
+      <div class="col-md-9">
+        <p class="form-control-static">{{applyDetail.adSolutionContentApply.adSolutiionContentNumber}}</p>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-md-2" >{{'CONTRACT_NUMBER' | translate}}：</label>
+      <div class="col-md-9">
+        <p class="form-control-static">
+          <a target="_blank" ng-href="{{applyDetail.adSolutionContentApply.contractUrl}}">{{applyDetail.adSolutionContentApply.contractNumber}}</a>
+        </p>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-md-2" >{{'APPLY_DESCRIPTION' | translate}}：</label>
+      <div class="col-md-9">
+        <p class="form-control-static">{{applyDetail.adSolutionContentApply.applyReason}}</p>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-md-2" >{{'ATTACHMENT' | translate}}：</label>
+      <div class="col-md-9">
+        <div class="form-control-static" ng-if="applyDetail.attachments.length">
+          <p class="mb0" ng-repeat="attachment in applyDetail.attachments"><a class="attachment" target="_blank" ng-href="{{attachment.url}}">{{attachment.name}}</a></p>
+        </div>
+        <p ng-if="!applyDetail.attachments.length">--</p>
+      </div>
+    </div>
+  </form>
+  <div class="modal-body pb0">
+    <legend>{{'APPROVAL_APPROVAL_RECORD' | translate}}</legend>
+    <div class="alert alert-info" ng-if="!applyDetail.approvalRecords.length">{{'RECORD_NO_APPROVAL_RECORD_YET' | translate}}</div>
+    <table class="table mb0 table-approval-record" ng-if="applyDetail.approvalRecords">
+      <thead>
+        <tr>
+          <th style="width: 140px">{{'RECORD_APPROVAL_TASK' | translate}}</th>
+          <th style="width: 80px">{{'RECORD_APPROVAL_RESULT' | translate}}</th>
+          <th>{{'RECORD_APPROVAL_OPINION' | translate}}</th>
+          <th style="width: 80px">{{'RECORD_OPERATOR' | translate}}</th>
+          <th style="width: 160px">{{'APPROVAL_TIME' | translate}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="record in applyDetail.approvalRecords">
+          <td>{{record.taskName}}</td>
+          <td>{{'APPROVAL_CONCLUSION_' + record.approvalStatus | translate}}</td>
+          <td>
+            <span ng-if="record.approvalSuggestion">{{record.approvalSuggestion}}</span>
+            <span ng-if="!record.approvalSuggestion">--</span>
+          </td>
+          <td>{{record.creater}}</td>
+          <td>{{record.createTime | date: 'yyyy-MM-dd HH:mm:ss'}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-warning pull-left" yt-popover-confirm="pubApplyWithdraw()"  yt-popover-ok-class="btn-warning" yt-popover-ok-text="{{'WITHDRAW' | translate}}" yt-popover-title="{{AdConstant.warnAdCancel}}" append-to-body="true" ng-if="applyDetail.applyStatus=='approving'">{{'WITHDRAW' | translate}}</button>
+  <button class="btn btn-default pull-left" ng-click="pubApplyReminder()" ng-if="applyDetail.applyStatus=='approving'">{{'REMINDER' | translate}}</button>
+  <button type="button" class="btn btn-default" ng-click="cancel()">{{'CLOSE' | translate}}</button>
+</div>

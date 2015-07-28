@@ -1,0 +1,1 @@
+define(["app"],function(t){t.registerFactory("Contract",["$http",function(t){return{get:function(n,a){t({method:"get",url:"/gcrm/adbaseinfo/contractSuggest",params:n}).then(function(t){a(t.data.data)})},getSuggestPromise:function(n){return t({method:"get",url:"/gcrm/adbaseinfo/contractSuggest",params:n}).then(function(t){return t.data.data})}}}])});

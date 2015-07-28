@@ -1,0 +1,132 @@
+{
+  "code": 200,
+  "data": {
+    "materialApplyVoList": [
+      {
+        "applyState": "0",
+        "createOperator": 6256473,
+        "createOperatorName": "叶艳",
+        "createTime": 1398485872000,
+        "number": "74627327",
+        "hasRecords": 1
+      },
+      {
+        "applyState": "1",
+        "createOperatorName": "ad",
+        "createTime": 1398485872000,
+        "number": "38657155",
+        "hasRecords": 1
+      },
+      {
+        "applyState": "3",
+        "createOperatorName": "asd",
+        "createTime": 1398485872000,
+        "number": "38657155",
+        "hasRecords": 1
+      },
+      {
+        "applyState": "2",
+        "createOperatorName": "",
+        "createTime": 1398485872000,
+        "number": "38657155",
+        "hasRecords": 1
+      }
+    ],
+    "materialContentVo": {
+      "adContentId": 795,
+      "advertiser": "直客-1",
+      "approvalStatus": "confirmed",
+      "areaRequired": "11*11",
+      "codeFile": {
+        "adSolutionContentId": 795,
+        "downloadFileName": "嵌入代码.txt",
+        "fileUrl": "http://bcs-sandbox.baidu.com/gcm-storage/07e44c5c-f603-4620-8d80-ecba6cfa15ca?sign=MBO:cNDCkbD8viASpw7OhpzgGkexgrTvMO0PQk:S3ND5Sfrm4410mT6H2loz8z3QpY=",
+        "id": 577,
+        "materialApplyId": 41,
+        "materialFileType": "EMBED_CODE",
+        "uploadFileName": "/07e44c5c-f603-4620-8d80-ecba6cfa15ca"
+      },
+      "description": "释放",
+      "materialList": [
+        {
+          "adSolutionContentId": 795,
+          "createOperator": 6256473,
+          "createTime": 1398486591000,
+          "downloadFileName": "代码检查工具.png",
+          "fileUrl": "http://bcs-sandbox.baidu.com/gcm-storage/07e44c5c-f603-4620-8d80-ecba6cfa15ca?sign=MBO:cNDCkbD8viASpw7OhpzgGkexgrTvMO0PQk:S3ND5Sfrm4410mT6H2loz8z3QpY=",
+          "id": 576,
+          "materialApplyId": 41,
+          "materialFileType": "IMAGE",
+          "updateOperator": 6256473,
+          "updateTime": 1398486591000,
+          "uploadFileName": "/07e44c5c-f603-4620-8d80-ecba6cfa15ca"
+        },
+        {
+          "adSolutionContentId": 796,
+          "createOperator": 6256473,
+          "createTime": 1398486591000,
+          "downloadFileName": "代码检查工具1.png",
+          "fileUrl": "http://bcs-sandbox.baidu.com/gcm-storage/07e44c5c-f603-4620-8d80-ecba6cfa15ca?sign=MBO:cNDCkbD8viASpw7OhpzgGkexgrTvMO0PQk:S3ND5Sfrm4410mT6H2loz8z3QpY=",
+          "id": 576,
+          "materialApplyId": 41,
+          "materialFileType": "IMAGE",
+          "updateOperator": 6256473,
+          "updateTime": 1398486591000,
+          "uploadFileName": "/07e44c5c-f603-4620-8d80-ecba6cfa15ca"
+        }
+      ],
+      "materialMenuList": [
+        {
+          "createOperator": 7426946,
+          "createTime": 1414569896000,
+          "material": {
+            "downloadFileName": "高福春.jpg",
+            "downloadUrl": "http://localhost:8080/gcrm/material/downloadMaterialFile?materialFileId=1",
+            "fileSize": 33,
+            "fileUrl": "http://bcs-sandbox.baidu.com/gcm-storage%2Fe5b02618-b2a0-4dcf-9f39-361e9b5f309a?sign=MBO%3AcqKYLqQNYOdk%3AWz4tmSeGwjCZAdsBq001x9pMSBg%3D",
+            "picHeight": 598,
+            "picWidth": 441,
+            "uploadFileName": "/e5b02618-b2a0-4dcf-9f39-361e9b5f309a"
+          },
+          "id": 1,
+          "materialApplyId": 1310,
+          "materialTitle": "aaa",
+          "materialUrl": "http://hetu.baidu.com/api/php/index",
+          "updateOperator": 7426946,
+          "updateTime": 1414569896000
+        },
+        {
+          "createOperator": 7426946,
+          "createTime": 1414569896000,
+          "material": {
+            "downloadFileName": "高福春.jpg",
+            "downloadUrl": "http://localhost:8080/gcrm/material/downloadMaterialFile?materialFileId=1",
+            "fileSize": 33,
+            "fileUrl": "http://bcs-sandbox.baidu.com/gcm-storage%2Fe5b02618-b2a0-4dcf-9f39-361e9b5f309a?sign=MBO%3AcqKYLqQNYOdk%3AWz4tmSeGwjCZAdsBq001x9pMSBg%3D",
+            "picHeight": 598,
+            "picWidth": 441,
+            "uploadFileName": "/e5b02618-b2a0-4dcf-9f39-361e9b5f309a"
+          },
+          "id": 1,
+          "materialApplyId": 122310,
+          "materialTitle": "aaa",
+          "materialUrl": "http://hetu.baidu.com/api/php/index",
+          "updateOperator": 7426946,
+          "updateTime": 1414569896000
+        }
+      ],
+      "materialPeriodDescription": "2014-06-23,2014-06-26;",
+      "materialTitle": "物料title",
+      "materialType": "2",
+      "materialUrl": "http://www.url.com",
+      "number": "82760961-02",
+      "operatorName": "张三",
+      "periodDescription": "2014-04-22;2014-04-29,2014-04-30;",
+      "positionName": "中文广告销售/测试站点1/测试频道1/测试区域1/详情页非轮播位",
+      "size": "11K",
+      "textlinkLength": "256"
+    },
+    "materialSaveType": "2"
+  },
+  "message": "OK"
+}

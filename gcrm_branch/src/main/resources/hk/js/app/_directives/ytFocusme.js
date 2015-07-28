@@ -1,0 +1,1 @@
+define(["app"],function(c){c.registerDirective("ytFocusme",["$timeout","$parse",function(c){return{scope:{ytFocusme:"="},link:function(t,e){t.$watch("ytFocusme.focus",function(o){o===!0&&c(function(){e[0].focus(),t.ytFocusme.focus=!1})})}}}])});

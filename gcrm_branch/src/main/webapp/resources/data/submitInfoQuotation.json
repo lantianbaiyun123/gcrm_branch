@@ -1,0 +1,126 @@
+{
+  "code": 200,
+  "data": [
+    {
+      "createrName": "黎亚洲",
+      "platformName": "hao123变现",
+      "quotationMain": {
+        "advertisingPlatformId": 1,
+        "approveStatus": "APPROVING",
+        "businessType": "CASH",
+        "createOperator": 1000,
+        "createTime": 1400497575000,
+        "descreption": "信息",
+        "endTime": 1401465600000,
+        "id": 151,
+        "priceType": "unit",
+        "quoteCode": "PP-20140519-173",
+        "siteId": 18,
+        "startTime": 1401120000000,
+        "status": "INVALID",
+        "taskInfo": "quote.main.approval.task:2014-05-19 19:06,PM 黎亚洲 chenchengxing ",
+        "updateOperator": 1000,
+        "updateTime": 1400497575000
+      },
+      "siteName": "印度",
+      "taskInfoMessage": "PM 黎亚洲 chenchengxing "
+    },
+    {
+      "createrName": "黎亚洲",
+      "platformName": "hao123变现",
+      "quotationMain": {
+        "advertisingPlatformId": 1,
+        "approveStatus": "APPROVING",
+        "businessType": "CASH",
+        "createOperator": 1000,
+        "createTime": 1400497515000,
+        "descreption": "信息",
+        "endTime": 1401465600000,
+        "id": 149,
+        "priceType": "unit",
+        "quoteCode": "PP-20140519-669",
+        "siteId": 18,
+        "startTime": 1401120000000,
+        "status": "INVALID",
+        "taskInfo": "quote.main.approval.task:2014-05-19 19:05,PM 黎亚洲 chenchengxing ",
+        "updateOperator": 1000,
+        "updateTime": 1400497515000
+      },
+      "siteName": "印度",
+      "taskInfoMessage": "PM 黎亚洲 chenchengxing "
+    },
+    {
+      "createrName": "黎亚洲",
+      "platformName": "hao123变现",
+      "quotationMain": {
+        "advertisingPlatformId": 1,
+        "approveStatus": "APPROVING",
+        "businessType": "CASH",
+        "createOperator": 1000,
+        "createTime": 1400497514000,
+        "descreption": "信息",
+        "endTime": 1401465600000,
+        "id": 148,
+        "priceType": "unit",
+        "quoteCode": "PP-20140519-678",
+        "siteId": 9,
+        "startTime": 1401120000000,
+        "status": "INVALID",
+        "taskInfo": "quote.main.approval.task:2014-05-19 19:05,PM 黎亚洲 chenchengxing ",
+        "updateOperator": 1000,
+        "updateTime": 1400497514000
+      },
+      "siteName": "zh_CN",
+      "taskInfoMessage": "PM 黎亚洲 chenchengxing "
+    },
+    {
+      "createrName": "黎亚洲",
+      "platformName": "hao123变现",
+      "quotationMain": {
+        "advertisingPlatformId": 1,
+        "approveStatus": "APPROVING",
+        "businessType": "CASH",
+        "createOperator": 1000,
+        "createTime": 1400497302000,
+        "descreption": "嘻嘻嘻",
+        "endTime": 1404057600000,
+        "id": 147,
+        "priceType": "unit",
+        "quoteCode": "PP-20140519-767",
+        "siteId": 18,
+        "startTime": 1401552000000,
+        "status": "INVALID",
+        "taskInfo": "quote.main.approval.task:2014-05-19 19:01,PM 黎亚洲 chenchengxing ",
+        "updateOperator": 1000,
+        "updateTime": 1400497302000
+      },
+      "siteName": "印度",
+      "taskInfoMessage": "PM 黎亚洲 chenchengxing "
+    },
+    {
+      "createrName": "黎亚洲",
+      "platformName": "hao123变现",
+      "quotationMain": {
+        "advertisingPlatformId": 1,
+        "approveStatus": "CANCEL",
+        "businessType": "CASH",
+        "createOperator": 1000,
+        "createTime": 1399180461000,
+        "descreption": "111",
+        "endTime": 1399996800000,
+        "id": 122,
+        "priceType": "unit",
+        "quoteCode": "PP-20140504-249",
+        "siteId": 1,
+        "startTime": 1399132800000,
+        "status": "INVALID",
+        "taskInfo": "quote.main.approval.refuse:2014-05-04 14:05,当前用户,88",
+        "updateOperator": 1000,
+        "updateTime": 1399180461000
+      },
+      "siteName": "测试站点1",
+      "taskInfoMessage": ""
+    }
+  ],
+  "message": "OK"
+}

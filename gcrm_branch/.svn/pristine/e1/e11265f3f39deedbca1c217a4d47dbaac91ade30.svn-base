@@ -1,0 +1,51 @@
+package com.baidu.gcrm.stock.service;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+
+import com.baidu.gcrm.stock.model.Stock;
+
+public interface ICalculateStockService {
+    
+    enum StockOperateType{
+        CPT_OCCUPY,
+        CPT_RELEASE,
+        CPM_OCCUPY,
+        CPM_RELEASE;
+    }
+    
+    /**
+     * key positionDateId + "-" + billingModelId
+     * @param positionDateIds
+     * @return
+     */
+    Map<String, Stock> findByConditions(Collection<Long> positionDateIds);
+    
+    Stock findSingleStock(Long positionDateId, Long billingModelId);
+    
+    Stock findById(Long id);
+    
+    int updateOccupiedStock(Long occupiedStock, Long id, Long oldOccupiedStock);
+    
+    void save(Stock stock);
+    
+    /**
+     * 
+     * @param positionDateId
+     * @param billingModelId
+     * @param stockMap key ==> positionDateId + "-" + billingModelId
+     * @return
+     */
+    Stock loadStock(Long positionDateId, Long billingModelId, Map<String, Stock> stockMap);
+    
+    /**
+     * 批量占用库存，返回对应计费方式剩余库存为0的positionDateId列表
+     * @param positionDateIds 被占用库存的positionDateId列表
+     * @param count 占用库存量
+     * @return 剩余库存为0的positionDateId列表
+     */
+    List<Long> batchOccupy(Collection<Long> positionDateIds, Long count);
+    
+    void batchRelease(Collection<Long> positionDateIds, Long count);
+}

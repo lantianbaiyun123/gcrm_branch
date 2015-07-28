@@ -1,0 +1,200 @@
+{
+  "code": 200,
+  "data": {
+    "adSolutionContentApply": {
+      "adSolutionId": 1,
+      "adSolutionContentId": 11,
+      "adSolutiionContentNumber": "1233344-01",
+      "applyReason": "I agree with no idea",
+      "contractNumber": "123323-01",
+      "contractUrl": "http://www.asdfas.asfasdf",
+      "id": 1,
+      "creator": "xuzhi",
+      "createTime": "2012-02-12 12:12:12",
+      "createOperator": 2345567
+    },
+    "attachments": [
+      {
+        "transactionRecordId": -1,
+        "moduleName": "adcontentonlineapply",
+        "delete": false,
+        "fieldName": "materialFile",
+        "id": -1,
+        "message": "success",
+        "name": "Jellyfish.jpg",
+        "tempUrl": "/b9b365fe-bef3-4e01-a0d1-60b394e8f181",
+        "url": "http://bcs-sandbox.baidu.com/gcm-storage%2Fb9b365fe-bef3-4e01-a0d1-60b394e8f181?sign=MBO%3AcqKYLqQNYOdk%3Arxmcjo1eAJ6YLQPKrPhVECe7mnM%3D",
+        "type": "businesslicense",
+        "isEditing": true
+      },
+      {
+        "transactionRecordId": -1,
+        "moduleName": "adcontentonlineapply",
+        "delete": false,
+        "fieldName": "materialFile",
+        "id": -1,
+        "message": "success",
+        "name": "Desert.jpg",
+        "tempUrl": "/35e06ae3-28c5-49e7-a4a9-b679ca136ecf",
+        "url": "http://bcs-sandbox.baidu.com/gcm-storage%2F35e06ae3-28c5-49e7-a4a9-b679ca136ecf?sign=MBO%3AcqKYLqQNYOdk%3A2IOBp2%2BG3XVAOq6FQt0LjivjfaM%3D",
+        "type": "businesslicense",
+        "isEditing": true
+      }
+    ],
+    "customerI18nView": {
+      "approvalStatus": "审核通过",
+      "belongsSales": "徐智",
+      "companySize": "50人以下",
+      "country": {
+        "code": "TH",
+        "i18nName": "泰国",
+        "id": 218,
+        "name": "泰国"
+      },
+      "customer": {
+        "address": "223",
+        "approvalStatus": 3,
+        "belongManager": 7426341,
+        "belongSales": 7426366,
+        "businessType": "CASH,SALE",
+        "companyName": "GYNO3",
+        "companySize": "less_50",
+        "companyStatus": 1,
+        "country": 218,
+        "createOperator": 7426366,
+        "createOperatorName": "徐智",
+        "createTime": 1404284859000,
+        "customerNumber": 7101920198,
+        "customerType": "direct",
+        "dataStatus": "create",
+        "id": 182,
+        "industry": 2,
+        "registerTime": 1403971200000,
+        "taskInfo": "",
+        "updateTime": 1405576946000,
+        "url": "http://baidu.com"
+      },
+      "customerType": "广告主—直客",
+      "hasContract": true,
+      "industry": {
+        "i18nName": "旅游",
+        "id": 2,
+        "name": "旅游"
+      }
+    },
+    "contract": {
+      "advertiseSolutionId": 2374,
+      "applier": "孙莎莎",
+      "beginDate": 1402729200000,
+      "category": "GJHT",
+      "customerId": 182,
+      "number": "6681415GJHT0108",
+      "parentNumber": "6651415GJXY0020",
+      "sales": "孙莎莎",
+      "state": "VALID",
+      "summary": "00031442",
+      "syncDate": 1402797728000,
+      "contractInfo": "等待张三审核"
+    },
+    "approvalContentViews": [
+      {
+        "adSolutionContent": {
+          "adSolutionId": 6509,
+          "advertiser": "GYNO3",
+          "advertiserId": 7101920198,
+          "approvalStatus": "saving",
+          "areaId": 1331,
+          "areaName": "Banner区",
+          "changedPosition": false,
+          "channelId": 1330,
+          "channelName": "图片",
+          "contentType": "create",
+          "createOperator": 7426946,
+          "createTime": 1406627729000,
+          "description": "1234",
+          "id": 6398,
+          "insertPeriodDescription": "",
+          "materialEmbedCode": 1,
+          "materialUrl": "http://www.baidu.com",
+          "modifyStatus": "MODIFYED",
+          "number": "00014097-01",
+          "periodDescription": "2014-07-29,2014-07-31;",
+          "positionId": 1333,
+          "positionName": "首页Banner1",
+          "productId": 17,
+          "productName": "Hao123",
+          "siteId": 10,
+          "siteName": "阿联酋",
+          "totalDays": 3,
+          "updateOperator": 7426946,
+          "updateTime": 1406695308000
+        },
+        "advertiseCodeMaterial": {
+          "adSolutionContentId": 6398,
+          "createOperator": 7426946,
+          "createTime": 1406627729000,
+          "downloadFileName": "生育津贴申领表.xlsx",
+          "downloadUrl": "/gcrm/material/downloadMaterialFile?materialFileId=291",
+          "fileUrl": "http://cq01-iit-bkmdev09.vm.baidu.com:8101/gcrm/material/downloadMaterialFile?materialFileId=291",
+          "id": 291,
+          "materialFileType": "EMBED_CODE",
+          "updateOperator": 7426946,
+          "updateTime": 1406695308000,
+          "uploadFileName": "/bb541543-7fbc-41f7-9957-43aaba7b7f0c"
+        },
+        "advertiseMaterials": [
+          {
+            "adSolutionContentId": 6398,
+            "createOperator": 7426946,
+            "createTime": 1406695308000,
+            "downloadFileName": "生育津贴申领表.xlsx",
+            "downloadUrl": "/gcrm/material/downloadMaterialFile?materialFileId=290",
+            "fileUrl": "http://cq01-iit-bkmdev09.vm.baidu.com:8101/gcrm/material/downloadMaterialFile?materialFileId=290",
+            "id": 290,
+            "materialFileType": "IMAGE",
+            "updateOperator": 7426946,
+            "updateTime": 1406695308000,
+            "uploadFileName": "/03e3a2f0-50f9-4a52-a20d-29b3060f0ebf"
+          }
+        ],
+        "advertiseQuotation": {
+          "adSolutionContentId": 6398,
+          "billingModelId": 5,
+          "billingModelName": "CPT",
+          "createOperator": 7426946,
+          "createTime": 1406627729000,
+          "customerQuote": 122,
+          "discount": 1,
+          "id": 6365,
+          "priceType": "unit",
+          "ratioConditionDesc": "",
+          "ratioCustomer": 0,
+          "ratioMine": 0,
+          "ratioThird": 0,
+          "reachEstimate": false,
+          "totalPrice": 366,
+          "updateOperator": 7426946,
+          "updateTime": 1406695308000
+        },
+        "canCreatePO": false,
+        "canUpdate": true,
+        "canWithdraw": false,
+        "emptyMaterial": false,
+        "infoViews": [],
+        "overdue": false,
+        "position": {
+          "areaRequired": "png/gif/jpg,728*90",
+          "click": 50,
+          "hasGuideFile": false,
+          "id": 1333,
+          "materialType": 0,
+          "pv": 10000,
+          "rotationType": 0,
+          "salesAmount": 1,
+          "size": "30K"
+        }
+      }
+    ]
+  },
+  "message": "OK"
+}

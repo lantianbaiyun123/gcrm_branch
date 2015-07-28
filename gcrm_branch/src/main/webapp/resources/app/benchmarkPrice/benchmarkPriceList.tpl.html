@@ -1,0 +1,222 @@
+<div class="container benchmark-price-list">
+    <div class="message-alert">
+      <div alert class="repeat" ng-repeat="alert in msgs.listAlerts" type="alert.type" close="closeMsg($index)">{{alert.msg}}
+      </div>
+    </div>
+    <div class="panel panel-default gcrm-panel">
+        <div class="panel-top-heading">
+          <h1>
+            <span>{{'PAGE_BENCHMARK_PRICE_LIST' | translate}}</span>
+            <span class="pull-right">
+                <a ui-sref="benchmarkPriceManagement.current" class="btn btn-link" ng-if="BtnIndex.btn_quotprice_list_current">{{'PAGE_BENCHMARK_PRICE_CURRENT' | translate}}</a>
+                <a href="#/benchmarkPriceManagement/add"  class="btn btn-success" ng-if="BtnIndex.btn_quotprice_list_add">{{'QUOTATION_ADD_PRICE' | translate}}</a>
+            </span>
+          </h1>
+        </div>
+        <div class="panel-heading">
+            <div class="panel-form panel-query">
+                <div class="row main-row">
+                  <div class="col-md-2">
+                    <div class="form-group row">
+                      <label class="col-md-5">{{'QUOTATION_PLATEFORM' | translate}}：</label>
+                      <div class="col-md-7">
+                        <div class="input-container btn-group">
+                            <button type="button" class="btn btn-default btn-sm btn-full-width dropdown-toggle" data-toggle="dropdown" tooltip="{{queryForm.platform.text}}" tooltip-append-to-body="true">
+                            <span class="col-md-10 btn-text">{{queryForm.platform.text}}</span>
+                            <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                                <li ng-click="changeQueryForm('platform', selectAll)"><a>{{ selectAll.text}}</a></li>
+                                <li ng-repeat="one in constant.platform" ng-click="changeQueryForm('platform', one)"><a>{{one.text}}</a></li>
+                            </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-2">
+                    <div class="form-group row">
+                      <label class="col-md-5">{{'QUOTATION_SITE_AREA' | translate}}：</label>
+                      <div class="col-md-7">
+                        <div class="input-container btn-group">
+                            <button type="button" class="btn btn-default btn-sm btn-full-width dropdown-toggle" data-toggle="dropdown" tooltip="{{queryForm.siteArea.text}}"  tooltip-append-to-body="true">
+                            <span class="col-md-10 btn-text">{{queryForm.siteArea.text}}</span>
+                            <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                                <li ng-click="changeQueryForm('siteArea', selectAll)"><a>{{selectAll.text}}</a></li>
+                                <li ng-repeat="one in constant.siteArea" ng-click="changeQueryForm('siteArea', one)"><a>{{one.text}}</a></li>
+                            </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-2">
+                    <div class="form-group row">
+                      <label class="col-md-5">{{'QUOTATION_STATUS' | translate}}：</label>
+                      <div class="col-md-7">
+                        <div class="input-container btn-group">
+                            <button type="button" class="btn btn-default btn-sm btn-full-width dropdown-toggle" data-toggle="dropdown" tooltip="{{queryForm.status.text}}" tooltip-append-to-body="true">
+                            <span class="col-md-10 btn-text">{{queryForm.status.text}}</span>
+                            <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                                <li ng-click="changeQueryForm('status', selectAll)"><a>{{selectAll.text}}</a></li>
+                                <li ng-repeat="status in constant.quotationStatus" ng-click="changeQueryForm('status', status)"><a>{{status.text}}</a></li>
+                            </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="form-group row">
+                      <label class="col-md-3">{{'QUOTATION_EFFECTIVE_STARTTIME' | translate}}：</label>
+                      <div class="col-md-9 row">
+                        <span class="col-md-5 span-datepicker">
+                            <input type="text" class="form-control input-sm datepicker-readonly" ng-model="queryForm.startDate" datepicker-popup readonly max="queryForm.endDate" />
+                        </span>
+                        <span class="col-md-2 time-dash">-</span>
+                        <span class="col-md-5 span-datepicker">
+                            <input type="text" class="form-control input-sm datepicker-readonly" ng-model="queryForm.endDate" datepicker-popup readonly min="queryForm.startDate"/>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-2">
+                    <div>
+                      <button class="btn btn-primary btn-sm" ng-click="btnQuery()">{{'BTN_QUERY' | translate}}</button>
+                      <button class="btn btn-link btn-sm" ng-if="!queryMoreShow" ng-click="toggleQueryMore()">{{'BTN_MORE' | translate}}</button>
+                      <button class="btn btn-link btn-sm" ng-if="queryMoreShow" ng-click="toggleQueryMore()">{{'BTN_SIMPLIFY' | translate}}</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row" collapse="!queryMoreShow">
+                  <div class="mb5" ng-class="{'col-md-2': lang=='zh-CN', 'col-md-3': 'en-US'}">
+                    <div class="form-group row">
+                      <label class="col-md-5">{{'QUOTATION_BUSINESS_TYPE' | translate}}：</label>
+                      <div class="col-md-7">
+                        <div class="input-container btn-group">
+                            <button type="button" class="btn btn-default btn-sm btn-full-width dropdown-toggle" data-toggle="dropdown">
+                            <span class="col-md-10 btn-text">{{queryForm.businessType.text}}</span>
+                            <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                              <li ng-click="changeQueryForm('businessType', selectAll)"><a>{{selectAll.text}}</a></li>
+                              <li ng-repeat="type in constant.businessType" ng-click="changeQueryForm('businessType', type)"><a>{{type.text}}</a></li>
+                            </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="mb5" ng-class="{'col-md-2': lang=='zh-CN', 'col-md-3': 'en-US'}">
+                    <div class="form-group row">
+                      <label class="col-md-5">{{'QUOTATION_APPROVAL_STATUS' | translate}}：</label>
+                      <div class="col-md-7">
+                        <div class="input-container btn-group">
+                            <button type="button" class="btn btn-default btn-sm btn-full-width dropdown-toggle" data-toggle="dropdown">
+                            <span class="col-md-10 btn-text">{{queryForm.approvalStatus.text}}</span>
+                            <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                                <li ng-click="changeQueryForm('approvalStatus', selectAll)"><a>{{selectAll.text}}</a></li>
+                                <li ng-repeat="status in constant.approvalStatus" ng-click="changeQueryForm('approvalStatus', status)"><a>{{status.text}}</a></li>
+                            </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div ng-class="{'col-md-4': lang=='zh-CN', 'col-md-5': 'en-US'}">
+                    <div class="form-group form-operator row">
+                      <label class="col-md-3">{{'QUOTATION_SUBMIT_OPERATOR' | translate}}：</label>
+                      <div class="col-md-8" ng-class="{'pl7': lang=='zh-CN'}">
+                        <div class="input-container btn-group">
+                            <input class="min-width-150 input-select2-suggest" type="hidden" ng-model="queryForm.operator" ui-select2="submitter" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel-body gcrm-list" ng-if="priceList.length">
+
+            <table class="table table-list table-hover">
+                <thead>
+                    <tr>
+                        <th>{{'QUOTATION_SERIAL' | translate}}</th>
+                        <th>{{'QUOTATION_BUSINESS_TYPE' | translate}}</th>
+                        <th>{{'QUOTATION_PLATEFORM' | translate}}</th>
+                        <th>{{'QUOTATION_PRICE_TYPE' | translate}}</th>
+                        <th>{{'QUOTATION_SITE_AREA' | translate}}</th>
+                        <th>{{'QUOTATION_EFFECTIVE_TIME' | translate}}</th>
+                        <th>{{'QUOTATION_APPROVAL_STATUS' | translate}}</th>
+                        <th>{{'QUOTATION_STATUS' | translate}}</th>
+                        <th>{{'QUOTATION_SUBMIT_OPERATOR' | translate}}</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="price in priceList">
+                        <td>
+                          <a ng-href="#/benchmarkPriceManagement/detail?id={{price.quotationMain.id}}" target="_blank">{{price.quotationMain.quoteCode}}
+                          </a>
+                        </td>
+                        <td>{{price.quotationMain.businessType | BusinessTypeFilter | translate}}</td>
+                        <td class="td-max mw70" title="{{price.platformName}}">{{price.platformName}}</td>
+                        <td>{{ 'PRICE_TYPE_' + price.quotationMain.priceType | translate}}</td>
+                        <td class="td-max mw80" title="{{price.siteName}}">{{price.siteName}}</td>
+                        <td class="td-max mw110" title="{{price.quotationMain.startTime | date: 'yyyy-MM-dd'}} ~ {{price.quotationMain.endTime | date: 'yyyy-MM-dd'}}">{{price.quotationMain.startTime | date: 'yyyy-MM-dd'}} ~ {{price.quotationMain.endTime | date: 'yyyy-MM-dd'}}</td>
+                        <td>{{price.quotationMain.approveStatus | QuotationApprovalStatusFilter | translate}}</td>
+                        <td>{{price.quotationMain.status | QuotationStatusFilter | translate}}</td>
+                        <td>{{price.createrName}}</td>
+                        <td>
+                            <a class="btn btn-link btn-xs" ng-href="#/benchmarkPriceManagement/detail?id={{price.quotationMain.id}}" target="_blank" ng-if="BtnIndex.btn_quotprice_list_view">{{'VIEW_DETAIL' | translate}}</a>
+                            <span ng-if="(!OwnerOpers.btn_quotprice_list_withdraw || price.isOwner) && price.quotationMain.approveStatus=='APPROVING' && BtnIndex.btn_quotprice_list_withdraw" >|
+                              <button class="btn btn-link btn-xs" yt-popover-confirm="withdrawPrice(price.quotationMain.id)" yt-popover-title="{{'QUOTATION_CONFIRM_WITHDRAW' | translate}}" yt-popover-ok-class="btn-warning" yt-popover-ok-text="{{'QUOTATION_WITHDRAW' | translate}}">{{'QUOTATION_WITHDRAW' | translate}}</button>
+                            </span>
+                            <span ng-if="(!OwnerOpers.btn_quotprice_list_cancel_recover || price.isOwner) && price.quotationMain.approveStatus=='APPROVED' && (price.quotationMain.status=='INVALID' || price.quotationMain.status=='VALID') && BtnIndex.btn_quotprice_list_cancel_recover">|
+                              <button class="btn btn-link btn-xs" yt-popover-confirm="nullifyPrice(price.quotationMain.id)" yt-popover-title="{{'QUOTATION_CONFIRM_NULLITY' | translate}}" yt-popover-ok-class="btn-danger" yt-popover-ok-text="{{'QUOTATION_NULLITY' | translate}}">{{'QUOTATION_NULLITY' | translate}}</button>
+                            </span>
+                            <span ng-if="price.quotationMain.approveStatus=='APPROVING' && BtnIndex.btn_quotprice_list_remind">|
+                              <button class="btn btn-link btn-xs" ng-click="sendReminder(price.quotationMain.id)">{{'QUOTATION_REMINDER' | translate}}</button>
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="row page-row">
+                <div class="pull-left">
+                  <div class="btn-group dropup">
+                    <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
+                        {{pager.pageSize || 10}}&nbsp;&nbsp;<span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                      <li ng-repeat="item in pager.pageSizeSlots">
+                        <a  ng-click="setPageSize(item)">{{item}}</a>
+                      </li>
+                    </ul>
+                  </div>
+                  <span class="page-row-text" ng-if="true">
+                    {{ 'PAGINATION_TOTAL' | translate }}
+                    {{ pager.totalPages+" " || 0 }}
+                    {{ 'PAGINATION_PAGES' | translate }},
+                    {{ pager.totalCount+" " || 0 }}
+                    {{ 'PAGINATION_ROWS' | translate }}
+                  </span>
+                </div>
+
+                <div class="pull-right">
+                    <pagination direction-links="true" total-items="pager.totalCount" page="pager.pageNumber" class="pagination-sm" items-per-page="pager.pageSize" previous-text="&laquo;" next-text="&raquo;" rotate="false" max-size="10"></pagination>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel-body" ng-if="!priceList.length">
+          <div class="alert alert-info">{{'QUOTATION_LIST_NO_ITEM' | translate}}</div>
+        </div>
+    </div>
+</div>

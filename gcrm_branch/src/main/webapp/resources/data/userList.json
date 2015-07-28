@@ -1,0 +1,75 @@
+{
+    "code": 200,
+    "data": {
+        "content": [
+            {
+                "email": "liyazhou@baidu.com",
+                "hasDataRights": true,
+                "id": 1,
+                "realName": "黎亚洲",
+                "roleName": "销售,销售leader,国代,变现主管,销售主管,部门总监,财务,法务,代理商管理员,产品经理,商务人员,查询组,国际化CFO,代理商上级,上级的上级,国际化执行总监,逐级审批",
+                "status": "DISABLE",
+                "ucId": 6255621,
+                "ucName": "liyazhou"
+            },
+            {
+                "email": "anhuan@baidu.com",
+                "hasDataRights": true,
+                "id": 2,
+                "realName": "安欢",
+                "status": "DISABLE",
+                "ucId": 6256465,
+                "ucName": "anhuan"
+            },
+            {
+                "email": "zhanglei35@baidu.com",
+                "hasDataRights": false,
+                "id": 5,
+                "realName": "张磊",
+                "roleName": "销售,国代",
+                "status": "DISABLE",
+                "ucId": 6257286,
+                "ucName": "zhanglei35"
+            },
+            {
+                "email": "dangqianyonghu@baidu.com",
+                "hasDataRights": true,
+                "id": 4,
+                "realName": "当前用户",
+                "roleName": "销售,销售leader",
+                "status": "DISABLE",
+                "ucId": 6256469,
+                "ucName": "current"
+            },
+            {
+                "email": "zhangxiaobin01@baidu.com",
+                "hasDataRights": false,
+                "id": 6,
+                "realName": "张晓斌",
+                "roleName": "国代",
+                "status": "DISABLE",
+                "ucId": 6256473,
+                "ucName": "zhangxiaobin01"
+            },
+            {
+                "email": "wujun@baidu.com",
+                "hasDataRights": false,
+                "id": 3,
+                "realName": "吴俊",
+                "status": "ENABLE",
+                "ucId": 6255995,
+                "ucName": "wujun"
+            }
+        ],
+        "offset": 0,
+        "pageNumber": 1,
+        "pageSize": 20,
+        "queryAll": false,
+        "result": [],
+        "resultClass": "com.baidu.gcrm.user.web.helper.UserListBean",
+        "total": 6,
+        "totalCount": 6,
+        "totalPages": 1
+    },
+    "message": "OK"
+}

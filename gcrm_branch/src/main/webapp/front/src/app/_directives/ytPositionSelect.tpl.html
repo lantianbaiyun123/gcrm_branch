@@ -1,0 +1,13 @@
+<div>
+  <div class="dropdown btn-group pull-left" ng-repeat="(key, value) in notSorted(q)" ng-class="{'ml5': key}">
+    <button class="dropdown-toggle btn btn-default btn-full-width" style="width:115px" tooltip="{{q[value].selected.i18nName}}" tooltip-append-to-body="true" ng-disabled="!q[value].list.length">
+      <span class="col-md-11 btn-text">{{q[value].selected.i18nName}}</span>
+      <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu">
+      <li ng-repeat="choice in q[value].list">
+        <a ng-click="setChoice($index, value)">{{choice.i18nName}}</a>
+      </li>
+    </ul>
+  </div>
+</div>

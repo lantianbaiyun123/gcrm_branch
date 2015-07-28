@@ -1,0 +1,98 @@
+<div class="container ad-solution">
+  <div alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)" ng-if="state.showSolutionAlert && alert.type!='danger'">{{alert.msg}}</div>
+  <div alert ng-repeat="alert in alerts" type="alert.type" ng-if="state.showSolutionAlert && alert.type=='danger'">{{alert.msg}}</div>
+  <div id="anchorBasicInfo">
+    <div ui-view="adBasicView"></div>
+    <div ui-view="adBasicEdit"></div>
+  </div>
+  <div ui-view="adContent" class="panel panel-gcrm gcrm-panel" id="anchorContent{{$index}}" ng-repeat="ad in adContents"></div>
+  <div class="panel panel-gcrm panel-canceled-list" id="anchorCancelList" ng-show="cancelRecord.length">
+    <div class="page-header">
+      <div class="panel-heading">
+        <span class="black-block">&nbsp;</span>
+        <span class="panel-heading-text ng-binding">{{'AD_SOLUTION_DETAIL_CANCELED_CONTENTS' | translate}}</span>
+      </div>
+    </div>
+    <div class="panel-body">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>{{'CONTENT_NUMBER' | translate}}</th>
+            <th>{{'ADVERTISER' | translate}}</th>
+            <th>{{'AD_SOLUTION_DETAIL_CANCEL_REASON' | translate}}</th>
+            <th>{{'SUBMIT_TIME' | translate}}</th>
+            <th>{{'AD_SOLUTION_DETAIL_CANCEL_TIME' | translate}}</th>
+            <th>{{'OPERATOR' | translate}}</th>
+            <th>{{'TABLE_OPERATION' | translate}}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="item in cancelRecord">
+            <td>{{item.adNumber}}</td>
+            <td>{{item.advertiser}}</td>
+            <td>{{'AD_CONTENT_CANCEL_REASON_' + item.cancelReason | translate}}</td>
+            <td>{{item.submitTime | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+            <td>{{item.cancelTime | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+            <td>{{item.operator}}</td>
+            <td><a ng-click="btnViewCanceled(item)">{{'VIEW' | translate}}</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<div class="fixed-btn-group">
+  <div class="container" ng-if="!state.isDetailView && basic.isOwner">
+    <div>
+      <form class="pull-left">
+        <span ng-if="state.basicReview">
+          <a class="btn btn-success" ng-if="basic.isOwner && state.canAddContent && !(state.isGlobleEditing || adContents.length >= 20 || state.isSolutionTypeUpdate)" ng-click="addAdContent()">
+            <span class="glyphicon glyphicon-plus"></span>
+            <span>{{'AD_BASIC_ADD_CONTENT' | translate}}</span>
+          </a>
+          <a class="btn btn-default" ng-click="tempSaveContents(true)" ng-if="state.isAutoSave">{{'AD_CONTENT_TEMP_SAVE' | translate}}</a>
+        </span>
+        <span ng-if="!state.basicReview">
+          <a class="btn btn-success" ng-if="state.canAddContent && (state.isGlobleEditing || adContents.length >= 20)" ng-hide="state.isSolutionTypeUpdate" tooltip="{{'AD_BASIC_SUBMIT_HINT' | translate}}" tooltip-append-to-body="true" style="opacity: 0.65;filter: alpha(opacity=65);">
+            <span class="glyphicon glyphicon-plus"></span>
+            <span>{{'AD_BASIC_ADD_CONTENT' | translate}}</span>
+          </a>
+          <a class="btn btn-default" ng-if="state.isAutoSave" tooltip="{{'AD_BASIC_SUBMIT_HINT' | translate}}" tooltip-append-to-body="true" style="opacity: 0.65;filter: alpha(opacity=65);">{{'AD_CONTENT_TEMP_SAVE' | translate}}</a>
+        </span>
+        <span class="alert alert-warning disp-ib mb0" ng-if="auto.saveTime">
+          <span class="glyphicon glyphicon-time"></span>
+          <span>{{'SAVED_AT' | translate}}</span>
+          <span>{{auto.saveTime | date:'HH:mm'}}</span>
+        </span>
+      </form>
+      <form class="text-center pull-right">
+        <a class="btn btn-default" ng-click="cancelChangeAd()" ng-show="state.isSolutionTypeUpdate && !state.isSolutionChanged">{{'CANCEL_SOLUTION_CHANGE' | translate}}</a>
+        <a ng-disabled="state.disableToApproval" class="btn btn-primary" ng-click="btnSubmitAdSolution();" ng-hide="state.isGlobleEditing || !adContents.length || !BtnIndex.btn_adsol_detail_submit">{{'AD_BASIC_SUBMIT' | translate}}</a>
+        <a ng-disabled="state.disableToApproval" class="btn btn-primary" ng-show="state.isGlobleEditing && adContents.length && BtnIndex.btn_adsol_detail_submit" tooltip="{{'AD_BASIC_SUBMIT_HINT' | translate}}" tooltip-append-to-body="true" style="opacity: 0.65;filter: alpha(opacity=65);">{{'AD_BASIC_SUBMIT' | translate}}</a>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="shortcuts" >
+  <div class="shortcut">
+    <a class="btn btn-default" ng-click="anchorTo('anchorBasicInfo')">{{'APPROVAL_CUSTOMERINFO_LABEL' | translate}}</a>
+  </div>
+  <div class="shortcut" ng-repeat="ad in adContents">
+    <a ng-click="anchorTo('anchorContent' + $index)" class="btn btn-default ta-c td-max mw120">
+      <span class="panel-heading-text">{{'APPROVAL_CONTENT_TITLE' | translate}}{{$index + 1}}</span>
+    </a>
+  </div>
+  <div class="shortcut" ng-show="cancelRecord.length">
+    <a ng-click="anchorTo('anchorCancelList')" class="btn btn-default">
+      {{'AD_SOLUTION_DETAIL_CANCELED_CONTENTS' | translate}}
+    </a>
+  </div>
+  <div class="shortcut">
+    <a ng-click="anchorTo('navBarTop')" class="btn btn-default">
+      &nbsp;
+      <span class="glyphicon glyphicon-chevron-up"></span>
+      <br>
+      {{'APPROVAL_BACK_TO_TOP' | translate}}
+    </a>
+  </div>
+</div>

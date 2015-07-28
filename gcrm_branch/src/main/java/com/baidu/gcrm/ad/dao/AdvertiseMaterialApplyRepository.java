@@ -1,0 +1,69 @@
+package com.baidu.gcrm.ad.dao;
+
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
+import com.baidu.gcrm.ad.model.AdvertiseMaterialApply;
+import com.baidu.gcrm.ad.model.AdvertiseMaterialApply.MaterialApplyState;
+
+public interface AdvertiseMaterialApplyRepository extends JpaRepository<AdvertiseMaterialApply,Long>{
+	
+	public List<AdvertiseMaterialApply> findByAdSolutionContentId(Long id);
+	
+	@Query("from AdvertiseMaterialApply where adSolutionContentId = ?1 order by createTime desc ")
+	public List<AdvertiseMaterialApply> findByContentIdInOrder(Long contentId);
+	
+	public AdvertiseMaterialApply findByNumber(String number);
+	
+	/**
+	 * 根据广告内容ID查找广告内容关联的物料单，并根据物料单ID排除指定的物料单
+	 * @param applyId
+	 * @param contentId
+	 * @return
+	 */
+	@Query("from AdvertiseMaterialApply where id <> ?1 and adSolutionContentId = ?2 ")
+	public List<AdvertiseMaterialApply> findMaterialApplyByExcludeIdAndContentId(Long applyId, Long contentId);
+//	/**
+//	 * 根据物料单ID设置物料单状态
+//	 * @param state
+//	 * @param applyId
+//	 */
+//	@Modifying
+//	@Query("update AdvertiseMaterialApply set applyState = ?1 where id = ?2")
+//	public void updateStateById(MaterialApplyState state, Long applyId);
+	
+	/**
+	 * 根据广告内容ID，统计关联的物料单数量
+	 * @param contentId
+	 * @return
+	 */
+	@Query("select count(*) from AdvertiseMaterialApply where adSolutionContentId = ?1")
+	public Long findCountByContentId(Long contentId);
+	
+	/**
+	 * 根据广告内容ID和物料单状态，查找物料单
+	 * @param contentId
+	 * @param state
+	 * @return
+	 */
+	@Query("from AdvertiseMaterialApply where adSolutionContentId = ?1 and applyState = ?2")
+	public List<AdvertiseMaterialApply> findMaterialApplyByContentIdAndState(Long contentId, MaterialApplyState state);
+	
+    public List<AdvertiseMaterialApply> findByAdSolutionContentIdAndApplyStateNot(Long contentId, MaterialApplyState state);
+    
+	
+	/**
+	 * 根据物料单ID，获取广告内容ID，以及广告内容关联的审批完成的物料单数量
+	 * @param applyId
+	 * @param state
+	 * @return
+	 */
+	@Query("select count(*) , a1.adSolutionContentId from AdvertiseMaterialApply a1, AdvertiseMaterialApply a2 where a1.id = ?1 and a1.adSolutionContentId = a2.adSolutionContentId and a2.applyState = ?2")
+	public List<Object[]> findContentStateCountByIdAndState(Long applyId, MaterialApplyState state);
+	
+	public AdvertiseMaterialApply findById(Long id);
+	
+
+}

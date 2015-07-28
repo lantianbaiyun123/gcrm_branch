@@ -1,0 +1,26 @@
+.yt-calendar { width: 471px; padding: 11px; }
+.yt-calendar .yt-button{padding: 0;width: 61px;height: 50px;}
+.yt-calendar .yt-button.blank-day{border-color: transparent;}
+.yt-calendar .yt-button .day-number{float: right;padding: 0 2px;font-weight: bold;color: #444; margin-bottom: 12px;}
+.yt-calendar .yt-button .day-content{clear: both;padding-left: 5px;text-align: left;font-size: 12px;color: #737373;height: 16px;}
+.yt-calendar .tbody-days{border-top: 1px solid #dcdcdc;border-left: 1px solid #dcdcdc;}
+.yt-calendar .tbody-days td{border-right: 1px solid #dcdcdc;border-bottom: 1px solid #dcdcdc;}
+.yt-calendar .schedule-legend{top: 30px;right: 6px;}
+.yt-calendar .schedule-legend-wrap{/*display: block !important;*/}
+.yt-calendar .day-label{font-size: 12px;line-height: 30px;font-family: '宋体';}
+.yt-calendar .calendar-legend-busy{background: url(../images/icons.png) no-repeat 0 0;width: 10px;height: 10px;display: inline-block;margin-right: 2px;}
+.yt-calendar .color-box-busy{padding: 1px 0 0 6px;}
+.yt-calendar .color-box-bidding{font-size: 12px;
+color: #737373;
+padding: 1px 0 0 6px;}
+.yt-calendar .glyphicon-arrow-left{font-size: 18px;}
+.yt-calendar .month-picker{width: 268px;
+margin: 0 4px;}
+
+.yt-calendar .is-full { background-color: #e2e2e2; }
+.yt-calendar-legend-wrap { display: block; position: absolute; top: 32px; right: 10px; min-width: 180px; }
+.yt-calendar-legend { display: block; position: absolute; top: 10px; right: 0; min-width: 150px; background-color: #fff; border: 1px solid #ccc; border: 1px solid rgba(0,0,0,.15); border-radius: 4px; -webkit-box-shadow: 0 6px 12px rgba(0,0,0,.175); box-shadow: 0 6px 12px rgba(0,0,0,.175); background-clip: padding-box; padding-bottom: 10px; padding-top: 5px; margin-bottom: 0; z-index: 100; }
+.yt-calendar-legend .color-box { display: inline-block; width: 20px; height: 20px; vertical-align: middle; margin-right: 10px; }
+.yt-calendar-legend .legend-is-full { background-color: #e2e2e2; }
+.yt-calendar-legend .legend-text { display: inline-block; vertical-align: middle; line-height: 20px; }
+.yt-calendar-legend .list-group-item { border: none; margin-bottom: 0; padding-bottom: 5px; }

@@ -1,0 +1,35 @@
+{
+  "code": 200,
+  "data": {"posotionData":[{
+      "id": 1,
+      "i18nData": {
+        "cnName": "测试频道1",
+        "enName": "TestChannel1"
+      },
+      "children": []
+    }, {
+      "id": 2,
+      "children": [{
+        "id": 21,
+        "children": [{
+          "id": 211,
+          "title": "2.1.1. spooky-giraffe",
+          "children": []
+        }, {
+          "id": 212,
+          "title": "2.1.2. bubble-burst",
+          "children": []
+        }]
+      }, {
+        "id": 22,
+        "children": []
+      }]
+    }, {
+      "id": 3,
+      "children": []
+    }, {
+      "id": 4,
+      "children": []
+    }]
+  }
+}

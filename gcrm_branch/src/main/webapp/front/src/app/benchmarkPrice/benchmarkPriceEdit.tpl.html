@@ -1,0 +1,236 @@
+<div class="panel-body basic-info-panel">
+  <div class="form-horizontal">
+    <div class="form-group">
+      <label class="col-md-2 control-label"><span class="txt-impt">*</span>{{'QUOTATION_BUSINESS_TYPE' | translate}}：</label>
+      <div ng-class="{'has-error': check.quotationMain && !quotationMain.businessType}">
+          <div class="col-md-4">
+              <label class="radio-inline" ng-repeat="type in constant.businessType" ng-class="{'disabled': !type.enabled}" ng-if="type.value"><input type="radio" ng-value="type.value" ng-model="quotationMain.businessType" ng-disabled="!type.enabled"/>{{type.text}}</label>
+          </div>
+      </div>
+    </div>
+
+    <div class="form-group" ng-show="quotationMain.businessType">
+      <label class="col-md-2 control-label"><span class="txt-impt">*</span>{{'QUOTATION_PLATEFORM' | translate}}：</label>
+      <div ng-class="{'has-error': checkPlatform && !quotationMain.advertisingPlatformId}">
+          <div class="col-md-10">
+            <div class="pull-left">
+              <label class="radio-inline" ng-repeat="one in constant.platform" ng-if="one.value" ng-show="one.businessType === quotationMain.businessType"><input type="radio" ng-value="one.value" ng-model="quotationMain.advertisingPlatformId"/>{{one.text}}</label>
+            </div>
+            <div class="col-md-3 text-danger form-control-static ml20" ng-show="checkPlatform && !quotationMain.advertisingPlatformId">
+                <span class="glyphicon glyphicon-warning-sign"></span>&nbsp;&nbsp;{{'QUOTATION_PLATEFORM_CANNOT_BE_EMPTY' | translate}}
+            </div>
+          </div>
+      </div>
+    </div>
+
+    <div class="form-group" ng-show="quotationMain.advertisingPlatformId || quotationMain.priceType">
+      <label class="col-md-2 control-label"><span class="txt-impt">*</span>{{'QUOTATION_PRICE_TYPE' | translate}}：</label>
+      <div ng-class="{'has-error': check.priceType && !quotationMain.priceType}">
+          <div class="col-md-4">
+              <label class="radio-inline" ng-repeat="type in constant.priceType" ng-if="type.value"><input type="radio" ng-value="type.value" ng-model="quotationMain.priceType"/>{{type.text}}</label>
+          </div>
+      </div>
+    </div>
+    <div ng-show="quotationMain.priceType">
+      <div class="form-group">
+        <label class="col-md-2 control-label"><span class="txt-impt">*</span>{{'QUOTATION_EFFECTIVE_TIME' | translate}}：</label>
+        <div ng-class="{'has-error': checkEffectiveTime && (!quotationMain.startTime || !quotationMain.endTime || quotationMain.startTime>quotationMain.endTime)}">
+            <div class="col-md-4 no-padding-left">
+              <span class="col-md-5">
+                <input type="text" class="form-control btn-sm datepicker-readonly" ng-model="quotationMain.startTime" min="minDate" max="quotationMain.endTime" datepicker-popup required readonly />
+              </span>
+              <span class="col-md-1 time-dash">-</span>
+              <span class="col-md-5">
+                <input type="text" class="form-control btn-sm datepicker-readonly" ng-model="quotationMain.endTime" min="quotationMain.startTime || minDate" datepicker-popup required readonly />
+              </span>
+            </div>
+            <div class="col-md-6 text-danger form-control-hint" ng-show="checkEffectiveTime && (!quotationMain.startTime || !quotationMain.endTime || quotationMain.startTime>quotationMain.endTime) ">
+                <span class="glyphicon glyphicon-warning-sign"></span>&nbsp;&nbsp;{{'QUOTATION_EFFECTIVE_TIME_CANNOT_BE_EMPTY' | translate}}
+            </div>
+        </div>
+      </div>
+
+      <!-- <div class="form-group" ng-show="quotationMain.priceType && quotationMain.startTime && quotationMain.endTime"> -->
+      <div class="form-group">
+        <label class="col-md-2 control-label"><span class="txt-impt">*</span>{{'QUOTATION_PRICE_DESCRIPTION' | translate}}：</label>
+        <div class="col-md-4 price-comment">
+            <textarea class="form-control" rows="3" ng-model="quotationMain.descreption" ng-trim="true" yt-placeholder="{{'QUOTATION_TYPE_IN_PRICE_DESCRIPTION' | translate}}"></textarea>
+        </div>
+      </div>
+
+        <!--     <div class="form-group"  ng-show="quotationMain.priceType && quotationMain.advertisingPlatformId  && quotationMain.startTime && quotationMain.endTime && quotationMain.descreption"> -->
+      <div class="form-group">
+        <label class="col-md-2 control-label"><span class="txt-impt">*</span>{{'QUOTATION_BENCHMARK_PRICE' | translate}}：</label>
+        <div class="panel-body price-panel">
+          <!-- <h5>标杆价</h5> -->
+          <div class="table-wrap">
+            <table class="table table-price">
+              <thead>
+                <tr>
+                  <th class="th-add">
+                    <button class="btn btn-link price-add" ng-click="addPrice($index)" ng-if="!isEdit" ng-hide="editSiteArea.length === quotationList.length" tooltip="{{'QUOTATION_ADD_PRICE' | translate}}" tooltip-append-to-body="true">
+                      <span class="glyphicon glyphicon-plus"></span>
+                    </button>
+                  </th>
+                  <th class="td-site-select">
+                    <span ng-if=" quotationMain.businessType === 'CASH' ">{{'QUOTATION_SITE' | translate}}</span>
+                    <span ng-if=" quotationMain.businessType === 'SALE' ">{{'QUOTATION_AREA' | translate}}</span>
+                  </th>
+                  <!-- 价格种类 == unit -->
+                  <th ng-if=" quotationMain.priceType ==='unit' " class="td-price">CPC($)</th>
+                  <th ng-if=" quotationMain.priceType ==='unit' " class="td-price">CPT($)</th>
+                  <th ng-if=" quotationMain.priceType ==='unit' " class="td-price">CPM($)</th>
+                  <th ng-if=" quotationMain.priceType ==='unit' " class="td-price">CPA($)</th>
+                  <th ng-if=" quotationMain.priceType ==='unit' " class="td-price-cps">CPS(%)</th>
+                  <!-- 价格种类 == unit END -->
+
+                  <!-- 价格种类 == ratio -->
+                  <th ng-if=" quotationMain.priceType ==='ratio' " class="td-ratio">{{'QUOTATION_RATIO_MINE' | translate}}</th>
+                  <th ng-if=" quotationMain.priceType ==='ratio' " class="td-ratio">{{'QUOTATION_RATIO_CUSTOMER' | translate}}</th>
+                  <th ng-if=" quotationMain.priceType ==='ratio' " class="td-ratio">{{'QUOTATION_RATIO_THIRD' | translate}}</th>
+                  <!-- 价格种类 == ratio END-->
+
+                  <!-- 价格种类 == rebate -->
+                  <th ng-if=" quotationMain.priceType ==='rebate' " class="td-rebate">{{'QUOTATION_REBATE' | translate}}</th>
+                  <!-- 价格种类 == rebate END -->
+
+                  <th>{{'QUOTATION_TESTIFY_MATERIAL' | translate}}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat='price in quotationList' ng-class="{'danger': price.checkPrice && (!price.site.value || !price.quotationMaterialList.length || !price.priceIsGood)}">
+                  <td>
+                    <button class="btn btn-link price-delete" ng-if="quotationList.length>1" ng-click="removePrice($index)" tooltip="{{'QUOTATION_DELETE_BENCHMARK_PRICE' | translate}}" tooltip-append-to-body="true">
+                      <span class="glyphicon glyphicon-trash"></span>
+                    </button>
+                  </td>
+                  <td>
+                    <div class="input-container btn-group site-select">
+                        <button type="button" class="btn btn-default btn-sm btn-full-width dropdown-toggle" data-toggle="dropdown">
+                        <span class="col-md-11 btn-text" ng-if="price.site.text">{{price.site.text}}</span>
+                        <span class="col-md-11 btn-text" ng-if="!price.site.text">{{'QUOTATION_SELECT' | translate}}</span>
+                        <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu" ng-if="editSiteArea.length && !editSiteAreaFull">
+                            <li ng-repeat="site in editSiteArea" ng-if="!site.selected" ng-click="setPriceSite(price, site)"><a>{{site.text}}</a></li>
+                        </ul>
+                    </div>
+                  </td>
+
+                  <!-- 价格种类 == unit -->
+                  <td ng-if=" quotationMain.priceType === 'unit' ">
+                    <!-- <div class="input-group">
+                      <span class="input-group-addon">$</span> -->
+                      <input type="text" class="form-control input-sm" ng-model="price.unit.cpc.value" ng-pattern="testPrice" ng-change="check.onePrice(price)">
+                    <!-- </div> -->
+                  </td>
+                  <td ng-if=" quotationMain.priceType === 'unit' ">
+                    <!-- <div class="input-group">
+                      <span class="input-group-addon">$</span> -->
+                      <input type="text" class="form-control input-sm" ng-model="price.unit.cpt.value" ng-pattern="testPrice" ng-change="check.onePrice(price)">
+                    <!-- </div> -->
+                  </td>
+                  <td ng-if=" quotationMain.priceType === 'unit' ">
+                    <!-- <div class="input-group">
+                      <span class="input-group-addon">$</span> -->
+                      <input type="text" class="form-control input-sm" ng-model="price.unit.cpm.value" ng-pattern="testPrice" ng-change="check.onePrice(price)">
+                    <!-- </div> -->
+                  </td>
+                  <td ng-if=" quotationMain.priceType === 'unit' ">
+                    <!-- <div class="input-group">
+                      <span class="input-group-addon">$</span> -->
+                      <input type="text" class="form-control input-sm" ng-model="price.unit.cpa.value" ng-pattern="testPrice" ng-change="check.onePrice(price)">
+                    <!-- </div> -->
+                  </td>
+                  <td class="td-price-cps" ng-if=" quotationMain.priceType === 'unit' ">
+                    <label class="checkbox"><input type="checkbox" ng-model="price.isUnifyedCPS"/>{{'QUOTATION_UNIFIED_RATIO' | translate}}</label>
+                    <div class="cps-ratio-group">
+                      <div class="input-group" ng-if="price.isUnifyedCPS">
+                        <span class="input-group-addon pre-addon">{{'QUOTATION_RATIO_MINE' | translate}}</span>
+                        <input type="text" class="form-control input-sm" ng-model="price.unit.cps[0].value" ng-pattern="/^([1-9]\d?(\.\d[1-9]0*|\.[1-9]0*)?|0\.([1-9]\d?|0[1-9])0*|100(\.0+)?)$/" ng-change="check.onePrice(price)">
+                        <span class="input-group-addon">%</span>
+                      </div>
+                      <div ng-if="!price.isUnifyedCPS">
+                        <div>{{'INDUSTRY_MAIN_TYPE_GAME' | translate}}</div>
+                        <div class="input-group" ng-repeat="industry in price.unit.cps" ng-if="$index && industry.parentId==1">
+                          <span class="input-group-addon pre-addon">{{industry.industryTypeName}}</span>
+                          <input type="text" class="form-control input-sm" ng-model="industry.value" ng-pattern="/^([1-9]\d?(\.\d[1-9]0*|\.[1-9]0*)?|0\.([1-9]\d?|0[1-9])0*|100(\.0+)?)$/" ng-change="check.onePrice(price)">
+                          <span class="input-group-addon">%</span>
+                        </div>
+                        <div class="mt10">{{'INDUSTRY_MAIN_TYPE_ECOMMERCE' | translate}}</div>
+                        <div class="input-group" ng-repeat="industry in price.unit.cps" ng-if="$index && industry.parentId==3">
+                          <span class="input-group-addon pre-addon">{{industry.industryTypeName}}</span>
+                          <input type="text" class="form-control input-sm" ng-model="industry.value" ng-pattern="/^([1-9]\d?(\.\d[1-9]0*|\.[1-9]0*)?|0\.([1-9]\d?|0[1-9])0*|100(\.0+)?)$/" ng-change="check.onePrice(price)">
+                          <span class="input-group-addon">%</span>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <!-- 价格种类 == unit END -->
+
+                  <!-- 价格种类 == ratio -->
+                  <td ng-if=" quotationMain.priceType === 'ratio' ">
+                    <div class="input-group">
+                      <input type="text" class="form-control input-sm" ng-blur="setRatio(price, 'ratioMine')" ng-model="price.ratio.ratioMine" ng-pattern="/^([1-9]\d?(\.\d[1-9]0*|\.[1-9]0*)?|0\.([1-9]\d?|0[1-9])0*|100(\.0+)?)$/" ng-change="check.onePrice(price)">
+                      <span class="input-group-addon">%</span>
+                    </div>
+                  </td>
+                  <td ng-if=" quotationMain.priceType === 'ratio' ">
+                    <div class="input-group">
+                      <input type="text" class="form-control input-sm" ng-blur="setRatio(price, 'ratioCustomer')" ng-model="price.ratio.ratioCustomer" ng-pattern="/^([1-9]\d?(\.\d[1-9]0*|\.[1-9]0*)?|0\.(\d{1,2})0*|0|100(\.0+)?)$/" ng-change="check.onePrice(price)">
+                      <span class="input-group-addon">%</span>
+                    </div>
+                  </td>
+                  <td ng-if=" quotationMain.priceType === 'ratio' ">
+                    <div class="input-group">
+                      <input type="text" class="form-control input-sm" ng-blur="setRatio(price, 'ratioThird')" ng-model="price.ratio.ratioThird" ng-pattern="/^([1-9]\d?(\.\d[1-9]0*|\.[1-9]0*)?|0\.(\d{1,2})0*|0|100(\.0+)?)$/" ng-change="check.onePrice(price)" readonly>
+                      <span class="input-group-addon">%</span>
+                    </div>
+                  </td>
+                  <!-- 价格种类 == ratio END -->
+
+                  <!-- 价格种类 == rebate -->
+                  <td ng-if=" quotationMain.priceType === 'rebate' ">
+                    <div class="input-group">
+                      <input type="text" class="form-control input-sm" ng-model="price.rebate.ratioRebate" ng-pattern="/^([1-9]\d?(\.\d[1-9]0*|\.[1-9]0*)?|0\.([1-9]\d?|0[1-9])0*|100(\.0+)?)$/" ng-change="check.onePrice(price)">
+                      <span class="input-group-addon">%</span>
+                    </div>
+                  </td>
+                  <!-- 价格种类 == rebate END -->
+
+
+                  <td class="td-testify-materials">
+                    <!--[if lt IE 10]>
+                    <span class="btn btn-success btn-xs material-add pull-left" yt-ajaxupload="{{uploadOpts}}" ng-model="price.quotationMaterialList" is-splice-to="true" uploaded-cbfn="check.onePrice(price)" upload-url="quote/uploadQuotationMaterial" upload-type="" upload-invalidatetype="exe|msi|bat|sh" upload-triggersource="{{price.site.value}}">
+                      <span class="glyphicon glyphicon-plus"></span>
+                      <span class="upload-text">{{'ADD' | translate}}</span>
+                    </span>
+                    <![endif]-->
+                    <!--[if (!IE)|(IE 10)]><!-->
+                    <span class="btn btn-success btn-xs material-add pull-left" yt-jquery-file-upload="{{uploadOpts}}" ng-model="price.quotationMaterialList" uploaded-cbfn="check.onePrice(price)" is-splice-to="true" upload-url="quote/uploadQuotationMaterial" upload-invalidatetype="exe|msi|bat|sh" upload-triggersource="{{price.site.value}}">
+                      <span class="glyphicon glyphicon-plus"></span>{{'ADD' | translate}}
+                    </span>
+                    <!--<![endif]-->
+                    <span class="add-hint text-danger" ng-show="onCheck && price.onCheck && !price.quotationMaterialList.length">{{'QUOTATION_UPLOAD_MATERIAL' | translate}}</span>
+                    <div class="testify-material-wrap row" ng-repeat="material in price.quotationMaterialList">
+                      <span class="testify-material col-md-10" ng-class="{'unit-max': quotationMain.priceType === 'unit','ratio-max': quotationMain.priceType === 'ratio', 'rebate-max': quotationMain.priceType === 'rebate'}">
+                        <a target="_blank" ng-if="material.id" href="{{material.downLoadUrl}}" tooltip="{{material.downloadFileName}}" tooltip-append-to-body="true">{{material.downloadFileName}}</a>
+                        <span ng-if="!material.id" tooltip="{{material.downloadFileName}}" tooltip-append-to-body="true">{{material.downloadFileName}}</span>
+                      </span>
+                      <button type="button" class="btn btn-link col-md-1 material-remove" ng-click="removeMaterial(price, $index)" tooltip="{{'DELETE' | translate}}" tooltip-append-to-body="true"><span class="glyphicon glyphicon-remove"></span></button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="panel-footer text-center">
+  <a ng-if="BtnIndex.btn_quotprice_list_add" class="btn btn-primary" ng-click="submitPrice()" ng-disabled="!(quotationMain.priceType && quotationMain.advertisingPlatformId  && quotationMain.startTime && quotationMain.endTime && quotationMain.descreption) || quotationSubmitDisable">{{'QUOTATION_SUBMIT_PRICE' | translate}}</a>
+</div>

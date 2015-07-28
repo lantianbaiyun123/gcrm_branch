@@ -1,0 +1,25 @@
+{
+  "code": 200,
+  "data": [
+    {
+      "date": 1403838811000,
+      "id": 26,
+      "materialNumber": "00016118",
+      "operator": 7426946,
+      "operatorName": "刘晓",
+      "publishNumber": "0000019145",
+      "type": "force_publish"
+    },
+    {
+      "date": 1403838996000,
+      "id": 27,
+      "materialNumber": "00016118",
+      "operator": 7426946,
+      "operatorName": "刘晓",
+      "planDate": 1403712000000,
+      "publishNumber": "0000019145",
+      "type": "unpublish"
+    }
+  ],
+  "message": "OK"
+}

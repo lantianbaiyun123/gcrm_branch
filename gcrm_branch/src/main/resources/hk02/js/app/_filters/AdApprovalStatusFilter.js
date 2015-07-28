@@ -1,0 +1,1 @@
+define(["app"],function(r){r.registerFilter("AdApprovalStatusFilter",function(){var r=["REJECT","AGREE"];return function(t){return 0===t||1===t?r[t]:"--"}})});

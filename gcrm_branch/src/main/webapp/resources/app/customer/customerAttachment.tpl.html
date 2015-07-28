@@ -1,0 +1,49 @@
+<div class="panel gcrm-panel customer-attachment">
+  <div class="panel-sub-heading">
+    <h2 ng-if="attachment.state == 'addEditing'">
+      <span class="black-block">&nbsp;</span>{{'CUSTOMER_QUALIFICATION_MATERIAL' | translate}}
+    </h2>
+  </div>
+  <div class="panel-body">
+    <table class="table mb10">
+      <thead>
+        <tr>
+          <th class="col-md-1" ng-if="(!OwnerOpers.btn_cust_detail_qualify || isOwner) && BtnIndex.btn_cust_detail_qualify"></th>
+          <th class="align-center col-md-2">{{'TYPE' | translate}}</th>
+          <th class="align-center col-md-9">{{'FILE_CONTENT' | translate}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="item in attachment.attachments" class="repeat">
+          <td style="padding: 10px 0" class="align-center" ng-if="(!OwnerOpers.btn_cust_detail_qualify || isOwner) && BtnIndex.btn_cust_detail_qualify">
+            <a class="btn btn-link btn-remove" ng-click="removeRow(item,$index)" ng-if="customerApplyInfo.companyStatus != 2 && customerApplyInfo.approveState != 'approving'"><span class="glyphicon glyphicon-trash"></span></a>
+            <a class="btn btn-link btn-edit" ng-if="attachment.state != 'addEditing' && !item.isEditing && customerApplyInfo.companyStatus != 2 && customerApplyInfo.approveState != 'approving'" ng-click="editRow(item)"><span class="glyphicon glyphicon-pencil"></span></a>
+            <a class="btn btn-link btn-edit" ng-if="attachment.state != 'addEditing' && item.isEditing && customerApplyInfo.companyStatus != 2 && customerApplyInfo.approveState != 'approving'" ng-click="saveRow(item)"><span class="glyphicon glyphicon-floppy-disk"></span></a>
+          </td>
+          <td class="col-md-2" ng-if="attachment.state == 'addEditing' || item.isEditing">
+            <div yt-input-dropdown="attachment.attachmentTypes" dropdown-selected="item.type" dropdown-type="attachment" please-text="false" />
+          </td>
+          <td ng-if="attachment.state != 'addEditing' && !item.isEditing" class="contact-td align-center">{{'ATTACHMENT_' + item.type | translate}}</td>
+          <td class="contact-td align-center"><a ng-href="{{item.downLoadUrl}}" target="_blank" ng-if="item.downLoadUrl">{{item.name}}</a><span ng-if="!item.downLoadUrl">{{item.name}}</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="" ng-if="(!OwnerOpers.btn_cust_detail_qualify || isOwner) && BtnIndex.btn_cust_detail_qualify && customerApplyInfo.companyStatus != 2 && customerApplyInfo.approveState != 'approving'">
+      <div class="col-md-1"></div>
+      <div class="col-md-2">
+        <div yt-input-dropdown="attachment.attachmentTypes" dropdown-selected="attachment.addType" dropdown-type="attachment" please-text="false" />
+      </div>
+      <div class="col-md-1">
+        <!--[if lt IE 10]>
+        <span class="btn btn-link pull-left" yt-ajaxupload='{{ { triggerSource : ad.positionByAreaSelection.id , uploadingText : "" , uploadedText : "" , formatErrorText : "AD_CONTENT_UPLOAD_FILE_TYPE_FORBIDDEN" , uploadFalseText : "" , beginUpload : "btnDisabled" , uploadDone : "btnEnabled" } }}' ng-model="attachment.attachments" upload-url="customer/doUploadFile" upload-invalidatetype="exe|msi|bat|sh"  uploaded-cbfn="uploaded()" is-push-in="true" send-begin-cbfn="beginUpload()">
+          <i class="glyphicon glyphicon-plus"></i>
+          <span class="upload-text">{{'AJAX_UPLOAD_UPLOAD' | translate}}</span>
+        </span>
+        <![endif]-->
+        <!--[if (!IE)|(IE 10)]><!-->
+        <span class="btn btn-link pull-left" yt-jquery-file-upload='{{ { triggerSource : ad.positionByAreaSelection.id , uploadingText : "" , uploadedText : "" , formatErrorText : "AD_CONTENT_UPLOAD_FILE_TYPE_FORBIDDEN" , uploadFalseText : "" , beginUpload : "btnDisabled" , uploadDone : "btnEnabled"} }}' ng-model="attachment.attachments" upload-url="customer/doUploadFile" upload-invalidatetype="exe|msi|bat|sh" uploaded-cbfn="uploaded()" is-push-in="true" send-begin-cbfn="beginUpload()"><i class="glyphicon glyphicon-plus"></i>{{'AJAX_UPLOAD_UPLOAD' | translate}}</span>
+        <!--<![endif]-->
+      </div>
+    </div>
+  </div>
+</div>

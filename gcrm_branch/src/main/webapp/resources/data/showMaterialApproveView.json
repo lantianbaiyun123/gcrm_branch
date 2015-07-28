@@ -1,0 +1,28 @@
+{
+	"code":200,
+	"data":{
+		"advertiser":"直客-1",
+		"approvalStatus":"saving",
+		"areaRequired":"23*23",
+		"description":"testd",
+		"materialApplyId":"43",
+		"materialApplyNumber":"63774653",
+		"materialTitle":"测试物料12345",
+		"materialType":"image_and_textlink",
+		"materialUrl":"www.baidu.com",
+		"advertiseContentNumber":"123",
+		"advertiseMaterials":[
+
+		],
+		"operatorName":"12",
+		"periodDescription":"2014-03-03,2014-04-30;2014-05-02,2014-05-13;2014-03-`3,2014-04-20;2014-05-22,2014-05-30;2014-03-04,2014-04-20;2014-05-12,2014-05-11;",
+		"positionName":"中文广告销售/null/null/null/null",
+		"role":"test",
+		"size":"14K",
+		"textSize":"10",
+		"submitPerson":"12",
+		"submitTime":1392803492000,
+		"taskClose":false
+	},
+	"message":"OK"
+}

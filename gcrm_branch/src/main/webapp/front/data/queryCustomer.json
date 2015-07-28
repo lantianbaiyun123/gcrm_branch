@@ -1,0 +1,132 @@
+{
+    "code": 200,
+    "data": {
+        "agentCountry": [
+            {
+                "code": "LK",
+                "i18nName": "斯里兰卡",
+                "id": 5,
+                "name": "斯里兰卡"
+            }
+        ],
+        "agentRegional": {
+            "agentCountries": [
+                {
+                    "code": "LK",
+                    "i18nName": "斯里兰卡",
+                    "id": 5,
+                    "name": "斯里兰卡"
+                },
+                {
+                    "code": "KH",
+                    "i18nName": "柬埔寨",
+                    "id": 9,
+                    "name": "柬埔寨"
+                },
+                {
+                    "code": "TW",
+                    "i18nName": "台湾",
+                    "id": 4,
+                    "name": "台湾"
+                },
+                {
+                    "code": "TH",
+                    "i18nName": "泰国",
+                    "id": 1,
+                    "name": "泰国"
+                },
+                {
+                    "code": "LA",
+                    "i18nName": "老挝",
+                    "id": 8,
+                    "name": "老挝"
+                },
+                {
+                    "code": "PK",
+                    "i18nName": "巴基斯坦",
+                    "id": 11,
+                    "name": "巴基斯坦"
+                },
+                {
+                    "code": "BD",
+                    "i18nName": "孟加拉",
+                    "id": 10,
+                    "name": "孟加拉"
+                },
+                {
+                    "code": "PH",
+                    "i18nName": "菲律宾",
+                    "id": 2,
+                    "name": "菲律宾"
+                },
+                {
+                    "code": "MM",
+                    "i18nName": "缅甸",
+                    "id": 7,
+                    "name": "缅甸"
+                },
+                {
+                    "code": "VN",
+                    "i18nName": "越南",
+                    "id": 3,
+                    "name": "越南"
+                },
+                {
+                    "code": "IN",
+                    "i18nName": "印度",
+                    "id": 6,
+                    "name": "印度"
+                }
+            ],
+            "i18nName": "泰语区",
+            "id": 1,
+            "name": "泰语区"
+        },
+        "agentType": "独家代理",
+        "approvalStatus": "待提交",
+        "belongsSales": "测试5",
+        "companySize": "50~100人",
+        "country": {
+            "code": "JO",
+            "i18nName": "约旦",
+            "id": 29,
+            "name": "约旦"
+        },
+        "currencyType": {
+            "i18nName": "美元",
+            "id": 1,
+            "name": "USD",
+            "radio": 0.1647
+        },
+        "customer": {
+            "address": "ss",
+            "agentCountry": "5",
+            "agentRegional": 1,
+            "agentType": 0,
+            "approvalStatus": 3,
+            "belongSales": 123,
+            "businessLicense": "111",
+            "businessScope": "",
+            "businessType": 0,
+            "companyName": "测试-1",
+            "companySize": "less_100",
+            "companyStatus": 0,
+            "country": 29,
+            "createOperator": 1000,
+            "createTime": 1392785570000,
+            "currencyType": 1,
+            "customerNumber": 12345678,
+            "description": "",
+            "id": 1,
+            "registerCapital": 23,
+            "registerTime": 1391356800000,
+            "type": "0",
+            "updateOperator": 1000,
+            "updateTime": 1393555572000,
+            "url": "http://sssss"
+        },
+         "customerType": "广告代理（线下）"
+    },
+    "errors": {},
+    "message": "OK"
+}

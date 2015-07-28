@@ -1,0 +1,68 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">&times;</button>
+    <h4>{{title | translate}}</h4>
+</div>
+<div class="modal-body">
+    <div class="insertion-wrap">
+        <table class="table approval-record-table">
+            <thead>
+                <tr>
+                    <th style="width: 50px"></th>
+                    <th style="width: 140px">{{'RECORD_APPROVAL_TASK' | translate}}</th>
+                    <th style="width: 80px">{{'RECORD_APPROVAL_RESULT' | translate}}</th>
+                    <th>{{'RECORD_APPROVAL_OPINION' | translate}}</th>
+                    <th style="width: 80px">{{'RECORD_OPERATOR' | translate}}</th>
+                    <th style="width: 160px">{{'APPROVAL_TIME' | translate}}</th>
+                </tr>
+            </thead>
+            <tbody ng-repeat="record in modalDatas">
+                <tr>
+                    <td>
+                        <button class="btn btn-success btn-xs" ng-click="record.insertShow=true" ng-hide="record.insertShow" ng-if="record.insertRecords.length>0">
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                        <button class="btn btn-success btn-xs" ng-click="record.insertShow=false" ng-show="record.insertShow" ng-if="record.insertRecords.length>0">
+                            <span class="glyphicon glyphicon-minus"></span>
+                        </button>
+                    </td>
+                    <td>{{record.taskName}}</td>
+                    <td>{{record.approvalStatus | ApprovalResultFilter | translate}}</td>
+                    <td class="td-max mw200" title="{{record.approvalSuggestion}}">
+                        <span ng-if="record.approvalSuggestion">{{record.approvalSuggestion}}</span>
+                        <span ng-if="!record.approvalSuggestion">--</span></td>
+                    <td>{{record.createOperatorName}}</td>
+                    <td>{{record.createTime | date: 'yyyy-MM-dd HH:mm:ss'}}</td>
+                </tr>
+                <tr class="dash-top" ng-if="record.insertRecords.length>0" ng-show="record.insertShow">
+                    <td>{{'RECORD_INSERT_OPINION' | translate}}</td>
+                    <td colspan="5">
+                        <table ng-repeat="adContent in record.insertRecords" class="table table-bordered insert-table">
+                            <caption>{{'AD_ANCHOR_SCROLL_AD_CONTENT' | translate}}&nbsp;{{$index + 1}}&nbsp;【{{adContent.adSolutionContentNumber}}】</caption>
+                            <thead>
+                                <tr class="active">
+                                    <th style="width: 160px;">{{'APPROVAL_CONFLICT_TIME' | translate}}</th>
+                                    <th style="width: 180px">{{'RECORD_INSERT_AD_MASTER' | translate}}</th>
+                                    <th>{{'RECORD_INSERT_AD_CONTENT' | translate}}</th>
+                                    <th style="width: 100px">{{'APPROVAL_IS_ALLOW_INSERT' | translate}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="insertRecord in adContent.insertedAdSolutionContent">
+                                    <td class="span-td">{{insertRecord.insertPeriod | DatePeriodFilter}}</td>
+                                    <td>{{insertRecord.insertedAdvertiser}}</td>
+                                    <td>{{insertRecord.adSolutionContentNumber}}</td>
+                                    <td class="td-center">
+                                        <span ng-if="insertRecord.allowInsert==1" class="glyphicon glyphicon-ok text-success"></span>
+                                        <span ng-if="!(insertRecord.allowInsert==1)" class="glyphicon glyphicon-remove text-danger"></span>
+                                    </td>
+                                </tr>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="cancel()">{{'CLOSE' | translate}}</button>
+</div>

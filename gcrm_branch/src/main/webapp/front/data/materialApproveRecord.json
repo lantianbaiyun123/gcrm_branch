@@ -1,0 +1,17 @@
+{
+	"code":200,
+	"data":[
+		{
+			"activityId":"act2",
+			"adMaterialApplyId":123,
+			"approvalStatus":0,
+			"approvalSuggestion":"asdfg",
+			"creater":"anhuan",
+			"processId":"12",
+			"taskId":"123",
+			"taskName":"PM审核物料",
+			"createTime": 1392076800000
+		}
+	],
+	"message":"OK"
+}

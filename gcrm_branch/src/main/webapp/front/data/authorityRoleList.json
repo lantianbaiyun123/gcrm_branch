@@ -1,0 +1,26 @@
+{
+    "code": 200,
+    "data": [
+        {
+            "createOperator": 0,
+            "createTime": 1402898670000,
+            "id": 1098,
+            "roleDesc": "国代",
+            "roleId": 1694,
+            "roleTag": "countryAgent",
+            "updateOperator": 0,
+            "updateTime": 1402898670000
+        },
+        {
+            "createOperator": 0,
+            "createTime": 1402898670000,
+            "id": 1099,
+            "roleDesc": "变现主管",
+            "roleId": 1695,
+            "roleTag": "cash_leader",
+            "updateOperator": 0,
+            "updateTime": 1402898670000
+        }
+    ],
+    "message": "OK"
+}

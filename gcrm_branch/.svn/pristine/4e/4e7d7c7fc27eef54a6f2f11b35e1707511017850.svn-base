@@ -1,0 +1,27 @@
+{
+  "code": 200,
+  "data": {
+    "adPlatformId": 1,
+    "areaRequired": "10*10",
+    "click": 1000,
+    "cptBenchmarkPrice": 10.5,
+    "createOperator": 23456789,
+    "createTime": 1398258211000,
+    "id": 387,
+    "indexStr": "1-1-385-386-",
+    "materialType": 1,
+    "parentId": 386,
+    "positionNumber": "157932",
+    "pv": 1000,
+    "rotationType": 0,
+    "salesAmount": 1,
+    "siteId": 1,
+    "size": "10k",
+    "status": "disable",
+    "textlinkLength": 10,
+    "type": "position",
+    "updateOperator": 23456789,
+    "updateTime": 1398258211000
+  },
+  "message": "OK"
+}

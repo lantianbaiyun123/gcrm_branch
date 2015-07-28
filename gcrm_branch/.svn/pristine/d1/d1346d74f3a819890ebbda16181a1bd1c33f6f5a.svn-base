@@ -1,0 +1,16 @@
+<style>
+.body{font-size:14px;}
+.important{font-weight:bold;}
+</style>
+<div class="body">
+	${operator}：</br>
+	#if(${type}=="Expand")
+	您在${oldQuoteCreateDate}提交的 标杆价${oldQuoteCode}与${submitTer} 提交的标杆价：${newQuoteCode} 有时间冲突</br>
+	 生效时间已被修改为${oldEditValidDate}#end</br> 
+	#if(${type}=="Split")您在${oldQuoteCreateDate}提交的 标杆价${oldQuoteCode}与${submitTer}</br>
+	提交的标杆价：${newQuoteCode} 有时间冲突</br> 原标杆价已被拆分为${oldQuoteCode}、${addQuoteCode} </br>
+	${oldQuoteCode}:生效时间为：${oldEditValidDate}</br>
+	${addQuoteCode}:生效时间为：${addValidDate} #end</br>
+	#if(${type}=="Cancel") 您在 ${oldQuoteCreateDate} 提交的标杆价${oldQuoteCode} 在 ${submitTer} 提交的标杆价${newQuoteCode}生效时间范围内，故原标杆价已作废，按新标杆价执行  #end</br>	  
+	系统邮件，请勿回复</br>
+</div>

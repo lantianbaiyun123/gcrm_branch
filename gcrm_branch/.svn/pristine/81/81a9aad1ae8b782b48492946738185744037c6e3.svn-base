@@ -1,0 +1,231 @@
+package com.baidu.gcrm.ws.cms.impl;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.stereotype.Service;
+
+import com.baidu.ebs.cms.ws.GCRMWebService;
+import com.baidu.ebs.cms.ws.dto.ContractDTO;
+import com.baidu.ebs.cms.ws.exception.CMSServiceException;
+import com.baidu.gcrm.ad.model.Contract;
+import com.baidu.gcrm.ad.model.Contract.ContractState;
+import com.baidu.gcrm.common.exception.CRMRuntimeException;
+import com.baidu.gcrm.customer.service.ICustomerService;
+import com.baidu.gcrm.mail.MailHelper;
+import com.baidu.gcrm.ws.cms.ICMSRequestFacade;
+import com.baidu.gcrm.ws.cms.ad.dto.AdSolutionContentDTO;
+import com.baidu.gcrm.ws.cms.ad.dto.AdSolutionDTO;
+import com.baidu.gcrm.ws.cms.customer.dto.CustomerDTO;
+import com.baidu.gcrm.ws.cms.service.ICMSAdSolutionService;
+import com.baidu.gcrm.ws.cms.service.ICMSCustomerService;
+
+@Service
+public class CMSRequestFacade implements ICMSRequestFacade {
+    
+    private static Logger logger = LoggerFactory.getLogger(CMSRequestFacade.class);
+    
+    @Autowired
+    ICMSCustomerService cmsCustomerService;
+    
+    @Autowired
+    ICMSAdSolutionService cmsAdSolutionService;
+    
+    @Autowired
+    GCRMWebService cmsWebService;
+    
+    private static final String SUCCESS_FLAG = "success";
+    
+    @Resource(name="taskExecutor")
+    ThreadPoolTaskExecutor taskExecutor;
+    
+    @Autowired
+    ICustomerService customerService;
+    
+    @Override
+    public void syncCustomer(final Long customerId) {
+        try {
+            logger.info("syncCustomer,customerId:{}" ,customerId);
+            CustomerDTO customerDTO = cmsCustomerService.findByCustomerId(customerId);
+            String result = cmsWebService.sendCustomer(customerDTO);
+            if (!SUCCESS_FLAG.equals(result)) {
+                throw new CRMRuntimeException("sendCustomer failed");
+            }
+            
+            logger.info("syncCustomer,customerId:{}, customerDTO:{}",
+                    customerId, ToStringBuilder.reflectionToString(customerDTO));
+        } catch (Exception e) {
+            logger.error("syncCustomer failed,customerId:" + customerId , e);
+            final String errorMsg = e.getMessage();
+            taskExecutor.execute(new Runnable(){
+                @Override
+                public void run() {
+                    MailHelper.sendSystemMail("[ERROR]syncCustomer failed,customerId:"+customerId, errorMsg);
+                }
+            });
+            throw new CRMRuntimeException(e);
+        }
+    }
+
+    @Override
+    public void createContract(final Long adSolutionId, String oldContractNum) {
+        try {
+            logger.info("createContract,adSolutionId:{},oldContractNum:{}" ,adSolutionId ,oldContractNum);
+            AdSolutionDTO adSolutionDTO = cmsAdSolutionService.findById(adSolutionId);
+            adSolutionDTO.setOldContractNum(oldContractNum);
+            String result = cmsWebService.sendAdSolution(adSolutionDTO);
+            if (!SUCCESS_FLAG.equals(result)) {
+                throw new CRMRuntimeException("sendAdSolution failed");
+            }
+            logger.info("syncCustomer,adSolutionId:{},oldContractNum:{},adSolutionDTO:{}",
+                    adSolutionId, oldContractNum, ToStringBuilder.reflectionToString(adSolutionDTO));
+        } catch (CMSServiceException e) {
+            logger.error("createContract failed,adSolutionId:" + adSolutionId , e);
+            final String errorMsg = e.getMessage();
+            taskExecutor.execute(new Runnable(){
+                @Override
+                public void run() {
+                    MailHelper.sendSystemMail("[ERROR]createContract failed,adSolutionId:"+adSolutionId, errorMsg);
+                }
+            });
+            throw new CRMRuntimeException(e);
+        }
+        
+    }
+    
+    @Override
+    public void createSingleContract(String contractNum, final Long adSolutionId) {
+        try {
+        	logger.info("createSingleContract,contractNum:{},adSolutionId:{}" ,contractNum,adSolutionId);
+        	AdSolutionDTO adSolutionDTO = cmsAdSolutionService.findById(adSolutionId);           
+        	String result = cmsWebService.sendAdSolution(adSolutionDTO);
+        	if (!SUCCESS_FLAG.equals(result)) {
+                throw new CRMRuntimeException("sendAdSolution failed");
+            }
+        	result = cmsWebService.createGjPo(contractNum, adSolutionId);
+        	if (!SUCCESS_FLAG.equals(result)) {
+                throw new CRMRuntimeException("createGjPo failed");
+            }
+            logger.info("syncCustomer,contractNum:{},adSolutionId:{},adSolutionDTO:{}",
+                    contractNum, adSolutionId, ToStringBuilder.reflectionToString(adSolutionDTO));
+        } catch (CMSServiceException e) {
+            logger.error("createSingleContract failed,adSolutionId:" + adSolutionId + ",contractNum:" + contractNum , e);
+            final String errorMsg = e.getMessage();
+            taskExecutor.execute(new Runnable(){
+                @Override
+                public void run() {
+                    MailHelper.sendSystemMail("[ERROR]createSingleContract failed,adSolutionId:"+adSolutionId, errorMsg);
+                }
+            });
+            throw new CRMRuntimeException(e);
+        }
+    }
+
+    @Override
+    public String createPO(String contractNumber, final Long adContentId,
+            Long ucId, String oldPONumber) {
+        
+        String poNumber = null;
+        try {
+            logger.info("createPO,contractNumber:{},adContentId:{},ucId:{},oldPONumber:{}", 
+                    contractNumber, adContentId, ucId, oldPONumber);
+            AdSolutionContentDTO currAdSolutionContentDTO = cmsAdSolutionService.findByContentId(adContentId);
+            poNumber = cmsWebService.createPOFromAdvContent(currAdSolutionContentDTO, contractNumber, ucId, oldPONumber);
+            logger.info("createPO adContentId:{}, contractNumber:{},oldPONumber:{},poNumber:{}", adContentId, contractNumber,oldPONumber,poNumber);
+        } catch (CMSServiceException e) {
+            logger.error("createPO failed,adContentId:" + adContentId + ",contractNumber:" + contractNumber , e);
+            final String errorMsg = e.getMessage();
+            taskExecutor.execute(new Runnable(){
+                @Override
+                public void run() {
+                    MailHelper.sendSystemMail("[ERROR]createPO failed,adContentId:"+adContentId, errorMsg);
+                }
+            });
+            throw new CRMRuntimeException(e);
+        }
+        return poNumber;
+    }
+
+    @Override
+    public boolean cancelAdSolution(final Long adSolutionId) {
+        String successStr = null;
+        try {
+            logger.info("cancelAdSolution adSolutionId:{}", adSolutionId);
+            successStr = cmsWebService.cancelAdSolution(adSolutionId);
+            logger.info("cancelAdSolution adSolutionId:{}, successStr:{}", adSolutionId, successStr);
+        } catch (CMSServiceException e) {
+            logger.error("cancelAdSolution failed,adSolutionId:" +adSolutionId , e);
+            final String errorMsg = e.getMessage();
+            taskExecutor.execute(new Runnable(){
+                @Override
+                public void run() {
+                    MailHelper.sendSystemMail("[ERROR]cancelAdSolution failed,adSolutionId:"+adSolutionId, errorMsg);
+                }
+            });
+        }
+        if (SUCCESS_FLAG.equalsIgnoreCase(successStr)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    
+    
+    @Override
+	public List<Contract> getImmeContractsByCustomerId(final Long customerId) {
+		try {
+			List<Contract> contracts=new ArrayList<Contract>();
+            List<ContractDTO> results = cmsWebService.findContractInfoByCustomerId(customerId);
+            Contract contract=null;
+            if(results!=null){
+            	for(ContractDTO cto:results){
+            	    contract = new Contract();
+            	    contract.setNumber(cto.getNum());
+            	    contract.setCategory(cto.getCode());
+            	    contract.setState(covertConStateFromCMStoCRM(cto.getState()));
+            		contract.setBeginDate(cto.getBeginDate());
+            		contract.setEndDate(cto.getEndDate());
+            		contracts.add(contract);
+            	}
+            }
+            logger.info("getImmeContractsByCustomerId,customerId:{}, ContractDTO:{}",
+                    customerId, ToStringBuilder.reflectionToString(results));
+            return contracts;
+        } catch (Exception e) {
+            logger.error("getImmeContractsByCustomerId failed,customerId:" + customerId , e);
+            final String errorMsg = e.getMessage();
+            taskExecutor.execute(new Runnable(){
+                @Override
+                public void run() {
+                    MailHelper.sendSystemMail("[ERROR]getImmeContractsByCustomerId failed,customerId:"+customerId, errorMsg);
+               }
+            });
+            throw new CRMRuntimeException(e);
+        }
+		
+	}
+	private ContractState covertConStateFromCMStoCRM(String state){
+		if("EFFECTIVE".equals(state)){
+			return ContractState.valueOf("VALID");
+		}else if("TERMINATED".equals(state)){
+			return ContractState.valueOf("TERMINATED");
+		}else if("NOT_EFFECTIVE".equals(state)){
+			return ContractState.valueOf("NOT_EFFECTIVE");
+		}else{
+			return ContractState.valueOf("INVALID");
+		}
+	}
+	@Override
+	public boolean invalidCustomer(Long customerId) {
+		return cmsWebService.invalidCustomer(customerId);
+	}
+
+}

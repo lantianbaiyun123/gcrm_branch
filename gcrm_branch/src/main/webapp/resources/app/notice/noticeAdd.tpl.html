@@ -1,0 +1,39 @@
+<div class="panel-body pt30">
+  <form action="" class="form-horizontal">
+    <div class="form-group">
+      <label class="control-label col-md-2">{{'标题' | translate}}：</label>
+      <div class="col-md-8">
+        <input type="text" class="form-control" ng-model="e.title" required>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-md-2">{{'内容' | translate}}：</label>
+      <div class="col-md-8">
+        <!-- <textarea class="form-control" rows="6" ng-maxlength="5000"></textarea> -->
+        <div summernote config="summernoteOpts" ng-model="e.content"></div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-md-2">{{'发送范围' | translate}}：</label>
+      <div class="col-md-6">
+        <label class="radio radio-inline">
+          <input type="radio" ng-model="e.deliveryScope" value="1">内部用户
+        </label>
+        <label class="radio radio-inline">
+          <input type="radio" ng-model="e.deliveryScope" value="2">外部用户
+        </label>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-md-2">{{'发送对象' | translate}}：</label>
+      <div class="col-md-8">
+        <input type="hidden" ui-select2="e.userOption" ng-model="e.users" style="width:100%">
+      </div>
+    </div>
+  </form>
+</div>
+<div class="panel-footer text-left">
+  <button class="btn btn-primary">{{'保存并发送' | translate}}</button>
+  <button class="btn btn-default">{{'保存' | translate}}</button>
+  <button class="btn btn-default pull-right">{{'返回' | translate}}</button>
+</div>

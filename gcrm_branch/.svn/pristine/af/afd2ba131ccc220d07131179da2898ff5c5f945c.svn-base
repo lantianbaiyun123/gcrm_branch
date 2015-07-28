@@ -1,0 +1,619 @@
+package com.baidu.gcrm.ad.content.web;
+
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+
+import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ValidationUtils;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.alibaba.fastjson.JSON;
+import com.baidu.gcrm.ad.content.model.AdSolutionContent;
+import com.baidu.gcrm.ad.content.model.AdSolutionContent.ApprovalStatus;
+import com.baidu.gcrm.ad.content.service.IAdSolutionContentService;
+import com.baidu.gcrm.ad.content.web.helper.BaseI18nModelComparator;
+import com.baidu.gcrm.ad.content.web.validator.AdSolutionContentExtraValidator;
+import com.baidu.gcrm.ad.content.web.validator.AdSolutionContentValidator;
+import com.baidu.gcrm.ad.content.web.vo.AdSolutionContentListBean;
+import com.baidu.gcrm.ad.content.web.vo.AdSolutionContentListView;
+import com.baidu.gcrm.ad.content.web.vo.AdSolutionContentView;
+import com.baidu.gcrm.ad.model.AdvertiseMaterial;
+import com.baidu.gcrm.ad.model.AdvertiseQuotation;
+import com.baidu.gcrm.ad.model.AdvertiseSolution;
+import com.baidu.gcrm.ad.service.IAdvertiseMaterialService;
+import com.baidu.gcrm.ad.service.IAdvertiseQuotationService;
+import com.baidu.gcrm.ad.service.IAdvertiseSolutionService;
+import com.baidu.gcrm.ad.web.utils.AdvertiseSolutionUtils;
+import com.baidu.gcrm.ad.web.utils.AutoSuggestBean;
+import com.baidu.gcrm.ad.web.validator.AdvertiseQuotationValidator;
+import com.baidu.gcrm.ad.web.vo.AdvertiseMaterialVO;
+import com.baidu.gcrm.common.ControllerHelper;
+import com.baidu.gcrm.common.IFileUploadService;
+import com.baidu.gcrm.common.exception.CRMRuntimeException;
+import com.baidu.gcrm.common.json.JsonBean;
+import com.baidu.gcrm.common.json.JsonBeanUtil;
+import com.baidu.gcrm.common.json.JsonListBean;
+import com.baidu.gcrm.common.log.LoggerHelper;
+import com.baidu.gcrm.customer.model.Customer;
+import com.baidu.gcrm.customer.service.ICustomerService;
+import com.baidu.gcrm.occupation.helper.DatePeriod;
+import com.baidu.gcrm.occupation.helper.DatePeriodHelper;
+import com.baidu.gcrm.quote.model.Quotation;
+import com.baidu.gcrm.quote.service.QuotationService;
+import com.baidu.gcrm.resource.adplatform.model.AdPlatform.AdPlatformBusinessType;
+import com.baidu.gcrm.resource.adplatform.model.AdPlatform.AdPlatformStatus;
+import com.baidu.gcrm.resource.adplatform.service.IAdPlatformService;
+import com.baidu.gcrm.resource.position.model.Position.PositionStatus;
+import com.baidu.gcrm.resource.position.service.IPositionService;
+import com.baidu.gcrm.resource.position.web.vo.PositionVO;
+import com.baidu.gcrm.resource.site.model.Site;
+import com.baidu.gcrm.resource.site.service.ISiteService;
+import com.baidu.gcrm.valuelistcache.model.AdvertisingPlatform;
+import com.baidu.gcrm.valuelistcache.model.BillingModel;
+import com.baidu.gcrm.valuelistcache.service.impl.AdvertisingPlatformServiceImpl;
+import com.baidu.gcrm.valuelistcache.service.impl.BillingModelServiceImpl;
+
+@Controller
+@RequestMapping("/adsolution/content")
+public class AdSolutionContentAction extends ControllerHelper {
+
+    Logger logger = LoggerFactory.getLogger(AdSolutionContentAction.class);
+
+    @Autowired
+    AdvertisingPlatformServiceImpl adPlatformCacheService;
+
+    @Autowired
+    IAdPlatformService adPlatformService;
+
+    @Autowired
+    ISiteService siteService;
+
+    @Autowired
+    IPositionService positionService;
+
+    @Autowired
+    private IAdvertiseSolutionService adSolutionService;
+
+    @Autowired
+    IAdSolutionContentService adSolutionContentService;
+
+    @Autowired
+    IAdvertiseQuotationService advertiseQuotationService;
+
+    @Autowired
+    private BillingModelServiceImpl billingModelServiceImpl;
+
+    @Autowired
+    IFileUploadService fileUploadService;
+
+    @Autowired
+    private QuotationService quotationService;
+
+    @Autowired
+    private ICustomerService customerService;
+
+    @Autowired
+    private IAdvertiseMaterialService materialService;
+
+    @RequestMapping("/queryProduct")
+    @ResponseBody
+    public JsonBean<List<AdvertisingPlatform>> queryProduct(
+            @RequestParam(value = "businessType", defaultValue = "0") Integer businessType) {
+        AdPlatformBusinessType filterBusinessType = null;
+        if (businessType == null) {
+            filterBusinessType = AdPlatformBusinessType.liquidate;
+        } else {
+            filterBusinessType = AdPlatformBusinessType.valueOf(businessType);
+        }
+
+        List<AdvertisingPlatform> adPlatformList = adPlatformCacheService.getAllByLocale(currentLocale);
+        List<AdvertisingPlatform> allDisplayAdplatformList = new LinkedList<AdvertisingPlatform>();
+        List<Long> allDisplayAdplatformIdList = new LinkedList<Long>();
+        for (AdvertisingPlatform dbAdvertisingPlatform : adPlatformList) {
+            Integer status = dbAdvertisingPlatform.getStatus();
+            if (status == null || AdPlatformStatus.enable.ordinal() != status.intValue()) {
+                continue;
+            }
+            Integer dbBusinessType = dbAdvertisingPlatform.getBusinessType();
+            if (dbBusinessType != null && dbBusinessType.intValue() == filterBusinessType.ordinal()) {
+                allDisplayAdplatformList.add(dbAdvertisingPlatform);
+                allDisplayAdplatformIdList.add(dbAdvertisingPlatform.getId());
+            }
+        }
+
+        // filter adPlatform
+        Map<String, String> usedIdMap = adPlatformService.findUsedAdPlatform(allDisplayAdplatformIdList);
+        if (!usedIdMap.isEmpty()) {
+            List<AdvertisingPlatform> validAdplatformList = new LinkedList<AdvertisingPlatform>();
+            for (AdvertisingPlatform displayAdvertisingPlatform : allDisplayAdplatformList) {
+                String idStr = displayAdvertisingPlatform.getId().toString();
+                if (usedIdMap.get(idStr) != null) {
+                    validAdplatformList.add(displayAdvertisingPlatform);
+                }
+            }
+            Collections.sort(validAdplatformList, new BaseI18nModelComparator());
+            return JsonBeanUtil.convertBeanToJsonBean(validAdplatformList);
+        } else {
+            return JsonBeanUtil.convertBeanToJsonBean(null);
+        }
+
+    }
+
+    @RequestMapping("/querySiteByProductId")
+    @ResponseBody
+    public JsonBean<List<Site>> querySiteByProductId(@RequestParam("productId") Long adPlatformId) {
+        List<Site> allSiteList = siteService.findSiteByAdPlatform(adPlatformId, currentLocale);
+        if (CollectionUtils.isEmpty(allSiteList)) {
+            return JsonBeanUtil.convertBeanToJsonBean(null);
+        }
+
+        List<Long> siteIds = new ArrayList<Long>();
+        for (Site temSite : allSiteList) {
+            siteIds.add(temSite.getId());
+        }
+        Map<String, String> siteIdMap = siteService.findUsedSiteIdByIds(adPlatformId, siteIds, PositionStatus.enable);
+        if (siteIdMap.size() < 1) {
+            return JsonBeanUtil.convertBeanToJsonBean(null);
+        }
+
+        List<Site> validSiteList = new LinkedList<Site>();
+        for (Site currSite : allSiteList) {
+            if (siteIdMap.get(currSite.getId().toString()) != null) {
+                validSiteList.add(currSite);
+            }
+        }
+        Collections.sort(validSiteList, new BaseI18nModelComparator());
+        return JsonBeanUtil.convertBeanToJsonBean(validSiteList);
+
+    }
+
+    @RequestMapping("/queryPositionBySiteId")
+    @ResponseBody
+    public JsonBean<List<PositionVO>> queryPositionBySiteId(@RequestParam("productId") Long adPlatformId,
+            @RequestParam("siteId") Long siteId) {
+        List<PositionVO> positionVO =
+                positionService
+                        .findChannelBySiteIdAndStatus(adPlatformId, siteId, currentLocale, PositionStatus.enable);
+        return JsonBeanUtil.convertBeanToJsonBean(positionVO);
+    }
+
+    @RequestMapping("/queryPositionByParentId")
+    @ResponseBody
+    public JsonBean<List<PositionVO>> queryPositionByParentId(@RequestParam("parentId") Long parentId) {
+        List<PositionVO> positionVO =
+                positionService.findByParentIdAndStatus(parentId, currentLocale, PositionStatus.enable);
+        return JsonBeanUtil.convertBeanToJsonBean(positionVO);
+    }
+
+    @RequestMapping("/saveAdsolutionContent")
+    @ResponseBody
+    public JsonBean<AdSolutionContentView> saveAdsolutionContent(
+            @RequestBody AdSolutionContentView adSolutionContentView, BindingResult bindingResult,
+            HttpServletRequest request) {
+        int errorCode = processValidator(adSolutionContentView, bindingResult);
+        if (errorCode != JsonBeanUtil.CODE_SUCCESS) {
+            if (errorCode == JsonBeanUtil.CODE_ERROR_DISPLAY_DIRECTLY) {
+                return JsonBeanUtil.convertBeanToJsonBean(adSolutionContentView, super.collectErrorList(bindingResult),
+                        errorCode);
+            } else {
+                return JsonBeanUtil.convertBeanToJsonBean(adSolutionContentView, super.collectErrors(bindingResult),
+                        errorCode);
+            }
+        } else {
+            generatePropertyForCreateOrUpdateAll(adSolutionContentView);
+            adSolutionContentService.saveContent(adSolutionContentView);
+            Long contentId =
+                    (null == adSolutionContentView.getAdSolutionContent()) ? null : adSolutionContentView
+                            .getAdSolutionContent().getId();
+            adSolutionContentView =
+                    adSolutionContentService.findByAdSolutionContentId(contentId, currentLocale,
+                            request.getContextPath());
+            return JsonBeanUtil.convertBeanToJsonBean(adSolutionContentView);
+        }
+    }
+
+    @SuppressWarnings("rawtypes")
+    @RequestMapping("/saveAdsolutionContentBatch")
+    @ResponseBody
+    public JsonBean<List<JsonBean>> saveAdsolutionContentBatch(@RequestBody AdSolutionContentListView adConentViewList,
+            BindingResult bindingResult, HttpServletRequest request) {
+        List<JsonBean> errorBeans = new ArrayList<JsonBean>();
+        int totalCode = JsonBeanUtil.CODE_SUCCESS;
+        for (AdSolutionContentView adContentView : adConentViewList.getAdContentViewList()) {
+            int errorCode = processValidator(adContentView, bindingResult);
+            if (errorCode != JsonBeanUtil.CODE_SUCCESS) {
+                errorBeans.add(super.collectMergeErrors(bindingResult, errorCode));
+                totalCode = JsonBeanUtil.CODE_ERROR_TOTAL;
+                break;
+            } else {
+                errorBeans.add(new JsonBean());
+            }
+        }
+        JsonBean<List<JsonBean>> result = JsonBeanUtil.convertBeanToJsonBean(errorBeans);
+        result.setCode(totalCode);
+        if (result.getCode() == JsonBeanUtil.CODE_ERROR_TOTAL) {
+            result.setMessage("error");
+            return result;
+        }
+
+        for (AdSolutionContentView contentView : adConentViewList.getAdContentViewList()) {
+            this.saveAdsolutionContent(contentView, bindingResult, request);
+        }
+        return result;
+    }
+
+    private int processValidator(AdSolutionContentView adSolutionContentView, BindingResult bindingResult) {
+
+        ValidationUtils.invokeValidator(new AdSolutionContentValidator(), adSolutionContentView, bindingResult);
+        if (bindingResult.hasErrors()) {
+            return JsonBeanUtil.CODE_ERROR;
+        }
+        ValidationUtils.invokeValidator(new AdvertiseQuotationValidator(), adSolutionContentView, bindingResult);
+        if (bindingResult.hasErrors()) {
+            return JsonBeanUtil.CODE_ERROR;
+        }
+        calculatePeriods(adSolutionContentView);
+        ValidationUtils.invokeValidator(new AdSolutionContentExtraValidator(), adSolutionContentView, bindingResult);// F**k
+                                                                                                                     // validator
+        if (bindingResult.hasErrors()) {
+            return JsonBeanUtil.CODE_ERROR_DISPLAY_DIRECTLY;
+        } else {
+            return JsonBeanUtil.CODE_SUCCESS;
+        }
+
+    }
+
+    @RequestMapping("/deleteAdsolutionContent/{adContentId}")
+    @ResponseBody
+    public JsonBean<Object> deleteAdsolutionContent(@PathVariable("adContentId") Long adContentId) {
+        try {
+            boolean isDeleted = adSolutionContentService.delContent(adContentId);
+            if (isDeleted) {
+                return JsonBeanUtil.convertBeanToJsonBean(null);
+            } else {
+                return JsonBeanUtil.convertBeanToJsonBean(null, "content.del.notallow");
+            }
+        } catch (Exception e) {
+            logger.error("delete AdsolutionContent failed,id is {}", adContentId);
+            return JsonBeanUtil.convertBeanToJsonBean(null, "content.del.failed");
+        }
+    }
+
+    private void generatePropertyForCreateOrUpdateAll(AdSolutionContentView adSolutionContentView) {
+        AdSolutionContent adSolutionContent = adSolutionContentView.getAdSolutionContent();
+        Long adSolutionContentId = adSolutionContent.getId();
+        Long adSolutionId = adSolutionContent.getAdSolutionId();
+        if (adSolutionContentId == null) {
+            generatePropertyForCreate(adSolutionContent);
+            // generate number
+            AdvertiseSolution adSolution = adSolutionService.findById(adSolutionId);
+            Set<String> numberSuffixSet = adSolutionContentService.findNumberByAdSolutionId(adSolution.getId());
+            String newNumber = AdvertiseSolutionUtils.generateContentNumber(adSolution.getNumber(), numberSuffixSet);
+            adSolutionContent.setNumber(newNumber);
+        } else {
+            AdSolutionContent dbAdSolutionContent =
+                    adSolutionContentService.findOne(adSolutionContentId);
+            adSolutionContent.setNumber(dbAdSolutionContent.getNumber());
+            adSolutionContent.setApprovalStatus(dbAdSolutionContent.getApprovalStatus());
+            adSolutionContent.setContentType(dbAdSolutionContent.getContentType());
+            adSolutionContent.setCreateTime(dbAdSolutionContent.getCreateTime());
+            adSolutionContent.setCreateOperator(dbAdSolutionContent.getCreateOperator());
+            if ((null != dbAdSolutionContent.getPositionId() && adSolutionContent.getPositionId() != null)
+                    && !adSolutionContent.getPositionId().equals(dbAdSolutionContent.getPositionId())) {
+                adSolutionContent.setChangedPosition(true);
+            } else if (null == dbAdSolutionContent.getPositionId() || adSolutionContent.getPositionId() == null) {
+                adSolutionContent.setChangedPosition(true);
+            } else {
+                adSolutionContent.setChangedPosition(false);
+            }
+            generatePropertyForCreateUpdate(adSolutionContent);
+        }
+
+        AdvertiseQuotation advertiseQuotation = adSolutionContentView.getAdvertiseQuotation();
+        if (advertiseQuotation.getId() == null) {
+            generatePropertyForCreate(advertiseQuotation);
+        } else {
+            generatePropertyForCreateUpdate(advertiseQuotation);
+        }
+        AdvertiseMaterial advertiseCodeMaterial = adSolutionContentView.getAdvertiseCodeMaterial();
+        if (advertiseCodeMaterial != null) {
+            if (advertiseCodeMaterial.getId() == null) {
+                generatePropertyForCreate(advertiseCodeMaterial);
+            } else {
+                generatePropertyForCreateUpdate(advertiseCodeMaterial);
+            }
+        }
+        List<AdvertiseMaterial> advertiseMaterials =
+                adSolutionContentService.getAdvertiseMaterial4Content(adSolutionContentView.getAdSolutionContent());
+        if (CollectionUtils.isEmpty(advertiseMaterials)) {
+            return;
+        }
+        for (AdvertiseMaterial advertiseMaterial : advertiseMaterials) {
+            if (advertiseMaterial.getId() == null) {
+                generatePropertyForCreate(advertiseMaterial);
+            } else {
+                generatePropertyForCreateUpdate(advertiseMaterial);
+            }
+        }
+    }
+
+    private void generatePropertyForCreateAll(AdSolutionContentView adSolutionContentView) { // 获取表单广告内容信息
+        AdSolutionContent adSolutionContent = adSolutionContentView.getAdSolutionContent();
+        Long adSolutionId = adSolutionContent.getAdSolutionId();
+        generatePropertyForCreate(adSolutionContent);
+        // 获取广告方案信息 将获取的编号 放入广告内容编号中
+        AdvertiseSolution adSolution = adSolutionService.findById(adSolutionId);
+        Set<String> numberSuffixSet = adSolutionContentService.findNumberByAdSolutionId(adSolution.getId());
+        String newNumber = AdvertiseSolutionUtils.generateContentNumber(adSolution.getNumber(), numberSuffixSet);
+        adSolutionContent.setNumber(newNumber);
+        // 获取广告内容报价信息
+        AdvertiseQuotation advertiseQuotation = adSolutionContentView.getAdvertiseQuotation();
+        generatePropertyForCreate(advertiseQuotation);
+        // 获取广告物料信息
+        List<AdvertiseMaterial> advertiseMaterials =
+                adSolutionContentService.getAdvertiseMaterial4Content(adSolutionContentView.getAdSolutionContent());
+        if (CollectionUtils.isEmpty(advertiseMaterials)) {
+            return;
+        }
+        for (AdvertiseMaterial advertiseMaterial : advertiseMaterials) {
+            generatePropertyForCreateUpdate(advertiseMaterial);
+        }
+    }
+
+    private void calculatePeriods(AdSolutionContentView adSolutionContentView) {
+        List<DatePeriod> periods = adSolutionContentView.getPeriods();
+        if (CollectionUtils.isEmpty(periods)) {
+            return;
+        }
+        List<DatePeriod> newDatePeriod = DatePeriodHelper.removeDatesFromPeriods(periods, null);
+        adSolutionContentView.setPeriods(newDatePeriod);
+        AdSolutionContent adSolutionContent = adSolutionContentView.getAdSolutionContent();
+        adSolutionContent.setPeriodDescription(DatePeriodHelper.getDatePeriodString(newDatePeriod));
+    }
+
+    @RequestMapping("/uploadAdSolutionContentMaterial")
+    @ResponseBody
+    public void uploadAdSolutionContentMaterial(AdvertiseMaterial advertiseMaterial, HttpServletResponse resp) {
+        String jsonStr = null;
+        PrintWriter writer = null;
+        resp.setContentType("text/html; charset=UTF-8");
+        try {
+            writer = resp.getWriter();
+            MultipartFile file = advertiseMaterial.getMaterialFile();
+            if (file != null && !file.isEmpty()) {
+                String uploadFileName = new StringBuilder().append("/").append(UUID.randomUUID().toString()).toString();
+                String fileUrl = fileUploadService.upload(uploadFileName, file.getBytes());
+                AdvertiseMaterialVO vo = new AdvertiseMaterialVO();
+                vo.setFileUrl(fileUrl);
+                vo.setUploadFileName(uploadFileName);
+                vo.setDownloadFileName(file.getOriginalFilename());
+                vo.setFileSize(Integer.valueOf(String.valueOf(file.getSize() < 1024 ? 1 : file.getSize() / 1024))); // 小于1kb约等于1kb
+                BufferedImage sourceImg = ImageIO.read(file.getInputStream());
+                if (null != sourceImg) {
+                    vo.setPicWidth(sourceImg.getWidth());
+                    vo.setPicHeight(sourceImg.getHeight());
+                }
+                jsonStr = JSON.toJSONString(JsonBeanUtil.convertBeanToJsonBean(vo));
+            }
+
+        } catch (IOException e) {
+            jsonStr = JSON.toJSONString(JsonBeanUtil.convertBeanToJsonBean(null, "upload fail"));
+        }
+        if (writer != null) {
+            writer.println(jsonStr);
+        }
+
+    }
+
+    @RequestMapping("/deleteMaterial/{materialId}")
+    @ResponseBody
+    public JsonBean<AdvertiseMaterialVO> deleteAdSolutionContentMaterial(@PathVariable("materialId") Long materialId) {
+        try {
+            if (materialId != null) {
+
+                AdvertiseMaterial existsAdvertiseMaterial = materialService.findMaterialById(materialId);
+                try {
+                    fileUploadService.deleteFile(existsAdvertiseMaterial.getUploadFileName());
+                } catch (Exception e) {
+                    logger.error("删除云端文件出错" + e.getMessage());
+
+                }
+                materialService.deleteAdvertiseMaterial(materialId);
+
+            }
+
+        } catch (Exception e) {
+
+            return JsonBeanUtil.convertBeanToJsonBean(null, "delete fail");
+        }
+
+        return JsonBeanUtil.convertBeanToJsonBean(null);
+    }
+
+    @RequestMapping("/queryAdContent/{adSolutionId}")
+    @ResponseBody
+    public JsonBean<List<AdSolutionContentView>> queryAdContentBySolutionId(
+            @PathVariable("adSolutionId") Long adSolutionId, HttpServletRequest request) {
+        List<AdSolutionContentView> viewList =
+                adSolutionContentService.findByAdSolutionId(adSolutionId, currentLocale, request.getContextPath());
+        return JsonBeanUtil.convertBeanToJsonBean(viewList);
+    }
+
+    @RequestMapping("/queryAdContentById/{adSolutionContentId}")
+    @ResponseBody
+    public JsonBean<AdSolutionContentView> queryAdContentById(
+            @PathVariable("adSolutionContentId") Long adSolutionContentId, HttpServletRequest request) {
+        AdSolutionContentView view =
+                adSolutionContentService.findByAdSolutionContentId(adSolutionContentId, currentLocale,
+                        request.getContextPath());
+        return JsonBeanUtil.convertBeanToJsonBean(view);
+    }
+
+    @RequestMapping("/queryBillModels")
+    @ResponseBody
+    public JsonBean<JsonListBean<BillingModel>> queryBillModels() {
+        List<BillingModel> billModels = billingModelServiceImpl.getAllByLocale(currentLocale);
+        return JsonBeanUtil.convertListBeanToJsonBean(billModels);
+    }
+
+    @RequestMapping("/queryQuotationPattern")
+    @ResponseBody
+    public JsonBean<JsonListBean<Quotation>> queryQuotationPattern(@RequestBody Quotation quotation) {
+        List<Quotation> qutations = null;
+        if (quotation.getBillingModelId() != null) {
+            qutations =
+                    quotationService.findByAdvertisingPlatformIdAndSiteIdAndBillingModelId(
+                            quotation.getAdvertisingPlatformId(), quotation.getSiteId(), quotation.getBillingModelId());
+        } else {
+            qutations =
+                    quotationService.findByAdvertisingPlatformIdAndSiteIdAndPriceType(
+                            quotation.getAdvertisingPlatformId(), quotation.getSiteId(),
+                            com.baidu.gcrm.quote.model.PriceType.ratio);
+        }
+        for (Quotation quote : qutations) {
+            // Double value = quote.getPublishPrice();
+            // if(value != null){
+            // BigDecimal b = new BigDecimal(value*100);
+            // quote.setPublishPrice(b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+            // }
+            Double value = quote.getRatioMine();
+            if (value != null) {
+                BigDecimal b = new BigDecimal(value * 100);
+                quote.setRatioMine(b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+            }
+            value = quote.getRatioThird();
+            if (value != null) {
+                BigDecimal b = new BigDecimal(value * 100);
+                quote.setRatioThird(b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+            }
+            value = quote.getRatioCustomer();
+            if (value != null) {
+                BigDecimal b = new BigDecimal(value * 100);
+                quote.setRatioCustomer(b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+            }
+        }
+        return JsonBeanUtil.convertListBeanToJsonBean(qutations);
+    }
+
+    @RequestMapping("/customersSuggest")
+    @ResponseBody
+    public JsonBean<List<AutoSuggestBean<Long>>> customersSuggest(@RequestParam("query") String tag) {
+        List<AutoSuggestBean<Long>> suggests = new ArrayList<AutoSuggestBean<Long>>();
+        if (StringUtils.isBlank(tag)) {
+            return JsonBeanUtil.convertBeanToJsonBean(suggests);
+        }
+
+        List<Customer> customers = customerService.findCustomerForAdcontent(tag);
+        for (Customer customer : customers) {
+            String companyName = customer.getCompanyName();
+            suggests.add(new AutoSuggestBean<Long>(companyName, customer.getCustomerNumber()));
+        }
+
+        return JsonBeanUtil.convertBeanToJsonBean(suggests);
+    }
+
+    /**
+     * 功能描述： 广告方案列表二级列表根据方案ID查询广告内容 创建人：yudajun 创建时间：2014-3-19 下午3:56:42 修改人：yudajun 修改时间：2014-3-19 下午3:56:42 修改备注： 参数： @param
+     * adSolutionId 参数： @return
+     * 
+     * @version
+     */
+    @RequestMapping("/queryAdContentList/{adSolutionId}")
+    @ResponseBody
+    public JsonBean<List<AdSolutionContentListBean>> queryAdContentListBySolutionId(
+            @PathVariable("adSolutionId") Long adSolutionId) {
+        List<AdSolutionContentListBean> viewList =
+                adSolutionContentService.findListByAdSolutionId(adSolutionId, currentLocale);
+        return JsonBeanUtil.convertBeanToJsonBean(viewList);
+    }
+
+    /**
+     * 功能描述： 广告内容修改提交审核 创建人：luge
+     */
+    @RequestMapping("/submitAdcontentToApproval/{id}")
+    @ResponseBody
+    public JsonBean<AdSolutionContentView> submitAdcontentToApproval(@PathVariable("id") Long id,
+            @RequestBody AdSolutionContentView adSolutionContentView, BindingResult bindingResult,
+            HttpServletRequest request) {
+
+        int errorCode = processValidator(adSolutionContentView, bindingResult);
+        if (errorCode != JsonBeanUtil.CODE_SUCCESS) {
+            if (errorCode == JsonBeanUtil.CODE_ERROR_DISPLAY_DIRECTLY) {
+                return JsonBeanUtil.convertBeanToJsonBean(adSolutionContentView, super.collectErrorList(bindingResult),
+                        errorCode);
+            } else {
+                return JsonBeanUtil.convertBeanToJsonBean(adSolutionContentView, super.collectErrors(bindingResult),
+                        errorCode);
+            }
+        } else {
+            AdSolutionContent adSolutionContent = adSolutionContentView.getAdSolutionContent();
+            ApprovalStatus oldApprovalStatus = adSolutionContent.getApprovalStatus();
+            if (oldApprovalStatus.equals(ApprovalStatus.approved) || oldApprovalStatus.equals(ApprovalStatus.effective)) {
+                generatePropertyForCreateAll(adSolutionContentView);
+            } else {
+                generatePropertyForCreateOrUpdateAll(adSolutionContentView);
+            }
+            adSolutionContentService.saveContentNew(adSolutionContentView, id, getUserName());
+            return JsonBeanUtil.convertBeanToJsonBean(adSolutionContentView);
+        }
+    }
+    
+    /**
+     * 功能描述： 合作终止 创建人：jianguo
+     */
+    @RequestMapping("/stopToAdContent/{id}")
+    @ResponseBody
+    public JsonBean<String> stopToAdContent(@PathVariable("id") Long id) {
+        try {
+            AdSolutionContent content = adSolutionContentService.findOne(id);
+            generatePropertyForUpdate(content);
+            adSolutionContentService.stopAdSolutionContent(content);
+            return JsonBeanUtil.convertBeanToJsonBean("success");
+        } catch (Exception e) {
+            LoggerHelper.err(getClass(), "终止内容合作出错", e);
+            throw new CRMRuntimeException(e.getMessage());
+        }
+    }
+    
+    /**
+     * 状态改变后，初始化线上数据的状态
+     * @param id
+     * @return
+     */
+    @RequestMapping("/initStatus")
+    @ResponseBody
+    public JsonBean<String> initAdContentStatus() {
+        try {
+            adSolutionContentService.initOnlineAdAndSolutionStatus();
+            return JsonBeanUtil.convertBeanToJsonBean("success");
+        } catch (Exception e) {
+            LoggerHelper.err(getClass(), "初始化出错", e);
+            throw new CRMRuntimeException(e.getMessage());
+        }
+    }
+
+}
